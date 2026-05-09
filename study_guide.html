@@ -379,6 +379,238 @@ button.run-btn.secondary{background:#2a3a52}
 </div>
 </div>
 
+<!-- 6.4b Real RAG Example -->
+<div class="card">
+<h2>6.4b ตัวอย่างกราฟจริง — อ่าน RAG ทีละขั้นและตรวจ Deadlock</h2>
+<div class="box box-yellow">
+  <strong>💡 โจทย์:</strong> ดู RAG ด้านล่าง แล้วบอกว่าระบบนี้มี Deadlock หรือไม่? ถ้ามี Process ใดติด Deadlock?<br>
+  <strong>ทรัพยากร:</strong> B (2 instances), D (1 instance), F (3 instances) &nbsp;|&nbsp; <strong>กระบวนการ:</strong> A, C, E, G
+</div>
+
+<!-- RAG SVG diagram matching the reference image -->
+<div style="margin:14px 0">
+  <div class="ex-title" style="margin-bottom:8px">📊 Resource Allocation Graph (RAG)</div>
+  <svg viewBox="0 0 560 300" style="background:#141925;border-radius:8px;width:100%;display:block" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="ex-a" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L0,9 L9,4.5 z" fill="#48cfad"/></marker>
+      <marker id="ex-r" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L0,9 L9,4.5 z" fill="#fc6e51"/></marker>
+    </defs>
+    <!-- ── Processes (circles) ── -->
+    <circle cx="82" cy="78" r="27" fill="#1e1533" stroke="#6c63ff" stroke-width="2.5"/>
+    <text x="82" y="84" text-anchor="middle" fill="#e8eaf6" font-size="17" font-family="sans-serif" font-weight="bold">A</text>
+    <circle cx="390" cy="78" r="27" fill="#1e1533" stroke="#6c63ff" stroke-width="2.5"/>
+    <text x="390" y="84" text-anchor="middle" fill="#e8eaf6" font-size="17" font-family="sans-serif" font-weight="bold">C</text>
+    <circle cx="252" cy="222" r="27" fill="#1e1533" stroke="#6c63ff" stroke-width="2.5"/>
+    <text x="252" y="228" text-anchor="middle" fill="#e8eaf6" font-size="17" font-family="sans-serif" font-weight="bold">E</text>
+    <circle cx="493" cy="222" r="27" fill="#1e1533" stroke="#6c63ff" stroke-width="2.5"/>
+    <text x="493" y="228" text-anchor="middle" fill="#e8eaf6" font-size="17" font-family="sans-serif" font-weight="bold">G</text>
+    <!-- ── Resources (rectangles) ── -->
+    <!-- B: 2 instances -->
+    <rect x="162" y="43" width="70" height="70" fill="#1a2744" stroke="#4a9eff" stroke-width="2" rx="4"/>
+    <text x="197" y="104" text-anchor="middle" fill="#7dd3fc" font-size="14" font-family="sans-serif">B</text>
+    <circle cx="186" cy="65" r="7" fill="#dde6f0"/>
+    <circle cx="208" cy="65" r="7" fill="#dde6f0"/>
+    <!-- D: 1 instance -->
+    <rect x="44" y="195" width="68" height="68" fill="#1a2744" stroke="#4a9eff" stroke-width="2" rx="4"/>
+    <text x="78" y="255" text-anchor="middle" fill="#7dd3fc" font-size="14" font-family="sans-serif">D</text>
+    <circle cx="78" cy="218" r="7" fill="#dde6f0"/>
+    <!-- F: 3 instances -->
+    <rect x="330" y="172" width="70" height="94" fill="#1a2744" stroke="#4a9eff" stroke-width="2" rx="4"/>
+    <text x="365" y="258" text-anchor="middle" fill="#7dd3fc" font-size="14" font-family="sans-serif">F</text>
+    <circle cx="353" cy="193" r="7" fill="#dde6f0"/>
+    <circle cx="377" cy="193" r="7" fill="#dde6f0"/>
+    <circle cx="365" cy="216" r="7" fill="#dde6f0"/>
+    <!-- ── Arrows ── -->
+    <!-- 1. A→B  Request (dashed orange) -->
+    <line x1="109" y1="76" x2="160" y2="75" stroke="#fc6e51" stroke-width="2.2" stroke-dasharray="7,4" marker-end="url(#ex-r)"/>
+    <!-- 2. B→C  Assignment (solid teal) -->
+    <line x1="232" y1="66" x2="362" y2="68" stroke="#48cfad" stroke-width="2.2" marker-end="url(#ex-a)"/>
+    <!-- 3. B→E  Assignment (solid teal) -->
+    <line x1="210" y1="113" x2="244" y2="195" stroke="#48cfad" stroke-width="2.2" marker-end="url(#ex-a)"/>
+    <!-- 4. C→F  Request (dashed orange) -->
+    <line x1="383" y1="105" x2="368" y2="170" stroke="#fc6e51" stroke-width="2.2" stroke-dasharray="7,4" marker-end="url(#ex-r)"/>
+    <!-- 5. F→E  Assignment (solid teal) -->
+    <line x1="330" y1="224" x2="279" y2="222" stroke="#48cfad" stroke-width="2.2" marker-end="url(#ex-a)"/>
+    <!-- 6. F→G  Assignment (solid teal) -->
+    <line x1="400" y1="232" x2="466" y2="228" stroke="#48cfad" stroke-width="2.2" marker-end="url(#ex-a)"/>
+    <!-- 7. E→D  Request (dashed orange) -->
+    <line x1="225" y1="222" x2="112" y2="230" stroke="#fc6e51" stroke-width="2.2" stroke-dasharray="7,4" marker-end="url(#ex-r)"/>
+    <!-- 8. D→A  Assignment (solid teal) -->
+    <line x1="78" y1="195" x2="81" y2="105" stroke="#48cfad" stroke-width="2.2" marker-end="url(#ex-a)"/>
+    <!-- ── Legend ── -->
+    <rect x="20" y="272" width="520" height="22" rx="4" fill="#1e2132"/>
+    <line x1="32" y1="283" x2="56" y2="283" stroke="#48cfad" stroke-width="2"/>
+    <text x="62" y="287" fill="#48cfad" font-size="11" font-family="sans-serif">Assignment Edge (Resource→Process: ถือครอง)</text>
+    <line x1="290" y1="283" x2="314" y2="283" stroke="#fc6e51" stroke-width="2" stroke-dasharray="6,4"/>
+    <text x="320" y="287" fill="#fc6e51" font-size="11" font-family="sans-serif">Request Edge (Process→Resource: รออยู่)</text>
+  </svg>
+</div>
+
+<!-- How to read each element -->
+<h3>วิธีอ่านสัญลักษณ์ใน RAG</h3>
+<table>
+  <tr><th>สัญลักษณ์</th><th>ความหมาย</th><th>ในโจทย์นี้</th></tr>
+  <tr><td>⬤ วงกลม</td><td>Process (กระบวนการ)</td><td>A, C, E, G</td></tr>
+  <tr><td>▭ สี่เหลี่ยม</td><td>Resource Type (ประเภทของทรัพยากร)</td><td>B, D, F</td></tr>
+  <tr><td>• จุดในสี่เหลี่ยม</td><td>Instance (ตัว/ชิ้น) ของทรัพยากรนั้น</td><td>B=2 จุด, D=1 จุด, F=3 จุด</td></tr>
+  <tr><td style="color:#48cfad">━━▶ ลูกศรเส้นทึบ (R→P)</td><td><strong>Assignment Edge</strong> — Resource ถูกจัดสรรให้ Process นั้นแล้ว</td><td>B→C (B ถือครองโดย C), D→A, B→E, F→E, F→G</td></tr>
+  <tr><td style="color:#fc6e51">╌╌▶ ลูกศรเส้นประ (P→R)</td><td><strong>Request Edge</strong> — Process กำลังรอ Resource นั้น</td><td>A→B (A รอ B), C→F, E→D</td></tr>
+</table>
+
+<!-- Holdings and Requests summary -->
+<h3>สรุปตาราง: ใครถืออะไร และรออะไร</h3>
+<table>
+  <tr><th>Process</th><th>ถือครอง (Allocation)</th><th>รออยู่ (Request)</th><th>สถานะ</th></tr>
+  <tr><td><strong>A</strong></td><td>D (1 instance ของ D)</td><td>B (1 instance ของ B)</td><td style="color:#fc6e51">รอ B อยู่</td></tr>
+  <tr><td><strong>C</strong></td><td>B (1 instance ของ B)</td><td>F (1 instance ของ F)</td><td style="color:#ffce54">รอ F อยู่</td></tr>
+  <tr><td><strong>E</strong></td><td>B (1 instance ของ B), F (1 instance ของ F)</td><td>D (1 instance ของ D)</td><td style="color:#fc6e51">รอ D อยู่</td></tr>
+  <tr><td><strong>G</strong></td><td>F (1 instance ของ F)</td><td><em>ไม่รออะไรเลย</em></td><td style="color:#48cfad">ทำงานได้ทันที ✓</td></tr>
+</table>
+
+<!-- Resource availability -->
+<h3>ทรัพยากรว่างอยู่เท่าไร?</h3>
+<table>
+  <tr><th>Resource</th><th>Total</th><th>Allocated</th><th>Free (ว่างอยู่)</th><th>ใครถือ</th></tr>
+  <tr><td><strong>B</strong></td><td>2</td><td>2</td><td style="color:#fc6e51"><strong>0</strong> (เต็ม!)</td><td>C ถือ 1, E ถือ 1</td></tr>
+  <tr><td><strong>D</strong></td><td>1</td><td>1</td><td style="color:#fc6e51"><strong>0</strong> (เต็ม!)</td><td>A ถือ 1</td></tr>
+  <tr><td><strong>F</strong></td><td>3</td><td>2</td><td style="color:#48cfad"><strong>1</strong> (ว่าง!)</td><td>E ถือ 1, G ถือ 1</td></tr>
+</table>
+<div class="box box-purple">
+  <strong>คีย์สำคัญ:</strong> F มี 3 instances แต่ใช้ไปแค่ 2 (E และ G ถือ) → ยังเหลือ 1 instance ว่างอยู่!<br>
+  C กำลังรอ F อยู่ และ F <em>มีของว่าง</em> → C สามารถได้รับ F ได้ทันที ← นี่คือกุญแจสำคัญ!
+</div>
+
+<!-- Step-by-step RAG Reduction -->
+<h3>ขั้นตอนตรวจสอบ Deadlock: RAG Reduction Algorithm</h3>
+<div class="box box-blue">
+  <strong>หลักการ:</strong> หา Process ที่สามารถได้รับทรัพยากรที่รออยู่ได้ (Request ≤ Available) → สมมติว่ามันทำงานเสร็จ → คืนทรัพยากรทั้งหมด → ทำซ้ำ<br>
+  ถ้าลบได้จนหมดทุก Process → <span style="color:#48cfad">Safe (ไม่มี Deadlock)</span><br>
+  ถ้ายังเหลือ Process ลบไม่ได้ → <span style="color:#fc6e51">Deadlock! (Process ที่ลบไม่ได้คือผู้ติด)</span>
+</div>
+<div class="example-box">
+  <div class="ex-title">เริ่มต้น: Available = B:0, D:0, F:1</div>
+  <div class="step"><div class="step-num">1</div><div class="step-body">
+    <strong>สแกนหา Process ที่ทำได้:</strong><br>
+    • A รอ B=1 → B available=0 → ❌ รอไม่ได้<br>
+    • C รอ F=1 → F available=1 → ✅ <strong>C ทำได้!</strong><br>
+    • E รอ D=1 → D available=0 → ❌ รอไม่ได้<br>
+    • G ไม่รออะไร → ✅ <strong>G ทำได้!</strong>
+  </div></div>
+  <div class="step"><div class="step-num">2</div><div class="step-body">
+    <strong>ให้ G เสร็จก่อน</strong> (ไม่รออะไร) → G คืน F(1 instance)<br>
+    Available ใหม่: B:0, D:0, F:<strong>2</strong><br>
+    <strong>ให้ C เสร็จ</strong> (ได้ F ที่รออยู่) → C คืน B(1) และ F(1)<br>
+    Available ใหม่: B:<strong>1</strong>, D:0, F:<strong>3</strong>
+  </div></div>
+  <div class="step"><div class="step-num">3</div><div class="step-body">
+    <strong>สแกนใหม่</strong> — Available = B:1, D:0, F:3<br>
+    • A รอ B=1 → B available=1 → ✅ <strong>A ทำได้!</strong><br>
+    • E รอ D=1 → D available=0 → ❌ รอไม่ได้<br>
+    ให้ A เสร็จ → A คืน D(1) → Available: B:2, D:<strong>1</strong>, F:3
+  </div></div>
+  <div class="step"><div class="step-num">4</div><div class="step-body">
+    <strong>สแกนสุดท้าย</strong> — Available = B:2, D:1, F:3<br>
+    • E รอ D=1 → D available=1 → ✅ <strong>E ทำได้!</strong><br>
+    ให้ E เสร็จ → ทุก Process เสร็จหมดแล้ว!
+  </div></div>
+  <div class="box box-green" style="margin-top:10px">
+    ✅ <strong>Safe Sequence: G → C → A → E</strong><br>
+    ทุก Process ทำงานเสร็จได้ → <strong>ไม่มี Deadlock!</strong>
+  </div>
+</div>
+
+<!-- Wait-For Graph -->
+<h3>Wait-For Graph — มองให้ชัดขึ้น</h3>
+<p>ลบ Resource Node ออกทั้งหมด แล้วลาก P→P โดยตรง: "ถ้า P1 รอ Resource ที่ P2 ถือ → วาด P1→P2"</p>
+<svg viewBox="0 0 560 180" style="background:#141925;border-radius:8px;width:100%;display:block;margin:10px 0" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="wfx-a" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L0,9 L9,4.5 z" fill="#fc6e51"/></marker>
+    <marker id="wfx-g" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L0,9 L9,4.5 z" fill="#48cfad"/></marker>
+  </defs>
+  <!-- A -->
+  <circle cx="90" cy="80" r="26" fill="#1e1533" stroke="#6c63ff" stroke-width="2"/>
+  <text x="90" y="86" text-anchor="middle" fill="#e8eaf6" font-size="16" font-family="sans-serif" font-weight="bold">A</text>
+  <!-- C -->
+  <circle cx="240" cy="80" r="26" fill="#1e1533" stroke="#6c63ff" stroke-width="2"/>
+  <text x="240" y="86" text-anchor="middle" fill="#e8eaf6" font-size="16" font-family="sans-serif" font-weight="bold">C</text>
+  <!-- E -->
+  <circle cx="165" cy="148" r="26" fill="#1e1533" stroke="#6c63ff" stroke-width="2"/>
+  <text x="165" y="154" text-anchor="middle" fill="#e8eaf6" font-size="16" font-family="sans-serif" font-weight="bold">E</text>
+  <!-- G: no wait, highlighted -->
+  <circle cx="360" cy="80" r="26" fill="#112b1e" stroke="#48cfad" stroke-width="2.5"/>
+  <text x="360" y="86" text-anchor="middle" fill="#48cfad" font-size="16" font-family="sans-serif" font-weight="bold">G</text>
+  <text x="360" y="122" text-anchor="middle" fill="#48cfad" font-size="10" font-family="sans-serif">ไม่รออะไร</text>
+  <!-- A→C (A waits B held by C) -->
+  <path d="M114,66 Q165,30 214,66" fill="none" stroke="#fc6e51" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#wfx-a)"/>
+  <text x="165" y="42" text-anchor="middle" fill="#fc6e51" font-size="10" font-family="sans-serif">A รอ B ที่ C ถือ</text>
+  <!-- A→E (A waits B held by E) -->
+  <line x1="80" y1="106" x2="145" y2="126" stroke="#fc6e51" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#wfx-a)"/>
+  <text x="97" y="123" fill="#fc6e51" font-size="9" font-family="sans-serif">B ที่ E ถือ</text>
+  <!-- C→E (C waits F held by E — BUT F has free instance! so technically C is NOT blocked) -->
+  <line x1="226" y1="106" x2="190" y2="126" stroke="#9fa8b3" stroke-width="1.5" stroke-dasharray="4,4"/>
+  <text x="225" y="130" fill="#9fa8b3" font-size="9" font-family="sans-serif">C รอ F (แต่ F มี 1 free!)</text>
+  <!-- E→A (E waits D held by A) -->
+  <path d="M141,136 Q100,155 82,108" fill="none" stroke="#fc6e51" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#wfx-a)"/>
+  <text x="80" y="150" text-anchor="middle" fill="#fc6e51" font-size="10" font-family="sans-serif">E รอ D ที่ A ถือ</text>
+  <!-- Annotation about cycle but C breaks it -->
+  <rect x="400" y="30" width="150" height="100" rx="6" fill="#1e2132" stroke="#2e3347"/>
+  <text x="475" y="52" text-anchor="middle" fill="#ffce54" font-size="11" font-family="sans-serif" font-weight="bold">สังเกต:</text>
+  <text x="475" y="68" text-anchor="middle" fill="#9fa8b3" font-size="10" font-family="sans-serif">A→E→A ดูเหมือน</text>
+  <text x="475" y="82" text-anchor="middle" fill="#fc6e51" font-size="10" font-family="sans-serif">Cycle อยู่!</text>
+  <text x="475" y="100" text-anchor="middle" fill="#9fa8b3" font-size="10" font-family="sans-serif">แต่ C→F ไม่บล็อก</text>
+  <text x="475" y="114" text-anchor="middle" fill="#48cfad" font-size="10" font-family="sans-serif">(F มีของว่าง ✓)</text>
+</svg>
+<div class="box box-yellow">
+  <strong>⚠ ข้อควรระวัง:</strong> การดู Cycle ใน Wait-For Graph อย่างเดียวอาจทำให้สับสน!<br>
+  ต้องตรวจสอบด้วยว่า Request Edge แต่ละเส้น — Resource นั้น <em>มี Free Instance หรือเปล่า?</em><br>
+  • A→B: B มี 0 free → A ถูกบล็อกจริง<br>
+  • C→F: F มี <strong>1 free</strong> → C <em>ไม่ถูกบล็อก!</em> (ได้ F ทันที)<br>
+  • E→D: D มี 0 free → E ถูกบล็อกจริง<br>
+  → ถอด C ออกจาก "กลุ่มที่อาจ Deadlock" → วงกลมแตก → ไม่มี Deadlock!
+</div>
+
+<!-- Comparison: if F has only 2 instances -->
+<h3>เปรียบเทียบ: ถ้า F มีแค่ 2 instances (ไม่มี Free) → เกิด Deadlock!</h3>
+<div class="example-box">
+  <div class="ex-title">กรณี F=2 instances: เริ่มต้น Available = B:0, D:0, F:0 (ทุกอย่างเต็มหมด)</div>
+  <table>
+    <tr><th>Process</th><th>รออะไร</th><th>Available ตอนนั้น</th><th>ทำได้?</th></tr>
+    <tr><td>A</td><td>B=1</td><td>B=0</td><td style="color:#fc6e51">❌ บล็อก</td></tr>
+    <tr><td>C</td><td>F=1</td><td>F=0</td><td style="color:#fc6e51">❌ บล็อก</td></tr>
+    <tr><td>E</td><td>D=1</td><td>D=0</td><td style="color:#fc6e51">❌ บล็อก</td></tr>
+    <tr><td>G</td><td>ไม่รือะไร</td><td>—</td><td style="color:#48cfad">✅ เสร็จ → คืน F(1) → F available=1</td></tr>
+  </table>
+  <p>หลัง G เสร็จ: Available = B:0, D:0, F:1</p>
+  <table>
+    <tr><th>Process</th><th>รออะไร</th><th>Available</th><th>ทำได้?</th></tr>
+    <tr><td>A</td><td>B=1</td><td>B=0</td><td style="color:#fc6e51">❌</td></tr>
+    <tr><td>C</td><td>F=1</td><td>F=1</td><td style="color:#48cfad">✅ C เสร็จ → คืน B(1), F(1)</td></tr>
+    <tr><td>E</td><td>D=1</td><td>D=0</td><td style="color:#fc6e51">❌</td></tr>
+  </table>
+  <p>หลัง C เสร็จ: Available = B:1, D:0, F:2 → A ได้ B → A เสร็จ → D free → E เสร็จ</p>
+  <div class="box box-green" style="margin-top:6px">
+    ✅ <strong>ยังไม่มี Deadlock!</strong> แม้ F มีแค่ 2 instances ก็ยังมี Safe Sequence: G→C→A→E<br>
+    เพราะ G เสร็จก่อนได้ (ไม่รออะไร) แล้วปล่อย F ให้ C ใช้ได้
+  </div>
+</div>
+<div class="example-box">
+  <div class="ex-title">กรณีที่จะเกิด Deadlock จริง: สมมติ G ก็รอ E (เพิ่ม G→E edge)</div>
+  <p>ถ้า G รอ E ด้วย (และ E ถูกบล็อก) + B,D,F ล้วนเต็มหมด → ไม่มีใครสามารถเริ่มก่อนได้<br>
+  Wait-For Graph: A→C→E→A (Cycle) และ C→G→E→A→C (Cycle ยาวกว่า) → <strong>Deadlock แน่นอน!</strong></p>
+  <div class="warn">⚠ กฎ: Deadlock เกิดเมื่อทุก Process ในกลุ่มหนึ่งต่างรอกัน AND ไม่มีใครสามารถเสร็จได้ก่อน (ไม่มี Free Resource ที่พอ)</div>
+</div>
+
+<!-- Summary box -->
+<div class="box box-green">
+  <strong>🎯 สรุปวิธีตรวจ Deadlock จาก RAG:</strong><br>
+  1. ดูว่า Resource ไหนมี Free Instance บ้าง<br>
+  2. หา Process ที่ Request ≤ Free Available → Process นั้นเสร็จได้ก่อน<br>
+  3. ให้มันเสร็จ → คืนทรัพยากรทั้งหมด → อัปเดต Available<br>
+  4. ทำซ้ำจนลบได้หมด (Safe) หรือไม่มีใครเสร็จได้อีก (Deadlock)<br>
+  5. Process ที่ลบไม่ได้ = ผู้ติด Deadlock
+</div>
+</div>
+
 <!-- 6.5 Safety Algorithm -->
 <div class="card">
 <h2>6.5 Safety Algorithm — หัวใจของ Banker's Algorithm</h2>
