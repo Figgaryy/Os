@@ -3783,23 +3783,74 @@ Internal Fragmentation = (จำนวน Pages × Page Size) − Process Size<b
   <!-- วิธีที่ 2: Page Fault Frequency -->
   <div style="background:#1a1f2e;border:1px solid #ffce54;border-radius:8px;padding:16px">
     <div style="color:#ffce54;font-weight:bold;font-size:15px;margin-bottom:8px">วิธีที่ 2: Page Fault Frequency (PFF)</div>
-    <p style="margin:0 0 10px 0">วัด <strong>อัตรา Page Fault ของแต่ละ Process</strong> แล้วเปรียบกับ threshold บน/ล่าง</p>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+    <p style="margin:0 0 12px 0">แทนที่จะคาดเดา PFF <strong>วัดของจริง</strong> — นับว่าแต่ละ Process เกิด Page Fault บ่อยแค่ไหน แล้วปรับ Frame ตามนั้น</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;font-size:13px">
       <div style="background:#2b1111;border:1px solid #ff6b6b;border-radius:6px;padding:10px;text-align:center">
-        <div style="color:#ff6b6b;font-weight:bold">Fault Rate สูงเกิน threshold บน</div>
-        <div style="color:#9fa8b3;margin-top:6px;font-size:13px">→ Process ขาด Frame<br>→ เพิ่ม Frame ให้</div>
+        <div style="color:#ff6b6b;font-weight:bold">Fault Rate &gt; ขีดบน</div>
+        <div style="color:#9fa8b3;margin-top:6px">Process ขาด Frame<br>→ <strong>เพิ่ม Frame ให้</strong></div>
+      </div>
+      <div style="background:#1a2744;border:1px solid #4a9eff;border-radius:6px;padding:10px;text-align:center">
+        <div style="color:#4a9eff;font-weight:bold">ขีดล่าง ≤ Rate ≤ ขีดบน</div>
+        <div style="color:#9fa8b3;margin-top:6px">อยู่ในช่วงปกติ<br>→ <strong>ไม่ต้องทำอะไร</strong></div>
       </div>
       <div style="background:#112b1e;border:1px solid #48cfad;border-radius:6px;padding:10px;text-align:center">
-        <div style="color:#48cfad;font-weight:bold">Fault Rate ต่ำกว่า threshold ล่าง</div>
-        <div style="color:#9fa8b3;margin-top:6px;font-size:13px">→ Process มี Frame เหลือ<br>→ ดึง Frame คืนมาให้คนอื่น</div>
+        <div style="color:#48cfad;font-weight:bold">Fault Rate &lt; ขีดล่าง</div>
+        <div style="color:#9fa8b3;margin-top:6px">Process มี Frame เกิน<br>→ <strong>ดึง Frame คืน</strong></div>
       </div>
     </div>
+
     <div class="example-box" style="margin:0">
-      <div class="ex-title">ตัวอย่าง PFF</div>
-      <p style="margin:6px 0 0 0;font-size:13px">กำหนด threshold: บน = 0.5 fault/step, ล่าง = 0.1 fault/step<br>
-      Process A วัดได้ 0.8 fault/step → <strong style="color:#ff6b6b">เพิ่ม Frame ให้ Process A</strong><br>
-      Process B วัดได้ 0.05 fault/step → <strong style="color:#48cfad">ดึง Frame จาก B มาให้ A</strong><br>
-      ถ้าไม่มี Frame เหลือพอ → ต้อง Swap Process ออก (ไปวิธีที่ 3)</p>
+      <div class="ex-title">ตัวอย่าง PFF แบบละเอียด</div>
+      <p style="margin:6px 0 10px 0;font-size:13px">
+        <strong>ตั้งค่า:</strong> วัดทุก 10 steps | ขีดบน = 5 faults/10 steps | ขีดล่าง = 1 fault/10 steps<br>
+        <strong>RAM มีทั้งหมด 12 Free Frames</strong> แจกให้ Process A=3, B=4, C=5 ตอนเริ่มต้น
+      </p>
+
+      <table style="font-size:13px">
+        <tr>
+          <th>ช่วง</th>
+          <th>Process A<br><span style="font-weight:normal;color:#9fa8b3">(ได้ 3 frames)</span></th>
+          <th>Process B<br><span style="font-weight:normal;color:#9fa8b3">(ได้ 4 frames)</span></th>
+          <th>Process C<br><span style="font-weight:normal;color:#9fa8b3">(ได้ 5 frames)</span></th>
+          <th>การตัดสินใจ</th>
+        </tr>
+        <tr>
+          <td>Steps 1–10</td>
+          <td style="color:#ff6b6b;font-weight:bold">8 faults 🔴</td>
+          <td style="color:#4a9eff">3 faults 🔵</td>
+          <td style="color:#48cfad">0 faults 🟢</td>
+          <td style="font-size:12px">A เกินขีดบน(5) → ขาด Frame<br>C ต่ำกว่าขีดล่าง(1) → Frame เกิน<br>→ ดึง 1 Frame จาก C ให้ A</td>
+        </tr>
+        <tr>
+          <td>Steps 11–20<br><span style="color:#9fa8b3;font-size:11px">(A=4, B=4, C=4)</span></td>
+          <td style="color:#4a9eff">4 faults 🔵</td>
+          <td style="color:#4a9eff">4 faults 🔵</td>
+          <td style="color:#48cfad">1 fault 🟢</td>
+          <td style="font-size:12px">ทุกตัวอยู่ในช่วงปกติ<br>→ ไม่ต้องเปลี่ยนอะไร ✅</td>
+        </tr>
+        <tr>
+          <td>Steps 21–30<br><span style="color:#9fa8b3;font-size:11px">(A=4, B=4, C=4)</span></td>
+          <td style="color:#4a9eff">3 faults 🔵</td>
+          <td style="color:#ff6b6b;font-weight:bold">7 faults 🔴</td>
+          <td style="color:#48cfad">0 faults 🟢</td>
+          <td style="font-size:12px">B เกินขีดบน → ขาด Frame<br>C ต่ำกว่าขีดล่าง → Frame เกิน<br>→ ดึง 1 Frame จาก C ให้ B</td>
+        </tr>
+        <tr>
+          <td>Steps 31–40<br><span style="color:#9fa8b3;font-size:11px">(A=4, B=5, C=3)</span></td>
+          <td style="color:#ff6b6b;font-weight:bold">6 faults 🔴</td>
+          <td style="color:#4a9eff">2 faults 🔵</td>
+          <td style="color:#48cfad">0 faults 🟢</td>
+          <td style="font-size:12px">A เกินขีดบนอีก, C ต่ำอีก<br>แต่ไม่มี Free Frame เหลือ!<br>→ <strong style="color:#fc6e51">Swap C ออก</strong> ให้ A ใช้ frame ของ C</td>
+        </tr>
+      </table>
+
+      <div style="margin-top:12px;background:#1a2744;border-left:3px solid #4a9eff;padding:10px 13px;border-radius:0 6px 6px 0;font-size:13px">
+        <strong style="color:#4a9eff">สรุปการทำงานของ PFF:</strong><br>
+        PFF ปรับ Frame แบบ <strong>dynamic ตลอดเวลา</strong> — ไม่ได้กำหนดตายตัวแต่แรก<br>
+        Process ที่ Fault เยอะ = ต้องการ Frame มากขึ้น | Process ที่ Fault น้อย = คืน Frame ได้<br>
+        ถ้าไม่มี Free Frame เหลือแจก → ต้อง Swap Process ออก (เชื่อมกับวิธีที่ 3)
+      </div>
     </div>
   </div>
 
