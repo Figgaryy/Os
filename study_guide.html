@@ -2212,27 +2212,137 @@ button.run-btn.secondary{background:#2a3a52}
 </div>
 
 <h3>การแปลงด้วย Binary (สำคัญมากในข้อสอบ!)</h3>
-<p>ถ้า Page Size = 2ⁿ words → Offset ใช้ <strong>n bits ล่างสุด</strong>, ส่วนที่เหลือเป็น Page Number</p>
-<div class="formula">Logical Address (binary) = [Page Number bits | Offset bits]<br>
-Offset bits = log₂(Page Size)<br>
-Page Number bits = (Total bits) − (Offset bits)</div>
+<p>เมื่อ Page Size = 2ⁿ words → binary ของ Logical Address จะ<strong>แบ่งตัวเองอัตโนมัติ</strong> ไม่ต้องหาร — ตัด n bits ขวาสุด = Offset, ที่เหลือ = Page Number</p>
+
+<div style="background:#0d1117;border-radius:10px;padding:16px;margin:12px 0;overflow-x:auto">
+  <div style="text-align:center;color:#ffce54;font-size:12px;font-weight:bold;margin-bottom:12px;letter-spacing:1px">โครงสร้าง m-bit Logical Address ในระบบ Paging</div>
+  <div style="display:flex;justify-content:center;align-items:center;gap:0;flex-wrap:wrap">
+    <div style="background:#1a2744;border:2px solid #4a9eff;padding:12px 32px;border-radius:8px 0 0 8px;text-align:center;min-width:130px">
+      <div style="color:#4a9eff;font-weight:bold;font-size:17px;font-family:monospace">m − n bits</div>
+      <div style="color:#9fa8b3;font-size:10px;margin-top:3px">← High bits (MSB)</div>
+      <div style="color:#7dd3fc;font-size:13px;margin-top:8px;font-family:sans-serif">Page Number (p)</div>
+    </div>
+    <div style="background:#1e2820;border:2px solid #48cfad;border-left:none;padding:12px 32px;border-radius:0 8px 8px 0;text-align:center;min-width:130px">
+      <div style="color:#48cfad;font-weight:bold;font-size:17px;font-family:monospace">n bits</div>
+      <div style="color:#9fa8b3;font-size:10px;margin-top:3px">Low bits (LSB) →</div>
+      <div style="color:#a8f0dd;font-size:13px;margin-top:8px;font-family:sans-serif">Offset (d)</div>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:10px;color:#9fa8b3;font-size:12px;font-family:monospace">
+    n = log₂(Page Size) &emsp;|&emsp; Page Size = 2ⁿ words &emsp;|&emsp; จำนวน Pages = 2^(m−n)
+  </div>
+</div>
+
+<div class="box box-blue">
+  <strong>ขั้นตอน 5 ขั้น (Binary Conversion):</strong><br>
+  <span style="color:#ffce54;font-weight:bold">①</span> หา n = log₂(Page Size) → จำนวน Offset bits<br>
+  <span style="color:#ffce54;font-weight:bold">②</span> แปลง Logical Address เป็น Binary m bits (เติม 0 นำหน้าให้ครบ)<br>
+  <span style="color:#ffce54;font-weight:bold">③</span> แบ่ง: <strong>n bits ขวาสุด</strong> = Offset (d) &nbsp;|&nbsp; bits ที่เหลือ = Page Number (p)<br>
+  <span style="color:#ffce54;font-weight:bold">④</span> แปลง p, d กลับเป็นฐาน 10 → หา Frame = PageTable[p]<br>
+  <span style="color:#ffce54;font-weight:bold">⑤</span> Physical Address = Frame × Page Size + d
+</div>
+
 <div class="example-box">
-  <div class="ex-title">ตัวอย่าง: แปลงด้วย Binary</div>
-  <p>Logical address = 7 bits, Page size = 4 words (= 2²) → offset = 2 bits, page# = 5 bits</p>
-  <p>Logical address = 45 (decimal) = 0101101 (binary, 7 bits)<br>
-  Page# = 01011 = 11, Offset = 01 = 1<br>
-  ถ้า Frame[11] = 6 → Physical Address = 6 × 4 + 1 = <strong>25</strong></p>
+  <div class="ex-title">ตัวอย่างทีละขั้น: m = 7 bits, Page Size = 4 = 2², PageTable[11] = 6</div>
+  <p style="color:#9fa8b3;margin-bottom:10px">แปลง Logical Address = <strong style="color:#fff">45</strong></p>
+  <div style="display:flex;flex-direction:column;gap:7px">
+    <div style="background:#1a1f2e;border-left:3px solid #ffce54;padding:9px 13px;border-radius:0 6px 6px 0;font-size:14px">
+      <span style="color:#ffce54;font-weight:bold">① </span>
+      Page Size = 4 = 2² → <strong style="color:#48cfad">n = 2</strong> offset bits &nbsp;,&nbsp; page bits = 7 − 2 = <strong style="color:#4a9eff">5</strong>
+    </div>
+    <div style="background:#1a1f2e;border-left:3px solid #ffce54;padding:9px 13px;border-radius:0 6px 6px 0;font-size:14px">
+      <span style="color:#ffce54;font-weight:bold">② </span>
+      45 (decimal) = <span style="font-family:monospace;color:#e0e0e0;font-size:16px;letter-spacing:2px">0101101</span>₂ (7 bits)
+    </div>
+    <div style="background:#1a1f2e;border-left:3px solid #ffce54;padding:9px 13px;border-radius:0 6px 6px 0">
+      <div style="font-size:14px"><span style="color:#ffce54;font-weight:bold">③ </span>แบ่ง bits (5 | 2):</div>
+      <div style="margin-top:9px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <span style="font-family:monospace;font-size:20px;letter-spacing:3px;background:#1a2744;border:2px solid #4a9eff;padding:6px 13px;border-radius:6px;color:#4a9eff">01011</span>
+        <span style="color:#6c63ff;font-size:26px;font-weight:bold;line-height:1">|</span>
+        <span style="font-family:monospace;font-size:20px;letter-spacing:3px;background:#1e2820;border:2px solid #48cfad;padding:6px 13px;border-radius:6px;color:#48cfad">01</span>
+        <div style="font-size:12px;color:#9fa8b3;display:flex;flex-direction:column;gap:2px">
+          <span><span style="color:#4a9eff">■</span> 5 bits = Page Number</span>
+          <span><span style="color:#48cfad">■</span> 2 bits = Offset</span>
+        </div>
+      </div>
+    </div>
+    <div style="background:#1a1f2e;border-left:3px solid #ffce54;padding:9px 13px;border-radius:0 6px 6px 0;font-size:14px">
+      <span style="color:#ffce54;font-weight:bold">④ </span>
+      p = <span style="font-family:monospace;color:#4a9eff">01011</span>₂ = <strong style="color:#4a9eff">11</strong> &nbsp;,&nbsp;
+      d = <span style="font-family:monospace;color:#48cfad">01</span>₂ = <strong style="color:#48cfad">1</strong>
+      → Frame = PageTable[<strong style="color:#4a9eff">11</strong>] = <strong style="color:#ffce54">6</strong>
+    </div>
+    <div style="background:#112b1e;border:2px solid #48cfad;padding:11px 13px;border-radius:6px;font-size:15px">
+      <span style="color:#48cfad;font-weight:bold">⑤ </span>
+      Physical = <strong style="color:#ffce54">6</strong> × 4 + <strong style="color:#48cfad">1</strong> = <strong style="color:#48cfad;font-size:20px">25</strong>
+    </div>
+  </div>
 </div>
 
 <h3>Internal Fragmentation ใน Paging</h3>
-<p>เพราะแบ่งเป็น Page ขนาดคงที่ กระบวนการที่ไม่ได้ขนาดพอดีจะเกิด Internal Fragmentation ที่ Page สุดท้าย</p>
-<div class="formula">Internal Fragmentation = (จำนวน Page × Page Size) − ขนาดกระบวนการ<br>
-หรือ = Page Size − (Process Size mod Page Size)  ถ้า mod ≠ 0</div>
+<p>Paging แบ่งเป็น Page ขนาดคงที่ — ถ้า process ขนาดไม่หารลงตัว <strong>Page สุดท้ายจะมีพื้นที่ว่างที่ใช้งานไม่ได้</strong> เรียกว่า Internal Fragmentation</p>
+
+<div style="background:#0d1117;border-radius:10px;padding:14px;margin:12px 0;overflow-x:auto">
+  <div style="text-align:center;color:#ffce54;font-size:12px;font-weight:bold;margin-bottom:12px">ภาพ: Process 35 words, Page Size = 8 words → ต้องการ 5 pages</div>
+  <div style="display:flex;justify-content:center;align-items:stretch;gap:3px;flex-wrap:wrap">
+    <div style="background:#1a2744;border:2px solid #4a9eff;padding:8px 10px;border-radius:6px;text-align:center;min-width:58px">
+      <div style="color:#4a9eff;font-size:10px;font-weight:bold">Page 0</div>
+      <div style="background:#4a9eff33;border-radius:3px;margin-top:5px;height:18px;display:flex;align-items:center;justify-content:center">
+        <span style="color:#7dd3fc;font-size:11px">8 words</span>
+      </div>
+      <div style="color:#48cfad;font-size:10px;margin-top:4px">✓ เต็ม</div>
+    </div>
+    <div style="background:#1a2744;border:2px solid #4a9eff;padding:8px 10px;border-radius:6px;text-align:center;min-width:58px">
+      <div style="color:#4a9eff;font-size:10px;font-weight:bold">Page 1</div>
+      <div style="background:#4a9eff33;border-radius:3px;margin-top:5px;height:18px;display:flex;align-items:center;justify-content:center">
+        <span style="color:#7dd3fc;font-size:11px">8 words</span>
+      </div>
+      <div style="color:#48cfad;font-size:10px;margin-top:4px">✓ เต็ม</div>
+    </div>
+    <div style="background:#1a2744;border:2px solid #4a9eff;padding:8px 10px;border-radius:6px;text-align:center;min-width:58px">
+      <div style="color:#4a9eff;font-size:10px;font-weight:bold">Page 2</div>
+      <div style="background:#4a9eff33;border-radius:3px;margin-top:5px;height:18px;display:flex;align-items:center;justify-content:center">
+        <span style="color:#7dd3fc;font-size:11px">8 words</span>
+      </div>
+      <div style="color:#48cfad;font-size:10px;margin-top:4px">✓ เต็ม</div>
+    </div>
+    <div style="background:#1a2744;border:2px solid #4a9eff;padding:8px 10px;border-radius:6px;text-align:center;min-width:58px">
+      <div style="color:#4a9eff;font-size:10px;font-weight:bold">Page 3</div>
+      <div style="background:#4a9eff33;border-radius:3px;margin-top:5px;height:18px;display:flex;align-items:center;justify-content:center">
+        <span style="color:#7dd3fc;font-size:11px">8 words</span>
+      </div>
+      <div style="color:#48cfad;font-size:10px;margin-top:4px">✓ เต็ม</div>
+    </div>
+    <div style="background:#1f1515;border:2px solid #ff6b6b;padding:8px 10px;border-radius:6px;text-align:center;min-width:90px">
+      <div style="color:#ff6b6b;font-size:10px;font-weight:bold">Page 4 (สุดท้าย)</div>
+      <div style="display:flex;gap:2px;margin-top:5px;align-items:stretch;height:18px">
+        <div style="background:#4a9eff;border-radius:2px 0 0 2px;flex:3;display:flex;align-items:center;justify-content:center;color:white;font-size:9px;font-weight:bold">3</div>
+        <div style="background:#ff6b6b22;border:1px dashed #ff6b6b;border-radius:0 2px 2px 0;flex:5;display:flex;align-items:center;justify-content:center;color:#ff6b6b;font-size:9px">5 ว่าง</div>
+      </div>
+      <div style="color:#ff6b6b;font-size:10px;margin-top:4px">ใช้ 3 / 8</div>
+    </div>
+  </div>
+  <div style="text-align:center;color:#9fa8b3;font-size:11px;margin-top:10px">
+    จัดสรรทั้งหมด = 5 × 8 = <strong style="color:#7dd3fc">40 words</strong> &nbsp;|&nbsp;
+    ใช้จริง = <strong style="color:#48cfad">35 words</strong> &nbsp;|&nbsp;
+    สูญเปล่า = <strong style="color:#ff6b6b">5 words ← Internal Fragmentation</strong>
+  </div>
+</div>
+
+<div class="formula">จำนวน Pages = ⌈Process Size ÷ Page Size⌉<br>
+Internal Fragmentation = (จำนวน Pages × Page Size) − Process Size<br>
+<span style="opacity:0.7;font-size:13px">ทางลัด: = Page Size − (Process Size mod Page Size) &nbsp;— ใช้ได้เฉพาะเมื่อ mod ≠ 0</span></div>
+
 <div class="example-box">
-  <div class="ex-title">ตัวอย่าง: Internal Fragmentation</div>
-  <p>Page size = 8 words. กระบวนการ = 35 words.<br>
-  Pages ที่ต้องใช้ = ⌈35/8⌉ = 5 pages (40 words ถูกจัดสรร)<br>
-  Internal Fragmentation = 40 − 35 = <strong>5 words</strong></p>
+  <div class="ex-title">ตัวอย่าง 2 กรณี</div>
+  <p><strong>กรณี A — ไม่หารลงตัว:</strong> Process = 35 words, Page Size = 8<br>
+  Pages = ⌈35 ÷ 8⌉ = 5 &nbsp;→&nbsp; allocated = 5 × 8 = 40 words<br>
+  <strong>Internal Frag = 40 − 35 = <span style="color:#ff6b6b">5 words</span></strong><br>
+  <span style="color:#9fa8b3;font-size:13px">ทางลัด: 8 − (35 mod 8) = 8 − 3 = 5 ✓</span></p>
+  <hr style="border-color:#2e3347;margin:10px 0">
+  <p><strong>กรณี B — หารลงตัว:</strong> Process = 40 words, Page Size = 8<br>
+  Pages = ⌈40 ÷ 8⌉ = 5 &nbsp;→&nbsp; allocated = 5 × 8 = 40 words<br>
+  <strong>Internal Frag = 40 − 40 = <span style="color:#48cfad">0 words</span></strong> (ไม่มี fragmentation เลย)</p>
 </div>
 
 <!-- 7.5b More Paging Examples -->
@@ -2274,24 +2384,84 @@ Page Number bits = (Total bits) − (Offset bits)</div>
 </div>
 
 <h3>Binary Mode — แปลงที่อยู่ด้วย Binary (สำคัญมาก!)</h3>
+
 <div class="box box-purple">
-  <strong>เทคนิค Binary Mode:</strong><br>
-  ถ้า Page Size = 2^n → ตัด n bits ขวาสุดออก = Offset (d), ส่วนที่เหลือ = Page Number (p)<br>
-  <br>
-  ตัวอย่าง: Page size = 16 = 2^4 → offset = 4 bits ล่างสุด<br>
-  Logical = 52 = 110100 binary<br>
-  Offset = 0100 = 4, Page# = 11 = 3<br>
-  → ถ้า Frame[3] = 7 → Physical = 7×16+4 = 116 = 1110100 binary
+  <strong>สรุปเทคนิค Binary Mode:</strong><br>
+  ถ้า Page Size = 2ⁿ → <strong>n = log₂(Page Size)</strong><br>
+  • Logical binary: [<span style="color:#4a9eff">Page# bits</span> | <span style="color:#48cfad">Offset n bits</span>] — ตัด n bits ขวา = Offset, ที่เหลือ = Page#<br>
+  • Physical binary: [<span style="color:#4a9eff">Frame# bits</span> | <span style="color:#48cfad">Offset n bits</span>] — offset เหมือนกันทั้งสองฝั่ง ประกอบได้เลย!
 </div>
 
 <div class="example-box">
-  <div class="ex-title">ตัวอย่าง Binary: Logical address = 8 bits, Page size = 32 = 2^5</div>
-  <p>→ Offset = 5 bits, Page# = 3 bits, สูงสุด 8 pages (2^3)</p>
+  <div class="ex-title">ตัวอย่างครบวงจร: Page Size = 16 = 2⁴ → n = 4 offset bits, PageTable[3] = 7</div>
+  <p><strong>แปลง Logical 52 → Physical (ทั้ง decimal และ binary)</strong></p>
+  <div style="display:flex;flex-direction:column;gap:7px;margin-top:8px">
+    <div style="background:#1a1f2e;border-left:3px solid #ffce54;padding:8px 12px;border-radius:0 6px 6px 0;font-size:14px">
+      <span style="color:#ffce54;font-weight:bold">① </span>
+      n = log₂(16) = <strong style="color:#48cfad">4</strong> offset bits &nbsp;,&nbsp; สมมติ m = 8 bits → page bits = 8 − 4 = <strong style="color:#4a9eff">4</strong>
+    </div>
+    <div style="background:#1a1f2e;border-left:3px solid #ffce54;padding:8px 12px;border-radius:0 6px 6px 0;font-size:14px">
+      <span style="color:#ffce54;font-weight:bold">② </span>
+      52 (decimal) = <span style="font-family:monospace;color:#e0e0e0;font-size:16px;letter-spacing:2px">00110100</span>₂ (8 bits)
+    </div>
+    <div style="background:#1a1f2e;border-left:3px solid #ffce54;padding:9px 12px;border-radius:0 6px 6px 0">
+      <div style="font-size:14px"><span style="color:#ffce54;font-weight:bold">③ </span>แบ่ง bits (4 | 4):</div>
+      <div style="margin-top:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <span style="font-family:monospace;font-size:20px;letter-spacing:2px;background:#1a2744;border:2px solid #4a9eff;padding:5px 12px;border-radius:6px;color:#4a9eff">0011</span>
+        <span style="color:#6c63ff;font-size:26px;font-weight:bold;line-height:1">|</span>
+        <span style="font-family:monospace;font-size:20px;letter-spacing:2px;background:#1e2820;border:2px solid #48cfad;padding:5px 12px;border-radius:6px;color:#48cfad">0100</span>
+        <div style="font-size:12px;color:#9fa8b3;display:flex;flex-direction:column;gap:2px">
+          <span><span style="color:#4a9eff">■</span> 0011₂ = Page# 3</span>
+          <span><span style="color:#48cfad">■</span> 0100₂ = Offset 4</span>
+        </div>
+      </div>
+    </div>
+    <div style="background:#1a1f2e;border-left:3px solid #ffce54;padding:8px 12px;border-radius:0 6px 6px 0;font-size:14px">
+      <span style="color:#ffce54;font-weight:bold">④ </span>
+      Frame = PageTable[<strong style="color:#4a9eff">3</strong>] = <strong style="color:#ffce54">7</strong>
+    </div>
+    <div style="background:#112b1e;border:2px solid #48cfad;padding:10px 12px;border-radius:6px">
+      <div style="font-size:15px"><span style="color:#48cfad;font-weight:bold">⑤ Decimal: </span>Physical = <strong style="color:#ffce54">7</strong> × 16 + <strong style="color:#48cfad">4</strong> = <strong style="color:#48cfad;font-size:20px">116</strong></div>
+      <div style="margin-top:8px;font-size:14px">
+        <span style="color:#48cfad;font-weight:bold">⑤ Binary: </span>Frame 7 = <span style="font-family:monospace;color:#4a9eff">0111</span> &nbsp;,&nbsp; Offset 4 = <span style="font-family:monospace;color:#48cfad">0100</span><br>
+        <span style="margin-left:16px">Physical binary = <span style="font-family:monospace"><span style="color:#4a9eff">0111</span><span style="color:#48cfad">0100</span></span> = 01110100₂ = <strong style="color:#48cfad">116</strong> ✓</span>
+      </div>
+    </div>
+  </div>
+  <div style="background:#1a1f2e;border-radius:6px;padding:8px 12px;margin-top:8px;font-size:13px;color:#9fa8b3">
+    💡 Physical binary = [<span style="color:#4a9eff">Frame binary</span>][<span style="color:#48cfad">Offset binary</span>] — ประกอบ bits ได้เลยโดยไม่ต้องคำนวณ!
+  </div>
+</div>
+
+<div class="example-box">
+  <div class="ex-title">ตัวอย่างตาราง: Logical 8 bits, Page Size = 32 = 2⁵, Page Table = [−, −, 6, 5, −, −, −, 2]</div>
+  <p style="color:#9fa8b3;margin-bottom:8px">n = 5 offset bits &nbsp;|&nbsp; page bits = 8 − 5 = 3 &nbsp;|&nbsp; สูงสุด 2³ = 8 pages</p>
   <table>
-    <tr><th>Logical (Dec)</th><th>Binary (8 bits)</th><th>Page# (3 bits)</th><th>Offset (5 bits)</th><th>Frame (สมมติ)</th><th>Physical</th></tr>
-    <tr><td>100</td><td>01100100</td><td>011 = 3</td><td>00100 = 4</td><td>PT[3]=5</td><td>5×32+4=<strong>164</strong></td></tr>
-    <tr><td>255</td><td>11111111</td><td>111 = 7</td><td>11111 = 31</td><td>PT[7]=2</td><td>2×32+31=<strong>95</strong></td></tr>
-    <tr><td>64</td><td>01000000</td><td>010 = 2</td><td>00000 = 0</td><td>PT[2]=6</td><td>6×32+0=<strong>192</strong></td></tr>
+    <tr><th>Logical</th><th>Binary (8 bits)</th><th>Page# (3 bits)</th><th>Offset (5 bits)</th><th>Frame</th><th>Physical</th></tr>
+    <tr>
+      <td>100</td>
+      <td style="font-family:monospace"><span style="color:#4a9eff">011</span><span style="color:#48cfad">00100</span></td>
+      <td><span style="color:#4a9eff">011</span>₂ = 3</td>
+      <td><span style="color:#48cfad">00100</span>₂ = 4</td>
+      <td>PT[3]=5</td>
+      <td>5×32+4=<strong>164</strong></td>
+    </tr>
+    <tr>
+      <td>255</td>
+      <td style="font-family:monospace"><span style="color:#4a9eff">111</span><span style="color:#48cfad">11111</span></td>
+      <td><span style="color:#4a9eff">111</span>₂ = 7</td>
+      <td><span style="color:#48cfad">11111</span>₂ = 31</td>
+      <td>PT[7]=2</td>
+      <td>2×32+31=<strong>95</strong></td>
+    </tr>
+    <tr>
+      <td>64</td>
+      <td style="font-family:monospace"><span style="color:#4a9eff">010</span><span style="color:#48cfad">00000</span></td>
+      <td><span style="color:#4a9eff">010</span>₂ = 2</td>
+      <td><span style="color:#48cfad">00000</span>₂ = 0</td>
+      <td>PT[2]=6</td>
+      <td>6×32+0=<strong>192</strong></td>
+    </tr>
   </table>
 </div>
 
