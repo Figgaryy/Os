@@ -4208,131 +4208,421 @@ Internal Fragmentation = (จำนวน Pages × Page Size) − Process Size<b
 <h2>9.1 ไฟล์ (File) คืออะไร?</h2>
 <p>ไฟล์คือหน่วยการจัดเก็บข้อมูลที่เล็กที่สุดบน Secondary Storage (ฮาร์ดดิสก์, SSD) มันเป็น <strong>Abstract</strong> ที่ซ่อนรายละเอียดทางกายภาพของอุปกรณ์จัดเก็บ</p>
 
+<!-- File Attributes Visual Card -->
 <h3>File Attributes (คุณสมบัติ/Metadata ของไฟล์)</h3>
-<table>
-  <tr><th>Attribute</th><th>ความหมาย</th><th>ตัวอย่าง</th></tr>
-  <tr><td><strong>Name</strong></td><td>ชื่อที่มนุษย์อ่านได้</td><td>report.pdf</td></tr>
-  <tr><td><strong>Type</strong></td><td>นามสกุลไฟล์ บอก OS ว่าเปิดด้วยโปรแกรมใด</td><td>.pdf, .exe, .txt</td></tr>
-  <tr><td><strong>Location</strong></td><td>ตำแหน่งบนอุปกรณ์จัดเก็บ</td><td>Sector 1024</td></tr>
-  <tr><td><strong>Size</strong></td><td>ขนาดไฟล์</td><td>2.4 MB</td></tr>
-  <tr><td><strong>Date/Time</strong></td><td>วันที่สร้าง, แก้ไข, เข้าถึงล่าสุด</td><td>2026-01-15</td></tr>
-  <tr><td><strong>Protection</strong></td><td>สิทธิ์การเข้าถึง (rwx)</td><td>-rwxr--r--</td></tr>
-</table>
+<div style="display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start;margin-bottom:16px">
+  <!-- File icon -->
+  <div style="flex:0 0 auto">
+    <svg width="110" height="130" viewBox="0 0 110 130" xmlns="http://www.w3.org/2000/svg">
+      <rect x="8" y="4" width="75" height="95" rx="6" fill="#1e2a3a" stroke="#4a9eff" stroke-width="2"/>
+      <polygon points="64,4 83,4 83,23" fill="#4a9eff" opacity="0.5"/>
+      <line x1="64" y1="4" x2="64" y2="23" stroke="#4a9eff" stroke-width="1.5"/>
+      <line x1="64" y1="23" x2="83" y2="23" stroke="#4a9eff" stroke-width="1.5"/>
+      <rect x="20" y="32" width="50" height="6" rx="3" fill="#4a9eff" opacity="0.7"/>
+      <rect x="20" y="44" width="38" height="5" rx="2.5" fill="#48cfad" opacity="0.6"/>
+      <rect x="20" y="54" width="44" height="5" rx="2.5" fill="#ffce54" opacity="0.6"/>
+      <rect x="20" y="64" width="30" height="5" rx="2.5" fill="#fc6e51" opacity="0.6"/>
+      <rect x="20" y="74" width="42" height="5" rx="2.5" fill="#a8b4c8" opacity="0.5"/>
+      <text x="46" y="115" font-family="monospace" font-size="11" fill="#4a9eff" text-anchor="middle">report.pdf</text>
+    </svg>
+  </div>
+  <!-- Attribute labels -->
+  <div style="flex:1;min-width:220px">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div style="background:#1e2a3a;border-left:3px solid #4a9eff;padding:8px 10px;border-radius:4px">
+        <div style="color:#4a9eff;font-size:11px;font-weight:700;text-transform:uppercase">Name</div>
+        <div style="color:#c9d1e0;font-size:12px;margin-top:2px">ชื่อที่มนุษย์อ่านได้</div>
+        <div style="color:#7a8a9e;font-size:11px">report.pdf</div>
+      </div>
+      <div style="background:#1e2a3a;border-left:3px solid #48cfad;padding:8px 10px;border-radius:4px">
+        <div style="color:#48cfad;font-size:11px;font-weight:700;text-transform:uppercase">Type</div>
+        <div style="color:#c9d1e0;font-size:12px;margin-top:2px">นามสกุล/ชนิดไฟล์</div>
+        <div style="color:#7a8a9e;font-size:11px">.pdf, .exe, .txt</div>
+      </div>
+      <div style="background:#1e2a3a;border-left:3px solid #ffce54;padding:8px 10px;border-radius:4px">
+        <div style="color:#ffce54;font-size:11px;font-weight:700;text-transform:uppercase">Location</div>
+        <div style="color:#c9d1e0;font-size:12px;margin-top:2px">ตำแหน่งบน Disk</div>
+        <div style="color:#7a8a9e;font-size:11px">Sector 1024</div>
+      </div>
+      <div style="background:#1e2a3a;border-left:3px solid #fc6e51;padding:8px 10px;border-radius:4px">
+        <div style="color:#fc6e51;font-size:11px;font-weight:700;text-transform:uppercase">Size</div>
+        <div style="color:#c9d1e0;font-size:12px;margin-top:2px">ขนาดไฟล์</div>
+        <div style="color:#7a8a9e;font-size:11px">2.4 MB</div>
+      </div>
+      <div style="background:#1e2a3a;border-left:3px solid #a78bfa;padding:8px 10px;border-radius:4px">
+        <div style="color:#a78bfa;font-size:11px;font-weight:700;text-transform:uppercase">Date/Time</div>
+        <div style="color:#c9d1e0;font-size:12px;margin-top:2px">สร้าง/แก้ไข/เข้าถึง</div>
+        <div style="color:#7a8a9e;font-size:11px">2026-01-15</div>
+      </div>
+      <div style="background:#1e2a3a;border-left:3px solid #ff6b6b;padding:8px 10px;border-radius:4px">
+        <div style="color:#ff6b6b;font-size:11px;font-weight:700;text-transform:uppercase">Protection</div>
+        <div style="color:#c9d1e0;font-size:12px;margin-top:2px">สิทธิ์การเข้าถึง</div>
+        <div style="color:#7a8a9e;font-size:11px">-rwxr--r--</div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <h3>File Operations (การดำเนินการกับไฟล์)</h3>
 <p>OS ให้ System Calls สำหรับ: <strong>Create, Write, Read, Seek (เลื่อน pointer), Delete, Truncate</strong></p>
-<p>การดำเนินการส่วนใหญ่ต้องเปิดไฟล์ก่อน OS ใช้ <strong>Open-File Table</strong> 2 ตาราง:</p>
-<ul>
-  <li><strong>Per-Process Table:</strong> เก็บไฟล์ที่แต่ละ Process เปิดอยู่</li>
-  <li><strong>System-Wide Table:</strong> เก็บข้อมูลไฟล์ที่เปิดอยู่ทั้งระบบ</li>
-</ul>
+<div style="display:flex;gap:12px;flex-wrap:wrap;margin:8px 0 14px">
+  <div style="background:#1e2a3a;border:1px solid #2d3a4e;border-radius:6px;padding:10px 14px;flex:1;min-width:200px">
+    <div style="color:#4a9eff;font-weight:700;margin-bottom:6px">Open-File Table</div>
+    <div style="display:flex;flex-direction:column;gap:5px">
+      <div style="background:#252f40;border-radius:4px;padding:6px 10px;font-size:12px;color:#c9d1e0">
+        <span style="color:#ffce54">Per-Process Table</span> — ไฟล์ที่แต่ละ Process เปิดอยู่
+      </div>
+      <div style="background:#252f40;border-radius:4px;padding:6px 10px;font-size:12px;color:#c9d1e0">
+        <span style="color:#48cfad">System-Wide Table</span> — ข้อมูลไฟล์ที่เปิดอยู่ทั้งระบบ
+      </div>
+    </div>
+  </div>
+</div>
 
+<!-- Access Methods Visual Comparison -->
 <h3>วิธีการ Access ไฟล์</h3>
-<table>
-  <tr><th>วิธี</th><th>ลักษณะ</th><th>ตัวอย่าง</th></tr>
-  <tr><td><strong>Sequential Access</strong></td><td>อ่าน/เขียนตามลำดับ ทีละ Record ไปข้างหน้า</td><td>อ่าน Text File, เล่น MP3</td></tr>
-  <tr><td><strong>Direct Access</strong></td><td>กระโดดไปยัง Block ใดก็ได้โดยตรงด้วยเลข Block</td><td>Database, CD-ROM</td></tr>
-</table>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:8px">
+  <!-- Sequential Access -->
+  <div style="background:#1a2235;border:1.5px solid #48cfad;border-radius:8px;padding:14px">
+    <div style="color:#48cfad;font-weight:700;font-size:13px;margin-bottom:10px">Sequential Access</div>
+    <svg width="100%" height="54" viewBox="0 0 220 54" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+      <!-- Blocks -->
+      <rect x="2" y="16" width="28" height="22" rx="3" fill="#1e3a2a" stroke="#48cfad" stroke-width="1.5"/>
+      <text x="16" y="31" font-family="monospace" font-size="9" fill="#48cfad" text-anchor="middle">B0</text>
+      <rect x="36" y="16" width="28" height="22" rx="3" fill="#1e3a2a" stroke="#48cfad" stroke-width="1.5"/>
+      <text x="50" y="31" font-family="monospace" font-size="9" fill="#48cfad" text-anchor="middle">B1</text>
+      <rect x="70" y="16" width="28" height="22" rx="3" fill="#1e3a2a" stroke="#48cfad" stroke-width="1.5"/>
+      <text x="84" y="31" font-family="monospace" font-size="9" fill="#48cfad" text-anchor="middle">B2</text>
+      <rect x="104" y="16" width="28" height="22" rx="3" fill="#1e3a2a" stroke="#48cfad" stroke-width="1.5"/>
+      <text x="118" y="31" font-family="monospace" font-size="9" fill="#48cfad" text-anchor="middle">B3</text>
+      <rect x="138" y="16" width="28" height="22" rx="3" fill="#1e3a2a" stroke="#48cfad" stroke-width="1.5"/>
+      <text x="152" y="31" font-family="monospace" font-size="9" fill="#48cfad" text-anchor="middle">B4</text>
+      <!-- Arrows -->
+      <line x1="30" y1="27" x2="35" y2="27" stroke="#48cfad" stroke-width="1.5" marker-end="url(#arrowG)"/>
+      <line x1="64" y1="27" x2="69" y2="27" stroke="#48cfad" stroke-width="1.5" marker-end="url(#arrowG)"/>
+      <line x1="98" y1="27" x2="103" y2="27" stroke="#48cfad" stroke-width="1.5" marker-end="url(#arrowG)"/>
+      <line x1="132" y1="27" x2="137" y2="27" stroke="#48cfad" stroke-width="1.5" marker-end="url(#arrowG)"/>
+      <defs>
+        <marker id="arrowG" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L6,3 z" fill="#48cfad"/>
+        </marker>
+      </defs>
+      <text x="16" y="52" font-family="monospace" font-size="8" fill="#7a8a9e" text-anchor="middle">start</text>
+      <text x="152" y="52" font-family="monospace" font-size="8" fill="#7a8a9e" text-anchor="middle">end</text>
+    </svg>
+    <div style="font-size:12px;color:#c9d1e0;margin-top:4px">อ่านทีละ Record ตามลำดับ ไปข้างหน้าเสมอ</div>
+    <div style="font-size:11px;color:#7a8a9e;margin-top:3px">เช่น อ่าน Text File, เล่น MP3</div>
+  </div>
+  <!-- Direct Access -->
+  <div style="background:#1a2235;border:1.5px solid #4a9eff;border-radius:8px;padding:14px">
+    <div style="color:#4a9eff;font-weight:700;font-size:13px;margin-bottom:10px">Direct Access</div>
+    <svg width="100%" height="54" viewBox="0 0 220 54" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+      <rect x="2" y="16" width="28" height="22" rx="3" fill="#1a2a3a" stroke="#555" stroke-width="1"/>
+      <text x="16" y="31" font-family="monospace" font-size="9" fill="#555" text-anchor="middle">B0</text>
+      <rect x="36" y="16" width="28" height="22" rx="3" fill="#1a2a3a" stroke="#555" stroke-width="1"/>
+      <text x="50" y="31" font-family="monospace" font-size="9" fill="#555" text-anchor="middle">B1</text>
+      <rect x="70" y="16" width="28" height="22" rx="3" fill="#1e2a3a" stroke="#4a9eff" stroke-width="2"/>
+      <text x="84" y="31" font-family="monospace" font-size="9" fill="#4a9eff" text-anchor="middle">B2</text>
+      <rect x="104" y="16" width="28" height="22" rx="3" fill="#1a2a3a" stroke="#555" stroke-width="1"/>
+      <text x="118" y="31" font-family="monospace" font-size="9" fill="#555" text-anchor="middle">B3</text>
+      <rect x="138" y="16" width="28" height="22" rx="3" fill="#1e2a3a" stroke="#4a9eff" stroke-width="2"/>
+      <text x="152" y="31" font-family="monospace" font-size="9" fill="#4a9eff" text-anchor="middle">B4</text>
+      <!-- Jump arrows from top -->
+      <path d="M16,14 Q84,2 84,14" stroke="#4a9eff" stroke-width="1.5" fill="none" marker-end="url(#arrowB)" stroke-dasharray="4,2"/>
+      <path d="M84,14 Q152,2 152,14" stroke="#4a9eff" stroke-width="1.5" fill="none" marker-end="url(#arrowB)" stroke-dasharray="4,2"/>
+      <defs>
+        <marker id="arrowB" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L6,3 z" fill="#4a9eff"/>
+        </marker>
+      </defs>
+      <text x="84" y="52" font-family="monospace" font-size="8" fill="#4a9eff" text-anchor="middle">seek(2) → seek(4)</text>
+    </svg>
+    <div style="font-size:12px;color:#c9d1e0;margin-top:4px">กระโดดไปยัง Block ใดก็ได้โดยตรง</div>
+    <div style="font-size:11px;color:#7a8a9e;margin-top:3px">เช่น Database, CD-ROM</div>
+  </div>
+</div>
 </div>
 
 <!-- 9.2 Directory -->
 <div class="card">
 <h2>9.2 Directory Structure — โครงสร้างการจัดไฟล์</h2>
-<p>Directory ใช้จัดระเบียบไฟล์ มี 5 โครงสร้างหลัก:</p>
+<p>Directory ใช้จัดระเบียบไฟล์ มี 5 โครงสร้างหลัก ซับซ้อนขึ้นเรื่อยๆ:</p>
 
-<div class="collapsible">
-  <div class="col-header" onclick="tog(this)">1. Single-Level Directory — ไดเรกทอรีระดับเดียว <span class="arrow">▼</span></div>
-  <div class="col-body">
-    <p>มีไดเรกทอรีเดียวสำหรับทุกไฟล์ของทุก User ในระบบ</p>
-    <div class="box box-green"><strong>ข้อดี:</strong> ง่ายที่สุด</div>
-    <div class="box box-red">
-      <strong>ข้อเสีย:</strong><br>
-      • Naming Problem: User สองคนไม่สามารถมีไฟล์ชื่อเดียวกันได้<br>
-      • ค้นหาช้า (ต้องสแกนทุกไฟล์)
-    </div>
+<!-- 1. Single-Level -->
+<div style="background:#1a2235;border:1.5px solid #48cfad;border-radius:8px;padding:14px 16px;margin-bottom:12px">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+    <span style="background:#48cfad;color:#141925;font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px">1</span>
+    <span style="color:#48cfad;font-weight:700;font-size:14px">Single-Level Directory — ไดเรกทอรีระดับเดียว</span>
+  </div>
+  <p style="font-size:13px;color:#c9d1e0;margin:0 0 10px">มีไดเรกทอรีเดียวสำหรับทุกไฟล์ของทุก User ในระบบ</p>
+  <!-- SVG diagram -->
+  <svg width="100%" height="60" viewBox="0 0 380 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" style="display:block;max-width:420px;margin:0 auto 10px">
+    <rect x="155" y="4" width="70" height="22" rx="4" fill="#1e3a2a" stroke="#48cfad" stroke-width="1.5"/>
+    <text x="190" y="19" font-family="monospace" font-size="10" fill="#48cfad" text-anchor="middle">Root /</text>
+    <!-- files -->
+    <line x1="60" y1="26" x2="60" y2="38" stroke="#48cfad" stroke-width="1" stroke-dasharray="3,2"/>
+    <line x1="60" y1="38" x2="320" y2="38" stroke="#48cfad" stroke-width="1" stroke-dasharray="3,2"/>
+    <line x1="60" y1="38" x2="60" y2="46" stroke="#48cfad" stroke-width="1"/>
+    <line x1="130" y1="38" x2="130" y2="46" stroke="#48cfad" stroke-width="1"/>
+    <line x1="190" y1="26" x2="190" y2="46" stroke="#48cfad" stroke-width="1"/>
+    <line x1="250" y1="38" x2="250" y2="46" stroke="#48cfad" stroke-width="1"/>
+    <line x1="320" y1="38" x2="320" y2="46" stroke="#48cfad" stroke-width="1"/>
+    <rect x="36" y="46" width="48" height="13" rx="3" fill="#1e2e1e" stroke="#48cfad" stroke-width="1"/>
+    <text x="60" y="56" font-family="monospace" font-size="9" fill="#48cfad" text-anchor="middle">a.txt</text>
+    <rect x="106" y="46" width="48" height="13" rx="3" fill="#1e2e1e" stroke="#48cfad" stroke-width="1"/>
+    <text x="130" y="56" font-family="monospace" font-size="9" fill="#48cfad" text-anchor="middle">b.txt</text>
+    <rect x="166" y="46" width="48" height="13" rx="3" fill="#1e2e1e" stroke="#48cfad" stroke-width="1"/>
+    <text x="190" y="56" font-family="monospace" font-size="9" fill="#48cfad" text-anchor="middle">c.exe</text>
+    <rect x="226" y="46" width="48" height="13" rx="3" fill="#1e2e1e" stroke="#48cfad" stroke-width="1"/>
+    <text x="250" y="56" font-family="monospace" font-size="9" fill="#48cfad" text-anchor="middle">d.pdf</text>
+    <rect x="296" y="46" width="48" height="13" rx="3" fill="#1e2e1e" stroke="#48cfad" stroke-width="1"/>
+    <text x="320" y="56" font-family="monospace" font-size="9" fill="#48cfad" text-anchor="middle">e.mp3</text>
+  </svg>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <div class="box box-green" style="flex:1;min-width:140px;margin:0"><strong>ข้อดี:</strong> ง่ายที่สุด</div>
+    <div class="box box-red" style="flex:2;min-width:200px;margin:0"><strong>ข้อเสีย:</strong> ชื่อซ้ำไม่ได้ — User 2 คนไม่สามารถมีไฟล์ชื่อเดียวกัน ค้นหาช้า</div>
   </div>
 </div>
 
-<div class="collapsible">
-  <div class="col-header" onclick="tog(this)">2. Two-Level Directory — ไดเรกทอรีสองระดับ <span class="arrow">▼</span></div>
-  <div class="col-body">
-    <p>มี Master File Directory (MFD) → แต่ละ User มี User File Directory (UFD) ของตัวเอง เหมือนต้นไม้ความสูง 2</p>
-    <div class="box box-green"><strong>ข้อดี:</strong> แก้ปัญหาชื่อซ้ำ (แต่ละ User มีพื้นที่ชื่อของตัวเอง)</div>
-    <div class="box box-red"><strong>ข้อเสีย:</strong> User แต่ละคนเข้าถึงไฟล์ของคนอื่นไม่ได้ (แยกกันสนิท)</div>
+<!-- 2. Two-Level -->
+<div style="background:#1a2235;border:1.5px solid #4a9eff;border-radius:8px;padding:14px 16px;margin-bottom:12px">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+    <span style="background:#4a9eff;color:#141925;font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px">2</span>
+    <span style="color:#4a9eff;font-weight:700;font-size:14px">Two-Level Directory — MFD + UFD</span>
+  </div>
+  <p style="font-size:13px;color:#c9d1e0;margin:0 0 10px">Master File Directory (MFD) → แต่ละ User มี User File Directory (UFD) ของตัวเอง</p>
+  <svg width="100%" height="80" viewBox="0 0 380 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" style="display:block;max-width:420px;margin:0 auto 10px">
+    <!-- MFD -->
+    <rect x="140" y="2" width="100" height="20" rx="4" fill="#1a2a3a" stroke="#4a9eff" stroke-width="1.5"/>
+    <text x="190" y="16" font-family="monospace" font-size="10" fill="#4a9eff" text-anchor="middle">MFD</text>
+    <!-- Lines to UFD -->
+    <line x1="190" y1="22" x2="80" y2="38" stroke="#4a9eff" stroke-width="1" stroke-dasharray="4,2"/>
+    <line x1="190" y1="22" x2="190" y2="38" stroke="#4a9eff" stroke-width="1" stroke-dasharray="4,2"/>
+    <line x1="190" y1="22" x2="305" y2="38" stroke="#4a9eff" stroke-width="1" stroke-dasharray="4,2"/>
+    <!-- UFDs -->
+    <rect x="44" y="38" width="72" height="20" rx="4" fill="#1a2a3a" stroke="#fc6e51" stroke-width="1.5"/>
+    <text x="80" y="52" font-family="monospace" font-size="10" fill="#fc6e51" text-anchor="middle">UFD: Alice</text>
+    <rect x="154" y="38" width="72" height="20" rx="4" fill="#1a2a3a" stroke="#fc6e51" stroke-width="1.5"/>
+    <text x="190" y="52" font-family="monospace" font-size="10" fill="#fc6e51" text-anchor="middle">UFD: Bob</text>
+    <rect x="269" y="38" width="72" height="20" rx="4" fill="#1a2a3a" stroke="#fc6e51" stroke-width="1.5"/>
+    <text x="305" y="52" font-family="monospace" font-size="10" fill="#fc6e51" text-anchor="middle">UFD: Carol</text>
+    <!-- Files under each UFD -->
+    <line x1="70" y1="58" x2="70" y2="66" stroke="#7a8a9e" stroke-width="1"/>
+    <line x1="90" y1="58" x2="90" y2="66" stroke="#7a8a9e" stroke-width="1"/>
+    <rect x="52" y="66" width="36" height="12" rx="2" fill="#1e2a3a" stroke="#555" stroke-width="1"/>
+    <text x="70" y="75" font-family="monospace" font-size="8" fill="#7a8a9e" text-anchor="middle">a.txt</text>
+    <rect x="72" y="66" width="36" height="12" rx="2" fill="#1e2a3a" stroke="#555" stroke-width="1"/>
+    <text x="90" y="75" font-family="monospace" font-size="8" fill="#7a8a9e" text-anchor="middle">a.txt</text>
+    <line x1="185" y1="58" x2="185" y2="66" stroke="#7a8a9e" stroke-width="1"/>
+    <rect x="167" y="66" width="36" height="12" rx="2" fill="#1e2a3a" stroke="#555" stroke-width="1"/>
+    <text x="185" y="75" font-family="monospace" font-size="8" fill="#7a8a9e" text-anchor="middle">a.txt</text>
+    <text x="190" y="8" font-family="monospace" font-size="8" fill="#ffce54" text-anchor="middle" dy="76">ชื่อซ้ำกันได้!</text>
+  </svg>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <div class="box box-green" style="flex:1;min-width:160px;margin:0"><strong>ข้อดี:</strong> ชื่อซ้ำกันได้ แต่ละ User มีพื้นที่ชื่อของตัวเอง</div>
+    <div class="box box-red" style="flex:1;min-width:160px;margin:0"><strong>ข้อเสีย:</strong> User เข้าถึงไฟล์ของกันและกันไม่ได้</div>
   </div>
 </div>
 
-<div class="collapsible">
-  <div class="col-header" onclick="tog(this)">3. Tree-Structured Directory — ไดเรกทอรีแบบต้นไม้ ⭐ ใช้จริงที่สุด <span class="arrow">▼</span></div>
-  <div class="col-body">
-    <p>มีระดับย่อยได้ไม่จำกัด User สร้าง subdirectory ของตัวเองได้ทุกระดับ นี่คือโครงสร้างที่ Windows, Linux ใช้</p>
-    <div class="box box-blue">
-      <strong>Path Name:</strong><br>
-      Absolute Path: เริ่มจาก Root → /home/user/Documents/report.pdf<br>
-      Relative Path: จาก Current Directory → Documents/report.pdf
-    </div>
-    <div class="box box-green"><strong>ข้อดี:</strong> จัดระเบียบได้ดี ค้นหาเร็ว แต่ละไฟล์มี Path เฉพาะตัว</div>
+<!-- 3. Tree-Structured -->
+<div style="background:#1a2235;border:1.5px solid #ffce54;border-radius:8px;padding:14px 16px;margin-bottom:12px">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+    <span style="background:#ffce54;color:#141925;font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px">3</span>
+    <span style="color:#ffce54;font-weight:700;font-size:14px">Tree-Structured Directory — ต้นไม้ ★ ใช้จริง (Windows/Linux)</span>
+  </div>
+  <p style="font-size:13px;color:#c9d1e0;margin:0 0 10px">ย่อยได้ไม่จำกัดระดับ — นี่คือระบบที่ Windows และ Linux ใช้จริง</p>
+  <svg width="100%" height="96" viewBox="0 0 380 96" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" style="display:block;max-width:420px;margin:0 auto 10px">
+    <!-- root -->
+    <rect x="160" y="2" width="60" height="18" rx="4" fill="#2a2000" stroke="#ffce54" stroke-width="1.5"/>
+    <text x="190" y="15" font-family="monospace" font-size="10" fill="#ffce54" text-anchor="middle">/</text>
+    <!-- level 1 dirs -->
+    <line x1="190" y1="20" x2="90" y2="36" stroke="#ffce54" stroke-width="1"/>
+    <line x1="190" y1="20" x2="190" y2="36" stroke="#ffce54" stroke-width="1"/>
+    <line x1="190" y1="20" x2="300" y2="36" stroke="#ffce54" stroke-width="1"/>
+    <rect x="54" y="36" width="72" height="18" rx="4" fill="#2a2000" stroke="#ffce54" stroke-width="1.2"/>
+    <text x="90" y="49" font-family="monospace" font-size="10" fill="#ffce54" text-anchor="middle">home/</text>
+    <rect x="154" y="36" width="72" height="18" rx="4" fill="#2a2000" stroke="#ffce54" stroke-width="1.2"/>
+    <text x="190" y="49" font-family="monospace" font-size="10" fill="#ffce54" text-anchor="middle">usr/</text>
+    <rect x="264" y="36" width="72" height="18" rx="4" fill="#2a2000" stroke="#ffce54" stroke-width="1.2"/>
+    <text x="300" y="49" font-family="monospace" font-size="10" fill="#ffce54" text-anchor="middle">etc/</text>
+    <!-- level 2 -->
+    <line x1="80" y1="54" x2="55" y2="68" stroke="#a89030" stroke-width="1"/>
+    <line x1="100" y1="54" x2="115" y2="68" stroke="#a89030" stroke-width="1"/>
+    <rect x="26" y="68" width="58" height="16" rx="3" fill="#1e1a00" stroke="#a89030" stroke-width="1"/>
+    <text x="55" y="79" font-family="monospace" font-size="9" fill="#a89030" text-anchor="middle">alice/</text>
+    <rect x="88" y="68" width="54" height="16" rx="3" fill="#1e1a00" stroke="#a89030" stroke-width="1"/>
+    <text x="115" y="79" font-family="monospace" font-size="9" fill="#a89030" text-anchor="middle">bob/</text>
+    <!-- level 3 files -->
+    <line x1="45" y1="84" x2="38" y2="92" stroke="#666" stroke-width="1"/>
+    <line x1="65" y1="84" x2="72" y2="92" stroke="#666" stroke-width="1"/>
+    <rect x="20" y="92" width="36" height="4" rx="1" fill="#444"/>
+    <rect x="54" y="92" width="36" height="4" rx="1" fill="#444"/>
+    <text x="38" y="92" font-family="monospace" font-size="8" fill="#666" text-anchor="middle">docs/</text>
+    <text x="72" y="92" font-family="monospace" font-size="8" fill="#666" text-anchor="middle">r.pdf</text>
+    <!-- path label -->
+    <text x="220" y="88" font-family="monospace" font-size="9" fill="#ffce54" text-anchor="start">/home/alice/docs/</text>
+  </svg>
+  <div class="box box-blue" style="margin:0 0 8px;font-size:12px">
+    <strong>Absolute Path:</strong> /home/alice/docs/report.pdf &nbsp;|&nbsp;
+    <strong>Relative Path:</strong> docs/report.pdf
+  </div>
+  <div class="box box-green" style="margin:0"><strong>ข้อดี:</strong> จัดระเบียบดี ค้นหาเร็ว ชื่อซ้ำได้ — ใช้จริงทั่วโลก</div>
+</div>
+
+<!-- 4. Acyclic-Graph -->
+<div style="background:#1a2235;border:1.5px solid #fc6e51;border-radius:8px;padding:14px 16px;margin-bottom:12px">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+    <span style="background:#fc6e51;color:#141925;font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px">4</span>
+    <span style="color:#fc6e51;font-weight:700;font-size:14px">Acyclic-Graph Directory — แชร์ไฟล์ได้ (Symlink)</span>
+  </div>
+  <p style="font-size:13px;color:#c9d1e0;margin:0 0 10px">ไฟล์เดียวกันปรากฏในหลายตำแหน่ง — <strong>2 paths ชี้มาที่ node เดียวกัน</strong></p>
+  <svg width="100%" height="76" viewBox="0 0 380 76" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" style="display:block;max-width:420px;margin:0 auto 10px">
+    <!-- Two parent dirs -->
+    <rect x="60" y="4" width="90" height="20" rx="4" fill="#2a1500" stroke="#fc6e51" stroke-width="1.5"/>
+    <text x="105" y="18" font-family="monospace" font-size="10" fill="#fc6e51" text-anchor="middle">/home/alice/</text>
+    <rect x="230" y="4" width="90" height="20" rx="4" fill="#2a1500" stroke="#fc6e51" stroke-width="1.5"/>
+    <text x="275" y="18" font-family="monospace" font-size="10" fill="#fc6e51" text-anchor="middle">/home/bob/</text>
+    <!-- Shared file node -->
+    <rect x="150" y="50" width="80" height="22" rx="4" fill="#3a1500" stroke="#ffce54" stroke-width="2"/>
+    <text x="190" y="65" font-family="monospace" font-size="10" fill="#ffce54" text-anchor="middle">shared.txt</text>
+    <!-- Lines from dirs to shared file -->
+    <line x1="120" y1="24" x2="170" y2="50" stroke="#fc6e51" stroke-width="1.5" marker-end="url(#arrowO)"/>
+    <line x1="260" y1="24" x2="210" y2="50" stroke="#fc6e51" stroke-width="1.5" marker-end="url(#arrowO)"/>
+    <defs>
+      <marker id="arrowO" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+        <path d="M0,0 L0,6 L6,3 z" fill="#fc6e51"/>
+      </marker>
+    </defs>
+    <text x="190" y="44" font-family="monospace" font-size="8" fill="#7a8a9e" text-anchor="middle">2 paths → same node</text>
+  </svg>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <div class="box box-yellow" style="flex:1;min-width:180px;margin:0;font-size:12px">แก้ไขจากที่ใดก็เห็นทันที ทั้งสองเส้นทาง</div>
+    <div class="box box-red" style="flex:1;min-width:180px;margin:0;font-size:12px"><strong>ปัญหา:</strong> ลบต้องใช้ Reference Count — ลบจริงเมื่อไม่มี Link ชี้แล้ว</div>
   </div>
 </div>
 
-<div class="collapsible">
-  <div class="col-header" onclick="tog(this)">4. Acyclic-Graph Directory — ไดเรกทอรีแบบกราฟไม่มีวงกลม <span class="arrow">▼</span></div>
-  <div class="col-body">
-    <p>อนุญาตให้ <strong>แชร์ไฟล์หรือ Directory</strong> ได้ ไฟล์เดียวกันปรากฏในหลายตำแหน่ง (เหมือน Symbolic Link)</p>
-    <div class="box box-yellow">ไฟล์ที่แชร์จะมี Path Name มากกว่า 1 เส้นทาง การแก้ไขจะมองเห็นจากทุกตำแหน่งทันที</div>
-    <div class="box box-red"><strong>ปัญหา:</strong> การลบไฟล์ → ต้องใช้ Reference Count (ลบจริงเมื่อไม่มี Link ชี้แล้ว)</div>
+<!-- 5. General Graph -->
+<div style="background:#1a2235;border:1.5px solid #ff6b6b;border-radius:8px;padding:14px 16px;margin-bottom:14px">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+    <span style="background:#ff6b6b;color:#141925;font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px">5</span>
+    <span style="color:#ff6b6b;font-weight:700;font-size:14px">General Graph Directory — มี Cycle ได้</span>
   </div>
+  <p style="font-size:13px;color:#c9d1e0;margin:0 0 10px">อนุญาตให้มี Cycle ในโครงสร้าง — มี Arrow วนกลับหาตัวเอง</p>
+  <svg width="100%" height="70" viewBox="0 0 380 70" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" style="display:block;max-width:420px;margin:0 auto 10px">
+    <rect x="100" y="10" width="70" height="22" rx="4" fill="#2a0000" stroke="#ff6b6b" stroke-width="1.5"/>
+    <text x="135" y="25" font-family="monospace" font-size="10" fill="#ff6b6b" text-anchor="middle">DirA</text>
+    <rect x="210" y="10" width="70" height="22" rx="4" fill="#2a0000" stroke="#ff6b6b" stroke-width="1.5"/>
+    <text x="245" y="25" font-family="monospace" font-size="10" fill="#ff6b6b" text-anchor="middle">DirB</text>
+    <!-- Forward arrow -->
+    <line x1="170" y1="21" x2="209" y2="21" stroke="#ff6b6b" stroke-width="1.5" marker-end="url(#arrowR)"/>
+    <!-- Cycle arrow back -->
+    <path d="M245,32 Q245,60 190,60 Q135,60 135,32" stroke="#ffce54" stroke-width="1.5" fill="none" marker-end="url(#arrowY)" stroke-dasharray="5,3"/>
+    <defs>
+      <marker id="arrowR" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+        <path d="M0,0 L0,6 L6,3 z" fill="#ff6b6b"/>
+      </marker>
+      <marker id="arrowY" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+        <path d="M0,0 L0,6 L6,3 z" fill="#ffce54"/>
+      </marker>
+    </defs>
+    <text x="190" y="56" font-family="monospace" font-size="9" fill="#ffce54" text-anchor="middle">Cycle!</text>
+  </svg>
+  <div class="box box-red" style="margin:0;font-size:12px"><strong>ปัญหา:</strong> การ Traverse อาจวนลูปไม่สิ้นสุด ต้องกำหนดขีดจำกัดหรือใช้ Garbage Collection</div>
 </div>
 
-<div class="collapsible">
-  <div class="col-header" onclick="tog(this)">5. General Graph Directory — ไดเรกทอรีแบบกราฟทั่วไป <span class="arrow">▼</span></div>
-  <div class="col-body">
-    <p>อนุญาตให้มี Cycle ในโครงสร้าง Directory</p>
-    <div class="box box-red"><strong>ปัญหา:</strong> การค้นหาอาจวนลูปไม่สิ้นสุด ต้องกำหนดขอบเขตการ Traverse หรือใช้ Garbage Collection</div>
-  </div>
-</div>
-
-<table style="margin-top:14px">
+<!-- Comparison table -->
+<table style="margin-top:4px">
   <tr><th>โครงสร้าง</th><th>ชื่อซ้ำ</th><th>แชร์ไฟล์</th><th>ค้นหา</th><th>ใช้จริง</th></tr>
-  <tr><td>Single-Level</td><td>❌ ไม่ได้</td><td>❌</td><td>ช้า</td><td>ระบบเก่ามาก</td></tr>
-  <tr><td>Two-Level</td><td>✅ ได้</td><td>❌</td><td>OK</td><td>ระบบเก่า</td></tr>
-  <tr><td>Tree-Structured</td><td>✅ ได้</td><td>❌</td><td>เร็ว</td><td>✅ Windows, Linux</td></tr>
-  <tr><td>Acyclic-Graph</td><td>✅ ได้</td><td>✅</td><td>เร็ว</td><td>✅ Linux (symlink)</td></tr>
-  <tr><td>General Graph</td><td>✅ ได้</td><td>✅</td><td>อาจวนลูป</td><td>⚠ ซับซ้อน</td></tr>
+  <tr><td>Single-Level</td><td style="color:#ff6b6b">No</td><td style="color:#ff6b6b">No</td><td>ช้า</td><td>ระบบเก่ามาก</td></tr>
+  <tr><td>Two-Level</td><td style="color:#48cfad">Yes</td><td style="color:#ff6b6b">No</td><td>OK</td><td>ระบบเก่า</td></tr>
+  <tr><td>Tree-Structured</td><td style="color:#48cfad">Yes</td><td style="color:#ff6b6b">No</td><td>เร็ว</td><td style="color:#48cfad">Windows, Linux</td></tr>
+  <tr><td>Acyclic-Graph</td><td style="color:#48cfad">Yes</td><td style="color:#48cfad">Yes</td><td>เร็ว</td><td style="color:#48cfad">Linux symlink</td></tr>
+  <tr><td>General Graph</td><td style="color:#48cfad">Yes</td><td style="color:#48cfad">Yes</td><td style="color:#ff6b6b">อาจวนลูป</td><td style="color:#ffce54">ซับซ้อน</td></tr>
 </table>
 </div>
 
 <!-- 9.3 Permissions -->
 <div class="card">
 <h2>9.3 File Protection — สิทธิ์การเข้าถึง</h2>
-<p>Linux/Unix ใช้ระบบ Permission แบบ 3×3:</p>
-<table>
-  <tr><th>สิทธิ์</th><th>Symbol</th><th>ไฟล์</th><th>Directory</th></tr>
-  <tr><td><strong>Read</strong></td><td>r</td><td>ดูเนื้อหาไฟล์</td><td>ดูรายการไฟล์</td></tr>
-  <tr><td><strong>Write</strong></td><td>w</td><td>แก้ไข/เขียนทับ</td><td>สร้าง/ลบไฟล์ใน Dir</td></tr>
-  <tr><td><strong>Execute</strong></td><td>x</td><td>รันเป็นโปรแกรม</td><td>เข้าไปใน Dir ได้</td></tr>
-</table>
-<h3>3 กลุ่มผู้ใช้</h3>
-<table>
-  <tr><th>กลุ่ม</th><th>ความหมาย</th></tr>
-  <tr><td><strong>Owner (u)</strong></td><td>คนที่สร้างไฟล์</td></tr>
-  <tr><td><strong>Group (g)</strong></td><td>สมาชิกใน Group เดียวกัน</td></tr>
-  <tr><td><strong>Others (o)</strong></td><td>คนอื่นทั้งหมด</td></tr>
-</table>
-<h3>การอ่าน Permission String</h3>
-<div class="box box-blue">
-  ตัวอย่าง: <span class="highlight">-rwxrw-r--</span><br>
-  ตำแหน่งที่ 1: ชนิด (- = ไฟล์ธรรมดา, d = directory)<br>
-  ตำแหน่ง 2-4: Owner (rwx) = อ่านได้, เขียนได้, รันได้<br>
-  ตำแหน่ง 5-7: Group (rw-) = อ่านได้, เขียนได้, รันไม่ได้<br>
-  ตำแหน่ง 8-10: Others (r--) = อ่านได้อย่างเดียว
+<p>Linux/Unix ใช้ระบบ Permission แบบ <strong>3 กลุ่ม × 3 สิทธิ์</strong> = 9 bits + 1 bit ชนิด = 10 ตัวอักษร</p>
+
+<!-- Visual Permission String Breakdown -->
+<h3>การอ่าน Permission String: <code style="color:#ffce54">-rwxrw-r--</code></h3>
+<div style="margin:14px 0 18px">
+  <!-- The 10-char string broken into colored segments -->
+  <div style="display:flex;gap:4px;flex-wrap:nowrap;align-items:flex-end;margin-bottom:6px;overflow-x:auto;padding-bottom:4px">
+    <!-- Char 1: type -->
+    <div style="display:flex;flex-direction:column;align-items:center;min-width:38px">
+      <div style="background:#2a2a3a;border:2px solid #7a8a9e;border-radius:5px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;font-family:monospace;font-size:20px;font-weight:700;color:#b0b8c8">-</div>
+      <div style="font-size:9px;color:#7a8a9e;margin-top:4px;text-align:center">Type</div>
+    </div>
+    <!-- Chars 2-4: owner -->
+    <div style="display:flex;flex-direction:column;align-items:center">
+      <div style="display:flex;gap:2px">
+        <div style="background:#1e3a1e;border:2px solid #48cfad;border-radius:5px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;font-family:monospace;font-size:20px;font-weight:700;color:#48cfad">r</div>
+        <div style="background:#1e3a1e;border:2px solid #48cfad;border-radius:5px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;font-family:monospace;font-size:20px;font-weight:700;color:#48cfad">w</div>
+        <div style="background:#1e3a1e;border:2px solid #48cfad;border-radius:5px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;font-family:monospace;font-size:20px;font-weight:700;color:#48cfad">x</div>
+      </div>
+      <div style="font-size:9px;color:#48cfad;margin-top:4px;text-align:center;font-weight:700">Owner (u)</div>
+    </div>
+    <!-- Chars 5-7: group -->
+    <div style="display:flex;flex-direction:column;align-items:center">
+      <div style="display:flex;gap:2px">
+        <div style="background:#2a2a00;border:2px solid #ffce54;border-radius:5px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;font-family:monospace;font-size:20px;font-weight:700;color:#ffce54">r</div>
+        <div style="background:#2a2a00;border:2px solid #ffce54;border-radius:5px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;font-family:monospace;font-size:20px;font-weight:700;color:#ffce54">w</div>
+        <div style="background:#2a2a00;border:2px solid #555;border-radius:5px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;font-family:monospace;font-size:20px;font-weight:700;color:#555">-</div>
+      </div>
+      <div style="font-size:9px;color:#ffce54;margin-top:4px;text-align:center;font-weight:700">Group (g)</div>
+    </div>
+    <!-- Chars 8-10: others -->
+    <div style="display:flex;flex-direction:column;align-items:center">
+      <div style="display:flex;gap:2px">
+        <div style="background:#2a1010;border:2px solid #ff6b6b;border-radius:5px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;font-family:monospace;font-size:20px;font-weight:700;color:#ff6b6b">r</div>
+        <div style="background:#2a1010;border:2px solid #555;border-radius:5px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;font-family:monospace;font-size:20px;font-weight:700;color:#555">-</div>
+        <div style="background:#2a1010;border:2px solid #555;border-radius:5px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;font-family:monospace;font-size:20px;font-weight:700;color:#555">-</div>
+      </div>
+      <div style="font-size:9px;color:#ff6b6b;margin-top:4px;text-align:center;font-weight:700">Others (o)</div>
+    </div>
+  </div>
+  <!-- Legend row -->
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+    <div style="background:#2a2a3a;border:1px solid #7a8a9e;border-radius:4px;padding:5px 10px;font-size:11px;color:#b0b8c8">
+      <strong style="color:#b0b8c8">-</strong> = ไฟล์ธรรมดา &nbsp; <strong style="color:#b0b8c8">d</strong> = directory &nbsp; <strong style="color:#b0b8c8">l</strong> = symlink
+    </div>
+    <div style="background:#1e3a1e;border:1px solid #48cfad;border-radius:4px;padding:5px 10px;font-size:11px;color:#48cfad">
+      <strong>Owner:</strong> rwx = อ่าน✓ เขียน✓ รัน✓
+    </div>
+    <div style="background:#2a2a00;border:1px solid #ffce54;border-radius:4px;padding:5px 10px;font-size:11px;color:#ffce54">
+      <strong>Group:</strong> rw- = อ่าน✓ เขียน✓ รัน✗
+    </div>
+    <div style="background:#2a1010;border:1px solid #ff6b6b;border-radius:4px;padding:5px 10px;font-size:11px;color:#ff6b6b">
+      <strong>Others:</strong> r-- = อ่าน✓ เขียน✗ รัน✗
+    </div>
+  </div>
 </div>
-<div class="example-box">
-  <div class="ex-title">ตัวอย่าง: -rwxrw-r--</div>
-  <p>User A = Owner: อ่าน✓ เขียน✓ รัน✓<br>
-  User B = Group: อ่าน✓ เขียน✓ รัน✗<br>
-  User C = Others: อ่าน✓ เขียน✗ รัน✗</p>
+
+<!-- rwx meaning table -->
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+  <div>
+    <div style="color:#c9d1e0;font-weight:700;font-size:12px;margin-bottom:6px">3 สิทธิ์ (Permission bits)</div>
+    <table style="margin:0">
+      <tr><th>สิทธิ์</th><th>ไฟล์</th><th>Directory</th></tr>
+      <tr><td style="color:#48cfad"><strong>r</strong> (4)</td><td>ดูเนื้อหา</td><td>ดูรายการไฟล์</td></tr>
+      <tr><td style="color:#ffce54"><strong>w</strong> (2)</td><td>แก้ไข/เขียนทับ</td><td>สร้าง/ลบไฟล์ใน Dir</td></tr>
+      <tr><td style="color:#fc6e51"><strong>x</strong> (1)</td><td>รันเป็นโปรแกรม</td><td>เข้าไปใน Dir ได้</td></tr>
+    </table>
+  </div>
+  <div>
+    <div style="color:#c9d1e0;font-weight:700;font-size:12px;margin-bottom:6px">3 กลุ่มผู้ใช้</div>
+    <table style="margin:0">
+      <tr><th>กลุ่ม</th><th>ความหมาย</th></tr>
+      <tr><td style="color:#48cfad"><strong>Owner (u)</strong></td><td>คนที่สร้างไฟล์</td></tr>
+      <tr><td style="color:#ffce54"><strong>Group (g)</strong></td><td>สมาชิกใน Group เดียวกัน</td></tr>
+      <tr><td style="color:#ff6b6b"><strong>Others (o)</strong></td><td>คนอื่นทั้งหมด</td></tr>
+    </table>
+  </div>
 </div>
+
 <div class="tool-area">
   <h3>🔐 Permission Interpreter</h3>
   <label>ใส่ Permission String เช่น -rwxrw-r--</label>
@@ -4346,48 +4636,115 @@ Internal Fragmentation = (จำนวน Pages × Page Size) − Process Size<b
 <div class="card">
 <h2>9.3b ตัวอย่าง Permission เพิ่มเติม</h2>
 
-<div class="box box-blue">
-  <strong>ระบบ Permission ใน Unix/Linux ใน 3 ระดับ:</strong><br>
-  Format: [type][owner-rwx][group-rwx][others-rwx]<br>
-  ตัวอย่าง: -rw-r--r-- = ไฟล์ธรรมดา, Owner อ่าน+เขียน, Group อ่านอย่างเดียว, Others อ่านอย่างเดียว
+<!-- Common permission strings as visual cards -->
+<h3>ฝึกอ่าน Permission Strings</h3>
+<div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px">
+
+  <!-- Helper macro repeated per row: type + 3 groups each with 3 colored chars -->
+  <!-- Row 1: -rwxrwxrwx -->
+  <div style="background:#1a2235;border-radius:6px;padding:10px 14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+    <div style="font-family:monospace;font-size:15px;font-weight:700;min-width:110px;letter-spacing:1px">
+      <span style="color:#7a8a9e">-</span><span style="color:#48cfad">rwx</span><span style="color:#ffce54">rwx</span><span style="color:#ff6b6b">rwx</span>
+    </div>
+    <div style="font-size:12px;color:#c9d1e0;flex:1">ไฟล์ — <span style="color:#48cfad">Owner: rwx</span> · <span style="color:#ffce54">Group: rwx</span> · <span style="color:#ff6b6b">Others: rwx</span> — <strong>ทุกคนทำทุกอย่างได้</strong> (ไม่ปลอดภัย)</div>
+  </div>
+
+  <!-- Row 2: -rw------- -->
+  <div style="background:#1a2235;border-radius:6px;padding:10px 14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+    <div style="font-family:monospace;font-size:15px;font-weight:700;min-width:110px;letter-spacing:1px">
+      <span style="color:#7a8a9e">-</span><span style="color:#48cfad">rw-</span><span style="color:#555">---</span><span style="color:#555">---</span>
+    </div>
+    <div style="font-size:12px;color:#c9d1e0;flex:1">ไฟล์ — <span style="color:#48cfad">Owner: rw- (อ่าน+เขียน ไม่รัน)</span> · <span style="color:#555">Group: ---</span> · <span style="color:#555">Others: ---</span> — <strong>ไฟล์ private</strong></div>
+  </div>
+
+  <!-- Row 3: drwxr-xr-x -->
+  <div style="background:#1a2235;border-radius:6px;padding:10px 14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+    <div style="font-family:monospace;font-size:15px;font-weight:700;min-width:110px;letter-spacing:1px">
+      <span style="color:#4a9eff">d</span><span style="color:#48cfad">rwx</span><span style="color:#ffce54">r-x</span><span style="color:#ff6b6b">r-x</span>
+    </div>
+    <div style="font-size:12px;color:#c9d1e0;flex:1"><span style="color:#4a9eff">Directory</span> — <span style="color:#48cfad">Owner: rwx</span> · <span style="color:#ffce54">Group: r-x (ดู+เข้า ไม่สร้างไฟล์ใหม่)</span> · <span style="color:#ff6b6b">Others: r-x</span></div>
+  </div>
+
+  <!-- Row 4: -rwsr-xr-x -->
+  <div style="background:#1a2235;border-radius:6px;padding:10px 14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+    <div style="font-family:monospace;font-size:15px;font-weight:700;min-width:110px;letter-spacing:1px">
+      <span style="color:#7a8a9e">-</span><span style="color:#48cfad">rw</span><span style="color:#a78bfa">s</span><span style="color:#ffce54">r-x</span><span style="color:#ff6b6b">r-x</span>
+    </div>
+    <div style="font-size:12px;color:#c9d1e0;flex:1">ไฟล์ — <span style="color:#a78bfa">s = setuid</span>: รันด้วยสิทธิ์ Owner เสมอ (เช่น sudo, passwd)</div>
+  </div>
+
+  <!-- Row 5: lrwxrwxrwx -->
+  <div style="background:#1a2235;border-radius:6px;padding:10px 14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+    <div style="font-family:monospace;font-size:15px;font-weight:700;min-width:110px;letter-spacing:1px">
+      <span style="color:#fc6e51">l</span><span style="color:#48cfad">rwx</span><span style="color:#ffce54">rwx</span><span style="color:#ff6b6b">rwx</span>
+    </div>
+    <div style="font-size:12px;color:#c9d1e0;flex:1"><span style="color:#fc6e51">l = Symbolic Link</span> — Permission ของ Link เอง (สิทธิ์จริงขึ้นกับปลายทาง)</div>
+  </div>
 </div>
 
+<!-- Example problem -->
 <div class="example-box">
-  <div class="ex-title">ฝึกอ่าน Permission Strings</div>
-  <table>
-    <tr><th>String</th><th>ชนิด</th><th>Owner</th><th>Group</th><th>Others</th></tr>
-    <tr><td><span class="highlight">-rwxrwxrwx</span></td><td>ไฟล์</td><td>rwx</td><td>rwx</td><td>rwx</td></tr>
-    <tr><td><span class="highlight">-rw-------</span></td><td>ไฟล์</td><td>rw- (ไม่รัน)</td><td>--- (ไม่มีสิทธิ์)</td><td>--- (ไม่มีสิทธิ์)</td></tr>
-    <tr><td><span class="highlight">drwxr-xr-x</span></td><td>Directory</td><td>rwx</td><td>r-x (อ่าน+เข้า, ไม่สร้างไฟล์ใหม่)</td><td>r-x</td></tr>
-    <tr><td><span class="highlight">-rwsr-xr-x</span></td><td>ไฟล์</td><td>rws (setuid)</td><td>r-x</td><td>r-x</td></tr>
-    <tr><td><span class="highlight">lrwxrwxrwx</span></td><td>Symbolic Link</td><td>rwx</td><td>rwx</td><td>rwx</td></tr>
-  </table>
+  <div class="ex-title">โจทย์: Permission = <span style="font-family:monospace"><span style="color:#7a8a9e">-</span><span style="color:#48cfad">rwx</span><span style="color:#ffce54">r-x</span><span style="color:#ff6b6b">---</span></span> ใครทำอะไรได้?</div>
+  <p style="margin:6px 0 10px;font-size:13px">Alice = Owner &nbsp;|&nbsp; Bob = Group member &nbsp;|&nbsp; Carol = Others</p>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;font-size:12px;text-align:center">
+    <div style="background:#1e2a3a;border-radius:4px;padding:6px;font-weight:700;color:#c9d1e0">ผู้ใช้</div>
+    <div style="background:#1e2a3a;border-radius:4px;padding:6px;font-weight:700;color:#48cfad">Read (r)</div>
+    <div style="background:#1e2a3a;border-radius:4px;padding:6px;font-weight:700;color:#ffce54">Write (w)</div>
+    <div style="background:#1e2a3a;border-radius:4px;padding:6px;font-weight:700;color:#fc6e51">Execute (x)</div>
+
+    <div style="background:#1a2235;border-radius:4px;padding:6px;color:#48cfad;font-weight:600">Alice (Owner)</div>
+    <div style="background:#1e3a1e;border-radius:4px;padding:6px;color:#48cfad">✓ ได้</div>
+    <div style="background:#1e3a1e;border-radius:4px;padding:6px;color:#48cfad">✓ ได้</div>
+    <div style="background:#1e3a1e;border-radius:4px;padding:6px;color:#48cfad">✓ ได้</div>
+
+    <div style="background:#1a2235;border-radius:4px;padding:6px;color:#ffce54;font-weight:600">Bob (Group)</div>
+    <div style="background:#1e3a1e;border-radius:4px;padding:6px;color:#48cfad">✓ ได้</div>
+    <div style="background:#3a1010;border-radius:4px;padding:6px;color:#ff6b6b">✗ ไม่ได้</div>
+    <div style="background:#1e3a1e;border-radius:4px;padding:6px;color:#48cfad">✓ ได้</div>
+
+    <div style="background:#1a2235;border-radius:4px;padding:6px;color:#ff6b6b;font-weight:600">Carol (Others)</div>
+    <div style="background:#3a1010;border-radius:4px;padding:6px;color:#ff6b6b">✗ ไม่ได้</div>
+    <div style="background:#3a1010;border-radius:4px;padding:6px;color:#ff6b6b">✗ ไม่ได้</div>
+    <div style="background:#3a1010;border-radius:4px;padding:6px;color:#ff6b6b">✗ ไม่ได้</div>
+  </div>
 </div>
 
+<!-- Octal / chmod -->
 <div class="example-box">
-  <div class="ex-title">โจทย์: ใครทำอะไรได้บ้าง? Permission = -rwxr-x---</div>
-  <p>Alice = Owner, Bob = Group member, Carol = Others</p>
-  <table>
-    <tr><th>ผู้ใช้</th><th>Read (r)</th><th>Write (w)</th><th>Execute (x)</th></tr>
-    <tr><td>Alice (Owner)</td><td>✅ ได้</td><td>✅ ได้</td><td>✅ ได้</td></tr>
-    <tr><td>Bob (Group)</td><td>✅ ได้</td><td>❌ ไม่ได้</td><td>✅ ได้</td></tr>
-    <tr><td>Carol (Others)</td><td>❌ ไม่ได้</td><td>❌ ไม่ได้</td><td>❌ ไม่ได้</td></tr>
-  </table>
-</div>
-
-<div class="example-box">
-  <div class="ex-title">แปลงจาก Octal Notation (ที่ใช้กับ chmod)</div>
-  <p>r = 4, w = 2, x = 1. รวมกันเป็น Octal ต่อ group<br>
-  <table>
-    <tr><th>Octal</th><th>Binary</th><th>Permission</th><th>ตัวอย่าง</th></tr>
-    <tr><td>7</td><td>111</td><td>rwx</td><td>chmod 7 = ทำทุกอย่างได้</td></tr>
-    <tr><td>6</td><td>110</td><td>rw-</td><td>อ่าน+เขียน</td></tr>
-    <tr><td>5</td><td>101</td><td>r-x</td><td>อ่าน+รัน</td></tr>
-    <tr><td>4</td><td>100</td><td>r--</td><td>อ่านอย่างเดียว</td></tr>
-    <tr><td>0</td><td>000</td><td>---</td><td>ไม่มีสิทธิ์</td></tr>
-  </table>
-  <p><strong>chmod 755 = -rwxr-xr-x</strong> (Owner=7=rwx, Group=5=r-x, Others=5=r-x)<br>
-  <strong>chmod 644 = -rw-r--r--</strong> (Owner=6=rw-, Group=4=r--, Others=4=r--)</p>
+  <div class="ex-title">Octal Notation — ใช้กับ chmod</div>
+  <p style="font-size:12px;color:#c9d1e0;margin:4px 0 10px"><strong>r=4, w=2, x=1</strong> — บวกรวมกันต่อ group เพื่อได้ octal digit</p>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+    <div style="background:#1a2235;border-radius:4px;padding:6px 10px;text-align:center;min-width:60px">
+      <div style="font-family:monospace;font-size:18px;font-weight:700;color:#48cfad">7</div>
+      <div style="font-size:10px;color:#7a8a9e">111 = rwx</div>
+    </div>
+    <div style="background:#1a2235;border-radius:4px;padding:6px 10px;text-align:center;min-width:60px">
+      <div style="font-family:monospace;font-size:18px;font-weight:700;color:#4a9eff">6</div>
+      <div style="font-size:10px;color:#7a8a9e">110 = rw-</div>
+    </div>
+    <div style="background:#1a2235;border-radius:4px;padding:6px 10px;text-align:center;min-width:60px">
+      <div style="font-family:monospace;font-size:18px;font-weight:700;color:#ffce54">5</div>
+      <div style="font-size:10px;color:#7a8a9e">101 = r-x</div>
+    </div>
+    <div style="background:#1a2235;border-radius:4px;padding:6px 10px;text-align:center;min-width:60px">
+      <div style="font-family:monospace;font-size:18px;font-weight:700;color:#fc6e51">4</div>
+      <div style="font-size:10px;color:#7a8a9e">100 = r--</div>
+    </div>
+    <div style="background:#1a2235;border-radius:4px;padding:6px 10px;text-align:center;min-width:60px">
+      <div style="font-family:monospace;font-size:18px;font-weight:700;color:#555">0</div>
+      <div style="font-size:10px;color:#7a8a9e">000 = ---</div>
+    </div>
+  </div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap">
+    <div style="background:#1e2a3a;border-radius:5px;padding:8px 12px;font-family:monospace;font-size:12px">
+      <span style="color:#ffce54">chmod 755</span> → <span style="color:#7a8a9e">-</span><span style="color:#48cfad">rwx</span><span style="color:#ffce54">r-x</span><span style="color:#ff6b6b">r-x</span>
+      <div style="color:#7a8a9e;font-size:10px;margin-top:2px">Owner=7 Group=5 Others=5</div>
+    </div>
+    <div style="background:#1e2a3a;border-radius:5px;padding:8px 12px;font-family:monospace;font-size:12px">
+      <span style="color:#ffce54">chmod 644</span> → <span style="color:#7a8a9e">-</span><span style="color:#48cfad">rw-</span><span style="color:#ffce54">r--</span><span style="color:#ff6b6b">r--</span>
+      <div style="color:#7a8a9e;font-size:10px;margin-top:2px">Owner=6 Group=4 Others=4</div>
+    </div>
+  </div>
 </div>
 </div>
 
@@ -4395,38 +4752,227 @@ Internal Fragmentation = (จำนวน Pages × Page Size) − Process Size<b
 <div class="card">
 <h2>9.4 วิธีเก็บไฟล์บน Disk (File Allocation Methods)</h2>
 
-<h3>วิธีที่ 1: Contiguous Allocation (เก็บต่อเนื่อง)</h3>
-<p>Block ทุก Block ของไฟล์อยู่ติดกันบน Disk Directory เก็บแค่ <em>Block เริ่มต้น</em> และ <em>ขนาด</em></p>
-<div class="box box-green"><strong>ข้อดี:</strong> เข้าถึงแบบ Sequential และ Random ได้เร็วมาก</div>
-<div class="box box-red"><strong>ข้อเสีย:</strong> External Fragmentation, ไฟล์ขยายขนาดลำบาก</div>
-
-<h3>วิธีที่ 2: Linked List Allocation (เก็บแบบเชื่อมโยง)</h3>
-<p>แต่ละ Block มี Pointer ชี้ไป Block ถัดไป Block ต่างๆ กระจายอยู่ทั่ว Disk</p>
-<div class="box box-green"><strong>ข้อดี:</strong> ไม่มี External Fragmentation, ขยายไฟล์ได้ง่าย</div>
-<div class="box box-red"><strong>ข้อเสีย:</strong> Random Access ช้า (ต้องไล่ตาม Pointer), Pointer กินเนื้อที่, Pointer เสีย → ข้อมูลสูญ</div>
-
-<h3>วิธีที่ 3: FAT (File Allocation Table)</h3>
-<p>ย้าย Pointer ทั้งหมดมาเก็บรวมกันใน Table ตอนต้น Disk แทนที่จะเก็บใน Block Directory เก็บแค่ Block แรกของไฟล์</p>
-<div class="box box-blue">FAT Entry: แต่ละ Entry บอกว่า Block ถัดไปอยู่ที่ Block ไหน (หรือ EOF ถ้าเป็น Block สุดท้าย)</div>
-<div class="box box-green"><strong>ข้อดี:</strong> Random Access เร็วกว่า Linked (Cache FAT ไว้ใน RAM ได้)</div>
-
-<h3>วิธีที่ 4: Indexed Allocation (i-node)</h3>
-<p>มี <strong>Index Block</strong> พิเศษ (i-node) ที่เก็บ Pointer ชี้ไปทุก Data Block ของไฟล์</p>
-<div class="box box-blue">
-  สำหรับไฟล์ขนาดใหญ่มาก ใช้ Indirect Pointer:<br>
-  • Single Indirect: i-node → Block ของ Pointer → Data<br>
-  • Double Indirect: i-node → Block ของ Block ของ Pointer → Data<br>
-  • Triple Indirect: ลึก 3 ระดับ
+<!-- ===== METHOD 1: Contiguous ===== -->
+<div style="background:#1a2235;border:1.5px solid #48cfad;border-radius:8px;padding:14px 16px;margin-bottom:14px">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+    <span style="background:#48cfad;color:#141925;font-size:11px;font-weight:700;padding:2px 10px;border-radius:10px">1</span>
+    <span style="color:#48cfad;font-weight:700;font-size:14px">Contiguous Allocation — เก็บต่อเนื่อง</span>
+  </div>
+  <p style="font-size:13px;color:#c9d1e0;margin:0 0 10px">Block ทุกก้อนอยู่ติดกัน — Directory เก็บแค่ <strong>Start Block</strong> และ <strong>Length</strong></p>
+  <!-- Disk row SVG -->
+  <div style="overflow-x:auto;margin-bottom:10px">
+  <svg width="520" height="58" viewBox="0 0 520 58" xmlns="http://www.w3.org/2000/svg" style="display:block;min-width:400px">
+    <!-- block labels -->
+    <text x="6" y="10" font-family="monospace" font-size="8" fill="#7a8a9e">Disk blocks:</text>
+    <!-- blocks 0-20 -->
+    <!-- free blocks: gray -->
+    <rect x="4"   y="14" width="22" height="22" rx="2" fill="#1e2a3a" stroke="#333"/><text x="15"  y="28" font-family="monospace" font-size="8" fill="#555" text-anchor="middle">0</text>
+    <rect x="28"  y="14" width="22" height="22" rx="2" fill="#1e2a3a" stroke="#333"/><text x="39"  y="28" font-family="monospace" font-size="8" fill="#555" text-anchor="middle">1</text>
+    <rect x="52"  y="14" width="22" height="22" rx="2" fill="#1e2a3a" stroke="#333"/><text x="63"  y="28" font-family="monospace" font-size="8" fill="#555" text-anchor="middle">2</text>
+    <rect x="76"  y="14" width="22" height="22" rx="2" fill="#1e2a3a" stroke="#333"/><text x="87"  y="28" font-family="monospace" font-size="8" fill="#555" text-anchor="middle">3</text>
+    <rect x="100" y="14" width="22" height="22" rx="2" fill="#1e2a3a" stroke="#333"/><text x="111" y="28" font-family="monospace" font-size="8" fill="#555" text-anchor="middle">4</text>
+    <rect x="124" y="14" width="22" height="22" rx="2" fill="#1e2a3a" stroke="#333"/><text x="135" y="28" font-family="monospace" font-size="8" fill="#555" text-anchor="middle">5</text>
+    <rect x="148" y="14" width="22" height="22" rx="2" fill="#1e2a3a" stroke="#333"/><text x="159" y="28" font-family="monospace" font-size="8" fill="#555" text-anchor="middle">6</text>
+    <rect x="172" y="14" width="22" height="22" rx="2" fill="#1e2a3a" stroke="#333"/><text x="183" y="28" font-family="monospace" font-size="8" fill="#555" text-anchor="middle">7</text>
+    <rect x="196" y="14" width="22" height="22" rx="2" fill="#1e2a3a" stroke="#333"/><text x="207" y="28" font-family="monospace" font-size="8" fill="#555" text-anchor="middle">8</text>
+    <rect x="220" y="14" width="22" height="22" rx="2" fill="#1e2a3a" stroke="#333"/><text x="231" y="28" font-family="monospace" font-size="8" fill="#555" text-anchor="middle">9</text>
+    <rect x="244" y="14" width="22" height="22" rx="2" fill="#1e2a3a" stroke="#333"/><text x="255" y="28" font-family="monospace" font-size="8" fill="#555" text-anchor="middle">10</text>
+    <rect x="268" y="14" width="22" height="22" rx="2" fill="#1e2a3a" stroke="#333"/><text x="279" y="28" font-family="monospace" font-size="8" fill="#555" text-anchor="middle">11</text>
+    <rect x="292" y="14" width="22" height="22" rx="2" fill="#1e2a3a" stroke="#333"/><text x="303" y="28" font-family="monospace" font-size="8" fill="#555" text-anchor="middle">12</text>
+    <rect x="316" y="14" width="22" height="22" rx="2" fill="#1e2a3a" stroke="#333"/><text x="327" y="28" font-family="monospace" font-size="8" fill="#555" text-anchor="middle">13</text>
+    <!-- file blocks 14-18: colored green -->
+    <rect x="340" y="14" width="22" height="22" rx="2" fill="#1e3a1e" stroke="#48cfad" stroke-width="2"/><text x="351" y="28" font-family="monospace" font-size="8" fill="#48cfad" text-anchor="middle">14</text>
+    <rect x="364" y="14" width="22" height="22" rx="2" fill="#1e3a1e" stroke="#48cfad" stroke-width="2"/><text x="375" y="28" font-family="monospace" font-size="8" fill="#48cfad" text-anchor="middle">15</text>
+    <rect x="388" y="14" width="22" height="22" rx="2" fill="#1e3a1e" stroke="#48cfad" stroke-width="2"/><text x="399" y="28" font-family="monospace" font-size="8" fill="#48cfad" text-anchor="middle">16</text>
+    <rect x="412" y="14" width="22" height="22" rx="2" fill="#1e3a1e" stroke="#48cfad" stroke-width="2"/><text x="423" y="28" font-family="monospace" font-size="8" fill="#48cfad" text-anchor="middle">17</text>
+    <rect x="436" y="14" width="22" height="22" rx="2" fill="#1e3a1e" stroke="#48cfad" stroke-width="2"/><text x="447" y="28" font-family="monospace" font-size="8" fill="#48cfad" text-anchor="middle">18</text>
+    <rect x="460" y="14" width="22" height="22" rx="2" fill="#1e2a3a" stroke="#333"/><text x="471" y="28" font-family="monospace" font-size="8" fill="#555" text-anchor="middle">19</text>
+    <rect x="484" y="14" width="22" height="22" rx="2" fill="#1e2a3a" stroke="#333"/><text x="495" y="28" font-family="monospace" font-size="8" fill="#555" text-anchor="middle">20</text>
+    <!-- brace under 14-18 -->
+    <line x1="340" y1="38" x2="458" y2="38" stroke="#48cfad" stroke-width="1.5"/>
+    <line x1="340" y1="36" x2="340" y2="40" stroke="#48cfad" stroke-width="1.5"/>
+    <line x1="458" y1="36" x2="458" y2="40" stroke="#48cfad" stroke-width="1.5"/>
+    <text x="399" y="52" font-family="monospace" font-size="9" fill="#48cfad" text-anchor="middle">Start=14, Length=5</text>
+  </svg>
+  </div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <div class="box box-green" style="flex:1;min-width:160px;margin:0;font-size:12px"><strong>ข้อดี:</strong> Sequential + Random Access เร็วมาก</div>
+    <div class="box box-red" style="flex:1;min-width:160px;margin:0;font-size:12px"><strong>ข้อเสีย:</strong> External Fragmentation, ขยายไฟล์ยาก</div>
+  </div>
 </div>
-<div class="box box-green"><strong>ข้อดี:</strong> Random Access เร็ว, ไม่มี External Fragmentation, ขยายได้ง่าย</div>
 
+<!-- ===== METHOD 2: Linked ===== -->
+<div style="background:#1a2235;border:1.5px solid #4a9eff;border-radius:8px;padding:14px 16px;margin-bottom:14px">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+    <span style="background:#4a9eff;color:#141925;font-size:11px;font-weight:700;padding:2px 10px;border-radius:10px">2</span>
+    <span style="color:#4a9eff;font-weight:700;font-size:14px">Linked Allocation — เชื่อมโยง Pointer</span>
+  </div>
+  <p style="font-size:13px;color:#c9d1e0;margin:0 0 10px">แต่ละ Block มี Pointer ชี้ Block ถัดไป — กระจายทั่ว Disk ได้</p>
+  <div style="overflow-x:auto;margin-bottom:10px">
+  <svg width="500" height="80" viewBox="0 0 500 80" xmlns="http://www.w3.org/2000/svg" style="display:block;min-width:400px">
+    <!-- scattered disk row -->
+    <!-- show only relevant blocks in a linear view with arrows between them -->
+    <!-- Block 9 -->
+    <rect x="10"  y="10" width="76" height="34" rx="4" fill="#1a2a3a" stroke="#4a9eff" stroke-width="2"/>
+    <text x="48"  y="24" font-family="monospace" font-size="9" fill="#4a9eff" text-anchor="middle">Block 9</text>
+    <text x="48"  y="36" font-family="monospace" font-size="8" fill="#7a8a9e" text-anchor="middle">next→16</text>
+    <!-- arrow -->
+    <line x1="86" y1="27" x2="124" y2="27" stroke="#4a9eff" stroke-width="1.5" marker-end="url(#arrowBL)"/>
+    <!-- Block 16 -->
+    <rect x="124" y="10" width="76" height="34" rx="4" fill="#1a2a3a" stroke="#4a9eff" stroke-width="2"/>
+    <text x="162" y="24" font-family="monospace" font-size="9" fill="#4a9eff" text-anchor="middle">Block 16</text>
+    <text x="162" y="36" font-family="monospace" font-size="8" fill="#7a8a9e" text-anchor="middle">next→1</text>
+    <!-- arrow -->
+    <line x1="200" y1="27" x2="238" y2="27" stroke="#4a9eff" stroke-width="1.5" marker-end="url(#arrowBL)"/>
+    <!-- Block 1 -->
+    <rect x="238" y="10" width="76" height="34" rx="4" fill="#1a2a3a" stroke="#4a9eff" stroke-width="2"/>
+    <text x="276" y="24" font-family="monospace" font-size="9" fill="#4a9eff" text-anchor="middle">Block 1</text>
+    <text x="276" y="36" font-family="monospace" font-size="8" fill="#7a8a9e" text-anchor="middle">next→10</text>
+    <!-- arrow -->
+    <line x1="314" y1="27" x2="352" y2="27" stroke="#4a9eff" stroke-width="1.5" marker-end="url(#arrowBL)"/>
+    <!-- Block 10 -->
+    <rect x="352" y="10" width="76" height="34" rx="4" fill="#1a2a3a" stroke="#4a9eff" stroke-width="2"/>
+    <text x="390" y="24" font-family="monospace" font-size="9" fill="#4a9eff" text-anchor="middle">Block 10</text>
+    <text x="390" y="36" font-family="monospace" font-size="8" fill="#7a8a9e" text-anchor="middle">next→EOF</text>
+    <!-- EOF marker -->
+    <rect x="438" y="18" width="36" height="18" rx="3" fill="#3a1010" stroke="#ff6b6b" stroke-width="1"/>
+    <text x="456" y="30" font-family="monospace" font-size="9" fill="#ff6b6b" text-anchor="middle">EOF</text>
+    <line x1="428" y1="27" x2="437" y2="27" stroke="#ff6b6b" stroke-width="1.5" marker-end="url(#arrowR2)"/>
+    <defs>
+      <marker id="arrowBL" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 z" fill="#4a9eff"/></marker>
+      <marker id="arrowR2" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 z" fill="#ff6b6b"/></marker>
+    </defs>
+    <!-- scattered label -->
+    <text x="10"  y="56" font-family="monospace" font-size="8" fill="#7a8a9e">disk pos:</text>
+    <text x="48"  y="56" font-family="monospace" font-size="8" fill="#7a8a9e" text-anchor="middle">9</text>
+    <text x="162" y="56" font-family="monospace" font-size="8" fill="#7a8a9e" text-anchor="middle">16</text>
+    <text x="276" y="56" font-family="monospace" font-size="8" fill="#7a8a9e" text-anchor="middle">1</text>
+    <text x="390" y="56" font-family="monospace" font-size="8" fill="#7a8a9e" text-anchor="middle">10</text>
+    <text x="240" y="72" font-family="monospace" font-size="9" fill="#ffce54" text-anchor="middle">กระจายทั่ว Disk — Random Access ต้องไล่ทุก Pointer</text>
+  </svg>
+  </div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <div class="box box-green" style="flex:1;min-width:160px;margin:0;font-size:12px"><strong>ข้อดี:</strong> ไม่มี External Fragmentation, ขยายง่าย</div>
+    <div class="box box-red" style="flex:1;min-width:160px;margin:0;font-size:12px"><strong>ข้อเสีย:</strong> Random Access ช้า, Pointer เสีย = ข้อมูลหาย</div>
+  </div>
+</div>
+
+<!-- ===== METHOD 3: FAT ===== -->
+<div style="background:#1a2235;border:1.5px solid #ffce54;border-radius:8px;padding:14px 16px;margin-bottom:14px">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+    <span style="background:#ffce54;color:#141925;font-size:11px;font-weight:700;padding:2px 10px;border-radius:10px">3</span>
+    <span style="color:#ffce54;font-weight:700;font-size:14px">FAT — File Allocation Table</span>
+  </div>
+  <p style="font-size:13px;color:#c9d1e0;margin:0 0 10px">Pointer ทั้งหมดย้ายมาอยู่ใน Table ตอนต้น Disk — Directory เก็บแค่ Block แรก</p>
+  <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:flex-start;margin-bottom:10px">
+    <!-- FAT table -->
+    <div style="flex:0 0 auto">
+      <div style="font-size:11px;color:#ffce54;font-weight:700;margin-bottom:4px;text-align:center">FAT Table</div>
+      <table style="margin:0;font-size:11px;font-family:monospace">
+        <tr><th style="padding:3px 8px">Block#</th><th style="padding:3px 8px">Next</th></tr>
+        <tr><td style="padding:2px 8px;color:#555">0</td><td style="padding:2px 8px;color:#555">—</td></tr>
+        <tr><td style="padding:2px 8px;color:#555">1</td><td style="padding:2px 8px;color:#555">free</td></tr>
+        <tr style="background:#2a2000"><td style="padding:2px 8px;color:#ffce54">2</td><td style="padding:2px 8px;color:#ffce54">5</td></tr>
+        <tr><td style="padding:2px 8px;color:#555">3</td><td style="padding:2px 8px;color:#555">free</td></tr>
+        <tr><td style="padding:2px 8px;color:#555">4</td><td style="padding:2px 8px;color:#555">EOF</td></tr>
+        <tr style="background:#2a2000"><td style="padding:2px 8px;color:#ffce54">5</td><td style="padding:2px 8px;color:#ffce54">8</td></tr>
+        <tr><td style="padding:2px 8px;color:#555">6</td><td style="padding:2px 8px;color:#555">free</td></tr>
+        <tr><td style="padding:2px 8px;color:#555">7</td><td style="padding:2px 8px;color:#555">free</td></tr>
+        <tr style="background:#2a2000"><td style="padding:2px 8px;color:#ffce54">8</td><td style="padding:2px 8px;color:#ff6b6b">EOF</td></tr>
+      </table>
+    </div>
+    <!-- Arrow + chain explanation -->
+    <div style="flex:1;min-width:180px;display:flex;flex-direction:column;gap:8px;padding-top:20px">
+      <div style="background:#252f40;border-radius:5px;padding:8px 12px;font-size:12px">
+        <div style="color:#ffce54;font-weight:700;margin-bottom:4px">File A chain (start=2):</div>
+        <div style="font-family:monospace;color:#ffce54">FAT[2]=5 → FAT[5]=8 → FAT[8]=EOF</div>
+        <div style="color:#7a8a9e;font-size:11px;margin-top:3px">ไฟล์ A ใช้ Block: 2 → 5 → 8</div>
+      </div>
+      <div class="box box-blue" style="margin:0;font-size:12px">
+        <strong>Cache FAT ใน RAM</strong> → Random Access เร็วกว่า Linked มาก เพราะไม่ต้องอ่าน Disk ไล่ตาม Pointer
+      </div>
+    </div>
+  </div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <div class="box box-green" style="flex:1;min-width:160px;margin:0;font-size:12px"><strong>ข้อดี:</strong> Cache ได้ ไม่มี Fragmentation</div>
+    <div class="box box-red" style="flex:1;min-width:160px;margin:0;font-size:12px"><strong>ข้อเสีย:</strong> FAT ใหญ่มากถ้า Disk ใหญ่</div>
+  </div>
+</div>
+
+<!-- ===== METHOD 4: Indexed (i-node) ===== -->
+<div style="background:#1a2235;border:1.5px solid #a78bfa;border-radius:8px;padding:14px 16px;margin-bottom:14px">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+    <span style="background:#a78bfa;color:#141925;font-size:11px;font-weight:700;padding:2px 10px;border-radius:10px">4</span>
+    <span style="color:#a78bfa;font-weight:700;font-size:14px">Indexed Allocation — i-node</span>
+  </div>
+  <p style="font-size:13px;color:#c9d1e0;margin:0 0 10px">Index Block (i-node) เก็บ Pointer ชี้ทุก Data Block — รองรับไฟล์ใหญ่ด้วย Indirect Pointer</p>
+  <div style="overflow-x:auto;margin-bottom:10px">
+  <svg width="560" height="160" viewBox="0 0 560 160" xmlns="http://www.w3.org/2000/svg" style="display:block;min-width:460px">
+    <!-- i-node box -->
+    <rect x="10" y="10" width="110" height="140" rx="6" fill="#1e1a2e" stroke="#a78bfa" stroke-width="2"/>
+    <text x="65" y="26" font-family="monospace" font-size="10" fill="#a78bfa" text-anchor="middle" font-weight="bold">i-node</text>
+    <!-- direct pointers -->
+    <rect x="18" y="32" width="94" height="14" rx="2" fill="#252040"/><text x="65" y="43" font-family="monospace" font-size="8" fill="#c9d1e0" text-anchor="middle">direct[0] → 22</text>
+    <rect x="18" y="48" width="94" height="14" rx="2" fill="#252040"/><text x="65" y="59" font-family="monospace" font-size="8" fill="#c9d1e0" text-anchor="middle">direct[1] → 35</text>
+    <rect x="18" y="64" width="94" height="14" rx="2" fill="#252040"/><text x="65" y="75" font-family="monospace" font-size="8" fill="#c9d1e0" text-anchor="middle">direct[2] → 41</text>
+    <text x="65" y="90" font-family="monospace" font-size="9" fill="#555" text-anchor="middle">⋮ (10 direct)</text>
+    <!-- single indirect -->
+    <rect x="18" y="94" width="94" height="14" rx="2" fill="#1a1a30" stroke="#4a9eff" stroke-width="1"/><text x="65" y="105" font-family="monospace" font-size="8" fill="#4a9eff" text-anchor="middle">single_ind → 77</text>
+    <!-- double indirect -->
+    <rect x="18" y="110" width="94" height="14" rx="2" fill="#1a1a30" stroke="#ffce54" stroke-width="1"/><text x="65" y="121" font-family="monospace" font-size="8" fill="#ffce54" text-anchor="middle">double_ind → 88</text>
+    <!-- triple indirect -->
+    <rect x="18" y="126" width="94" height="14" rx="2" fill="#1a1a30" stroke="#ff6b6b" stroke-width="1"/><text x="65" y="137" font-family="monospace" font-size="8" fill="#ff6b6b" text-anchor="middle">triple_ind → 99</text>
+
+    <!-- Direct pointer arrows to data blocks -->
+    <line x1="112" y1="39" x2="160" y2="28" stroke="#c9d1e0" stroke-width="1" marker-end="url(#arrowW)"/>
+    <line x1="112" y1="55" x2="160" y2="55" stroke="#c9d1e0" stroke-width="1" marker-end="url(#arrowW)"/>
+    <line x1="112" y1="71" x2="160" y2="82" stroke="#c9d1e0" stroke-width="1" marker-end="url(#arrowW)"/>
+    <!-- Data blocks (direct) -->
+    <rect x="160" y="18" width="54" height="20" rx="3" fill="#1e2a3a" stroke="#555" stroke-width="1"/><text x="187" y="31" font-family="monospace" font-size="8" fill="#c9d1e0" text-anchor="middle">Data B22</text>
+    <rect x="160" y="45" width="54" height="20" rx="3" fill="#1e2a3a" stroke="#555" stroke-width="1"/><text x="187" y="58" font-family="monospace" font-size="8" fill="#c9d1e0" text-anchor="middle">Data B35</text>
+    <rect x="160" y="72" width="54" height="20" rx="3" fill="#1e2a3a" stroke="#555" stroke-width="1"/><text x="187" y="85" font-family="monospace" font-size="8" fill="#c9d1e0" text-anchor="middle">Data B41</text>
+
+    <!-- Single indirect path -->
+    <line x1="112" y1="101" x2="240" y2="101" stroke="#4a9eff" stroke-width="1.5" marker-end="url(#arrowBL2)"/>
+    <rect x="240" y="88" width="80" height="26" rx="3" fill="#1a2a3a" stroke="#4a9eff" stroke-width="1.5"/>
+    <text x="280" y="100" font-family="monospace" font-size="8" fill="#4a9eff" text-anchor="middle">Index Block 77</text>
+    <text x="280" y="110" font-family="monospace" font-size="7" fill="#7a8a9e" text-anchor="middle">[→B50, →B51, ...]</text>
+    <line x1="320" y1="101" x2="370" y2="101" stroke="#4a9eff" stroke-width="1" stroke-dasharray="3,2" marker-end="url(#arrowBL2)"/>
+    <rect x="370" y="89" width="54" height="20" rx="3" fill="#1e2a3a" stroke="#555" stroke-width="1"/><text x="397" y="102" font-family="monospace" font-size="8" fill="#c9d1e0" text-anchor="middle">Data B50…</text>
+
+    <!-- Double indirect path -->
+    <line x1="112" y1="117" x2="240" y2="128" stroke="#ffce54" stroke-width="1.5" marker-end="url(#arrowY2)"/>
+    <rect x="240" y="118" width="80" height="20" rx="3" fill="#2a2000" stroke="#ffce54" stroke-width="1.5"/>
+    <text x="280" y="131" font-family="monospace" font-size="8" fill="#ffce54" text-anchor="middle">Idx Blk → Idx Blk</text>
+    <line x1="320" y1="128" x2="370" y2="128" stroke="#ffce54" stroke-width="1" stroke-dasharray="3,2" marker-end="url(#arrowY2)"/>
+    <rect x="370" y="118" width="54" height="20" rx="3" fill="#1e2a3a" stroke="#555" stroke-width="1"/><text x="397" y="131" font-family="monospace" font-size="8" fill="#c9d1e0" text-anchor="middle">Data…</text>
+
+    <defs>
+      <marker id="arrowW"   markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 z" fill="#c9d1e0"/></marker>
+      <marker id="arrowBL2" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 z" fill="#4a9eff"/></marker>
+      <marker id="arrowY2"  markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 z" fill="#ffce54"/></marker>
+    </defs>
+
+    <!-- legend -->
+    <text x="160" y="152" font-family="monospace" font-size="8" fill="#c9d1e0">Direct (1 I/O)</text>
+    <text x="250" y="152" font-family="monospace" font-size="8" fill="#4a9eff">Single Indirect (2 I/O)</text>
+    <text x="390" y="152" font-family="monospace" font-size="8" fill="#ffce54">Double (3 I/O)</text>
+  </svg>
+  </div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <div class="box box-green" style="flex:1;min-width:160px;margin:0;font-size:12px"><strong>ข้อดี:</strong> Random Access เร็ว, ไม่มี Fragmentation, รองรับไฟล์ขนาดใหญ่มาก</div>
+    <div class="box box-red" style="flex:1;min-width:160px;margin:0;font-size:12px"><strong>ข้อเสีย:</strong> i-node กินเนื้อที่, ไฟล์เล็กๆ เสีย Overhead</div>
+  </div>
+</div>
+
+<!-- Comparison table -->
 <h3>ตารางเปรียบเทียบ 4 วิธี</h3>
 <table>
   <tr><th>วิธี</th><th>Sequential</th><th>Random</th><th>Fragmentation</th><th>ขยายไฟล์</th></tr>
-  <tr><td><strong>Contiguous</strong></td><td>✅ เร็วมาก</td><td>✅ เร็วมาก</td><td>External</td><td>❌ ยาก</td></tr>
-  <tr><td><strong>Linked</strong></td><td>✅ OK</td><td>❌ ช้า</td><td>ไม่มี</td><td>✅ ง่าย</td></tr>
-  <tr><td><strong>FAT</strong></td><td>✅ OK</td><td>✅ OK (ถ้า Cache)</td><td>ไม่มี</td><td>✅ ง่าย</td></tr>
-  <tr><td><strong>Indexed (i-node)</strong></td><td>✅ OK</td><td>✅ เร็ว</td><td>ไม่มี</td><td>✅ ง่าย</td></tr>
+  <tr><td><strong style="color:#48cfad">Contiguous</strong></td><td style="color:#48cfad">เร็วมาก</td><td style="color:#48cfad">เร็วมาก</td><td style="color:#ff6b6b">External</td><td style="color:#ff6b6b">ยาก</td></tr>
+  <tr><td><strong style="color:#4a9eff">Linked</strong></td><td style="color:#48cfad">OK</td><td style="color:#ff6b6b">ช้า</td><td style="color:#48cfad">ไม่มี</td><td style="color:#48cfad">ง่าย</td></tr>
+  <tr><td><strong style="color:#ffce54">FAT</strong></td><td style="color:#48cfad">OK</td><td style="color:#ffce54">OK (ถ้า Cache)</td><td style="color:#48cfad">ไม่มี</td><td style="color:#48cfad">ง่าย</td></tr>
+  <tr><td><strong style="color:#a78bfa">Indexed (i-node)</strong></td><td style="color:#48cfad">OK</td><td style="color:#48cfad">เร็ว</td><td style="color:#48cfad">ไม่มี</td><td style="color:#48cfad">ง่าย</td></tr>
 </table>
 </div>
 
@@ -4434,132 +4980,459 @@ Internal Fragmentation = (จำนวน Pages × Page Size) − Process Size<b
 <div class="card">
 <h2>9.4b ตัวอย่างการคำนวณ File Allocation Methods</h2>
 
-<h3>Contiguous Allocation — คำนวณตำแหน่ง Block</h3>
-<div class="box box-blue">
-  Directory Entry: (start_block, length)<br>
-  Block ที่ i ของไฟล์ = start_block + i (เริ่มนับจาก 0)<br>
-  ไฟล์ขนาด n blocks → ใช้ start_block ถึง start_block + n − 1
-</div>
-<div class="example-box">
-  <div class="ex-title">ตัวอย่าง: ไฟล์ "report" เริ่มที่ Block 14, ขนาด 5 blocks</div>
-  <p>Block ของไฟล์ = [14, 15, 16, 17, 18]<br>
-  เข้าถึง Block ที่ 3 (0-indexed) = 14 + 3 = <strong>Block 17</strong><br>
-  เข้าถึง Block ที่ 0 = 14 + 0 = <strong>Block 14</strong> (Sequential เริ่มต้น)</p>
-</div>
+<!-- Contiguous walkthrough -->
+<details open style="background:#1a2235;border:1.5px solid #48cfad;border-radius:8px;padding:12px 16px;margin-bottom:12px">
+  <summary style="color:#48cfad;font-weight:700;font-size:13px;cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px">
+    <span style="background:#48cfad;color:#141925;font-size:10px;padding:1px 7px;border-radius:8px">Contiguous</span>
+    คำนวณตำแหน่ง Block — สูตร: Physical = Start + i
+  </summary>
+  <div style="margin-top:10px">
+    <div class="box box-blue" style="margin-bottom:10px;font-size:12px">
+      <strong>สูตร:</strong> Block ที่ i ของไฟล์ = start_block + i &nbsp;(นับจาก 0)<br>
+      Directory Entry เก็บแค่ <code>(start, length)</code>
+    </div>
+    <div style="background:#141925;border-radius:6px;padding:10px 14px;font-size:12px">
+      <div style="color:#ffce54;font-weight:700;margin-bottom:8px">ไฟล์ "report": start=14, length=5</div>
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="background:#1e3a1e;border:1px solid #48cfad;border-radius:3px;padding:3px 10px;font-family:monospace;font-size:11px;color:#48cfad;min-width:80px;text-align:center">file[0]</div>
+          <span style="color:#7a8a9e;font-size:11px">= 14 + 0 =</span>
+          <div style="background:#252f40;border-radius:3px;padding:3px 10px;font-family:monospace;font-size:11px;color:#48cfad">Physical Block 14</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="background:#1e3a1e;border:1px solid #48cfad;border-radius:3px;padding:3px 10px;font-family:monospace;font-size:11px;color:#48cfad;min-width:80px;text-align:center">file[1]</div>
+          <span style="color:#7a8a9e;font-size:11px">= 14 + 1 =</span>
+          <div style="background:#252f40;border-radius:3px;padding:3px 10px;font-family:monospace;font-size:11px;color:#48cfad">Physical Block 15</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="background:#1e3a1e;border:1px solid #48cfad;border-radius:3px;padding:3px 10px;font-family:monospace;font-size:11px;color:#48cfad;min-width:80px;text-align:center">file[3]</div>
+          <span style="color:#7a8a9e;font-size:11px">= 14 + 3 =</span>
+          <div style="background:#252f40;border-radius:3px;padding:3px 10px;font-family:monospace;font-size:11px;color:#48cfad">Physical Block 17</div>
+          <span style="color:#48cfad;font-size:11px">← Random Access: 1 I/O</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</details>
 
-<h3>Linked List Allocation — ไล่ตาม Pointer</h3>
-<div class="example-box">
-  <div class="ex-title">ตัวอย่าง: ไฟล์เริ่มที่ Block 9 (Linked)</div>
-  <p>Block 9 → ข้อมูล + Pointer ชี้ Block 16<br>
-  Block 16 → ข้อมูล + Pointer ชี้ Block 1<br>
-  Block 1 → ข้อมูล + Pointer ชี้ Block 10<br>
-  Block 10 → ข้อมูล + Pointer = EOF<br>
-  <strong>เข้าถึง Block ที่ 3 (ท้ายสุด): ต้องไล่ 9→16→1→10 = 4 I/O operations!</strong><br>
-  (ช้ากว่า Contiguous มากสำหรับ Random Access)</p>
-</div>
+<!-- Linked walkthrough -->
+<details open style="background:#1a2235;border:1.5px solid #4a9eff;border-radius:8px;padding:12px 16px;margin-bottom:12px">
+  <summary style="color:#4a9eff;font-weight:700;font-size:13px;cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px">
+    <span style="background:#4a9eff;color:#141925;font-size:10px;padding:1px 7px;border-radius:8px">Linked</span>
+    ไล่ตาม Pointer ทีละก้าว
+  </summary>
+  <div style="margin-top:10px">
+    <div style="background:#141925;border-radius:6px;padding:10px 14px;font-size:12px;margin-bottom:8px">
+      <div style="color:#ffce54;font-weight:700;margin-bottom:8px">เข้าถึง Block ที่ 3 ของไฟล์ (start=9)</div>
+      <div style="display:flex;flex-direction:column;gap:5px">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="background:#1a2a3a;border:1px solid #4a9eff;border-radius:3px;padding:3px 8px;font-family:monospace;font-size:11px;color:#4a9eff;min-width:70px;text-align:center">Step 1</div>
+          <span style="color:#c9d1e0;font-size:11px">อ่าน Block 9 → Pointer ชี้ Block <strong style="color:#ffce54">16</strong></span>
+          <span style="color:#7a8a9e;font-size:10px">(1 I/O)</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="background:#1a2a3a;border:1px solid #4a9eff;border-radius:3px;padding:3px 8px;font-family:monospace;font-size:11px;color:#4a9eff;min-width:70px;text-align:center">Step 2</div>
+          <span style="color:#c9d1e0;font-size:11px">อ่าน Block 16 → Pointer ชี้ Block <strong style="color:#ffce54">1</strong></span>
+          <span style="color:#7a8a9e;font-size:10px">(2 I/O)</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="background:#1a2a3a;border:1px solid #4a9eff;border-radius:3px;padding:3px 8px;font-family:monospace;font-size:11px;color:#4a9eff;min-width:70px;text-align:center">Step 3</div>
+          <span style="color:#c9d1e0;font-size:11px">อ่าน Block 1 → Pointer ชี้ Block <strong style="color:#ffce54">10</strong></span>
+          <span style="color:#7a8a9e;font-size:10px">(3 I/O)</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="background:#1a2a3a;border:1px solid #48cfad;border-radius:3px;padding:3px 8px;font-family:monospace;font-size:11px;color:#48cfad;min-width:70px;text-align:center">Step 4</div>
+          <span style="color:#c9d1e0;font-size:11px">อ่าน Block 10 = <strong style="color:#48cfad">ข้อมูลที่ต้องการ</strong> (EOF)</span>
+          <span style="color:#ff6b6b;font-size:10px;font-weight:700">(4 I/O total!)</span>
+        </div>
+      </div>
+    </div>
+    <div class="box box-red" style="margin:0;font-size:12px">Contiguous เข้า Block ที่ 3 ใช้แค่ <strong>1 I/O</strong> แต่ Linked ใช้ถึง <strong>4 I/O</strong> — ช้ากว่า 4 เท่า</div>
+  </div>
+</details>
 
-<h3>FAT (File Allocation Table) — อ่าน FAT Table</h3>
-<div class="example-box">
-  <div class="ex-title">ตัวอย่าง: ไฟล์ A เริ่มที่ Block 2</div>
-  <table>
-    <tr><th>Block #</th><th>FAT Entry (Next Block)</th><th>เป็นของไฟล์</th></tr>
-    <tr><td>0</td><td>-</td><td>ไม่ใช้</td></tr>
-    <tr><td>1</td><td>-</td><td>ว่าง</td></tr>
-    <tr><td>2</td><td>5</td><td style="color:#48cfad">ไฟล์ A (Block 1 ของไฟล์)</td></tr>
-    <tr><td>3</td><td>-</td><td>ว่าง</td></tr>
-    <tr><td>4</td><td>EOF</td><td style="color:#6c63ff">ไฟล์ B</td></tr>
-    <tr><td>5</td><td>8</td><td style="color:#48cfad">ไฟล์ A (Block 2 ของไฟล์)</td></tr>
-    <tr><td>6</td><td>-</td><td>ว่าง</td></tr>
-    <tr><td>7</td><td>-</td><td>ว่าง</td></tr>
-    <tr><td>8</td><td>EOF</td><td style="color:#48cfad">ไฟล์ A (Block 3 ของไฟล์)</td></tr>
-  </table>
-  <p><strong>ไฟล์ A ประกอบด้วย Block: 2 → 5 → 8 → EOF</strong><br>
-  เข้าถึง Block ที่ 2 ของไฟล์ A: FAT[2]=5, FAT[5]=8 → ไป Block 8<br>
-  ถ้า Cache FAT ไว้ใน RAM → Random Access เร็วกว่า Linked มาก</p>
-</div>
+<!-- FAT walkthrough -->
+<details open style="background:#1a2235;border:1.5px solid #ffce54;border-radius:8px;padding:12px 16px;margin-bottom:12px">
+  <summary style="color:#ffce54;font-weight:700;font-size:13px;cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px">
+    <span style="background:#ffce54;color:#141925;font-size:10px;padding:1px 7px;border-radius:8px">FAT</span>
+    ไล่ Chain ใน FAT Table (Cache ใน RAM ได้)
+  </summary>
+  <div style="margin-top:10px">
+    <div style="display:flex;gap:14px;flex-wrap:wrap">
+      <table style="margin:0;font-size:11px;font-family:monospace;flex:0 0 auto">
+        <tr><th style="padding:3px 8px;background:#2a2000;color:#ffce54">Block#</th><th style="padding:3px 8px;background:#2a2000;color:#ffce54">FAT[x]</th><th style="padding:3px 8px;background:#2a2000;color:#ffce54">Owner</th></tr>
+        <tr><td style="padding:2px 8px;color:#555">0</td><td style="padding:2px 8px;color:#555">—</td><td style="padding:2px 8px;color:#555">unused</td></tr>
+        <tr><td style="padding:2px 8px;color:#555">1</td><td style="padding:2px 8px;color:#555">free</td><td style="padding:2px 8px;color:#555">—</td></tr>
+        <tr style="background:#2a2000"><td style="padding:2px 8px;color:#ffce54;font-weight:700">2</td><td style="padding:2px 8px;color:#ffce54;font-weight:700">5</td><td style="padding:2px 8px;color:#ffce54">File A [0]</td></tr>
+        <tr><td style="padding:2px 8px;color:#555">3</td><td style="padding:2px 8px;color:#555">free</td><td style="padding:2px 8px;color:#555">—</td></tr>
+        <tr><td style="padding:2px 8px;color:#a78bfa">4</td><td style="padding:2px 8px;color:#a78bfa">EOF</td><td style="padding:2px 8px;color:#a78bfa">File B [0]</td></tr>
+        <tr style="background:#2a2000"><td style="padding:2px 8px;color:#ffce54;font-weight:700">5</td><td style="padding:2px 8px;color:#ffce54;font-weight:700">8</td><td style="padding:2px 8px;color:#ffce54">File A [1]</td></tr>
+        <tr><td style="padding:2px 8px;color:#555">6</td><td style="padding:2px 8px;color:#555">free</td><td style="padding:2px 8px;color:#555">—</td></tr>
+        <tr><td style="padding:2px 8px;color:#555">7</td><td style="padding:2px 8px;color:#555">free</td><td style="padding:2px 8px;color:#555">—</td></tr>
+        <tr style="background:#2a2000"><td style="padding:2px 8px;color:#ffce54;font-weight:700">8</td><td style="padding:2px 8px;color:#ff6b6b;font-weight:700">EOF</td><td style="padding:2px 8px;color:#ffce54">File A [2]</td></tr>
+      </table>
+      <div style="flex:1;min-width:180px;display:flex;flex-direction:column;gap:7px;padding-top:4px">
+        <div style="color:#ffce54;font-weight:700;font-size:12px">ไฟล์ A เริ่มที่ Block 2:</div>
+        <div style="display:flex;flex-direction:column;gap:4px;font-size:11px">
+          <div style="background:#2a2000;border-radius:3px;padding:4px 8px;font-family:monospace">
+            <span style="color:#7a8a9e">Start:</span> <span style="color:#ffce54">Block 2</span>
+          </div>
+          <div style="background:#2a2000;border-radius:3px;padding:4px 8px;font-family:monospace">
+            <span style="color:#7a8a9e">FAT[2] =</span> <span style="color:#ffce54">5</span> <span style="color:#7a8a9e">→ next Block</span>
+          </div>
+          <div style="background:#2a2000;border-radius:3px;padding:4px 8px;font-family:monospace">
+            <span style="color:#7a8a9e">FAT[5] =</span> <span style="color:#ffce54">8</span> <span style="color:#7a8a9e">→ next Block</span>
+          </div>
+          <div style="background:#2a2000;border-radius:3px;padding:4px 8px;font-family:monospace">
+            <span style="color:#7a8a9e">FAT[8] =</span> <span style="color:#ff6b6b">EOF</span> <span style="color:#7a8a9e">← จบไฟล์</span>
+          </div>
+        </div>
+        <div class="box box-green" style="margin:0;font-size:11px">FAT อยู่ใน RAM → ไล่ chain โดยไม่ต้องอ่าน Disk</div>
+      </div>
+    </div>
+  </div>
+</details>
 
-<h3>Indexed (i-node) — คำนวณ Indirect Pointer</h3>
-<div class="box box-blue">
-  <strong>i-node Direct vs Indirect:</strong><br>
-  Direct Pointer: ชี้ตรงไป Data Block<br>
-  Single Indirect: ชี้ไป Index Block → Index Block ชี้ไป Data Block<br>
-  Double Indirect: ชี้ไป Block ของ Index Block → Index Block → Data Block<br>
-  <br>
-  ถ้า Block size = B bytes, Pointer size = P bytes → แต่ละ Indirect Block มี B/P pointers
-</div>
-<div class="example-box">
-  <div class="ex-title">ตัวอย่าง: Block size = 512 bytes, Pointer = 4 bytes</div>
-  <p>Index Block ละ 512/4 = 128 pointers<br>
-  Direct blocks = 10 (สมมติ i-node มี 10 direct pointers)<br>
-  Single Indirect: 128 blocks<br>
-  Double Indirect: 128 × 128 = 16,384 blocks<br>
-  Triple Indirect: 128^3 = 2,097,152 blocks<br>
-  <br>
-  <strong>ขนาดไฟล์สูงสุด:</strong><br>
-  (10 + 128 + 16,384 + 2,097,152) × 512 bytes = ~1 GB</p>
-</div>
+<!-- i-node calculation -->
+<details open style="background:#1a2235;border:1.5px solid #a78bfa;border-radius:8px;padding:12px 16px;margin-bottom:6px">
+  <summary style="color:#a78bfa;font-weight:700;font-size:13px;cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px">
+    <span style="background:#a78bfa;color:#141925;font-size:10px;padding:1px 7px;border-radius:8px">i-node</span>
+    คำนวณขนาดไฟล์สูงสุดและ Indirect Pointers
+  </summary>
+  <div style="margin-top:10px">
+    <div class="box box-blue" style="font-size:12px;margin-bottom:10px">
+      <strong>สูตร:</strong> Pointers per Indirect Block = Block_size ÷ Pointer_size
+    </div>
+    <div style="background:#141925;border-radius:6px;padding:12px 14px;font-size:12px">
+      <div style="color:#ffce54;font-weight:700;margin-bottom:8px">ตัวอย่าง: Block=512B, Pointer=4B → 512÷4 = <span style="color:#a78bfa">128 pointers/block</span></div>
+      <div style="display:grid;grid-template-columns:auto 1fr auto;gap:5px 12px;align-items:center">
+        <div style="background:#1e1a2e;border:1px solid #a78bfa;border-radius:3px;padding:3px 8px;font-family:monospace;font-size:11px;color:#a78bfa;text-align:center">Direct (×10)</div>
+        <div style="color:#c9d1e0;font-size:11px">10 blocks</div>
+        <div style="color:#7a8a9e;font-size:10px">= 10 × 512 = 5 KB</div>
+
+        <div style="background:#1a2a3a;border:1px solid #4a9eff;border-radius:3px;padding:3px 8px;font-family:monospace;font-size:11px;color:#4a9eff;text-align:center">Single Ind.</div>
+        <div style="color:#c9d1e0;font-size:11px">128 blocks</div>
+        <div style="color:#7a8a9e;font-size:10px">= 128 × 512 = 64 KB</div>
+
+        <div style="background:#2a2000;border:1px solid #ffce54;border-radius:3px;padding:3px 8px;font-family:monospace;font-size:11px;color:#ffce54;text-align:center">Double Ind.</div>
+        <div style="color:#c9d1e0;font-size:11px">128 × 128 = 16,384 blocks</div>
+        <div style="color:#7a8a9e;font-size:10px">= 8 MB</div>
+
+        <div style="background:#2a1010;border:1px solid #ff6b6b;border-radius:3px;padding:3px 8px;font-family:monospace;font-size:11px;color:#ff6b6b;text-align:center">Triple Ind.</div>
+        <div style="color:#c9d1e0;font-size:11px">128³ = 2,097,152 blocks</div>
+        <div style="color:#7a8a9e;font-size:10px">= 1 GB</div>
+      </div>
+      <div style="margin-top:10px;padding:8px 12px;background:#1e1a2e;border-radius:4px;font-family:monospace;font-size:11px">
+        <span style="color:#7a8a9e">Max file size = </span>
+        <span style="color:#a78bfa">(10 + 128 + 16,384 + 2,097,152)</span>
+        <span style="color:#7a8a9e"> × 512 B ≈ </span>
+        <span style="color:#48cfad;font-weight:700">~1 GB</span>
+      </div>
+    </div>
+  </div>
+</details>
 </div>
 
 <!-- 9.5 Free Space -->
 <div class="card">
 <h2>9.5 Free Space Management — ติดตาม Block ว่าง</h2>
-<h3>Bit Vector (Bitmap)</h3>
-<p>ใช้ 1 bit ต่อ 1 Block: <span class="highlight">0</span> = ว่าง, <span class="highlight">1</span> = ถูกใช้</p>
-<div class="box box-blue">
-  ข้อดี: หา Block ว่างติดกันได้ง่าย ใช้ bit operation<br>
-  ข้อเสีย: ถ้า Disk ใหญ่มาก Bitmap ก็ใหญ่ตาม
+<p>OS ต้องรู้ว่า Block ไหนบน Disk ว่างอยู่บ้าง มี 2 วิธีหลัก:</p>
+
+<!-- Bitmap visual -->
+<div style="background:#1a2235;border:1.5px solid #4a9eff;border-radius:8px;padding:14px 16px;margin-bottom:12px">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+    <span style="background:#4a9eff;color:#141925;font-size:11px;font-weight:700;padding:2px 10px;border-radius:10px">1</span>
+    <span style="color:#4a9eff;font-weight:700;font-size:14px">Bit Vector (Bitmap)</span>
+  </div>
+  <p style="font-size:13px;color:#c9d1e0;margin:0 0 10px">1 bit ต่อ 1 Block — <strong style="color:#48cfad">0 = ว่าง (free)</strong>, <strong style="color:#ff6b6b">1 = ใช้งาน (used)</strong></p>
+
+  <!-- Bitmap row -->
+  <div style="overflow-x:auto;margin-bottom:10px">
+  <svg width="520" height="64" viewBox="0 0 520 64" xmlns="http://www.w3.org/2000/svg" style="display:block;min-width:380px">
+    <text x="4" y="11" font-family="monospace" font-size="9" fill="#7a8a9e">Block#:</text>
+    <!-- bits: 1=used(red), 0=free(green) pattern: 1,1,0,0,1,1,1,0,0,0,1,0,0,1,1,0,0,0,0,1 -->
+    <!-- Helper: each cell 24px wide starting x=4 -->
+    <!-- Block 0: used -->
+    <rect x="4"   y="16" width="22" height="22" rx="2" fill="#3a1010" stroke="#ff6b6b" stroke-width="1.5"/>
+    <text x="15"  y="31" font-family="monospace" font-size="10" fill="#ff6b6b" text-anchor="middle" font-weight="bold">1</text>
+    <text x="15"  y="50" font-family="monospace" font-size="8"  fill="#7a8a9e" text-anchor="middle">0</text>
+    <!-- Block 1: used -->
+    <rect x="28"  y="16" width="22" height="22" rx="2" fill="#3a1010" stroke="#ff6b6b" stroke-width="1.5"/>
+    <text x="39"  y="31" font-family="monospace" font-size="10" fill="#ff6b6b" text-anchor="middle" font-weight="bold">1</text>
+    <text x="39"  y="50" font-family="monospace" font-size="8"  fill="#7a8a9e" text-anchor="middle">1</text>
+    <!-- Block 2: free -->
+    <rect x="52"  y="16" width="22" height="22" rx="2" fill="#1e3a1e" stroke="#48cfad" stroke-width="1.5"/>
+    <text x="63"  y="31" font-family="monospace" font-size="10" fill="#48cfad" text-anchor="middle" font-weight="bold">0</text>
+    <text x="63"  y="50" font-family="monospace" font-size="8"  fill="#7a8a9e" text-anchor="middle">2</text>
+    <!-- Block 3: free -->
+    <rect x="76"  y="16" width="22" height="22" rx="2" fill="#1e3a1e" stroke="#48cfad" stroke-width="1.5"/>
+    <text x="87"  y="31" font-family="monospace" font-size="10" fill="#48cfad" text-anchor="middle" font-weight="bold">0</text>
+    <text x="87"  y="50" font-family="monospace" font-size="8"  fill="#7a8a9e" text-anchor="middle">3</text>
+    <!-- Block 4: used -->
+    <rect x="100" y="16" width="22" height="22" rx="2" fill="#3a1010" stroke="#ff6b6b" stroke-width="1.5"/>
+    <text x="111" y="31" font-family="monospace" font-size="10" fill="#ff6b6b" text-anchor="middle" font-weight="bold">1</text>
+    <text x="111" y="50" font-family="monospace" font-size="8"  fill="#7a8a9e" text-anchor="middle">4</text>
+    <!-- Block 5: used -->
+    <rect x="124" y="16" width="22" height="22" rx="2" fill="#3a1010" stroke="#ff6b6b" stroke-width="1.5"/>
+    <text x="135" y="31" font-family="monospace" font-size="10" fill="#ff6b6b" text-anchor="middle" font-weight="bold">1</text>
+    <text x="135" y="50" font-family="monospace" font-size="8"  fill="#7a8a9e" text-anchor="middle">5</text>
+    <!-- Block 6: used -->
+    <rect x="148" y="16" width="22" height="22" rx="2" fill="#3a1010" stroke="#ff6b6b" stroke-width="1.5"/>
+    <text x="159" y="31" font-family="monospace" font-size="10" fill="#ff6b6b" text-anchor="middle" font-weight="bold">1</text>
+    <text x="159" y="50" font-family="monospace" font-size="8"  fill="#7a8a9e" text-anchor="middle">6</text>
+    <!-- Block 7: free -->
+    <rect x="172" y="16" width="22" height="22" rx="2" fill="#1e3a1e" stroke="#48cfad" stroke-width="1.5"/>
+    <text x="183" y="31" font-family="monospace" font-size="10" fill="#48cfad" text-anchor="middle" font-weight="bold">0</text>
+    <text x="183" y="50" font-family="monospace" font-size="8"  fill="#7a8a9e" text-anchor="middle">7</text>
+    <!-- Block 8: free -->
+    <rect x="196" y="16" width="22" height="22" rx="2" fill="#1e3a1e" stroke="#48cfad" stroke-width="1.5"/>
+    <text x="207" y="31" font-family="monospace" font-size="10" fill="#48cfad" text-anchor="middle" font-weight="bold">0</text>
+    <text x="207" y="50" font-family="monospace" font-size="8"  fill="#7a8a9e" text-anchor="middle">8</text>
+    <!-- Block 9: free -->
+    <rect x="220" y="16" width="22" height="22" rx="2" fill="#1e3a1e" stroke="#48cfad" stroke-width="1.5"/>
+    <text x="231" y="31" font-family="monospace" font-size="10" fill="#48cfad" text-anchor="middle" font-weight="bold">0</text>
+    <text x="231" y="50" font-family="monospace" font-size="8"  fill="#7a8a9e" text-anchor="middle">9</text>
+    <!-- Block 10: used -->
+    <rect x="244" y="16" width="22" height="22" rx="2" fill="#3a1010" stroke="#ff6b6b" stroke-width="1.5"/>
+    <text x="255" y="31" font-family="monospace" font-size="10" fill="#ff6b6b" text-anchor="middle" font-weight="bold">1</text>
+    <text x="255" y="50" font-family="monospace" font-size="8"  fill="#7a8a9e" text-anchor="middle">10</text>
+    <!-- Block 11: free -->
+    <rect x="268" y="16" width="22" height="22" rx="2" fill="#1e3a1e" stroke="#48cfad" stroke-width="1.5"/>
+    <text x="279" y="31" font-family="monospace" font-size="10" fill="#48cfad" text-anchor="middle" font-weight="bold">0</text>
+    <text x="279" y="50" font-family="monospace" font-size="8"  fill="#7a8a9e" text-anchor="middle">11</text>
+    <!-- Block 12: free -->
+    <rect x="292" y="16" width="22" height="22" rx="2" fill="#1e3a1e" stroke="#48cfad" stroke-width="1.5"/>
+    <text x="303" y="31" font-family="monospace" font-size="10" fill="#48cfad" text-anchor="middle" font-weight="bold">0</text>
+    <text x="303" y="50" font-family="monospace" font-size="8"  fill="#7a8a9e" text-anchor="middle">12</text>
+    <!-- ... label -->
+    <text x="320" y="30" font-family="monospace" font-size="14" fill="#7a8a9e">…</text>
+    <!-- legend -->
+    <rect x="360" y="16" width="14" height="14" rx="2" fill="#1e3a1e" stroke="#48cfad" stroke-width="1.5"/>
+    <text x="378" y="27" font-family="monospace" font-size="9" fill="#48cfad">0 = Free</text>
+    <rect x="440" y="16" width="14" height="14" rx="2" fill="#3a1010" stroke="#ff6b6b" stroke-width="1.5"/>
+    <text x="458" y="27" font-family="monospace" font-size="9" fill="#ff6b6b">1 = Used</text>
+    <!-- Brace for contiguous free blocks 7-9 -->
+    <line x1="172" y1="42" x2="242" y2="42" stroke="#48cfad" stroke-width="1.2"/>
+    <line x1="172" y1="40" x2="172" y2="44" stroke="#48cfad" stroke-width="1.2"/>
+    <line x1="242" y1="40" x2="242" y2="44" stroke="#48cfad" stroke-width="1.2"/>
+    <text x="207" y="57" font-family="monospace" font-size="8" fill="#48cfad" text-anchor="middle">3 ว่างติดกัน (7,8,9)</text>
+  </svg>
+  </div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <div class="box box-green" style="flex:1;min-width:180px;margin:0;font-size:12px"><strong>ข้อดี:</strong> หา Block ว่างติดกันได้ง่ายด้วย bit operations เร็วมาก</div>
+    <div class="box box-red" style="flex:1;min-width:180px;margin:0;font-size:12px"><strong>ข้อเสีย:</strong> Bitmap ใหญ่ตาม Disk — Disk 1 TB (512B/block) ต้องการ Bitmap ~256 MB</div>
+  </div>
 </div>
-<h3>Linked List ของ Block ว่าง</h3>
-<p>เชื่อม Block ว่างด้วย Pointer ง่ายต่อการเพิ่ม/ลบ แต่หา Block ว่างติดกันยาก</p>
+
+<!-- Linked free list -->
+<div style="background:#1a2235;border:1.5px solid #48cfad;border-radius:8px;padding:14px 16px;margin-bottom:6px">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+    <span style="background:#48cfad;color:#141925;font-size:11px;font-weight:700;padding:2px 10px;border-radius:10px">2</span>
+    <span style="color:#48cfad;font-weight:700;font-size:14px">Linked List ของ Block ว่าง</span>
+  </div>
+  <p style="font-size:13px;color:#c9d1e0;margin:0 0 10px">เชื่อม Block ว่างเข้าด้วยกันด้วย Pointer (เก็บ Pointer ใน Block นั้นเอง)</p>
+  <svg width="100%" height="46" viewBox="0 0 420 46" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" style="display:block;max-width:500px;margin:0 auto 10px">
+    <text x="4" y="11" font-family="monospace" font-size="9" fill="#7a8a9e">Free list head →</text>
+    <!-- Free blocks linked -->
+    <rect x="100" y="14" width="60" height="22" rx="3" fill="#1e3a1e" stroke="#48cfad" stroke-width="1.5"/>
+    <text x="130" y="28" font-family="monospace" font-size="9" fill="#48cfad" text-anchor="middle">Block 2</text>
+    <line x1="160" y1="25" x2="185" y2="25" stroke="#48cfad" stroke-width="1.5" marker-end="url(#arrowFree)"/>
+    <rect x="185" y="14" width="60" height="22" rx="3" fill="#1e3a1e" stroke="#48cfad" stroke-width="1.5"/>
+    <text x="215" y="28" font-family="monospace" font-size="9" fill="#48cfad" text-anchor="middle">Block 3</text>
+    <line x1="245" y1="25" x2="270" y2="25" stroke="#48cfad" stroke-width="1.5" marker-end="url(#arrowFree)"/>
+    <rect x="270" y="14" width="60" height="22" rx="3" fill="#1e3a1e" stroke="#48cfad" stroke-width="1.5"/>
+    <text x="300" y="28" font-family="monospace" font-size="9" fill="#48cfad" text-anchor="middle">Block 7</text>
+    <line x1="330" y1="25" x2="355" y2="25" stroke="#48cfad" stroke-width="1.5" marker-end="url(#arrowFree)"/>
+    <rect x="355" y="14" width="54" height="22" rx="3" fill="#1e3a1e" stroke="#48cfad" stroke-width="1.5"/>
+    <text x="382" y="28" font-family="monospace" font-size="9" fill="#48cfad" text-anchor="middle">Block 8…</text>
+    <defs>
+      <marker id="arrowFree" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 z" fill="#48cfad"/></marker>
+    </defs>
+  </svg>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <div class="box box-green" style="flex:1;min-width:160px;margin:0;font-size:12px"><strong>ข้อดี:</strong> ไม่ต้องการพื้นที่พิเศษ — Pointer อยู่ใน Block ว่างนั้นเอง</div>
+    <div class="box box-red" style="flex:1;min-width:160px;margin:0;font-size:12px"><strong>ข้อเสีย:</strong> หา Block ว่างติดกันยาก ต้องไล่ List</div>
+  </div>
+</div>
 </div>
 
 <!-- 9.6 I/O -->
 <div class="card">
 <h2>9.6 ระบบ I/O</h2>
 
-<h3>โครงสร้างฮาร์ดแวร์ I/O</h3>
-<p>อุปกรณ์ I/O เชื่อมต่อกับ CPU ผ่าน <strong>Bus</strong>:</p>
-<table>
-  <tr><th>Bus</th><th>ใช้กับ</th></tr>
-  <tr><td>PCI / PCIe</td><td>อุปกรณ์ความเร็วสูง (GPU, NVMe SSD)</td></tr>
-  <tr><td>Expansion Bus</td><td>อุปกรณ์ช้า (Keyboard, USB, Serial)</td></tr>
-  <tr><td>SCSI Bus</td><td>อุปกรณ์จัดเก็บ (HDD, Tape)</td></tr>
-</table>
+<!-- I/O Control Methods: 3-column visual comparison -->
+<h3>วิธีควบคุม I/O — 3 แบบ (ที่ออกสอบบ่อยที่สุด)</h3>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px">
 
-<h3>Device Controller Registers</h3>
-<p>แต่ละ Controller มี Register 4 แบบ:</p>
-<table>
-  <tr><th>Register</th><th>หน้าที่</th></tr>
-  <tr><td>Data-in</td><td>CPU อ่านข้อมูลจากอุปกรณ์</td></tr>
-  <tr><td>Data-out</td><td>CPU ส่งข้อมูลไปอุปกรณ์</td></tr>
-  <tr><td>Status</td><td>บอกสถานะ (Busy/Idle/Error)</td></tr>
-  <tr><td>Control</td><td>คำสั่ง/โหมดการทำงาน</td></tr>
-</table>
+  <!-- Polling -->
+  <div style="background:#1a2235;border:1.5px solid #ff6b6b;border-radius:8px;padding:12px">
+    <div style="color:#ff6b6b;font-weight:700;font-size:13px;text-align:center;margin-bottom:10px">Polling</div>
+    <svg width="100%" height="110" viewBox="0 0 130 110" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" style="display:block;margin:0 auto 8px">
+      <!-- CPU box -->
+      <rect x="10" y="8" width="46" height="22" rx="3" fill="#2a0000" stroke="#ff6b6b" stroke-width="1.5"/>
+      <text x="33" y="22" font-family="monospace" font-size="9" fill="#ff6b6b" text-anchor="middle">CPU</text>
+      <!-- Loop arrow on CPU -->
+      <path d="M30,30 Q10,48 30,56" stroke="#ff6b6b" stroke-width="1.5" fill="none" marker-end="url(#arrowRed)"/>
+      <path d="M36,30 Q56,48 36,56" stroke="#ff6b6b" stroke-width="1.5" fill="none"/>
+      <text x="33" y="48" font-family="monospace" font-size="7" fill="#ff6b6b" text-anchor="middle">loop</text>
+      <text x="33" y="57" font-family="monospace" font-size="7" fill="#ffce54" text-anchor="middle">check?</text>
+      <!-- Device box -->
+      <rect x="74" y="8" width="46" height="22" rx="3" fill="#1e2a3a" stroke="#555" stroke-width="1"/>
+      <text x="97" y="22" font-family="monospace" font-size="9" fill="#7a8a9e" text-anchor="middle">Device</text>
+      <!-- CPU polls device -->
+      <line x1="56" y1="19" x2="73" y2="19" stroke="#ff6b6b" stroke-width="1" stroke-dasharray="3,2" marker-end="url(#arrowRed)"/>
+      <text x="64" y="15" font-family="monospace" font-size="7" fill="#ff6b6b" text-anchor="middle">poll</text>
+      <!-- Timeline -->
+      <text x="5" y="76" font-family="monospace" font-size="7" fill="#7a8a9e">CPU:</text>
+      <rect x="26" y="68" width="90" height="10" rx="2" fill="#3a0000"/>
+      <text x="71" y="76" font-family="monospace" font-size="7" fill="#ff6b6b" text-anchor="middle">BUSY-WAIT (wasted)</text>
+      <text x="5" y="96" font-family="monospace" font-size="7" fill="#7a8a9e">Dev:</text>
+      <rect x="26" y="88" width="30" height="10" rx="2" fill="#252f40" stroke="#555" stroke-width="1"/>
+      <text x="41" y="96" font-family="monospace" font-size="7" fill="#555" text-anchor="middle">working</text>
+      <defs>
+        <marker id="arrowRed" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto"><path d="M0,0 L0,5 L5,2.5 z" fill="#ff6b6b"/></marker>
+      </defs>
+    </svg>
+    <div style="font-size:11px;color:#c9d1e0;margin-bottom:4px">CPU วนตรวจ Status Register ซ้ำๆ ตลอดเวลา</div>
+    <div style="font-size:10px;color:#ff6b6b">CPU เสียเวลา Busy-Wait ทั้งหมด</div>
+  </div>
 
-<h3>วิธีควบคุม I/O — 3 แบบ</h3>
-<table>
-  <tr><th>วิธี</th><th>การทำงาน</th><th>ข้อดี</th><th>ข้อเสีย</th></tr>
-  <tr><td><strong>Polling</strong></td><td>CPU วนตรวจ Status Register ซ้ำๆ</td><td>ง่าย</td><td>CPU เสียเวลา Busy-Wait ไม่ได้ทำอะไร</td></tr>
-  <tr><td><strong>Interrupt-Driven</strong></td><td>อุปกรณ์ส่ง Interrupt เมื่อพร้อม CPU ทำงานอื่นระหว่างรอ</td><td>CPU ไม่เสียเวลา</td><td>Overhead ถ้า Interrupt เยอะมาก</td></tr>
-  <tr><td><strong>DMA</strong></td><td>DMA Controller จัดการโอนข้อมูลก้อนใหญ่เองทั้งหมด CPU แค่ตั้งค่า แล้วก็ได้รับ Interrupt เมื่อเสร็จ</td><td>CPU เป็นอิสระระหว่างโอน</td><td>ต้องการ DMA Controller</td></tr>
-</table>
-<div class="box box-blue">
-  <strong>DMA (Direct Memory Access):</strong><br>
-  มาตรฐานสำหรับการโอนข้อมูลปริมาณมาก CPU บอก DMA ว่า โอนจากไหน ไปไหน กี่ bytes แล้ว CPU ทำงานอื่น → DMA โอนข้อมูลเอง → เสร็จแล้ว Interrupt CPU
+  <!-- Interrupt -->
+  <div style="background:#1a2235;border:1.5px solid #48cfad;border-radius:8px;padding:12px">
+    <div style="color:#48cfad;font-weight:700;font-size:13px;text-align:center;margin-bottom:10px">Interrupt-Driven</div>
+    <svg width="100%" height="110" viewBox="0 0 130 110" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" style="display:block;margin:0 auto 8px">
+      <!-- CPU -->
+      <rect x="10" y="8" width="46" height="22" rx="3" fill="#1e3a1e" stroke="#48cfad" stroke-width="1.5"/>
+      <text x="33" y="22" font-family="monospace" font-size="9" fill="#48cfad" text-anchor="middle">CPU</text>
+      <!-- Device -->
+      <rect x="74" y="8" width="46" height="22" rx="3" fill="#1e2a3a" stroke="#4a9eff" stroke-width="1"/>
+      <text x="97" y="22" font-family="monospace" font-size="9" fill="#4a9eff" text-anchor="middle">Device</text>
+      <!-- CPU issues command -->
+      <line x1="56" y1="15" x2="73" y2="15" stroke="#4a9eff" stroke-width="1" marker-end="url(#arrowBlue2)"/>
+      <text x="64" y="12" font-family="monospace" font-size="7" fill="#4a9eff" text-anchor="middle">cmd</text>
+      <!-- Interrupt back -->
+      <line x1="73" y1="24" x2="56" y2="24" stroke="#ffce54" stroke-width="1.5" stroke-dasharray="3,2" marker-end="url(#arrowYel)"/>
+      <text x="64" y="34" font-family="monospace" font-size="7" fill="#ffce54" text-anchor="middle">IRQ done!</text>
+      <!-- Timeline -->
+      <text x="5" y="76" font-family="monospace" font-size="7" fill="#7a8a9e">CPU:</text>
+      <rect x="26" y="68" width="42" height="10" rx="2" fill="#3a0000"/>
+      <text x="47" y="76" font-family="monospace" font-size="7" fill="#ff6b6b" text-anchor="middle">wait</text>
+      <rect x="70" y="68" width="46" height="10" rx="2" fill="#1e3a1e"/>
+      <text x="93" y="76" font-family="monospace" font-size="7" fill="#48cfad" text-anchor="middle">other work</text>
+      <text x="5" y="96" font-family="monospace" font-size="7" fill="#7a8a9e">Dev:</text>
+      <rect x="26" y="88" width="55" height="10" rx="2" fill="#1a2a3a" stroke="#4a9eff" stroke-width="1"/>
+      <text x="53" y="96" font-family="monospace" font-size="7" fill="#4a9eff" text-anchor="middle">transfer</text>
+      <text x="84" y="96" font-family="monospace" font-size="7" fill="#ffce54">IRQ↑</text>
+      <defs>
+        <marker id="arrowBlue2" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto"><path d="M0,0 L0,5 L5,2.5 z" fill="#4a9eff"/></marker>
+        <marker id="arrowYel" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto"><path d="M0,0 L0,5 L5,2.5 z" fill="#ffce54"/></marker>
+      </defs>
+    </svg>
+    <div style="font-size:11px;color:#c9d1e0;margin-bottom:4px">CPU ทำงานอื่น รอ Interrupt จาก Device</div>
+    <div style="font-size:10px;color:#48cfad">CPU ไม่เสียเวลา แต่ Overhead สูงถ้า IRQ เยอะ</div>
+  </div>
+
+  <!-- DMA -->
+  <div style="background:#1a2235;border:1.5px solid #a78bfa;border-radius:8px;padding:12px">
+    <div style="color:#a78bfa;font-weight:700;font-size:13px;text-align:center;margin-bottom:10px">DMA</div>
+    <svg width="100%" height="110" viewBox="0 0 130 110" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" style="display:block;margin:0 auto 8px">
+      <!-- CPU -->
+      <rect x="4" y="8" width="36" height="22" rx="3" fill="#1e1a2e" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="22" y="22" font-family="monospace" font-size="8" fill="#a78bfa" text-anchor="middle">CPU</text>
+      <!-- DMA controller -->
+      <rect x="47" y="8" width="36" height="22" rx="3" fill="#2a1a3a" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="65" y="19" font-family="monospace" font-size="7" fill="#a78bfa" text-anchor="middle">DMA</text>
+      <text x="65" y="27" font-family="monospace" font-size="7" fill="#a78bfa" text-anchor="middle">ctrl</text>
+      <!-- Device -->
+      <rect x="90" y="8" width="36" height="22" rx="3" fill="#1e2a3a" stroke="#4a9eff" stroke-width="1"/>
+      <text x="108" y="22" font-family="monospace" font-size="8" fill="#4a9eff" text-anchor="middle">Device</text>
+      <!-- CPU sets up DMA -->
+      <line x1="40" y1="15" x2="46" y2="15" stroke="#a78bfa" stroke-width="1" marker-end="url(#arrowPurp)"/>
+      <text x="43" y="12" font-family="monospace" font-size="6" fill="#a78bfa" text-anchor="middle">setup</text>
+      <!-- DMA handles device -->
+      <line x1="83" y1="19" x2="89" y2="19" stroke="#4a9eff" stroke-width="1.5" marker-end="url(#arrowBL3)"/>
+      <!-- IRQ back to CPU -->
+      <line x1="46" y1="26" x2="40" y2="26" stroke="#ffce54" stroke-width="1.5" stroke-dasharray="3,2" marker-end="url(#arrowYel2)"/>
+      <text x="43" y="35" font-family="monospace" font-size="6" fill="#ffce54" text-anchor="middle">IRQ</text>
+      <!-- Timeline -->
+      <text x="2" y="70" font-family="monospace" font-size="7" fill="#7a8a9e">CPU:</text>
+      <rect x="20" y="62" width="12" height="10" rx="1" fill="#3a0000"/>
+      <text x="26" y="70" font-family="monospace" font-size="6" fill="#a78bfa" text-anchor="middle">set</text>
+      <rect x="34" y="62" width="60" height="10" rx="2" fill="#1e1a2e"/>
+      <text x="64" y="70" font-family="monospace" font-size="7" fill="#48cfad" text-anchor="middle">free — other work</text>
+      <rect x="96" y="62" width="14" height="10" rx="1" fill="#1e3a1e"/>
+      <text x="103" y="70" font-family="monospace" font-size="6" fill="#48cfad" text-anchor="middle">IRQ</text>
+      <text x="2" y="90" font-family="monospace" font-size="7" fill="#7a8a9e">DMA:</text>
+      <rect x="20" y="82" width="76" height="10" rx="2" fill="#2a1a3a" stroke="#a78bfa" stroke-width="1"/>
+      <text x="58" y="90" font-family="monospace" font-size="7" fill="#a78bfa" text-anchor="middle">handles transfer</text>
+      <defs>
+        <marker id="arrowPurp" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto"><path d="M0,0 L0,5 L5,2.5 z" fill="#a78bfa"/></marker>
+        <marker id="arrowBL3"  markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto"><path d="M0,0 L0,5 L5,2.5 z" fill="#4a9eff"/></marker>
+        <marker id="arrowYel2" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto"><path d="M0,0 L0,5 L5,2.5 z" fill="#ffce54"/></marker>
+      </defs>
+    </svg>
+    <div style="font-size:11px;color:#c9d1e0;margin-bottom:4px">DMA Controller โอนข้อมูลทั้งก้อน CPU ได้ทำงานอื่น</div>
+    <div style="font-size:10px;color:#a78bfa">เหมาะกับข้อมูลปริมาณมาก (HDD→RAM)</div>
+  </div>
 </div>
 
-<h3>Kernel I/O Subsystem — บริการ I/O ของ Kernel</h3>
-<table>
-  <tr><th>บริการ</th><th>ความหมาย</th></tr>
-  <tr><td><strong>Scheduling</strong></td><td>จัดลำดับ I/O Request ให้มีประสิทธิภาพ</td></tr>
-  <tr><td><strong>Buffering</strong></td><td>เก็บข้อมูลชั่วคราวระหว่างอุปกรณ์ที่ความเร็วต่างกัน</td></tr>
-  <tr><td><strong>Double Buffering</strong></td><td>ใช้ Buffer 2 ก้อน: CPU ประมวลผล Buffer A ขณะ Device เติม Buffer B</td></tr>
-  <tr><td><strong>Spooling</strong></td><td>คิว Output สำหรับอุปกรณ์ที่ใช้ได้แค่ครั้งละ 1 Process (เช่น Printer)</td></tr>
-  <tr><td><strong>Error Handling</strong></td><td>ตรวจจับและรายงาน I/O Error</td></tr>
-</table>
+<!-- Quick comparison strip -->
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:16px;font-size:11px;text-align:center">
+  <div style="background:#2a0000;border-radius:4px;padding:6px;color:#ff6b6b"><strong>Polling</strong><br>CPU ทำทุกอย่าง<br>เสียเวลา 100%</div>
+  <div style="background:#1e3a1e;border-radius:4px;padding:6px;color:#48cfad"><strong>Interrupt</strong><br>CPU รอ IRQ<br>ทำงานอื่นได้บ้าง</div>
+  <div style="background:#1e1a2e;border-radius:4px;padding:6px;color:#a78bfa"><strong>DMA</strong><br>CPU อิสระ<br>DMA ทำเอง</div>
+</div>
 
-<h3>Device Driver</h3>
-<p>โปรแกรม (ส่วนหนึ่งของ OS) ที่แปล คำสั่งทั่วไปของ OS → คำสั่งเฉพาะของอุปกรณ์ อุปกรณ์แต่ละชนิดต้องการ Driver ของตัวเอง</p>
+<!-- Hardware structure (compact) -->
+<h3>โครงสร้างฮาร์ดแวร์ I/O</h3>
+<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px">
+  <div style="background:#1a2235;border-radius:6px;padding:10px 14px;flex:1;min-width:180px">
+    <div style="color:#4a9eff;font-weight:700;font-size:12px;margin-bottom:6px">Bus ที่ใช้เชื่อมต่อ CPU</div>
+    <div style="display:flex;flex-direction:column;gap:4px;font-size:12px">
+      <div style="background:#252f40;border-radius:3px;padding:4px 8px;color:#c9d1e0"><span style="color:#4a9eff">PCIe</span> — GPU, NVMe SSD (ความเร็วสูง)</div>
+      <div style="background:#252f40;border-radius:3px;padding:4px 8px;color:#c9d1e0"><span style="color:#ffce54">Expansion Bus</span> — Keyboard, USB, Serial</div>
+      <div style="background:#252f40;border-radius:3px;padding:4px 8px;color:#c9d1e0"><span style="color:#48cfad">SCSI Bus</span> — HDD, Tape (จัดเก็บ)</div>
+    </div>
+  </div>
+  <div style="background:#1a2235;border-radius:6px;padding:10px 14px;flex:1;min-width:180px">
+    <div style="color:#fc6e51;font-weight:700;font-size:12px;margin-bottom:6px">Device Controller Registers (4 แบบ)</div>
+    <div style="display:flex;flex-direction:column;gap:4px;font-size:12px">
+      <div style="background:#252f40;border-radius:3px;padding:4px 8px;color:#c9d1e0"><span style="color:#48cfad">Data-in</span> — CPU อ่านข้อมูลจากอุปกรณ์</div>
+      <div style="background:#252f40;border-radius:3px;padding:4px 8px;color:#c9d1e0"><span style="color:#fc6e51">Data-out</span> — CPU ส่งข้อมูลไปอุปกรณ์</div>
+      <div style="background:#252f40;border-radius:3px;padding:4px 8px;color:#c9d1e0"><span style="color:#ffce54">Status</span> — Busy / Idle / Error</div>
+      <div style="background:#252f40;border-radius:3px;padding:4px 8px;color:#c9d1e0"><span style="color:#a78bfa">Control</span> — คำสั่ง / โหมดการทำงาน</div>
+    </div>
+  </div>
+</div>
+
+<!-- Kernel I/O Subsystem -->
+<h3>Kernel I/O Subsystem — บริการ I/O ของ Kernel</h3>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;margin-bottom:14px">
+  <div style="background:#1e2a3a;border-left:3px solid #4a9eff;border-radius:4px;padding:8px 10px">
+    <div style="color:#4a9eff;font-size:11px;font-weight:700">Scheduling</div>
+    <div style="color:#c9d1e0;font-size:11px;margin-top:2px">จัดลำดับ I/O Request ให้มีประสิทธิภาพ</div>
+  </div>
+  <div style="background:#1e2a3a;border-left:3px solid #48cfad;border-radius:4px;padding:8px 10px">
+    <div style="color:#48cfad;font-size:11px;font-weight:700">Buffering</div>
+    <div style="color:#c9d1e0;font-size:11px;margin-top:2px">เก็บข้อมูลชั่วคราวระหว่างอุปกรณ์ที่ความเร็วต่างกัน</div>
+  </div>
+  <div style="background:#1e2a3a;border-left:3px solid #ffce54;border-radius:4px;padding:8px 10px">
+    <div style="color:#ffce54;font-size:11px;font-weight:700">Double Buffering</div>
+    <div style="color:#c9d1e0;font-size:11px;margin-top:2px">Buffer A: CPU ประมวลผล | Buffer B: Device เติม (สลับกัน)</div>
+  </div>
+  <div style="background:#1e2a3a;border-left:3px solid #fc6e51;border-radius:4px;padding:8px 10px">
+    <div style="color:#fc6e51;font-size:11px;font-weight:700">Spooling</div>
+    <div style="color:#c9d1e0;font-size:11px;margin-top:2px">คิว Output สำหรับอุปกรณ์ครั้งละ 1 Process เช่น Printer</div>
+  </div>
+  <div style="background:#1e2a3a;border-left:3px solid #ff6b6b;border-radius:4px;padding:8px 10px">
+    <div style="color:#ff6b6b;font-size:11px;font-weight:700">Error Handling</div>
+    <div style="color:#c9d1e0;font-size:11px;margin-top:2px">ตรวจจับและรายงาน I/O Error</div>
+  </div>
+  <div style="background:#1e2a3a;border-left:3px solid #a78bfa;border-radius:4px;padding:8px 10px">
+    <div style="color:#a78bfa;font-size:11px;font-weight:700">Device Driver</div>
+    <div style="color:#c9d1e0;font-size:11px;margin-top:2px">แปล OS command → คำสั่งเฉพาะอุปกรณ์ (ต่างชนิด ต่าง Driver)</div>
+  </div>
+</div>
 
 <div class="tool-area">
   <h3>📝 โจทย์ฝึกหัด File Systems</h3>
