@@ -782,47 +782,213 @@ button.run-btn.secondary{background:#2a3a52}
 <!-- 6.6b More Request Examples -->
 <div class="card">
 <h2>6.6b ตัวอย่างเพิ่มเติม Request Algorithm — ฝึกทีละขั้น</h2>
-<div class="box box-blue">
-  <strong>สรุป 4 ขั้นตอน Request Algorithm (จำให้ขึ้นใจ):</strong><br>
-  1️⃣ Request ≤ Need? (ขอไม่เกิน Max ที่แจ้งไว้) ถ้าไม่ → Error<br>
-  2️⃣ Request ≤ Available? (มีของพอให้?) ถ้าไม่ → รอ<br>
-  3️⃣ จำลองให้: Available−=Req, Alloc+=Req, Need−=Req<br>
-  4️⃣ รัน Safety Algorithm: Safe → ให้จริง | Unsafe → Rollback ปฏิเสธ
+
+<!-- Flow chart of 4 steps -->
+<div style="margin-bottom:16px">
+  <div class="ex-title" style="margin-bottom:8px">📊 ขั้นตอน Request Algorithm (4 ด่าน — ต้องผ่านครบ)</div>
+  <svg viewBox="0 0 560 80" style="background:#141925;border-radius:8px;width:100%;display:block" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="req-ok" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L0,8 L8,4 z" fill="#48cfad"/></marker>
+      <marker id="req-no" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L0,8 L8,4 z" fill="#fc6e51"/></marker>
+    </defs>
+    <!-- Step boxes -->
+    <rect x="8"   y="18" width="118" height="44" rx="6" fill="#1e1533" stroke="#6c63ff" stroke-width="2"/>
+    <rect x="154" y="18" width="118" height="44" rx="6" fill="#1a2744" stroke="#4a9eff" stroke-width="2"/>
+    <rect x="300" y="18" width="118" height="44" rx="6" fill="#112b1e" stroke="#48cfad" stroke-width="2"/>
+    <rect x="446" y="18" width="106" height="44" rx="6" fill="#2b2410" stroke="#ffce54" stroke-width="2"/>
+    <!-- Step text -->
+    <text x="67"  y="35" text-anchor="middle" fill="#6c63ff" font-size="10" font-family="sans-serif" font-weight="bold">① Req ≤ Need?</text>
+    <text x="67"  y="50" text-anchor="middle" fill="#9fa8b3" font-size="9"  font-family="sans-serif">ไม่เกิน Max?</text>
+    <text x="67"  y="62" text-anchor="middle" fill="#fc6e51" font-size="9"  font-family="sans-serif">ไม่ผ่าน → Error</text>
+    <text x="213" y="35" text-anchor="middle" fill="#4a9eff" font-size="10" font-family="sans-serif" font-weight="bold">② Req ≤ Available?</text>
+    <text x="213" y="50" text-anchor="middle" fill="#9fa8b3" font-size="9"  font-family="sans-serif">มีของพอให้?</text>
+    <text x="213" y="62" text-anchor="middle" fill="#fc6e51" font-size="9"  font-family="sans-serif">ไม่ผ่าน → รอ</text>
+    <text x="359" y="35" text-anchor="middle" fill="#48cfad" font-size="10" font-family="sans-serif" font-weight="bold">③ จำลองให้</text>
+    <text x="359" y="50" text-anchor="middle" fill="#9fa8b3" font-size="9"  font-family="sans-serif">Avail−=Req</text>
+    <text x="359" y="62" text-anchor="middle" fill="#9fa8b3" font-size="9"  font-family="sans-serif">Alloc+=Req, Need−=Req</text>
+    <text x="499" y="35" text-anchor="middle" fill="#ffce54" font-size="10" font-family="sans-serif" font-weight="bold">④ Safety Check</text>
+    <text x="499" y="50" text-anchor="middle" fill="#48cfad" font-size="9"  font-family="sans-serif">Safe → ให้จริง ✓</text>
+    <text x="499" y="62" text-anchor="middle" fill="#fc6e51" font-size="9"  font-family="sans-serif">Unsafe → Rollback ✗</text>
+    <!-- Arrows between steps -->
+    <line x1="126" y1="40" x2="152" y2="40" stroke="#48cfad" stroke-width="2" marker-end="url(#req-ok)"/>
+    <line x1="272" y1="40" x2="298" y2="40" stroke="#48cfad" stroke-width="2" marker-end="url(#req-ok)"/>
+    <line x1="418" y1="40" x2="444" y2="40" stroke="#48cfad" stroke-width="2" marker-end="url(#req-ok)"/>
+  </svg>
 </div>
 
+<!-- Base state table (shared across all examples) -->
+<div class="box box-purple" style="margin-bottom:14px">
+  <strong>ระบบฐาน (ใช้ร่วมกันทุกตัวอย่าง):</strong> ทรัพยากร A(10) B(5) C(7) &nbsp;|&nbsp; Available = [<strong>3, 3, 2</strong>]
+  <table style="margin-top:8px">
+    <tr><th>Process</th><th>Alloc A B C</th><th>Max A B C</th><th>Need A B C</th></tr>
+    <tr><td>P0</td><td>0 1 0</td><td>7 5 3</td><td style="color:#48cfad">7 4 3</td></tr>
+    <tr><td>P1</td><td>2 0 0</td><td>3 2 2</td><td style="color:#48cfad">1 2 2</td></tr>
+    <tr><td>P2</td><td>3 0 2</td><td>9 0 2</td><td style="color:#48cfad">6 0 0</td></tr>
+    <tr><td>P3</td><td>2 1 1</td><td>2 2 2</td><td style="color:#48cfad">0 1 1</td></tr>
+    <tr><td>P4</td><td>0 0 2</td><td>4 3 3</td><td style="color:#48cfad">4 3 1</td></tr>
+  </table>
+</div>
+
+<!-- ─────────── Example 1 ─────────── -->
 <div class="example-box">
-  <div class="ex-title">ตัวอย่างที่ 1: P0 ขอ [0,2,0] — ให้ได้</div>
-  <p>ระบบจากตัวอย่างคลาสสิก: Available=[3,3,2], Need[P0]=[7,4,3], Alloc[P0]=[0,1,0]</p>
-  <p><strong>ขั้น 1:</strong> Request[0,2,0] ≤ Need[P0]=[7,4,3]? → 0≤7✓, 2≤4✓, 0≤3✓ → ผ่าน<br>
-  <strong>ขั้น 2:</strong> Request[0,2,0] ≤ Available=[3,3,2]? → 0≤3✓, 2≤3✓, 0≤2✓ → ผ่าน<br>
-  <strong>ขั้น 3: จำลอง:</strong><br>
-  &nbsp;&nbsp;Available=[3−0, 3−2, 2−0] = [3,1,2]<br>
-  &nbsp;&nbsp;Alloc[P0]=[0+0, 1+2, 0+0] = [0,3,0]<br>
-  &nbsp;&nbsp;Need[P0]=[7−0, 4−2, 3−0] = [7,2,3]<br>
-  <strong>ขั้น 4: Safety:</strong> Work=[3,1,2]<br>
-  &nbsp;&nbsp;P1: Need=[1,2,2] → B: 2>1 ✗. P3: Need=[0,1,1] → 0≤3✓, 1≤1✓, 1≤2✓ → P3 เสร็จ Work=[5,2,3]<br>
-  &nbsp;&nbsp;P1: Need=[1,2,2] ≤ [5,2,3] ✓ → Work=[7,2,3]<br>
-  &nbsp;&nbsp;P4: Need=[4,3,1] ≤ [7,2,3]? B: 3>2✗. P0: Need=[7,2,3] ≤ [7,2,3] ✓ → Work=[7,5,3]<br>
-  &nbsp;&nbsp;P4: Need=[4,3,1] ≤ [7,5,3] ✓ → Work=[7,5,5]. P2: Need=[6,0,0] ✓ → Done<br>
-  ✅ <strong>Safe → ให้ทรัพยากรได้!</strong></p>
+  <div class="ex-title">ตัวอย่างที่ 1: P0 ขอ Request = [0, 2, 0] → ให้ได้หรือไม่?</div>
+
+  <!-- 4-step check table -->
+  <table style="margin:10px 0">
+    <tr><th>ขั้น</th><th>การตรวจ</th><th>A</th><th>B</th><th>C</th><th>ผลลัพธ์</th></tr>
+    <tr>
+      <td><strong>① Req ≤ Need[P0]</strong></td>
+      <td>Request vs Need[P0]=[7,4,3]</td>
+      <td>0 ≤ 7 ✓</td><td>2 ≤ 4 ✓</td><td>0 ≤ 3 ✓</td>
+      <td style="color:#48cfad">ผ่าน ✓</td>
+    </tr>
+    <tr>
+      <td><strong>② Req ≤ Available</strong></td>
+      <td>Request vs Available=[3,3,2]</td>
+      <td>0 ≤ 3 ✓</td><td>2 ≤ 3 ✓</td><td>0 ≤ 2 ✓</td>
+      <td style="color:#48cfad">ผ่าน ✓</td>
+    </tr>
+  </table>
+
+  <!-- Step 3: simulate -->
+  <div style="font-weight:700;color:#48cfad;margin:8px 0 4px">③ จำลองให้ทรัพยากร:</div>
+  <table style="margin:0 0 10px">
+    <tr><th>ค่า</th><th>ก่อน</th><th>การเปลี่ยน</th><th>หลัง (จำลอง)</th></tr>
+    <tr><td><strong>Available</strong></td><td>[3, 3, 2]</td><td>−[0,2,0]</td><td style="color:#ffce54">[3, 1, 2]</td></tr>
+    <tr><td><strong>Alloc[P0]</strong></td><td>[0, 1, 0]</td><td>+[0,2,0]</td><td style="color:#ffce54">[0, 3, 0]</td></tr>
+    <tr><td><strong>Need[P0]</strong></td><td>[7, 4, 3]</td><td>−[0,2,0]</td><td style="color:#ffce54">[7, 2, 3]</td></tr>
+  </table>
+
+  <!-- Step 4: safety trace table -->
+  <div style="font-weight:700;color:#ffce54;margin:8px 0 4px">④ Safety Check (Work เริ่มจาก Available จำลอง = [3,1,2]):</div>
+  <table style="margin:0 0 10px">
+    <tr><th>รอบ</th><th>ลอง P</th><th>Need</th><th>Work ปัจจุบัน</th><th>ผ่าน?</th><th>Work ใหม่</th></tr>
+    <tr><td>1</td><td>P0</td><td>[7,2,3]</td><td>[3,1,2]</td><td style="color:#fc6e51">7&gt;3 ✗</td><td>—</td></tr>
+    <tr><td>1</td><td>P1</td><td>[1,2,2]</td><td>[3,1,2]</td><td style="color:#fc6e51">2&gt;1 ✗</td><td>—</td></tr>
+    <tr><td>1</td><td>P2</td><td>[6,0,0]</td><td>[3,1,2]</td><td style="color:#fc6e51">6&gt;3 ✗</td><td>—</td></tr>
+    <tr><td>1</td><td><strong>P3</strong></td><td>[0,1,1]</td><td>[3,1,2]</td><td style="color:#48cfad">✓ ผ่าน</td><td>[3+2,1+1,2+1] = <strong>[5,2,3]</strong></td></tr>
+    <tr><td>2</td><td><strong>P1</strong></td><td>[1,2,2]</td><td>[5,2,3]</td><td style="color:#48cfad">✓ ผ่าน</td><td>[5+2,2+0,3+0] = <strong>[7,2,3]</strong></td></tr>
+    <tr><td>3</td><td>P4</td><td>[4,3,1]</td><td>[7,2,3]</td><td style="color:#fc6e51">3&gt;2 ✗</td><td>—</td></tr>
+    <tr><td>3</td><td><strong>P0</strong></td><td>[7,2,3]</td><td>[7,2,3]</td><td style="color:#48cfad">✓ ผ่าน</td><td>[7+0,2+1,3+0] = <strong>[7,3,3]</strong></td></tr>
+    <tr><td>4</td><td><strong>P4</strong></td><td>[4,3,1]</td><td>[7,3,3]</td><td style="color:#48cfad">✓ ผ่าน</td><td>[7+0,3+0,3+2] = <strong>[7,3,5]</strong></td></tr>
+    <tr><td>5</td><td><strong>P2</strong></td><td>[6,0,0]</td><td>[7,3,5]</td><td style="color:#48cfad">✓ ผ่าน</td><td>[7+3,3+0,5+2] = <strong>[10,3,7]</strong></td></tr>
+  </table>
+  <div class="box box-green" style="margin:0">
+    ✅ <strong>Safe Sequence: P3 → P1 → P0 → P4 → P2</strong><br>
+    Finish ทุกตัว = true → <strong>ให้ทรัพยากรแก่ P0 ได้!</strong>
+  </div>
 </div>
 
-<div class="example-box">
-  <div class="ex-title">ตัวอย่างที่ 2: P0 ขอ [7,4,3] — รอก่อน (Available ไม่พอ)</div>
-  <p>Available=[3,3,2]<br>
-  <strong>ขั้น 1:</strong> Request[7,4,3] ≤ Need[P0]=[7,4,3]? ✓<br>
-  <strong>ขั้น 2:</strong> Request[7,4,3] ≤ Available=[3,3,2]? → A: 7>3 ✗<br>
-  → <span class="badge badge-red">รอก่อน! Available ไม่พอ ไม่ต้องรัน Safety เลย</span></p>
+<!-- ─────────── Example 2 ─────────── -->
+<div class="example-box" style="margin-top:14px">
+  <div class="ex-title">ตัวอย่างที่ 2: P0 ขอ Request = [7, 4, 3] → ผลเป็นอย่างไร?</div>
+  <table style="margin:10px 0">
+    <tr><th>ขั้น</th><th>การตรวจ</th><th>A</th><th>B</th><th>C</th><th>ผลลัพธ์</th></tr>
+    <tr>
+      <td><strong>① Req ≤ Need[P0]</strong></td>
+      <td>Request vs Need[P0]=[7,4,3]</td>
+      <td>7 ≤ 7 ✓</td><td>4 ≤ 4 ✓</td><td>3 ≤ 3 ✓</td>
+      <td style="color:#48cfad">ผ่าน ✓</td>
+    </tr>
+    <tr style="background:#2b1111">
+      <td><strong>② Req ≤ Available</strong></td>
+      <td>Request vs Available=[3,3,2]</td>
+      <td style="color:#fc6e51"><strong>7 &gt; 3 ✗</strong></td><td>—</td><td>—</td>
+      <td style="color:#fc6e51"><strong>ไม่ผ่าน! หยุดทันที</strong></td>
+    </tr>
+  </table>
+  <div class="box box-red" style="margin:0">
+    🕐 <strong>ผล: P0 ต้องรอก่อน</strong> — Available ไม่พอ (A ขอ 7 แต่มีแค่ 3)<br>
+    ไม่ต้องรัน Safety ต่อ — รอจนกว่า Process อื่นจะคืนทรัพยากร A มาก่อน
+  </div>
 </div>
 
-<div class="example-box">
-  <div class="ex-title">ตัวอย่างที่ 3: P1 ขอ [2,3,0] — Error (เกิน Need)</div>
-  <p>Need[P1]=[1,2,2]<br>
-  <strong>ขั้น 1:</strong> Request[2,3,0] ≤ Need[P1]=[1,2,2]? → A: 2>1 ✗<br>
-  → <span class="badge badge-red">Error! ขอเกินกว่าที่ประกาศ Max ไว้ตั้งแต่แรก</span></p>
+<!-- ─────────── Example 3 ─────────── -->
+<div class="example-box" style="margin-top:14px">
+  <div class="ex-title">ตัวอย่างที่ 3: P1 ขอ Request = [2, 3, 0] → ผลเป็นอย่างไร?</div>
+  <table style="margin:10px 0">
+    <tr><th>ขั้น</th><th>การตรวจ</th><th>A</th><th>B</th><th>C</th><th>ผลลัพธ์</th></tr>
+    <tr style="background:#2b1111">
+      <td><strong>① Req ≤ Need[P1]</strong></td>
+      <td>Request vs Need[P1]=[1,2,2]</td>
+      <td style="color:#fc6e51"><strong>2 &gt; 1 ✗</strong></td><td>—</td><td>—</td>
+      <td style="color:#fc6e51"><strong>ไม่ผ่าน! หยุดทันที</strong></td>
+    </tr>
+  </table>
+  <div class="box box-red" style="margin:0">
+    ❌ <strong>ผล: Error!</strong> — P1 ขอเกินกว่าที่ประกาศ Max ไว้ตั้งแต่แรก<br>
+    Max[P1]=[3,2,2], Alloc[P1]=[2,0,0] → Need[P1]=[1,2,2] แต่ขอ A=2 เกิน Need=1<br>
+    → แสดงว่า Process พยายามโกง หรือมี Bug ในโปรแกรม
+  </div>
 </div>
 
-<div class="warn">⚠ <strong>จุดสำคัญ:</strong> ขั้น 1 และขั้น 2 ใช้ AND logic — ต้องผ่านทุก resource type ถึงจะไปขั้นต่อไป พอ type ใด type หนึ่งไม่ผ่านให้หยุดทันที</div>
+<!-- ─────────── Example 4: Unsafe ─────────── -->
+<div class="example-box" style="margin-top:14px">
+  <div class="ex-title">ตัวอย่างที่ 4: P4 ขอ Request = [3, 3, 0] — ผ่าน ① ② แต่ Unsafe!</div>
+  <table style="margin:10px 0">
+    <tr><th>ขั้น</th><th>การตรวจ</th><th>A</th><th>B</th><th>C</th><th>ผลลัพธ์</th></tr>
+    <tr>
+      <td><strong>① Req ≤ Need[P4]</strong></td>
+      <td>vs Need[P4]=[4,3,1]</td>
+      <td>3 ≤ 4 ✓</td><td>3 ≤ 3 ✓</td><td>0 ≤ 1 ✓</td>
+      <td style="color:#48cfad">ผ่าน ✓</td>
+    </tr>
+    <tr>
+      <td><strong>② Req ≤ Available</strong></td>
+      <td>vs Available=[3,3,2]</td>
+      <td>3 ≤ 3 ✓</td><td>3 ≤ 3 ✓</td><td>0 ≤ 2 ✓</td>
+      <td style="color:#48cfad">ผ่าน ✓</td>
+    </tr>
+  </table>
+  <div style="font-weight:700;color:#48cfad;margin:6px 0 4px">③ จำลองให้:</div>
+  <table style="margin:0 0 10px">
+    <tr><th>ค่า</th><th>ก่อน</th><th>การเปลี่ยน</th><th>หลัง (จำลอง)</th></tr>
+    <tr><td><strong>Available</strong></td><td>[3,3,2]</td><td>−[3,3,0]</td><td style="color:#ffce54">[0, 0, 2]</td></tr>
+    <tr><td><strong>Alloc[P4]</strong></td><td>[0,0,2]</td><td>+[3,3,0]</td><td style="color:#ffce54">[3, 3, 2]</td></tr>
+    <tr><td><strong>Need[P4]</strong></td><td>[4,3,1]</td><td>−[3,3,0]</td><td style="color:#ffce54">[1, 0, 1]</td></tr>
+  </table>
+  <div style="font-weight:700;color:#ffce54;margin:6px 0 4px">④ Safety Check (Work = [0,0,2]):</div>
+  <table style="margin:0 0 10px">
+    <tr><th>ลอง P</th><th>Need</th><th>Work</th><th>ผ่าน?</th></tr>
+    <tr><td>P0</td><td>[7,4,3]</td><td>[0,0,2]</td><td style="color:#fc6e51">✗</td></tr>
+    <tr><td>P1</td><td>[1,2,2]</td><td>[0,0,2]</td><td style="color:#fc6e51">✗ (1&gt;0)</td></tr>
+    <tr><td>P2</td><td>[6,0,0]</td><td>[0,0,2]</td><td style="color:#fc6e51">✗ (6&gt;0)</td></tr>
+    <tr><td>P3</td><td>[0,1,1]</td><td>[0,0,2]</td><td style="color:#fc6e51">✗ (1&gt;0)</td></tr>
+    <tr><td>P4</td><td>[1,0,1]</td><td>[0,0,2]</td><td style="color:#fc6e51">✗ (1&gt;0)</td></tr>
+  </table>
+  <div class="box box-red" style="margin:0">
+    🔴 <strong>Unsafe! ไม่มีใครเริ่มได้เลย</strong> — Work=[0,0,2] แต่ทุก Process ต้องการ A หรือ B ที่ไม่มีแล้ว<br>
+    → <strong>Rollback:</strong> Available กลับเป็น [3,3,2], Alloc[P4] กลับเป็น [0,0,2], Need[P4] กลับเป็น [4,3,1]<br>
+    → <strong>ปฏิเสธ Request</strong> ให้ P4 รอก่อน
+  </div>
+</div>
+
+<!-- Summary comparison table -->
+<h3>สรุปเปรียบเทียบทุกตัวอย่าง</h3>
+<table>
+  <tr><th>ตัวอย่าง</th><th>Process</th><th>Request</th><th>① ≤ Need?</th><th>② ≤ Avail?</th><th>③ จำลอง</th><th>④ Safe?</th><th>ผลสุดท้าย</th></tr>
+  <tr>
+    <td>1</td><td>P0</td><td>[0,2,0]</td>
+    <td style="color:#48cfad">✓</td><td style="color:#48cfad">✓</td><td style="color:#48cfad">✓</td><td style="color:#48cfad">✓ Safe</td>
+    <td style="color:#48cfad"><strong>ให้ได้ ✓</strong></td>
+  </tr>
+  <tr>
+    <td>2</td><td>P0</td><td>[7,4,3]</td>
+    <td style="color:#48cfad">✓</td><td style="color:#fc6e51">✗ (A ไม่พอ)</td><td>—</td><td>—</td>
+    <td style="color:#ffce54"><strong>รอก่อน 🕐</strong></td>
+  </tr>
+  <tr>
+    <td>3</td><td>P1</td><td>[2,3,0]</td>
+    <td style="color:#fc6e51">✗ (A เกิน Need)</td><td>—</td><td>—</td><td>—</td>
+    <td style="color:#fc6e51"><strong>Error ❌</strong></td>
+  </tr>
+  <tr>
+    <td>4</td><td>P4</td><td>[3,3,0]</td>
+    <td style="color:#48cfad">✓</td><td style="color:#48cfad">✓</td><td style="color:#48cfad">✓</td><td style="color:#fc6e51">✗ Unsafe</td>
+    <td style="color:#fc6e51"><strong>ปฏิเสธ + Rollback ❌</strong></td>
+  </tr>
+</table>
+<div class="warn">⚠ <strong>จุดสำคัญ:</strong> ขั้น ① และ ② ต้องผ่านทุก resource type — พอ type ใดไม่ผ่านให้หยุดทันที ไม่ต้องเช็คต่อ | ขั้น ④ ต้องทำ Safety Algorithm ใหม่ทั้งหมดหลังจำลองค่าแล้ว</div>
 </div>
 
 <!-- 6.7 Detection -->
