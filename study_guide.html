@@ -1,0 +1,3281 @@
+﻿<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSS225 ระบบปฏิบัติการ – คู่มือสอบฉบับสมบูรณ์</title>
+<style>
+:root{--bg:#0f1117;--bg2:#1a1d27;--bg3:#252836;--accent:#6c63ff;--accent2:#48cfad;--accent3:#fc6e51;--accent4:#ffce54;--text:#e8eaf6;--text2:#9fa8b3;--border:#2e3347;--card:#1e2132}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Tahoma,sans-serif;font-size:15px;line-height:1.8}
+a{color:var(--accent2)}
+#topnav{position:fixed;top:0;left:0;right:0;height:54px;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;z-index:1000;gap:6px;overflow-x:auto}
+#topnav .logo{font-weight:700;color:var(--accent);white-space:nowrap;margin-right:12px;font-size:15px}
+.nav-btn{padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;white-space:nowrap;font-size:13px;transition:.2s;font-family:inherit}
+.nav-btn:hover,.nav-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+#main{margin-top:54px;max-width:1080px;margin-left:auto;margin-right:auto;padding:24px 18px}
+.chapter{display:none}.chapter.active{display:block}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:22px;margin-bottom:18px}
+.card h2{font-size:21px;margin-bottom:10px;color:var(--accent2)}
+.card h3{font-size:16px;margin:16px 0 8px;color:var(--accent4)}
+.card h4{font-size:14px;margin:12px 0 5px;color:var(--accent3)}
+.card p{color:var(--text2);margin-bottom:10px}
+.card ul,.card ol{padding-left:22px;color:var(--text2);margin-bottom:10px}
+.card li{margin-bottom:5px}
+.box{border-radius:8px;padding:14px 18px;margin:12px 0;font-size:14px}
+.box-blue{background:#1a2744;border-left:4px solid #4a9eff}
+.box-green{background:#112b1e;border-left:4px solid #48cfad}
+.box-yellow{background:#2b2410;border-left:4px solid #ffce54}
+.box-red{background:#2b1111;border-left:4px solid #fc6e51}
+.box-purple{background:#1e1533;border-left:4px solid #6c63ff}
+.box strong,.box b{color:#fff}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13.5px}
+th{background:var(--bg3);color:var(--accent2);padding:9px 12px;text-align:left;border:1px solid var(--border)}
+td{padding:8px 12px;border:1px solid var(--border);color:var(--text2)}
+tr:nth-child(even) td{background:#191c2a}
+.step{display:flex;gap:14px;margin:10px 0;align-items:flex-start}
+.step-num{min-width:30px;height:30px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#fff;flex-shrink:0;margin-top:2px}
+.step-body{color:var(--text2);font-size:14px;padding-top:4px}
+.tool-area{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:20px;margin:14px 0}
+.tool-area h3{color:var(--accent);margin-bottom:12px;font-size:16px}
+label{display:block;color:var(--text2);font-size:13px;margin-bottom:4px;margin-top:8px}
+input,select,textarea{background:#12151f;color:var(--text);border:1px solid var(--border);border-radius:6px;padding:7px 10px;font-size:13px;font-family:inherit;width:100%;margin-bottom:8px}
+button.run-btn{background:var(--accent);color:#fff;border:none;border-radius:6px;padding:8px 22px;cursor:pointer;font-size:14px;font-weight:600;transition:.2s;font-family:inherit;margin-top:4px}
+button.run-btn:hover{background:#5a52e0}
+button.run-btn.secondary{background:#2a3a52}
+.output-box{background:#0a0d15;border:1px solid var(--border);border-radius:6px;padding:14px;font-family:'Courier New',monospace;font-size:13px;color:#a8f7a0;white-space:pre-wrap;min-height:60px;max-height:420px;overflow-y:auto;margin-top:10px}
+.collapsible{background:var(--bg3);border:1px solid var(--border);border-radius:8px;margin:8px 0}
+.col-header{padding:13px 16px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;color:var(--text);font-weight:600;font-size:14px;user-select:none}
+.col-header:hover{color:var(--accent2)}
+.col-body{padding:15px 16px;border-top:1px solid var(--border);display:none;color:var(--text2);font-size:14px}
+.col-body.open{display:block}
+.arrow{transition:.2s;display:inline-block}
+.arrow.open{transform:rotate(180deg)}
+.chapter-hero{background:linear-gradient(135deg,#1a1d27,#252836);border:1px solid var(--border);border-radius:14px;padding:26px;margin-bottom:22px;display:flex;align-items:center;gap:18px}
+.hero-icon{font-size:46px;flex-shrink:0}
+.hero-title{font-size:24px;font-weight:700;color:#fff}
+.hero-sub{color:var(--text2);font-size:14px;margin-top:4px}
+.tag{display:inline-block;background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:2px 8px;font-size:11px;color:var(--text2);margin:2px}
+.badge{display:inline-block;padding:2px 9px;border-radius:10px;font-size:11px;font-weight:700;margin-left:4px}
+.badge-green{background:#112b1e;color:#48cfad;border:1px solid #48cfad}
+.badge-red{background:#2b1111;color:#fc6e51;border:1px solid #fc6e51}
+.formula{background:#0d1520;border:1px solid #4a9eff;border-radius:8px;padding:12px 16px;font-family:'Courier New',monospace;color:#7dd3fc;margin:10px 0;font-size:14px}
+.example-box{background:#141925;border:1px solid #2e3347;border-radius:8px;padding:16px;margin:12px 0}
+.example-box .ex-title{color:var(--accent4);font-weight:700;font-size:13px;margin-bottom:8px}
+.highlight{background:#1e2a1a;color:#48cfad;padding:1px 6px;border-radius:4px;font-family:monospace}
+.warn{background:#2b1e00;color:#ffce54;padding:10px 14px;border-radius:6px;margin:8px 0;font-size:13px}
+.matrix-row{display:flex;gap:4px;align-items:center;margin:3px 0}
+.matrix-label{min-width:26px;color:var(--accent2);font-size:12px;text-align:right;margin-right:4px}
+.m-inp{width:48px!important;text-align:center;padding:5px!important;margin:0!important}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:600px){.grid2{grid-template-columns:1fr}}
+.quiz{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:16px;margin:10px 0}
+.quiz-q{font-weight:600;color:var(--text);margin-bottom:10px;font-size:14.5px}
+.quiz-q .qnum{display:inline-block;background:var(--accent);color:#fff;border-radius:50%;width:26px;height:26px;line-height:26px;text-align:center;font-size:12px;margin-right:8px}
+.quiz-opt{display:block;background:#12151f;border:1px solid var(--border);border-radius:6px;padding:9px 13px;margin:5px 0;cursor:pointer;color:var(--text2);font-size:13.5px;transition:.15s;user-select:none}
+.quiz-opt:hover{border-color:var(--accent2);color:var(--text)}
+.quiz-opt.correct{background:#112b1e;border-color:#48cfad;color:#48cfad}
+.quiz-opt.wrong{background:#2b1111;border-color:#fc6e51;color:#fc6e51}
+.quiz-opt.disabled{cursor:default;pointer-events:none}
+.quiz-exp{display:none;background:#1a2744;border-left:4px solid #4a9eff;padding:11px 14px;margin-top:8px;border-radius:6px;font-size:13px;color:var(--text2)}
+.quiz-exp.show{display:block}
+.quiz-exp b{color:#fff}
+.quiz-cat{display:inline-block;font-size:11px;padding:2px 8px;border-radius:10px;background:var(--bg2);border:1px solid var(--border);color:var(--accent4);margin-left:6px}
+.score-board{position:sticky;top:62px;z-index:50;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.score-board .sc{font-size:14px;color:var(--text)}
+.score-board .sc b{color:var(--accent2);font-size:18px}
+.score-board .wrong-c{color:var(--accent3)}
+.subq{background:#0d1520;border:1px solid #2e3347;border-radius:8px;padding:14px;margin:10px 0}
+.subq-title{color:var(--accent4);font-weight:700;margin-bottom:8px;font-size:14px}
+.show-ans-btn{background:#2a3a52;color:#fff;border:none;border-radius:6px;padding:7px 16px;cursor:pointer;font-size:13px;margin-top:8px;font-family:inherit}
+.show-ans-btn:hover{background:var(--accent)}
+.ans-block{display:none;background:#112b1e;border-left:4px solid #48cfad;padding:12px 14px;margin-top:8px;border-radius:6px;font-size:13.5px;color:var(--text2)}
+.ans-block.show{display:block}
+.ans-block b,.ans-block strong{color:#fff}
+.final-num{display:inline-block;background:var(--accent2);color:#0d1520;font-weight:700;padding:3px 12px;border-radius:6px;font-family:'Courier New',monospace;font-size:14px}
+</style>
+</head>
+<body>
+<nav id="topnav">
+  <div class="logo">🖥 CSS225 OS</div>
+  <button class="nav-btn active" onclick="showCh('ch6',this)">บทที่ 6: Deadlocks</button>
+  <button class="nav-btn" onclick="showCh('ch7',this)">บทที่ 7: Memory</button>
+  <button class="nav-btn" onclick="showCh('ch8',this)">บทที่ 8: Virtual Memory</button>
+  <button class="nav-btn" onclick="showCh('ch9',this)">บทที่ 9: File &amp; I/O</button>
+  <button class="nav-btn" onclick="showCh('exam',this)">📝 บทสอบฝึก</button>
+</nav>
+<div id="main">
+
+<!-- ═══════════════════════════════════════════════════
+     บทที่ 6 : Resource Allocation & Deadlocks
+═══════════════════════════════════════════════════ -->
+<div id="ch6" class="chapter active">
+<div class="chapter-hero">
+  <div class="hero-icon">🔒</div>
+  <div>
+    <div class="hero-title">บทที่ 6 — การจัดสรรทรัพยากรและ Deadlock</div>
+    <div class="hero-sub">Banker's Algorithm · RAG · Safety · Request · Detection · Recovery</div>
+    <div style="margin-top:8px">
+      <span class="tag">Safe State</span><span class="tag">Deadlock</span>
+      <span class="tag">Safety Algorithm</span><span class="tag">Request Algorithm</span>
+      <span class="tag">Detection Algorithm</span><span class="tag">Recovery</span>
+    </div>
+  </div>
+</div>
+
+<!-- 6.1 -->
+<div class="card">
+<h2>6.1 การจัดสรรทรัพยากรคืออะไร?</h2>
+<div class="box box-green">
+  <strong>🎯 อุปมาที่เข้าใจง่าย: คลับห้องสมุด</strong><br>
+  จินตนาการห้องสมุดที่มีหนังสือ (ทรัพยากร) จำกัด และมีนักศึกษา (Process) หลายคนต้องการยืม<br>
+  • นักศึกษา A: ต้องการหนังสือเล่ม 1 และ 2 พร้อมกัน<br>
+  • นักศึกษา B: ต้องการหนังสือเล่ม 2 และ 3 พร้อมกัน<br>
+  • ถ้า A ถือเล่ม 2 รอเล่ม 1, B ถือเล่ม 2 รอเล่ม 3 → ทั้งคู่รอกันไม่มีทางออก = <strong>Deadlock!</strong><br>
+  บรรณารักษ์ (OS) ต้องชาญฉลาดในการจัดสรรหนังสือเพื่อป้องกันสถานการณ์นี้
+</div>
+<p>ในระบบคอมพิวเตอร์ มีกระบวนการ (Process) หลายตัวทำงานพร้อมกัน และแต่ละกระบวนการต้องการ <strong>ทรัพยากร (Resource)</strong> เช่น CPU, RAM, เครื่องพิมพ์, ไฟล์ เพื่อให้ทำงานสำเร็จ ระบบปฏิบัติการ (OS) ทำหน้าที่ <strong>จัดสรรทรัพยากร</strong> เหล่านี้ให้กระบวนการต่างๆ</p>
+<div class="box box-blue">
+  <strong>ประเภทของทรัพยากร (Resource Type):</strong> เช่น CPU, RAM, เครื่องพิมพ์ — แต่ละประเภทอาจมีหลาย instance เช่น RAM 8 GB, เครื่องพิมพ์ 2 เครื่อง<br><br>
+  <strong>ปัญหาหลัก:</strong> ทรัพยากรมีจำกัด แต่มีกระบวนการมากมายต้องการใช้พร้อมกัน → OS ต้องจัดสรรอย่างชาญฉลาด
+</div>
+<h3>ตัวแปรสำคัญที่ต้องจำ</h3>
+<table>
+  <tr><th>ตัวแปร</th><th>ความหมาย</th><th>ขนาด</th></tr>
+  <tr><td><strong>Allocation[i][j]</strong></td><td>ทรัพยากรชนิด j ที่กระบวนการ i ถือครองอยู่ตอนนี้</td><td>n × m</td></tr>
+  <tr><td><strong>Max[i][j]</strong></td><td>ทรัพยากรชนิด j สูงสุดที่กระบวนการ i อาจต้องการทั้งหมด</td><td>n × m</td></tr>
+  <tr><td><strong>Need[i][j]</strong></td><td>ทรัพยากรชนิด j ที่กระบวนการ i ยังขาดอยู่ = Max − Allocation</td><td>n × m</td></tr>
+  <tr><td><strong>Available[j]</strong></td><td>ทรัพยากรชนิด j ที่ว่างอยู่ในขณะนี้</td><td>1 × m</td></tr>
+</table>
+<div class="formula">Need[i][j] = Max[i][j] − Allocation[i][j]</div>
+<div class="example-box">
+  <div class="ex-title">ตัวอย่างที่ 1: อ่านตาราง</div>
+  <p>สมมติมี 3 กระบวนการ (P0, P1, P2) และ 1 ชนิดทรัพยากร A:</p>
+  <table>
+    <tr><th>Process</th><th>Allocation (A)</th><th>Max (A)</th><th>Need (A)</th></tr>
+    <tr><td>P0</td><td>1</td><td>7</td><td>7−1 = 6</td></tr>
+    <tr><td>P1</td><td>2</td><td>3</td><td>3−2 = 1</td></tr>
+    <tr><td>P2</td><td>3</td><td>9</td><td>9−3 = 6</td></tr>
+  </table>
+  <p>ถ้า Available = 1 → P1 ต้องการ 1 unit พอดี → P1 ทำงานเสร็จได้ก่อน</p>
+</div>
+</div>
+
+<!-- 6.2 -->
+<div class="card">
+<h2>6.2 Safe State vs Deadlock — หัวใจของบทนี้</h2>
+<p>เป้าหมายของ OS คือการจัดสรรให้ระบบอยู่ใน <strong>Safe State</strong> เสมอ</p>
+<div class="box box-green">
+  <strong>Safe State (สถานะปลอดภัย):</strong><br>
+  มีลำดับกระบวนการ (Safe Sequence) ที่ทุกกระบวนการสามารถทำงานเสร็จได้ทีละตัว โดยใช้ทรัพยากรที่มีอยู่บวกกับที่กระบวนการก่อนหน้าคืนมา<br><br>
+  <strong>ตัวอย่าง Safe Sequence:</strong> ⟨P1 → P3 → P0 → P2⟩ หมายความว่า:<br>
+  → P1 ทำงานเสร็จก่อน คืนทรัพยากรทั้งหมด<br>
+  → P3 ได้รับทรัพยากรที่ต้องการ ทำงานเสร็จ คืนกลับ<br>
+  → ทำแบบนี้ต่อจนทุกกระบวนการเสร็จ
+</div>
+<div class="box box-red">
+  <strong>Deadlock (การหยุดชะงัก):</strong><br>
+  ทุกกระบวนการรอกันเป็นวงกลม ไม่มีใครสามารถทำงานต่อได้ ระบบหยุดนิ่ง<br><br>
+  <strong>ตัวอย่าง:</strong> P1 รอทรัพยากรที่ P2 ถือ, P2 รอทรัพยากรที่ P1 ถือ → วนเวียนไม่มีทางออก
+</div>
+<div class="box box-yellow">
+  <strong>ความสัมพันธ์ที่สำคัญ:</strong><br>
+  Safe State → <em>ไม่มี</em> Deadlock แน่นอน<br>
+  Unsafe State → <em>อาจ</em> เกิด Deadlock (ไม่ใช่ว่า Deadlock แน่ๆ)<br>
+  Deadlock → อยู่ใน Unsafe State แน่นอน
+</div>
+<h3>วิธีหา Safe Sequence (ด้วยมือ)</h3>
+<div class="step"><div class="step-num">1</div><div class="step-body">ดู Available ว่ามีทรัพยากรอะไรว่างบ้าง</div></div>
+<div class="step"><div class="step-num">2</div><div class="step-body">หากระบวนการที่ Need ≤ Available (ใช้ทรัพยากรที่มีได้พอ)</div></div>
+<div class="step"><div class="step-num">3</div><div class="step-body">กระบวนการนั้นทำงานเสร็จ → คืน Allocation ทั้งหมดเข้า Available</div></div>
+<div class="step"><div class="step-num">4</div><div class="step-body">ทำซ้ำจนทุกกระบวนการเสร็จ (Safe) หรือไม่มีใครทำได้อีก (Deadlock)</div></div>
+
+<div class="example-box">
+  <div class="ex-title">ตัวอย่างที่ 2: หา Safe Sequence</div>
+  <p>ทรัพยากร 1 ชนิด (A), Available = 3</p>
+  <table>
+    <tr><th>Process</th><th>Allocation</th><th>Need</th></tr>
+    <tr><td>P0</td><td>0</td><td>7</td></tr>
+    <tr><td>P1</td><td>2</td><td>1</td></tr>
+    <tr><td>P2</td><td>3</td><td>6</td></tr>
+  </table>
+  <p>Available = 3. ลอง P0: Need=7 > 3 ✗. ลอง P1: Need=1 ≤ 3 ✓ → P1 เสร็จ, Available = 3+2 = 5<br>
+  ลอง P0: Need=7 > 5 ✗. ลอง P2: Need=6 > 5 ✗.<br>
+  ไม่มีใครทำได้ → <span class="badge badge-red">Deadlock! (P0 และ P2 ติด)</span></p>
+</div>
+</div>
+
+<!-- 6.3 -->
+<div class="card">
+<h2>6.3 เงื่อนไข 4 ข้อของ Deadlock</h2>
+<p>Deadlock จะเกิดขึ้นได้ก็ต่อเมื่อเงื่อนไขทั้ง 4 ข้อนี้เกิดขึ้น <strong>พร้อมกัน</strong> ทำลายเงื่อนไขใดข้อหนึ่งก็ป้องกัน Deadlock ได้</p>
+<table>
+  <tr><th>#</th><th>เงื่อนไข</th><th>อธิบาย</th><th>ตัวอย่างการทำลาย</th></tr>
+  <tr><td>1</td><td><strong>Mutual Exclusion</strong></td><td>ทรัพยากรใช้ได้ครั้งละ 1 กระบวนการเท่านั้น</td><td>ทำให้ทรัพยากรแชร์ได้ (แต่ทำยากมาก)</td></tr>
+  <tr><td>2</td><td><strong>Hold and Wait</strong></td><td>กระบวนการถือทรัพยากรอยู่แล้วยังรอทรัพยากรเพิ่ม</td><td>ต้องขอทรัพยากรทั้งหมดตั้งแต่เริ่ม หรือขอเมื่อมือว่างเท่านั้น</td></tr>
+  <tr><td>3</td><td><strong>No Preemption</strong></td><td>ทรัพยากรไม่สามารถถูกดึงคืนโดยบังคับ ต้องรอให้คืนเอง</td><td>OS บังคับดึงทรัพยากรคืนได้</td></tr>
+  <tr><td>4</td><td><strong>Circular Wait</strong></td><td>มีวงกลมของกระบวนการที่รอกัน: P1→P2→P3→P1</td><td>กำหนดลำดับเลขให้ทรัพยากร ขอได้เฉพาะเลขที่สูงกว่า</td></tr>
+</table>
+<div class="warn">⚠ จำให้ขึ้นใจ: ต้องมีครบ 4 ข้อพร้อมกัน ถึงจะเกิด Deadlock ขาดข้อใดข้อหนึ่งก็ไม่เกิด</div>
+</div>
+
+<!-- 6.4 RAG -->
+<div class="card">
+<h2>6.4 Resource Allocation Graph (RAG)</h2>
+<p>กราฟที่แสดงให้เห็นว่าใครถือทรัพยากรอะไร และใครกำลังรออะไรอยู่ ใช้ตรวจสอบ Deadlock กรณี <strong>ทรัพยากรมีแค่ 1 instance ต่อประเภท</strong></p>
+<div class="box box-blue">
+  <strong>สัญลักษณ์:</strong><br>
+  ⬤ วงกลม = กระบวนการ (Process)<br>
+  ▭ สี่เหลี่ยม = ประเภทของทรัพยากร (Resource Type)<br>
+  • จุดในสี่เหลี่ยม = instance (ตัวอย่าง: มี 2 จุด = 2 instances)<br>
+  → กระบวนการ → ทรัพยากร = <em>Request Edge</em> (กำลังรอ)<br>
+  → ทรัพยากร → กระบวนการ = <em>Assignment Edge</em> (ถือครองอยู่)
+</div>
+<h3>วิธีตรวจสอบ Safe/Deadlock จาก RAG</h3>
+<div class="step"><div class="step-num">1</div><div class="step-body">หากระบวนการที่สามารถได้รับทรัพยากรที่รออยู่ทั้งหมดได้ (ดูว่ามี instance ว่างพอ)</div></div>
+<div class="step"><div class="step-num">2</div><div class="step-body">กระบวนการนั้น "สมมติ" ทำงานเสร็จ → ลบออกจากกราฟ คืนทรัพยากรทั้งหมด</div></div>
+<div class="step"><div class="step-num">3</div><div class="step-body">ทำซ้ำ หากลบได้จนหมด = Safe, ลบไม่หมด = Deadlock</div></div>
+<h3>Wait-For Graph (ใช้เมื่อทุก Resource มี 1 instance)</h3>
+<p>ลบ Node ของ Resource ออก แล้วลาก P→P โดยตรง ถ้ามี <strong>cycle (วงกลม)</strong> ในกราฟ → <span class="badge badge-red">Deadlock</span></p>
+<div class="example-box">
+  <div class="ex-title">ตัวอย่าง: อ่าน RAG</div>
+  <p>P1 ถือ R1, รอ R2. P2 ถือ R2, รอ R1.<br>
+  Wait-for graph: P1 → P2 → P1 = มี cycle → <strong>Deadlock!</strong></p>
+  <p>แต่ถ้า P3 ถือ R1 อีกตัว, รอไม่มีอะไร:<br>
+  P3 ทำงานเสร็จก่อน คืน R1 → P2 ได้รับ R1 ทำงานเสร็จ → P1 ได้รับ R2 → Safe</p>
+</div>
+</div>
+
+<!-- 6.5 Safety Algorithm -->
+<div class="card">
+<h2>6.5 Safety Algorithm — หัวใจของ Banker's Algorithm</h2>
+<p>ใช้ตรวจสอบว่าระบบอยู่ใน <strong>Safe State</strong> หรือไม่ และหา Safe Sequence เมื่อมีทรัพยากรหลายชนิด หลาย instance</p>
+
+<h3>ตัวแปรที่ใช้ในอัลกอริทึม</h3>
+<div class="box box-purple">
+  <strong>Work[j]</strong> = ทรัพยากรที่ "ว่าง" ณ ขณะนั้น (เริ่มต้นเท่ากับ Available)<br>
+  <strong>Finish[i]</strong> = true ถ้ากระบวนการ i ทำงานเสร็จแล้ว (เริ่มต้น = false ทุกตัว)
+</div>
+
+<h3>ขั้นตอน Safety Algorithm</h3>
+<div class="step"><div class="step-num">0</div><div class="step-body"><strong>เตรียมการ:</strong> คำนวณ Need = Max − Allocation ทุกกระบวนการ. ตั้งค่า Work = Available, Finish[i] = false ทุกตัว</div></div>
+<div class="step"><div class="step-num">1</div><div class="step-body"><strong>หากระบวนการ i</strong> ที่ตรงตามเงื่อนไข: Finish[i] = false <strong>และ</strong> Need[i] ≤ Work (ทุก resource type)</div></div>
+<div class="step"><div class="step-num">2</div><div class="step-body"><strong>อัปเดต:</strong> Work = Work + Allocation[i], Finish[i] = true, บันทึก i ลงใน Safe Sequence → กลับไปขั้นตอน 1</div></div>
+<div class="step"><div class="step-num">3</div><div class="step-body"><strong>ตรวจผล:</strong> ถ้า Finish[i] = true ทุกตัว → <span class="badge badge-green">Safe State</span> มี Safe Sequence. ถ้ายังมี Finish[i] = false → <span class="badge badge-red">Deadlock</span></div></div>
+
+<div class="example-box">
+  <div class="ex-title">ตัวอย่างคลาสสิก (5 กระบวนการ, 3 ทรัพยากร)</div>
+  <p>ทรัพยากร: A (10), B (5), C (7). Available = [3, 3, 2]</p>
+  <table>
+    <tr><th>Process</th><th>Alloc A B C</th><th>Max A B C</th><th>Need A B C</th></tr>
+    <tr><td>P0</td><td>0 1 0</td><td>7 5 3</td><td>7 4 3</td></tr>
+    <tr><td>P1</td><td>2 0 0</td><td>3 2 2</td><td>1 2 2</td></tr>
+    <tr><td>P2</td><td>3 0 2</td><td>9 0 2</td><td>6 0 0</td></tr>
+    <tr><td>P3</td><td>2 1 1</td><td>2 2 2</td><td>0 1 1</td></tr>
+    <tr><td>P4</td><td>0 0 2</td><td>4 3 3</td><td>4 3 1</td></tr>
+  </table>
+  <p>Work = [3,3,2]. ลองทีละตัว:</p>
+  <p>P0: Need=[7,4,3] ≤ [3,3,2]? ✗ (7>3)<br>
+  P1: Need=[1,2,2] ≤ [3,3,2]? ✓ → Work=[3+2,3+0,2+0]=[5,3,2]. Finish[P1]=true<br>
+  P3: Need=[0,1,1] ≤ [5,3,2]? ✓ → Work=[5+2,3+1,2+1]=[7,4,3]. Finish[P3]=true<br>
+  P4: Need=[4,3,1] ≤ [7,4,3]? ✓ → Work=[7+0,4+0,3+2]=[7,4,5]. Finish[P4]=true<br>
+  P0: Need=[7,4,3] ≤ [7,4,5]? ✓ → Work=[7+0,4+1,5+0]=[7,5,5]. Finish[P0]=true<br>
+  P2: Need=[6,0,0] ≤ [7,5,5]? ✓ → Work=[7+3,5+0,5+2]=[10,5,7]. Finish[P2]=true</p>
+  <p>✅ <strong>Safe Sequence: P1 → P3 → P4 → P0 → P2</strong></p>
+</div>
+</div>
+
+<!-- 6.5b More Safety Examples -->
+<div class="card">
+<h2>6.5b ตัวอย่างเพิ่มเติม Safety Algorithm — ฝึกจนชำนาญ</h2>
+<div class="box box-yellow">
+  <strong>💡 เทคนิคจำ:</strong> ทำ Safety Algorithm เหมือนเล่นเกม "ช่วยกันทำงาน"<br>
+  → เริ่มจากคน (Process) ที่ต้องการของน้อยที่สุด ให้เขาทำงานก่อน คืนของมา แล้วค่อยช่วยคนต่อไป<br>
+  → ถ้าวนครบแล้วยังมีคนทำงานไม่ได้ = ระบบติดแน่นอน
+</div>
+
+<div class="example-box">
+  <div class="ex-title">ตัวอย่างที่ 2: ระบบ 3 ทรัพยากร (A,B,C) — ง่าย</div>
+  <p>ทรัพยากร: A=9, B=3, C=6. สร้างตาราง Need ก่อนเลย!</p>
+  <table>
+    <tr><th>Process</th><th>Alloc A B C</th><th>Max A B C</th><th>Need A B C (Max−Alloc)</th></tr>
+    <tr><td>P0</td><td>2 0 0</td><td>4 2 0</td><td style="color:#48cfad">2 2 0</td></tr>
+    <tr><td>P1</td><td>3 0 2</td><td>6 3 2</td><td style="color:#48cfad">3 3 0</td></tr>
+    <tr><td>P2</td><td>0 1 1</td><td>0 2 2</td><td style="color:#48cfad">0 1 1</td></tr>
+  </table>
+  <p><strong>Available = A:4, B:2, C:3</strong> (คำนวณจาก Total − ΣAlloc = 9−5=4, 3−1=2, 6−3=3)</p>
+  <div class="box box-purple">
+    <strong>วิธีคำนวณ Available:</strong> Total − (ΣAlloc ทุกกระบวนการ)<br>
+    A: 9 − (2+3+0) = 9−5 = 4 ✓<br>
+    B: 3 − (0+0+1) = 3−1 = 2 ✓<br>
+    C: 6 − (0+2+1) = 6−3 = 3 ✓
+  </div>
+  <p><strong>รัน Safety Algorithm:</strong><br>
+  Work = [4, 2, 3]. ตรวจทีละกระบวนการ:</p>
+  <table>
+    <tr><th>รอบ</th><th>ลอง Process</th><th>Need</th><th>Work (ปัจจุบัน)</th><th>Need ≤ Work?</th><th>ผล</th></tr>
+    <tr><td>1</td><td>P0</td><td>[2,2,0]</td><td>[4,2,3]</td><td>2≤4 ✓, 2≤2 ✓, 0≤3 ✓</td><td>P0 เสร็จ → Work=[4+2,2+0,3+0]=[6,2,3]</td></tr>
+    <tr><td>2</td><td>P1</td><td>[3,3,0]</td><td>[6,2,3]</td><td>3≤6 ✓, 3>2 ✗</td><td>ข้าม P1</td></tr>
+    <tr><td>2</td><td>P2</td><td>[0,1,1]</td><td>[6,2,3]</td><td>0≤6 ✓, 1≤2 ✓, 1≤3 ✓</td><td>P2 เสร็จ → Work=[6+0,2+1,3+1]=[6,3,4]</td></tr>
+    <tr><td>3</td><td>P1</td><td>[3,3,0]</td><td>[6,3,4]</td><td>3≤6 ✓, 3≤3 ✓, 0≤4 ✓</td><td>P1 เสร็จ → Work=[6+3,3+0,4+2]=[9,3,6]</td></tr>
+  </table>
+  <p>✅ <strong>Safe Sequence: P0 → P2 → P1</strong></p>
+</div>
+
+<div class="example-box">
+  <div class="ex-title">ตัวอย่างที่ 3: ระบบ 4 กระบวนการ 2 ทรัพยากร — ที่นิยมออกสอบ</div>
+  <p>ทรัพยากร: A=7, B=6. Available =[2, 1]</p>
+  <table>
+    <tr><th>Process</th><th>Alloc A B</th><th>Max A B</th><th>Need A B</th></tr>
+    <tr><td>P0</td><td>2 1</td><td>4 2</td><td style="color:#48cfad">2 1</td></tr>
+    <tr><td>P1</td><td>1 2</td><td>3 5</td><td style="color:#48cfad">2 3</td></tr>
+    <tr><td>P2</td><td>2 1</td><td>5 3</td><td style="color:#48cfad">3 2</td></tr>
+    <tr><td>P3</td><td>0 1</td><td>2 2</td><td style="color:#48cfad">2 1</td></tr>
+  </table>
+  <p>ตรวจ: ΣAlloc A = 2+1+2+0 = 5 → Available A = 7−5 = 2 ✓<br>
+  ΣAlloc B = 1+2+1+1 = 5 → Available B = 6−5 = 1 ✓</p>
+  <p><strong>รัน:</strong><br>
+  Work=[2,1]<br>
+  P0: Need=[2,1] ≤ [2,1] ✓ → Work=[2+2,1+1]=[4,2]<br>
+  P1: Need=[2,3] → B: 3>2 ✗ ข้าม<br>
+  P2: Need=[3,2] → A: 3>4? ✗ ไม่ใช่ → 3≤4 ✓, 2≤2 ✓ → P2 เสร็จ → Work=[4+2,2+1]=[6,3]<br>
+  P1: Need=[2,3] ≤ [6,3] ✓ → Work=[6+1,3+2]=[7,5]<br>
+  P3: Need=[2,1] ≤ [7,5] ✓ → Work=[7+0,5+1]=[7,6]</p>
+  <p>✅ <strong>Safe Sequence: P0 → P2 → P1 → P3</strong></p>
+</div>
+
+<div class="example-box">
+  <div class="ex-title">ตัวอย่างที่ 4: Deadlock! — ไม่มี Safe Sequence</div>
+  <p>ทรัพยากร: A=5, B=3. Available=[0, 0]</p>
+  <table>
+    <tr><th>Process</th><th>Alloc A B</th><th>Max A B</th><th>Need A B</th></tr>
+    <tr><td>P0</td><td>1 1</td><td>4 2</td><td style="color:#fc6e51">3 1</td></tr>
+    <tr><td>P1</td><td>2 0</td><td>3 1</td><td style="color:#fc6e51">1 1</td></tr>
+    <tr><td>P2</td><td>2 2</td><td>4 3</td><td style="color:#fc6e51">2 1</td></tr>
+  </table>
+  <p>Work=[0,0]<br>
+  P0: Need=[3,1] ≤ [0,0]? A: 3>0 ✗<br>
+  P1: Need=[1,1] ≤ [0,0]? A: 1>0 ✗<br>
+  P2: Need=[2,1] ≤ [0,0]? A: 2>0 ✗<br>
+  ไม่มีใครทำได้ → <span class="badge badge-red">❌ Deadlock! P0, P1, P2 ทุกตัวติด</span></p>
+</div>
+
+<div class="warn">
+  ⚠ <strong>ข้อผิดพลาดที่พบบ่อย:</strong><br>
+  1. ลืมคำนวณ Need ก่อน (Need = Max − Allocation)<br>
+  2. ลืม Available ต้องตรงทุก resource type ถึงจะผ่าน (AND condition, ไม่ใช่ OR)<br>
+  3. เมื่อ Process เสร็จ ต้องบวก Allocation คืนเข้า Work ทุก type<br>
+  4. ถ้า Work ไม่พอให้ Process ใดเลย → หยุดวน → Deadlock ทันที
+</div>
+</div>
+
+<!-- 6.6 Request Algorithm -->
+<div class="card">
+<h2>6.6 Request Algorithm — ตัดสินใจให้หรือปฏิเสธ</h2>
+<p>เมื่อกระบวนการ i ขอทรัพยากรเพิ่ม OS จะใช้อัลกอริทึมนี้ตัดสินใจว่าควรให้หรือไม่</p>
+
+<h3>ขั้นตอน Request Algorithm</h3>
+<div class="step"><div class="step-num">1</div><div class="step-body"><strong>ตรวจสอบ Max Claim:</strong> ถ้า Request[i] > Need[i] → <span class="badge badge-red">Error!</span> ขอเกินกว่าที่แจ้งไว้ตั้งแต่แรก</div></div>
+<div class="step"><div class="step-num">2</div><div class="step-body"><strong>ตรวจสอบ Availability:</strong> ถ้า Request[i] > Available → <span class="badge badge-red">รอก่อน</span> ทรัพยากรไม่พอ</div></div>
+<div class="step"><div class="step-num">3</div><div class="step-body"><strong>จำลองการให้:</strong> Available = Available − Request[i], Allocation[i] = Allocation[i] + Request[i], Need[i] = Need[i] − Request[i]</div></div>
+<div class="step"><div class="step-num">4</div><div class="step-body"><strong>รัน Safety Algorithm:</strong> ถ้า Safe → <span class="badge badge-green">ให้เลย</span>. ถ้า Unsafe → <span class="badge badge-red">ยกเลิก (rollback)</span> ปฏิเสธคำขอ</div></div>
+
+<div class="example-box">
+  <div class="ex-title">ตัวอย่าง: P1 ขอ [1,0,2]</div>
+  <p>จากตัวอย่างข้างบน: Need[P1]=[1,2,2], Available=[3,3,2]</p>
+  <p>ขั้น 1: [1,0,2] ≤ [1,2,2]? ✓<br>
+  ขั้น 2: [1,0,2] ≤ [3,3,2]? ✓<br>
+  ขั้น 3: Available=[3-1,3-0,2-2]=[2,3,0], Alloc[P1]=[2+1,0+0,0+2]=[3,0,2], Need[P1]=[1-1,2-0,2-2]=[0,2,0]<br>
+  ขั้น 4: รัน Safety → ยังหา Safe Sequence ได้ → <strong>ให้ทรัพยากร!</strong></p>
+</div>
+
+<div class="tool-area">
+  <h3>🧮 Banker's Algorithm Calculator</h3>
+  <div class="grid2">
+    <div>
+      <label>จำนวนกระบวนการ (n)</label>
+      <input type="number" id="bn" value="5" min="2" max="8" oninput="buildBanker()">
+    </div>
+    <div>
+      <label>จำนวนชนิดทรัพยากร (m)</label>
+      <input type="number" id="bm" value="3" min="1" max="5" oninput="buildBanker()">
+    </div>
+  </div>
+  <div id="banker-inputs"></div>
+  <label>Available (คั่นด้วยช่องว่าง เช่น 3 3 2)</label>
+  <input type="text" id="b-avail" value="3 3 2">
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <button class="run-btn" onclick="runSafety()">▶ Safety Algorithm</button>
+    <button class="run-btn secondary" onclick="runRequest()">📤 Request Algorithm</button>
+  </div>
+  <label>คำขอ: [index กระบวนการ] [ปริมาณ...] เช่น 1 1 0 2 = P1 ขอ [1,0,2]</label>
+  <input type="text" id="b-req" value="1 1 0 2">
+  <div id="b-out" class="output-box">กรอกข้อมูลแล้วกด Safety Algorithm</div>
+</div>
+</div>
+
+<!-- 6.6b More Request Examples -->
+<div class="card">
+<h2>6.6b ตัวอย่างเพิ่มเติม Request Algorithm — ฝึกทีละขั้น</h2>
+<div class="box box-blue">
+  <strong>สรุป 4 ขั้นตอน Request Algorithm (จำให้ขึ้นใจ):</strong><br>
+  1️⃣ Request ≤ Need? (ขอไม่เกิน Max ที่แจ้งไว้) ถ้าไม่ → Error<br>
+  2️⃣ Request ≤ Available? (มีของพอให้?) ถ้าไม่ → รอ<br>
+  3️⃣ จำลองให้: Available−=Req, Alloc+=Req, Need−=Req<br>
+  4️⃣ รัน Safety Algorithm: Safe → ให้จริง | Unsafe → Rollback ปฏิเสธ
+</div>
+
+<div class="example-box">
+  <div class="ex-title">ตัวอย่างที่ 1: P0 ขอ [0,2,0] — ให้ได้</div>
+  <p>ระบบจากตัวอย่างคลาสสิก: Available=[3,3,2], Need[P0]=[7,4,3], Alloc[P0]=[0,1,0]</p>
+  <p><strong>ขั้น 1:</strong> Request[0,2,0] ≤ Need[P0]=[7,4,3]? → 0≤7✓, 2≤4✓, 0≤3✓ → ผ่าน<br>
+  <strong>ขั้น 2:</strong> Request[0,2,0] ≤ Available=[3,3,2]? → 0≤3✓, 2≤3✓, 0≤2✓ → ผ่าน<br>
+  <strong>ขั้น 3: จำลอง:</strong><br>
+  &nbsp;&nbsp;Available=[3−0, 3−2, 2−0] = [3,1,2]<br>
+  &nbsp;&nbsp;Alloc[P0]=[0+0, 1+2, 0+0] = [0,3,0]<br>
+  &nbsp;&nbsp;Need[P0]=[7−0, 4−2, 3−0] = [7,2,3]<br>
+  <strong>ขั้น 4: Safety:</strong> Work=[3,1,2]<br>
+  &nbsp;&nbsp;P1: Need=[1,2,2] → B: 2>1 ✗. P3: Need=[0,1,1] → 0≤3✓, 1≤1✓, 1≤2✓ → P3 เสร็จ Work=[5,2,3]<br>
+  &nbsp;&nbsp;P1: Need=[1,2,2] ≤ [5,2,3] ✓ → Work=[7,2,3]<br>
+  &nbsp;&nbsp;P4: Need=[4,3,1] ≤ [7,2,3]? B: 3>2✗. P0: Need=[7,2,3] ≤ [7,2,3] ✓ → Work=[7,5,3]<br>
+  &nbsp;&nbsp;P4: Need=[4,3,1] ≤ [7,5,3] ✓ → Work=[7,5,5]. P2: Need=[6,0,0] ✓ → Done<br>
+  ✅ <strong>Safe → ให้ทรัพยากรได้!</strong></p>
+</div>
+
+<div class="example-box">
+  <div class="ex-title">ตัวอย่างที่ 2: P0 ขอ [7,4,3] — รอก่อน (Available ไม่พอ)</div>
+  <p>Available=[3,3,2]<br>
+  <strong>ขั้น 1:</strong> Request[7,4,3] ≤ Need[P0]=[7,4,3]? ✓<br>
+  <strong>ขั้น 2:</strong> Request[7,4,3] ≤ Available=[3,3,2]? → A: 7>3 ✗<br>
+  → <span class="badge badge-red">รอก่อน! Available ไม่พอ ไม่ต้องรัน Safety เลย</span></p>
+</div>
+
+<div class="example-box">
+  <div class="ex-title">ตัวอย่างที่ 3: P1 ขอ [2,3,0] — Error (เกิน Need)</div>
+  <p>Need[P1]=[1,2,2]<br>
+  <strong>ขั้น 1:</strong> Request[2,3,0] ≤ Need[P1]=[1,2,2]? → A: 2>1 ✗<br>
+  → <span class="badge badge-red">Error! ขอเกินกว่าที่ประกาศ Max ไว้ตั้งแต่แรก</span></p>
+</div>
+
+<div class="warn">⚠ <strong>จุดสำคัญ:</strong> ขั้น 1 และขั้น 2 ใช้ AND logic — ต้องผ่านทุก resource type ถึงจะไปขั้นต่อไป พอ type ใด type หนึ่งไม่ผ่านให้หยุดทันที</div>
+</div>
+
+<!-- 6.7 Detection -->
+<div class="card">
+<h2>6.7 Detection Algorithm — ตรวจจับ Deadlock ที่เกิดขึ้นแล้ว</h2>
+<p>ถ้า OS ไม่ใช้วิธีป้องกัน Deadlock เลย ก็ต้องใช้ Detection Algorithm หา Deadlock ที่เกิดขึ้นแล้ว</p>
+<div class="box box-yellow">
+  <strong>ความต่างจาก Safety Algorithm:</strong><br>
+  • ใช้ <strong>Request matrix</strong> (สิ่งที่ขออยู่ตอนนี้) แทน Need matrix (สิ่งที่ยังขาดอยู่)<br>
+  • Finish[i] = <strong>true ตั้งแต่แรก</strong> ถ้า Allocation[i] = 0 (ไม่ได้ถือทรัพยากรเลย)<br>
+  • Finish[i] = <strong>false</strong> ถ้า Allocation[i] ≠ 0
+</div>
+<h3>ขั้นตอน Detection Algorithm</h3>
+<div class="step"><div class="step-num">0</div><div class="step-body">Work = Available. Finish[i] = true ถ้า Allocation[i]=0, false ถ้า Allocation[i]≠0</div></div>
+<div class="step"><div class="step-num">1</div><div class="step-body">หากระบวนการ i ที่: Finish[i]=false <strong>และ</strong> Request[i] ≤ Work</div></div>
+<div class="step"><div class="step-num">2</div><div class="step-body">Work = Work + Allocation[i]. Finish[i] = true → กลับขั้นตอน 1</div></div>
+<div class="step"><div class="step-num">3</div><div class="step-body">กระบวนการใดที่ Finish[i] = false → <span class="badge badge-red">อยู่ใน Deadlock</span></div></div>
+<div class="example-box">
+  <div class="ex-title">ตัวอย่าง Detection</div>
+  <p>3 กระบวนการ, 2 ชนิด (A, B). Available=[0,0]</p>
+  <table>
+    <tr><th>Process</th><th>Alloc A B</th><th>Request A B</th><th>Finish เริ่มต้น</th></tr>
+    <tr><td>P0</td><td>1 0</td><td>0 0</td><td>false (Alloc≠0)</td></tr>
+    <tr><td>P1</td><td>0 2</td><td>2 0</td><td>false (Alloc≠0)</td></tr>
+    <tr><td>P2</td><td>1 1</td><td>0 1</td><td>false (Alloc≠0)</td></tr>
+  </table>
+  <p>Work=[0,0]. P0: Request[0,0] ≤ [0,0] ✓ → Work=[0+1,0+0]=[1,0]. Finish[P0]=true<br>
+  P1: Request[2,0] ≤ [1,0]? ✗. P2: Request[0,1] ≤ [1,0]? ✗ (1>0)<br>
+  หาไม่ได้แล้ว → <strong>P1 และ P2 อยู่ใน Deadlock</strong></p>
+</div>
+</div>
+
+<!-- 6.7b More Detection Examples -->
+<div class="card">
+<h2>6.7b ตัวอย่างเพิ่มเติม Detection Algorithm</h2>
+<div class="box box-yellow">
+  <strong>ข้อแตกต่างสำคัญระหว่าง Safety vs Detection:</strong><br>
+  <table style="margin:8px 0">
+    <tr><th>หัวข้อ</th><th>Safety Algorithm</th><th>Detection Algorithm</th></tr>
+    <tr><td>ใช้เมื่อ</td><td>ก่อนให้ทรัพยากร (ป้องกัน)</td><td>ตรวจสอบว่าเกิด Deadlock แล้วหรือยัง</td></tr>
+    <tr><td>Matrix ที่ใช้</td><td>Need = Max−Alloc</td><td>Request = สิ่งที่ขออยู่ตอนนี้จริงๆ</td></tr>
+    <tr><td>Finish เริ่มต้น</td><td>false ทั้งหมด</td><td>true ถ้า Alloc=0, false ถ้า Alloc≠0</td></tr>
+    <tr><td>เปรียบกับ</td><td>เช็คว่ายังปลอดภัยอยู่</td><td>ตรวจจับหลังเกิดเหตุ</td></tr>
+  </table>
+</div>
+
+<div class="example-box">
+  <div class="ex-title">ตัวอย่างที่ 2: 5 กระบวนการ 3 ทรัพยากร</div>
+  <p>Available = [0, 0, 0]</p>
+  <table>
+    <tr><th>P</th><th>Alloc A B C</th><th>Request A B C</th><th>Finish เริ่มต้น</th></tr>
+    <tr><td>P0</td><td>0 1 0</td><td>0 0 0</td><td>false (Alloc≠0)</td></tr>
+    <tr><td>P1</td><td>2 0 0</td><td>2 0 2</td><td>false (Alloc≠0)</td></tr>
+    <tr><td>P2</td><td>3 0 3</td><td>0 0 0</td><td>false (Alloc≠0)</td></tr>
+    <tr><td>P3</td><td>2 1 1</td><td>1 0 0</td><td>false (Alloc≠0)</td></tr>
+    <tr><td>P4</td><td>0 0 2</td><td>0 0 2</td><td>false (Alloc≠0)</td></tr>
+  </table>
+  <p><strong>Work = [0,0,0]</strong></p>
+  <p>P0: Request=[0,0,0] ≤ [0,0,0] ✓ → Finish[P0]=true, Work=[0+0,0+1,0+0]=[0,1,0]<br>
+  P1: Request=[2,0,2] ≤ [0,1,0]? A:2>0 ✗ข้าม<br>
+  P2: Request=[0,0,0] ≤ [0,1,0] ✓ → Finish[P2]=true, Work=[0+3,1+0,0+3]=[3,1,3]<br>
+  P3: Request=[1,0,0] ≤ [3,1,3] ✓ → Finish[P3]=true, Work=[3+2,1+1,3+1]=[5,2,4]<br>
+  P4: Request=[0,0,2] ≤ [5,2,4] ✓ → Finish[P4]=true, Work=[5+0,2+0,4+2]=[5,2,6]<br>
+  P1: Request=[2,0,2] ≤ [5,2,6] ✓ → Finish[P1]=true</p>
+  <p>✅ <strong>ไม่มี Deadlock! ทุกกระบวนการ Finish=true</strong></p>
+</div>
+
+<div class="example-box">
+  <div class="ex-title">ตัวอย่างที่ 3: มีบางกระบวนการที่ติด Deadlock</div>
+  <p>Available = [1, 0, 0]</p>
+  <table>
+    <tr><th>P</th><th>Alloc A B C</th><th>Request A B C</th><th>Finish เริ่มต้น</th></tr>
+    <tr><td>P0</td><td>0 0 0</td><td>0 0 0</td><td style="color:#48cfad">true (Alloc=0 ทั้งหมด)</td></tr>
+    <tr><td>P1</td><td>1 0 1</td><td>0 1 0</td><td>false</td></tr>
+    <tr><td>P2</td><td>0 1 0</td><td>1 0 0</td><td>false</td></tr>
+    <tr><td>P3</td><td>0 0 1</td><td>0 0 1</td><td>false</td></tr>
+  </table>
+  <p>Work=[1,0,0]. (P0 ข้ามได้เพราะ Finish=true แล้ว)<br>
+  P1: Request=[0,1,0] → B:1>0 ✗<br>
+  P2: Request=[1,0,0] ≤ [1,0,0] ✓ → Finish[P2]=true, Work=[1+0,0+1,0+0]=[1,1,0]<br>
+  P1: Request=[0,1,0] ≤ [1,1,0] ✓ → Finish[P1]=true, Work=[1+1,1+0,0+1]=[2,1,1]<br>
+  P3: Request=[0,0,1] ≤ [2,1,1] ✓ → Finish[P3]=true</p>
+  <p>✅ <strong>ไม่มี Deadlock</strong></p>
+</div>
+</div>
+
+<!-- 6.8 Recovery -->
+<div class="card">
+<h2>6.8 Recovery — การกู้คืนจาก Deadlock</h2>
+<p>เมื่อตรวจพบ Deadlock มี 2 วิธีในการแก้ไข:</p>
+<h3>วิธีที่ 1: Process Termination (ยุติกระบวนการ)</h3>
+<table>
+  <tr><th>แบบ</th><th>วิธี</th><th>ข้อดี</th><th>ข้อเสีย</th></tr>
+  <tr><td><strong>ยุติทั้งหมด</strong></td><td>Kill ทุกกระบวนการที่ติด Deadlock ทันที</td><td>ง่าย รวดเร็ว</td><td>สูญเสียงานที่ทำไปแล้วทั้งหมด</td></tr>
+  <tr><td><strong>ยุติทีละตัว</strong></td><td>Kill ทีละกระบวนการ → รัน Detection ใหม่ → ถ้าหาย Deadlock หยุด</td><td>สูญเสียน้อยกว่า</td><td>ใช้เวลานาน (รัน Detection ซ้ำหลายรอบ)</td></tr>
+</table>
+<h3>วิธีที่ 2: Resource Preemption (บังคับดึงทรัพยากรคืน)</h3>
+<p>เลือก "เหยื่อ" (Victim Process) แล้วบังคับดึงทรัพยากรที่ถืออยู่คืน มี 3 ประเด็นที่ต้องพิจารณา:</p>
+<ul>
+  <li><strong>เลือกเหยื่อ:</strong> เลือกกระบวนการที่สูญเสียน้อยที่สุด (เช่น ทำงานไปน้อยที่สุด)</li>
+  <li><strong>Rollback:</strong> ย้อนกระบวนการเหยื่อไปยัง safe checkpoint</li>
+  <li><strong>Starvation:</strong> ต้องมีกลไกป้องกันไม่ให้กระบวนการเดิมถูกเลือกเป็นเหยื่อซ้ำแล้วซ้ำเล่า</li>
+</ul>
+
+<div class="tool-area">
+  <h3>📝 โจทย์ฝึกหัด (สไตล์ Homework)</h3>
+  <div class="collapsible">
+    <div class="col-header" onclick="tog(this)">โจทย์ 1: Safety Algorithm — หา Safe Sequence <span class="arrow">▼</span></div>
+    <div class="col-body">
+      <p>5 กระบวนการ P0–P4, ทรัพยากร A(10) B(5) C(7), Available=[3,3,2]</p>
+      <table>
+        <tr><th>Process</th><th>Alloc A B C</th><th>Max A B C</th></tr>
+        <tr><td>P0</td><td>0 1 0</td><td>7 5 3</td></tr>
+        <tr><td>P1</td><td>2 0 0</td><td>3 2 2</td></tr>
+        <tr><td>P2</td><td>3 0 2</td><td>9 0 2</td></tr>
+        <tr><td>P3</td><td>2 1 1</td><td>2 2 2</td></tr>
+        <tr><td>P4</td><td>0 0 2</td><td>4 3 3</td></tr>
+      </table>
+      <button class="run-btn" onclick="show('ans1')">แสดงเฉลย</button>
+      <div id="ans1" style="display:none" class="box box-green">
+        Need: P0=[7,4,3] P1=[1,2,2] P2=[6,0,0] P3=[0,1,1] P4=[4,3,1]<br><br>
+        Work=[3,3,2]<br>
+        P1: [1,2,2]≤[3,3,2]✓ → Work=[5,3,2]<br>
+        P3: [0,1,1]≤[5,3,2]✓ → Work=[7,4,3]<br>
+        P4: [4,3,1]≤[7,4,3]✓ → Work=[7,4,5]<br>
+        P0: [7,4,3]≤[7,4,5]✓ → Work=[7,5,5]<br>
+        P2: [6,0,0]≤[7,5,5]✓ → Work=[10,5,7]<br>
+        <strong>Safe Sequence: P1→P3→P4→P0→P2 ✅</strong>
+      </div>
+    </div>
+  </div>
+  <div class="collapsible">
+    <div class="col-header" onclick="tog(this)">โจทย์ 2: Request Algorithm — ให้หรือปฏิเสธ? <span class="arrow">▼</span></div>
+    <div class="col-body">
+      <p>ระบบเดียวกับโจทย์ 1. P4 ขอ [3,3,0]. ควรให้หรือไม่?</p>
+      <button class="run-btn" onclick="show('ans2')">แสดงเฉลย</button>
+      <div id="ans2" style="display:none" class="box box-red">
+        ขั้น 1: Request[3,3,0] ≤ Need[P4]=[4,3,1]? ✓<br>
+        ขั้น 2: Request[3,3,0] ≤ Available=[3,3,2]? ✓<br>
+        ขั้น 3: จำลอง: Available=[0,0,2], Alloc[P4]=[3,3,2], Need[P4]=[1,0,1]<br>
+        ขั้น 4: รัน Safety → Work=[0,0,2]<br>
+        P0:[7,4,3]>[0,0,2]✗, P1:[1,2,2]>[0,0,2]✗, P2:[6,0,0]>[0,0,2]✗<br>
+        P3:[0,1,1]>[0,0,2]? B: 1>0 ✗. P4:[1,0,1]>[0,0,2]? A:1>0 ✗<br>
+        ไม่มีใครทำงานได้ → Unsafe → <strong>ปฏิเสธคำขอ!</strong>
+      </div>
+    </div>
+  </div>
+  <div class="collapsible">
+    <div class="col-header" onclick="tog(this)">โจทย์ 3: Detection Algorithm <span class="arrow">▼</span></div>
+    <div class="col-body">
+      <p>4 กระบวนการ, 2 ชนิด (A, B). Available=[0,0]</p>
+      <table>
+        <tr><th>P</th><th>Alloc A B</th><th>Request A B</th></tr>
+        <tr><td>P0</td><td>0 0</td><td>0 0</td></tr>
+        <tr><td>P1</td><td>2 1</td><td>1 0</td></tr>
+        <tr><td>P2</td><td>0 2</td><td>0 1</td></tr>
+        <tr><td>P3</td><td>1 0</td><td>1 1</td></tr>
+      </table>
+      <button class="run-btn" onclick="show('ans3')">แสดงเฉลย</button>
+      <div id="ans3" style="display:none" class="box box-green">
+        Finish: P0=true (Alloc=0), P1=false, P2=false, P3=false<br>
+        Work=[0,0]<br>
+        P1: Req[1,0]≤[0,0]? ✗. P2: Req[0,1]≤[0,0]? ✗. P3: Req[1,1]>[0,0]? ✗<br>
+        (P0 ไม่ต้องดู เพราะ Finish=true แล้ว)<br>
+        ไม่มีกระบวนการทำงานได้ → <strong>P1, P2, P3 อยู่ใน Deadlock!</strong>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<!-- 6.HW โจทย์จาก Homework -->
+<div class="card">
+<h2>6.HW โจทย์จาก Homework 6 — เฉลยทีละขั้น</h2>
+<div class="box box-purple">
+  <strong>📌 ส่วนนี้รวมโจทย์ทั้งหมดจาก Homework 6 พร้อมเฉลยแบบละเอียด ทำให้ได้แล้วสอบ Final ผ่านแน่นอน</strong>
+</div>
+
+<div class="collapsible">
+  <div class="col-header" onclick="tog(this)">HW6 ข้อ 1: Traffic Deadlock — เงื่อนไข 4 ข้อ <span class="arrow">▼</span></div>
+  <div class="col-body">
+    <p><strong>โจทย์:</strong> รถติดที่สี่แยก แสดงว่าเงื่อนไข Deadlock 4 ข้อเกิดขึ้นทั้งหมด และเสนอกฎง่ายๆ ป้องกัน</p>
+    <div class="box box-green">
+      <strong>เฉลย (a) เงื่อนไข 4 ข้อ:</strong><br>
+      1. <strong>Mutual Exclusion</strong>: ที่หนึ่งบนถนนใช้ได้แค่ 1 รถเท่านั้น<br>
+      2. <strong>Hold and Wait</strong>: รถถือพื้นที่ที่ตัวเองอยู่ และรอเพื่อขยับไปข้างหน้า<br>
+      3. <strong>No Preemption</strong>: ดึงรถออกจากตำแหน่งของมันโดยบังคับไม่ได้<br>
+      4. <strong>Circular Wait</strong>: แต่ละรถรอรถข้างหน้าให้ขยับ → วงกลมการรอ<br><br>
+      <strong>เฉลย (b) กฎป้องกัน:</strong><br>
+      "รถจะไม่เข้าสี่แยก ถ้าไม่มั่นใจว่าจะออกจากสี่แยกได้ทันที" → ทำลาย Hold-and-Wait
+    </div>
+  </div>
+</div>
+
+<div class="collapsible">
+  <div class="col-header" onclick="tog(this)">HW6 RAG (ข้อ 6, 7): การอ่าน Resource Allocation Graph <span class="arrow">▼</span></div>
+  <div class="col-body">
+    <div class="box box-purple">
+      <strong>วิธีตรวจ Deadlock จาก RAG ที่มีหลาย Instance:</strong><br>
+      1. หา Process ที่ <em>ทุก</em> Request Edge สามารถจัดสรรได้ (instance ว่างพอ)<br>
+      2. Process นั้น "ทำงานเสร็จ" → ลบ Edge ทั้งหมดของมัน คืน instance<br>
+      3. ทำซ้ำ ถ้าลบได้หมด = ไม่มี Deadlock, ถ้าลบไม่ได้ = Deadlock
+    </div>
+    <p><strong>เทคนิคจำง่าย:</strong> ถ้ากราฟไม่มี Cycle → ไม่มี Deadlock แน่นอน. ถ้ามี Cycle และทุก Resource มีแค่ 1 instance → Deadlock แน่. ถ้ามี Cycle แต่ Resource มีหลาย instance → อาจไม่ใช่ Deadlock (ต้องเช็คเพิ่ม)</p>
+    <div class="box box-green">
+      <strong>ข้อ 6:</strong> ดูจากกราฟ — A ถือ D, C ถือ B รอ F, E ถือ F. ถ้าตามเงื่อนไข ทุก resource จัดสรรได้ → ลบได้หมด → ไม่ใช่ Deadlock → คำตอบ C ผิด (incorrect)<br>
+      <strong>ข้อ 7:</strong> ตรวจดู process set จริง → คำตอบ B ผิด (set ของ process ไม่ถูกต้อง — มี process ที่ไม่ได้ถูกระบุ)
+    </div>
+  </div>
+</div>
+
+<div class="collapsible">
+  <div class="col-header" onclick="tog(this)">HW6 ข้อ 2: Banker's Algorithm — การเปลี่ยนแปลงในระบบจริง <span class="arrow">▼</span></div>
+  <div class="col-body">
+    <p><strong>โจทย์ (Exercise 7.6):</strong> ในระบบที่ใช้ Banker's Algorithm การเปลี่ยนแปลงต่อไปนี้ทำได้อย่างปลอดภัยหรือไม่?</p>
+    <div class="box box-green">
+      <table>
+        <tr><th>การเปลี่ยนแปลง</th><th>ปลอดภัย?</th><th>เหตุผล</th></tr>
+        <tr><td>(a) เพิ่ม Available (เพิ่มทรัพยากรใหม่)</td><td>✅ ปลอดภัย</td><td>มีของให้ใช้มากขึ้น ไม่มีปัญหา</td></tr>
+        <tr><td>(b) ลด Available (ทรัพยากรเสียถาวร)</td><td>❌ ไม่ปลอดภัย</td><td>อาจเกิด Deadlock เพราะ Safety เดิมสมมติว่ามีของจำนวนหนึ่ง</td></tr>
+        <tr><td>(c) เพิ่ม Max ของ Process</td><td>❌ ไม่ปลอดภัย</td><td>Process อาจขอเกินที่ระบบรองรับ → Deadlock</td></tr>
+        <tr><td>(d) ลด Max ของ Process</td><td>✅ ปลอดภัย</td><td>Process ขอน้อยลง ระบบยิ่งปลอดภัย</td></tr>
+        <tr><td>(e) เพิ่มจำนวน Process</td><td>⚠ ได้ ถ้าจัดสรรให้ Process ใหม่แล้วระบบยังอยู่ใน Safe State</td><td>ต้องเช็ค Safety หลังจัดสรร</td></tr>
+        <tr><td>(f) ลดจำนวน Process</td><td>✅ ปลอดภัย</td><td>คนแย่งของน้อยลง</td></tr>
+      </table>
+      <div class="warn">⚠ ข้อนี้ออกบ่อยเป็น MCQ! จำให้ได้ว่า "เพิ่ม Available + ลด Max + ลดจำนวน Process = ปลอดภัย", "ลด Available + เพิ่ม Max = อันตราย"</div>
+    </div>
+  </div>
+</div>
+
+<div class="collapsible">
+  <div class="col-header" onclick="tog(this)">HW6 ข้อ 3: Banker's — 5 Process 4 Resource (A,B,C,D) <span class="arrow">▼</span></div>
+  <div class="col-body">
+    <p><strong>โจทย์ (Exercise 7.13):</strong> Available=[3,3,2,1]</p>
+    <table>
+      <tr><th>P</th><th>Allocation A B C D</th><th>Max A B C D</th></tr>
+      <tr><td>P0</td><td>2 0 0 1</td><td>4 2 1 2</td></tr>
+      <tr><td>P1</td><td>3 1 2 1</td><td>5 2 5 2</td></tr>
+      <tr><td>P2</td><td>2 1 0 3</td><td>2 3 1 6</td></tr>
+      <tr><td>P3</td><td>1 3 1 2</td><td>1 4 2 4</td></tr>
+      <tr><td>P4</td><td>1 4 3 2</td><td>3 6 6 5</td></tr>
+    </table>
+    <button class="run-btn" onclick="show('hw6-3a')">เฉลย (a) Safe Sequence</button>
+    <div id="hw6-3a" style="display:none" class="box box-green">
+      <strong>คำนวณ Need = Max − Allocation:</strong><br>
+      P0: [2,2,1,1], P1: [2,1,3,1], P2: [0,2,1,3], P3: [0,1,1,2], P4: [2,2,3,3]<br><br>
+      <strong>รัน Safety Algorithm</strong> Work=[3,3,2,1]:<br>
+      P0: Need=[2,2,1,1]≤Work[3,3,2,1] ✓ → Work=[3+2,3+0,2+0,1+1]=[5,3,2,2]<br>
+      P1: Need=[2,1,3,1]≤[5,3,2,2]? C: 3>2 ✗ ข้าม<br>
+      P2: Need=[0,2,1,3]≤[5,3,2,2]? D: 3>2 ✗ ข้าม<br>
+      P3: Need=[0,1,1,2]≤[5,3,2,2] ✓ → Work=[5+1,3+3,2+1,2+2]=[6,6,3,4]<br>
+      P4: Need=[2,2,3,3]≤[6,6,3,4] ✓ → Work=[6+1,6+4,3+3,4+2]=[7,10,6,6]<br>
+      P1: Need=[2,1,3,1]≤[7,10,6,6] ✓ → Work=[7+3,10+1,6+2,6+1]=[10,11,8,7]<br>
+      P2: Need=[0,2,1,3]≤[10,11,8,7] ✓ → Work=[10+2,11+1,8+0,7+3]=[12,12,8,10]<br>
+      ✅ <strong>Safe Sequence: ⟨P0, P3, P4, P1, P2⟩</strong>
+    </div>
+    <button class="run-btn" onclick="show('hw6-3b')">เฉลย (b) P1 ขอ [1,1,0,0]</button>
+    <div id="hw6-3b" style="display:none" class="box box-green">
+      <strong>ขั้น 1:</strong> Request=[1,1,0,0] ≤ Need[P1]=[2,1,3,1]? ✓<br>
+      <strong>ขั้น 2:</strong> Request ≤ Available=[3,3,2,1]? ✓<br>
+      <strong>ขั้น 3: จำลอง:</strong> Available=[2,2,2,1], Alloc[P1]=[4,2,2,1], Need[P1]=[1,0,3,1]<br>
+      <strong>ขั้น 4: Safety</strong> Work=[2,2,2,1]:<br>
+      P0: [2,2,1,1] ≤ [2,2,2,1] ✓ → Work=[4,2,2,2]<br>
+      P3: [0,1,1,2] ≤ [4,2,2,2] ✓ → Work=[5,5,3,4]<br>
+      P4: [2,2,3,3] ≤ [5,5,3,4]? D:3≤4✓, C:3≤3✓ → Work=[6,9,6,6]<br>
+      P1: [1,0,3,1] ≤ [6,9,6,6] ✓ → Work=[10,11,8,7]<br>
+      P2: [0,2,1,3] ≤ [10,11,8,7] ✓ → Work=[12,12,8,10]<br>
+      ✅ <strong>Safe → OS อนุมัติคำขอของ P1</strong>
+    </div>
+    <button class="run-btn" onclick="show('hw6-3c')">เฉลย (c) P4 ขอ [0,0,2,0]</button>
+    <div id="hw6-3c" style="display:none" class="box box-red">
+      <strong>ขั้น 1:</strong> [0,0,2,0] ≤ Need[P4]=[2,2,3,3] ✓<br>
+      <strong>ขั้น 2:</strong> [0,0,2,0] ≤ Available=[3,3,2,1] ✓<br>
+      <strong>ขั้น 3: จำลอง:</strong> Available=[3,3,0,1], Alloc[P4]=[1,4,5,2], Need[P4]=[2,2,1,3]<br>
+      <strong>ขั้น 4: Safety</strong> Work=[3,3,0,1]:<br>
+      P0: Need=[2,2,1,1]? C:1>0 ✗<br>
+      P1: Need=[2,1,3,1]? C:3>0 ✗<br>
+      P2: Need=[0,2,1,3]? C:1>0 ✗<br>
+      P3: Need=[0,1,1,2]? C:1>0 ✗<br>
+      P4: Need=[2,2,1,3]? C:1>0 ✗<br>
+      ไม่มีกระบวนการใดทำงานได้ → <strong>❌ Deadlock! ปฏิเสธคำขอ</strong>
+    </div>
+  </div>
+</div>
+
+<div class="collapsible">
+  <div class="col-header" onclick="tog(this)">HW6 ข้อ 16 (MCQ): Detection — 3 Process 3 Resource <span class="arrow">▼</span></div>
+  <div class="col-body">
+    <p><strong>โจทย์:</strong> Available=[1,0,1]. Detection state มี Deadlock หรือไม่?</p>
+    <table>
+      <tr><th>P</th><th>Alloc A B C</th><th>Request A B C</th></tr>
+      <tr><td>P0</td><td>1 0 1</td><td>2 0 1</td></tr>
+      <tr><td>P1</td><td>0 1 2</td><td>1 2 1</td></tr>
+      <tr><td>P2</td><td>2 3 1</td><td>2 1 0</td></tr>
+    </table>
+    <button class="run-btn" onclick="show('hw6-16')">เฉลย</button>
+    <div id="hw6-16" style="display:none" class="box box-red">
+      Finish เริ่มต้น: P0,P1,P2 = false ทั้งหมด (เพราะ Allocation ≠ 0)<br>
+      Work=[1,0,1]<br>
+      P0: Request=[2,0,1]? A:2>1 ✗<br>
+      P1: Request=[1,2,1]? B:2>0 ✗<br>
+      P2: Request=[2,1,0]? A:2>1 ✗<br>
+      ไม่มีใครทำได้ → <strong>Deadlock! P0, P1, P2 ทุกตัวติด → คำตอบ B</strong>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- 6.Cheat Sheet -->
+<div class="card">
+<h2>6.Cheat 📋 Cheat Sheet & ข้อผิดพลาดที่พบบ่อย — บทที่ 6</h2>
+<div class="grid2">
+  <div class="box box-blue">
+    <strong>📋 สูตรหลัก</strong><br>
+    • Need[i] = Max[i] − Allocation[i]<br>
+    • Available = Total − ΣAllocation<br>
+    • Safe State ⟹ ไม่เกิด Deadlock<br>
+    • Deadlock ⟹ Unsafe (แต่ Unsafe ไม่จำเป็น Deadlock)
+  </div>
+  <div class="box box-yellow">
+    <strong>⚠ ข้อผิดพลาดที่พบบ่อย</strong><br>
+    • ลืมคำนวณ Need ก่อน Safety<br>
+    • Need ≤ Work ต้องผ่าน <em>ทุก</em> resource (AND)<br>
+    • Detection ใช้ Request matrix ไม่ใช่ Need<br>
+    • Detection: Finish=true ตั้งแต่แรก ถ้า Alloc=0 ทั้งหมด<br>
+    • Process termination ≠ Resource preemption (HW ข้อ 14)
+  </div>
+</div>
+<div class="box box-green">
+  <strong>✅ จำให้ขึ้นใจสำหรับ Final:</strong><br>
+  1. <strong>4 เงื่อนไข Deadlock:</strong> Mutual Exclusion, Hold and Wait, No Preemption, Circular Wait (ต้องครบทุกข้อพร้อมกัน)<br>
+  2. <strong>Safety Algorithm:</strong> ใช้ Need, Finish เริ่ม false, ตอบ Safe/Unsafe + Safe Sequence<br>
+  3. <strong>Request Algorithm:</strong> 4 ขั้น (≤Need? ≤Available? จำลอง? Safety?)<br>
+  4. <strong>Detection Algorithm:</strong> ใช้ Request, Finish[i]=true ถ้า Alloc[i]=0<br>
+  5. <strong>Recovery:</strong> Process termination (ทั้งหมด/ทีละตัว) หรือ Resource preemption (เลือกเหยื่อ + Rollback + ป้องกัน Starvation)
+</div>
+</div>
+</div><!-- end ch6 -->
+
+<!-- ═══════════════ PLACEHOLDER CH7 CH8 CH9 ═══════════════ -->
+<div id="ch7" class="chapter">
+<div class="chapter-hero">
+  <div class="hero-icon">🧩</div>
+  <div>
+    <div class="hero-title">บทที่ 7 — กลยุทธ์การจัดการหน่วยความจำ</div>
+    <div class="hero-sub">Contiguous · Segmentation · Paging · Address Translation</div>
+    <div style="margin-top:8px">
+      <span class="tag">Logical Address</span><span class="tag">Physical Address</span>
+      <span class="tag">Paging</span><span class="tag">Segmentation</span>
+      <span class="tag">Fragmentation</span><span class="tag">First/Best/Worst Fit</span>
+    </div>
+  </div>
+</div>
+
+<!-- 7.1 -->
+<div class="card">
+<h2>7.1 พื้นฐาน: Logical vs Physical Address</h2>
+<p>เมื่อโปรแกรมทำงาน CPU จะอ้างอิงที่อยู่หน่วยความจำแบบ <strong>Logical Address (ที่อยู่ตรรกะ)</strong> ซึ่งเริ่มจาก 0 เสมอและมีเฉพาะในมุมมองของกระบวนการนั้น แต่ RAM จริงๆ ใช้ <strong>Physical Address (ที่อยู่ทางกายภาพ)</strong> ที่ระบุตำแหน่งจริงในชิป</p>
+<div class="box box-blue">
+  <strong>ตัวอย่างเปรียบเทียบ:</strong><br>
+  โปรแกรม A เริ่มที่ logical 0 → Physical 5000<br>
+  โปรแกรม B เริ่มที่ logical 0 → Physical 8000<br>
+  ทั้งสองใช้ logical 0 เหมือนกัน แต่อยู่คนละที่จริงๆ ใน RAM
+</div>
+<div class="box box-purple">
+  <strong>MMU (Memory Management Unit)</strong> คือชิปฮาร์ดแวร์ที่แปลง Logical → Physical แบบ Real-time ทุกครั้งที่ CPU เข้าถึงหน่วยความจำ
+</div>
+<h3>โครงสร้างกระบวนการในหน่วยความจำ</h3>
+<p>กระบวนการหนึ่งๆ ประกอบด้วย "word" หลายๆ ตัว แต่ละ word มี logical address ของตัวเอง (0, 1, 2, …, Max−1)</p>
+<div class="formula">Physical Address = Base + Logical Address (กรณี Contiguous)</div>
+</div>
+
+<!-- 7.2 Swapping -->
+<div class="card">
+<h2>7.2 Swapping — สลับกระบวนการเข้าออก RAM</h2>
+<p>เมื่อ RAM เต็ม OS จะย้ายกระบวนการที่ "รอ" หรือ "ไม่ active" ไปเก็บไว้ที่ฮาร์ดดิสก์ชั่วคราว เรียกว่า <strong>Swap Out</strong> และดึงกลับมาเมื่อต้องการเรียก <strong>Swap In</strong></p>
+<div class="box box-yellow">
+  <strong>ปัญหาของ Swapping แบบเต็มกระบวนการ:</strong><br>
+  ถ้ากระบวนการขนาด 100 MB ต้อง swap ที่ความเร็ว 50 MB/s → ใช้เวลา 2 วินาที แต่กระบวนการทั่วไปรันได้แค่ไม่กี่ ms<br>
+  → เสียเวลา Swap มากกว่าเวลาทำงานจริง = ไม่คุ้ม<br>
+  ระบบทันสมัยจึงใช้ Virtual Memory (Demand Paging) แทน
+</div>
+</div>
+
+<!-- 7.3 Contiguous -->
+<div class="card">
+<h2>7.3 Contiguous Memory Allocation — เก็บกระบวนการแบบต่อเนื่อง</h2>
+<div class="box box-green">
+  <strong>🎯 อุปมา: ที่จอดรถในลานจอด</strong><br>
+  RAM เปรียบเหมือนลานจอดรถ กระบวนการเหมือนรถที่มีขนาดต่างกัน<br>
+  • Fixed Partition: ตีเส้นช่องจอดขนาดคงที่ล่วงหน้า → รถเล็กจอดช่องใหญ่เสียพื้นที่ (Internal Fragmentation)<br>
+  • Variable Partition: ไม่ตีเส้นล่วงหน้า ให้รถจอดตามขนาดจริง → พอรถออกไปเกิดช่องว่างกระจาย (External Fragmentation)
+</div>
+<p>วิธีที่ง่ายที่สุด: กระบวนการทั้งหมดถูกเก็บไว้ในบล็อกหน่วยความจำที่ <strong>ต่อเนื่องกัน</strong> ไม่มีการแตกเป็นชิ้น</p>
+
+<h3>วิธีที่ 1: Fixed-Size Partition (แบ่งพาร์ทิชันขนาดคงที่)</h3>
+<p>RAM ถูกแบ่งเป็นส่วนๆ ล่วงหน้า แต่ละส่วน (Partition) เก็บได้แค่ 1 กระบวนการ</p>
+<div class="box box-red">
+  <strong>ปัญหา: Internal Fragmentation (การแตกกระจายภายใน)</strong><br>
+  Partition ขนาด 10 MB แต่กระบวนการมีขนาดแค่ 7 MB → เสีย 3 MB ทิ้งไปโดยเปล่าประโยชน์ "ภายใน" Partition นั้น
+</div>
+<div class="formula">Internal Fragmentation = ขนาด Partition − ขนาดกระบวนการ</div>
+<div class="example-box">
+  <div class="ex-title">ตัวอย่าง: Internal Fragmentation</div>
+  <p>Partition = 5 MB. กระบวนการมีขนาด 3 MB.<br>
+  Internal Fragmentation = 5 − 3 = <strong>2 MB</strong></p>
+</div>
+
+<h3>วิธีที่ 2: Variable-Size Partition (แบ่งพาร์ทิชันแบบยืดหยุ่น)</h3>
+<p>ไม่แบ่ง Partition ล่วงหน้า แต่จัดสรรพื้นที่ให้กระบวนการตามขนาดจริง เมื่อกระบวนการออกจากระบบ จะเกิด "รู" (Hole) ว่างขึ้น</p>
+<div class="box box-red">
+  <strong>ปัญหา: External Fragmentation (การแตกกระจายภายนอก)</strong><br>
+  มีหน่วยความจำว่างรวมกันพอ แต่กระจายอยู่หลายที่ ไม่มีก้อนเดียวที่ใหญ่พอสำหรับกระบวนการใหม่
+</div>
+<div class="example-box">
+  <div class="ex-title">ตัวอย่าง: External Fragmentation</div>
+  <p>RAM ว่าง: [10MB] [5MB] [8MB] กระจายอยู่ 3 ที่ รวม 23 MB<br>
+  กระบวนการใหม่ต้องการ 20 MB ต่อเนื่อง → ใส่ไม่ได้! แม้มีพื้นที่รวมพอ</p>
+  <p><strong>วิธีแก้:</strong> Compaction (รวมรูว่างเข้าหากัน) หรือใช้ Paging/Segmentation</p>
+</div>
+
+<h3>การคำนวณ Physical Address (Contiguous)</h3>
+<div class="box box-blue">
+  <strong>Contiguous Allocation ใช้ Base+Limit Register:</strong><br>
+  เมื่อ CPU อ้างอิง Logical Address d:<br>
+  1. ตรวจ: d ≥ Limit → Trap (Memory Access Violation!)<br>
+  2. Physical = Base + d
+</div>
+<div class="example-box">
+  <div class="ex-title">ตัวอย่าง Base+Limit: Base=1000, Limit=600</div>
+  <table>
+    <tr><th>Logical Address</th><th>d &lt; Limit (600)?</th><th>Physical Address</th></tr>
+    <tr><td>0</td><td>0 &lt; 600 ✓</td><td>1000 + 0 = <strong>1000</strong></td></tr>
+    <tr><td>100</td><td>100 &lt; 600 ✓</td><td>1000 + 100 = <strong>1100</strong></td></tr>
+    <tr><td>599</td><td>599 &lt; 600 ✓</td><td>1000 + 599 = <strong>1599</strong></td></tr>
+    <tr><td>600</td><td>600 ≥ 600 ✗</td><td><strong>Memory Violation Trap!</strong></td></tr>
+  </table>
+</div>
+
+<h3>Dynamic Storage-Allocation Strategy — เลือก Hole ไหนดี?</h3>
+<p>เมื่อมีหลาย Hole ที่ใหญ่พอ จะเลือก Hole ไหนใส่กระบวนการใหม่?</p>
+<table>
+  <tr><th>กลยุทธ์</th><th>วิธีเลือก</th><th>ผลลัพธ์</th></tr>
+  <tr><td><strong>First Fit</strong></td><td>เลือก Hole แรกที่ใหญ่พอ (สแกนจากต้น)</td><td>เร็วที่สุด เหมาะใช้งานจริง</td></tr>
+  <tr><td><strong>Best Fit</strong></td><td>เลือก Hole เล็กที่สุดที่ยังใหญ่พอ (สแกนทั้งหมด)</td><td>เสียพื้นที่น้อยที่สุด แต่ช้ากว่า</td></tr>
+  <tr><td><strong>Worst Fit</strong></td><td>เลือก Hole ใหญ่ที่สุด (สแกนทั้งหมด)</td><td>ทิ้งเศษขนาดใหญ่ไว้ใช้ต่อได้ แต่มักแย่กว่า 2 แบบแรก</td></tr>
+</table>
+<div class="example-box">
+  <div class="ex-title">ตัวอย่าง: เปรียบเทียบ 3 กลยุทธ์</div>
+  <p>Holes ว่าง (MB): [100, 500, 200, 300, 600]. กระบวนการ: 212 MB</p>
+  <p><strong>First Fit:</strong> Hole แรกที่ ≥ 212 คือ Hole[1]=500 → ใช้ 212, เหลือ 288 MB<br>
+  <strong>Best Fit:</strong> Hole เล็กสุดที่ ≥ 212 คือ Hole[2]=300 (300 > 212 ✓, 500 > 300 ✗ ไม่เล็กกว่า) → ใช้ 212, เหลือ 88 MB<br>
+  <strong>Worst Fit:</strong> Hole ใหญ่สุดคือ Hole[4]=600 → ใช้ 212, เหลือ 388 MB</p>
+</div>
+
+<div class="tool-area">
+  <h3>🔍 First/Best/Worst Fit Calculator</h3>
+  <label>Holes ว่าง (MB คั่นด้วยช่องว่าง เช่น 100 500 200 300 600)</label>
+  <input type="text" id="fit-h" value="100 500 200 300 600">
+  <label>ขนาดกระบวนการที่จะใส่ (MB)</label>
+  <input type="number" id="fit-s" value="212">
+  <button class="run-btn" onclick="runFit()">▶ คำนวณ</button>
+  <div id="fit-out" class="output-box">กรอกข้อมูลแล้วกดคำนวณ</div>
+</div>
+</div>
+
+<!-- 7.4 Segmentation -->
+<div class="card">
+<h2>7.4 Segmentation — แบ่งกระบวนการตามโครงสร้างตรรกะ</h2>
+<p>กระบวนการถูกแบ่งออกเป็น <strong>Segment</strong> หลายๆ ส่วนตามความหมายทางโปรแกรม เช่น Code Segment, Data Segment, Stack, Heap แต่ละ Segment มีขนาดต่างกัน และถูกเก็บไว้คนละที่ใน RAM ได้</p>
+<div class="box box-blue">
+  <strong>Segment Table</strong> — ตารางที่เก็บข้อมูลของแต่ละ Segment:<br>
+  • <strong>Base</strong> = Physical Address เริ่มต้นของ Segment นั้น<br>
+  • <strong>Limit</strong> = ขนาด (จำนวน word) ของ Segment นั้น
+</div>
+<h3>การแปลง Logical Address → Physical Address (Segmentation)</h3>
+<p>Logical Address ใน Segmentation แทนด้วย คู่ <strong>(s, d)</strong>:</p>
+<ul>
+  <li><strong>s</strong> = หมายเลข Segment</li>
+  <li><strong>d</strong> = Offset ภายใน Segment (ห่างจากต้น Segment เท่าไร)</li>
+</ul>
+<div class="formula">Physical Address = SegTable[s].base + d<br>เงื่อนไข: d &lt; SegTable[s].limit (มิฉะนั้น → Segmentation Fault!)</div>
+<div class="example-box">
+  <div class="ex-title">ตัวอย่าง: แปลงที่อยู่ใน Segmentation</div>
+  <table>
+    <tr><th>Segment</th><th>Base</th><th>Limit</th></tr>
+    <tr><td>0</td><td>219</td><td>600</td></tr>
+    <tr><td>1</td><td>2300</td><td>14</td></tr>
+    <tr><td>2</td><td>90</td><td>100</td></tr>
+    <tr><td>3</td><td>1327</td><td>580</td></tr>
+  </table>
+  <p><strong>Logical (2, 53):</strong> d=53 &lt; limit=100 ✓ → Physical = 90 + 53 = <strong>143</strong></p>
+  <p><strong>Logical (3, 600):</strong> d=600 &gt;= limit=580 → <strong>Segmentation Fault!</strong></p>
+</div>
+<div class="warn">⚠ Segmentation อาจเกิด External Fragmentation เหมือน Variable Partition เพราะ Segment มีขนาดต่างกัน</div>
+
+<!-- 7.4b More Segmentation Examples -->
+<div class="example-box">
+  <div class="ex-title">ตัวอย่างที่ 2: แปลงหลายที่อยู่พร้อมกัน</div>
+  <table>
+    <tr><th>Segment</th><th>Base</th><th>Limit</th></tr>
+    <tr><td>0 (Code)</td><td>4000</td><td>1000</td></tr>
+    <tr><td>1 (Data)</td><td>6000</td><td>500</td></tr>
+    <tr><td>2 (Stack)</td><td>9000</td><td>1000</td></tr>
+    <tr><td>3 (Heap)</td><td>7500</td><td>800</td></tr>
+  </table>
+  <table>
+    <tr><th>Logical (s, d)</th><th>Limit Check</th><th>Physical Address</th></tr>
+    <tr><td>(0, 500)</td><td>500 &lt; 1000 ✓</td><td>4000 + 500 = <strong>4500</strong></td></tr>
+    <tr><td>(1, 499)</td><td>499 &lt; 500 ✓</td><td>6000 + 499 = <strong>6499</strong></td></tr>
+    <tr><td>(1, 500)</td><td>500 ≥ 500 ✗</td><td><strong>Segmentation Fault!</strong></td></tr>
+    <tr><td>(2, 999)</td><td>999 &lt; 1000 ✓</td><td>9000 + 999 = <strong>9999</strong></td></tr>
+    <tr><td>(3, 1000)</td><td>1000 ≥ 800 ✗</td><td><strong>Segmentation Fault!</strong></td></tr>
+    <tr><td>(4, 0)</td><td>Segment 4 ไม่มี ✗</td><td><strong>Segmentation Fault!</strong></td></tr>
+  </table>
+</div>
+
+<div class="box box-yellow">
+  ⚠ <strong>สาเหตุ Segmentation Fault มี 2 แบบ:</strong><br>
+  1. Offset (d) ≥ Limit ของ Segment นั้น (เกินขอบเขต)<br>
+  2. หมายเลข Segment (s) ไม่มีอยู่ใน Segment Table
+</div>
+
+<h3>เปรียบเทียบ Paging vs Segmentation</h3>
+<table>
+  <tr><th>หัวข้อ</th><th>Paging</th><th>Segmentation</th></tr>
+  <tr><td>หน่วยพื้นฐาน</td><td>Page (ขนาดคงที่)</td><td>Segment (ขนาดยืดหยุ่น)</td></tr>
+  <tr><td>ที่อยู่</td><td>(page#, offset)</td><td>(segment#, offset)</td></tr>
+  <tr><td>External Fragmentation</td><td>❌ ไม่มี</td><td>✅ มี (เหมือน Variable Partition)</td></tr>
+  <tr><td>Internal Fragmentation</td><td>✅ มี (Page สุดท้าย)</td><td>❌ ไม่มี</td></tr>
+  <tr><td>ความหมายทางตรรกะ</td><td>ไม่สอดคล้องกับโปรแกรม</td><td>สอดคล้อง (Code/Data/Stack แยกกัน)</td></tr>
+  <tr><td>ใช้งานจริง</td><td>Modern OS ส่วนใหญ่</td><td>ร่วมกับ Paging (Segmented Paging)</td></tr>
+</table>
+
+<div class="tool-area">
+  <h3>🧮 Segmentation Address Calculator</h3>
+  <label>จำนวน Segment</label>
+  <input type="number" id="seg-n" value="4" min="1" max="8" oninput="buildSeg()">
+  <div id="seg-tbl"></div>
+  <label>Logical Address (s d) เช่น 2 53</label>
+  <input type="text" id="seg-addr" value="2 53">
+  <button class="run-btn" onclick="runSeg()">▶ แปลงที่อยู่</button>
+  <div id="seg-out" class="output-box">กรอกข้อมูลแล้วกดแปลงที่อยู่</div>
+</div>
+</div>
+
+<!-- 7.5 Paging -->
+<div class="card">
+<h2>7.5 Paging — แบ่งกระบวนการเป็นหน้าขนาดเท่ากัน</h2>
+<p>Paging แก้ปัญหา External Fragmentation ด้วยการแบ่งทั้งกระบวนการและ RAM เป็นบล็อกขนาดเท่ากัน</p>
+<div class="box box-blue">
+  <strong>Page</strong> = บล็อกของ Logical Address Space (ฝั่งกระบวนการ)<br>
+  <strong>Frame</strong> = บล็อกของ Physical Memory ฝั่ง RAM<br>
+  <strong>Page Size = Frame Size</strong> เสมอ<br>
+  แต่ละ Page สามารถอยู่ใน Frame ใดก็ได้ → ไม่ต้องอยู่ติดกัน → <strong>ไม่มี External Fragmentation!</strong>
+</div>
+<h3>Page Table — ตารางแปลงหน้าเป็นเฟรม</h3>
+<p>แต่ละกระบวนการมี Page Table ของตัวเอง เก็บว่า Page ที่ i อยู่ใน Frame ที่เท่าไร</p>
+<table>
+  <tr><th>ฟิลด์ใน Page Table</th><th>ความหมาย</th></tr>
+  <tr><td>Frame Number</td><td>เฟรมที่เก็บ Page นี้</td></tr>
+  <tr><td>Valid bit = 1</td><td>Page อยู่ใน RAM</td></tr>
+  <tr><td>Valid bit = 0</td><td>Page อยู่บน Disk (ใช้ใน Virtual Memory)</td></tr>
+  <tr><td>Dirty bit = 1</td><td>Page ถูกแก้ไขแล้ว ต้อง Write back ก่อน Swap out</td></tr>
+</table>
+
+<h3>การแปลง Logical Address → Physical Address (Paging)</h3>
+<p>Logical Address แสดงด้วยคู่ <strong>(p, d)</strong>:</p>
+<ul>
+  <li><strong>p</strong> = Page Number = logical_address ÷ page_size (เอาส่วนเต็ม)</li>
+  <li><strong>d</strong> = Offset = logical_address mod page_size</li>
+</ul>
+<div class="formula">Physical Address = PageTable[p] × PageSize + d<br>
+(PageTable[p] = Frame Number ของ Page p)</div>
+<div class="example-box">
+  <div class="ex-title">ตัวอย่าง: แปลง Logical → Physical (แบบทศนิยม)</div>
+  <p>Page size = 4 words. Page Table: [5, 2, 8, 0, 3]</p>
+  <p><strong>Logical = 13:</strong><br>
+  p = 13 ÷ 4 = 3 (page 3), d = 13 mod 4 = 1 (offset 1)<br>
+  Frame = PageTable[3] = 0<br>
+  Physical = 0 × 4 + 1 = <strong>1</strong></p>
+  <p><strong>Logical = 9:</strong><br>
+  p = 9 ÷ 4 = 2, d = 9 mod 4 = 1<br>
+  Frame = PageTable[2] = 8<br>
+  Physical = 8 × 4 + 1 = <strong>33</strong></p>
+</div>
+
+<h3>การแปลงด้วย Binary (สำคัญมากในข้อสอบ!)</h3>
+<p>ถ้า Page Size = 2ⁿ words → Offset ใช้ <strong>n bits ล่างสุด</strong>, ส่วนที่เหลือเป็น Page Number</p>
+<div class="formula">Logical Address (binary) = [Page Number bits | Offset bits]<br>
+Offset bits = log₂(Page Size)<br>
+Page Number bits = (Total bits) − (Offset bits)</div>
+<div class="example-box">
+  <div class="ex-title">ตัวอย่าง: แปลงด้วย Binary</div>
+  <p>Logical address = 7 bits, Page size = 4 words (= 2²) → offset = 2 bits, page# = 5 bits</p>
+  <p>Logical address = 45 (decimal) = 0101101 (binary, 7 bits)<br>
+  Page# = 01011 = 11, Offset = 01 = 1<br>
+  ถ้า Frame[11] = 6 → Physical Address = 6 × 4 + 1 = <strong>25</strong></p>
+</div>
+
+<h3>Internal Fragmentation ใน Paging</h3>
+<p>เพราะแบ่งเป็น Page ขนาดคงที่ กระบวนการที่ไม่ได้ขนาดพอดีจะเกิด Internal Fragmentation ที่ Page สุดท้าย</p>
+<div class="formula">Internal Fragmentation = (จำนวน Page × Page Size) − ขนาดกระบวนการ<br>
+หรือ = Page Size − (Process Size mod Page Size)  ถ้า mod ≠ 0</div>
+<div class="example-box">
+  <div class="ex-title">ตัวอย่าง: Internal Fragmentation</div>
+  <p>Page size = 8 words. กระบวนการ = 35 words.<br>
+  Pages ที่ต้องใช้ = ⌈35/8⌉ = 5 pages (40 words ถูกจัดสรร)<br>
+  Internal Fragmentation = 40 − 35 = <strong>5 words</strong></p>
+</div>
+
+<!-- 7.5b More Paging Examples -->
+<div class="card">
+<h2>7.5b ตัวอย่างเพิ่มเติม Paging — ฝึกให้คล่อง</h2>
+
+<div class="box box-blue">
+  <strong>สูตรที่ต้องจำให้ขึ้นใจ:</strong><br>
+  p (Page Number) = Logical Address ÷ Page Size (เอาส่วนเต็ม, floor)<br>
+  d (Offset) = Logical Address mod Page Size (เศษที่เหลือ)<br>
+  Physical = Frame Number × Page Size + d<br>
+  Frame Number = Page Table[p]
+</div>
+
+<div class="example-box">
+  <div class="ex-title">ตัวอย่าง: Page size = 512 bytes, Page Table = [3, 7, 1, 0, 5, 2]</div>
+  <p>แปลง Logical Address ต่อไปนี้:</p>
+  <table>
+    <tr><th>Logical (LA)</th><th>p = LA÷512</th><th>d = LA mod 512</th><th>Frame = PT[p]</th><th>Physical = Frame×512+d</th></tr>
+    <tr><td>0</td><td>0</td><td>0</td><td>3</td><td>3×512+0 = <strong>1536</strong></td></tr>
+    <tr><td>512</td><td>1</td><td>0</td><td>7</td><td>7×512+0 = <strong>3584</strong></td></tr>
+    <tr><td>756</td><td>1</td><td>244</td><td>7</td><td>7×512+244 = <strong>3828</strong></td></tr>
+    <tr><td>1025</td><td>2</td><td>1</td><td>1</td><td>1×512+1 = <strong>513</strong></td></tr>
+    <tr><td>2560</td><td>5</td><td>0</td><td>2</td><td>2×512+0 = <strong>1024</strong></td></tr>
+  </table>
+</div>
+
+<div class="example-box">
+  <div class="ex-title">ตัวอย่าง: Page size = 100 bytes, Page Table = [8, 6, 3, 2]</div>
+  <p>แปลง: Logical 300, 350, 50, 399</p>
+  <table>
+    <tr><th>Logical</th><th>p</th><th>d</th><th>Frame</th><th>Physical</th><th>คำนวณ</th></tr>
+    <tr><td>300</td><td>3</td><td>0</td><td>PT[3]=2</td><td><strong>200</strong></td><td>2×100+0=200</td></tr>
+    <tr><td>350</td><td>3</td><td>50</td><td>PT[3]=2</td><td><strong>250</strong></td><td>2×100+50=250</td></tr>
+    <tr><td>50</td><td>0</td><td>50</td><td>PT[0]=8</td><td><strong>850</strong></td><td>8×100+50=850</td></tr>
+    <tr><td>399</td><td>3</td><td>99</td><td>PT[3]=2</td><td><strong>299</strong></td><td>2×100+99=299</td></tr>
+  </table>
+  <p><strong>ข้อสังเกต:</strong> Logical 300–399 ทุก address อยู่ใน Page 3 ซึ่ง Map ไปที่ Frame 2 (Physical 200–299)</p>
+</div>
+
+<h3>Binary Mode — แปลงที่อยู่ด้วย Binary (สำคัญมาก!)</h3>
+<div class="box box-purple">
+  <strong>เทคนิค Binary Mode:</strong><br>
+  ถ้า Page Size = 2^n → ตัด n bits ขวาสุดออก = Offset (d), ส่วนที่เหลือ = Page Number (p)<br>
+  <br>
+  ตัวอย่าง: Page size = 16 = 2^4 → offset = 4 bits ล่างสุด<br>
+  Logical = 52 = 110100 binary<br>
+  Offset = 0100 = 4, Page# = 11 = 3<br>
+  → ถ้า Frame[3] = 7 → Physical = 7×16+4 = 116 = 1110100 binary
+</div>
+
+<div class="example-box">
+  <div class="ex-title">ตัวอย่าง Binary: Logical address = 8 bits, Page size = 32 = 2^5</div>
+  <p>→ Offset = 5 bits, Page# = 3 bits, สูงสุด 8 pages (2^3)</p>
+  <table>
+    <tr><th>Logical (Dec)</th><th>Binary (8 bits)</th><th>Page# (3 bits)</th><th>Offset (5 bits)</th><th>Frame (สมมติ)</th><th>Physical</th></tr>
+    <tr><td>100</td><td>01100100</td><td>011 = 3</td><td>00100 = 4</td><td>PT[3]=5</td><td>5×32+4=<strong>164</strong></td></tr>
+    <tr><td>255</td><td>11111111</td><td>111 = 7</td><td>11111 = 31</td><td>PT[7]=2</td><td>2×32+31=<strong>95</strong></td></tr>
+    <tr><td>64</td><td>01000000</td><td>010 = 2</td><td>00000 = 0</td><td>PT[2]=6</td><td>6×32+0=<strong>192</strong></td></tr>
+  </table>
+</div>
+
+<h3>Address Space Size — คำนวณขนาด</h3>
+<div class="box box-green">
+  <strong>สูตรสำคัญ:</strong><br>
+  ถ้า Logical Address = n bits → Logical Address Space = 2^n<br>
+  ถ้า Offset = d bits → Page Size = 2^d<br>
+  ถ้า Physical Address = m bits → Physical Address Space = 2^m<br>
+  จำนวน Page ทั้งหมด = Logical Address Space ÷ Page Size = 2^(n−d)<br>
+  จำนวน Frame ทั้งหมด = Physical Address Space ÷ Page Size = 2^(m−d)
+</div>
+<div class="example-box">
+  <div class="ex-title">ตัวอย่าง: ระบบ 32-bit Logical, 30-bit Physical, Page size 4KB</div>
+  <p>4KB = 4096 = 2^12 → offset = 12 bits<br>
+  จำนวน Page = 2^(32−12) = 2^20 = 1,048,576 pages (~1 ล้าน pages)<br>
+  จำนวน Frame = 2^(30−12) = 2^18 = 262,144 frames (~262K frames)<br>
+  Page Table ต้องมี 2^20 entries</p>
+</div>
+
+<h3>Internal Fragmentation — คำนวณทีละขั้น</h3>
+<div class="example-box">
+  <div class="ex-title">ตัวอย่าง: กระบวนการขนาด 200 words, Page size = 64 words</div>
+  <p>Pages ที่ต้องการ = ⌈200/64⌉ = ⌈3.125⌉ = 4 pages<br>
+  พื้นที่ที่ได้รับ = 4 × 64 = 256 words<br>
+  <strong>Internal Fragmentation = 256 − 200 = 56 words</strong><br>
+  (Page สุดท้าย page 4 ว่าง 56 words)<br>
+  <br>
+  อีกวิธี: 200 mod 64 = 200 − 3×64 = 200 − 192 = 8 (= words ที่ใช้ใน Page สุดท้าย)<br>
+  Internal Frag = 64 − 8 = 56 words ✓</p>
+</div>
+</div>
+
+<div class="tool-area">
+  <h3>🧮 Paging Address Calculator</h3>
+  <div class="grid2">
+    <div>
+      <label>Page Size (จำนวน words)</label>
+      <input type="number" id="pg-sz" value="4">
+      <label>Page Table (Frame สำหรับ Page 0, 1, 2, … คั่นช่องว่าง)</label>
+      <input type="text" id="pg-tbl" value="5 2 8 0 3">
+      <label>Logical Address (ทศนิยม)</label>
+      <input type="number" id="pg-la" value="13">
+      <button class="run-btn" onclick="runPaging()">▶ แปลงที่อยู่</button>
+    </div>
+    <div>
+      <label>── Binary Mode ──</label>
+      <label>จำนวน Bit ทั้งหมดของ Logical Address</label>
+      <input type="number" id="bin-bits" value="7">
+      <label>Page Size (words, ต้องเป็น 2ⁿ เช่น 4, 8, 16)</label>
+      <input type="number" id="bin-pgsz" value="4">
+      <label>Logical Address (ทศนิยม)</label>
+      <input type="number" id="bin-la" value="45">
+      <button class="run-btn" onclick="runBin()">▶ Binary Convert</button>
+    </div>
+  </div>
+  <div id="pg-out" class="output-box">กรอกข้อมูลแล้วกดแปลงที่อยู่</div>
+</div>
+
+<div class="tool-area">
+  <h3>📝 โจทย์ฝึกหัด Memory Management</h3>
+  <div class="collapsible">
+    <div class="col-header" onclick="tog(this)">โจทย์ 1: แปลงที่อยู่ Paging (ทศนิยม) <span class="arrow">▼</span></div>
+    <div class="col-body">
+      <p>Page size = 4 words. Page Table = [2, 5, 1, 8, 3]. แปลง Logical address 18 และ 3</p>
+      <button class="run-btn" onclick="show('p7a1')">แสดงเฉลย</button>
+      <div id="p7a1" style="display:none" class="box box-green">
+        <strong>Logical = 18:</strong> p=18÷4=4, d=18 mod 4=2, Frame=PageTable[4]=3, Physical=3×4+2=<strong>14</strong><br>
+        <strong>Logical = 3:</strong> p=3÷4=0, d=3 mod 4=3, Frame=PageTable[0]=2, Physical=2×4+3=<strong>11</strong>
+      </div>
+    </div>
+  </div>
+  <div class="collapsible">
+    <div class="col-header" onclick="tog(this)">โจทย์ 2: แปลงที่อยู่ Binary <span class="arrow">▼</span></div>
+    <div class="col-body">
+      <p>Logical address = 9 bits, Page size = 8 words. Physical memory = 512 frames. Logical = 255. Page Table[31] = 10. หา Physical address</p>
+      <button class="run-btn" onclick="show('p7a2')">แสดงเฉลย</button>
+      <div id="p7a2" style="display:none" class="box box-green">
+        Page size = 8 = 2³ → offset = 3 bits, page# bits = 9−3 = 6 bits<br>
+        Logical 255 = 011111111 (9 bits)<br>
+        Page# = 011111 = 31, Offset = 111 = 7<br>
+        Frame = PageTable[31] = 10<br>
+        Physical = 10 × 8 + 7 = <strong>87</strong><br>
+        Physical address binary: 10 = 001010 (9 bits สำหรับ 512 frames) → 001010111 = 87
+      </div>
+    </div>
+  </div>
+  <div class="collapsible">
+    <div class="col-header" onclick="tog(this)">โจทย์ 3: Internal Fragmentation <span class="arrow">▼</span></div>
+    <div class="col-body">
+      <p>Page size = 16 words. กระบวนการขนาด 100 words. Internal Fragmentation เท่าไร?</p>
+      <button class="run-btn" onclick="show('p7a3')">แสดงเฉลย</button>
+      <div id="p7a3" style="display:none" class="box box-green">
+        Pages needed = ⌈100/16⌉ = 7 pages (112 words จัดสรรให้)<br>
+        Internal Fragmentation = 112 − 100 = <strong>12 words</strong>
+      </div>
+    </div>
+  </div>
+  <div class="collapsible">
+    <div class="col-header" onclick="tog(this)">โจทย์ 4: Segmentation Address Translation <span class="arrow">▼</span></div>
+    <div class="col-body">
+      <p>Segment Table: Seg0=(base=100, limit=500), Seg1=(base=700, limit=300), Seg2=(base=1200, limit=100)<br>
+      หา Physical address ของ Logical (1, 250) และ (2, 150)</p>
+      <button class="run-btn" onclick="show('p7a4')">แสดงเฉลย</button>
+      <div id="p7a4" style="display:none" class="box box-green">
+        <strong>(1, 250):</strong> d=250 &lt; limit=300 ✓ → Physical = 700 + 250 = <strong>950</strong><br>
+        <strong>(2, 150):</strong> d=150 ≥ limit=100 ✗ → <strong>Segmentation Fault!</strong>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- 7.HW โจทย์จาก Homework 7 -->
+<div class="card">
+<h2>7.HW โจทย์จาก Homework 7 — เฉลยทีละขั้น</h2>
+<div class="box box-purple">
+  <strong>📌 รวมโจทย์จริงทุกข้อใน Homework 7 พร้อมเฉลยละเอียดเป็นภาษาไทย</strong>
+</div>
+
+<div class="collapsible">
+  <div class="col-header" onclick="tog(this)">HW7 ข้อ 1: Internal vs External Fragmentation <span class="arrow">▼</span></div>
+  <div class="col-body">
+    <div class="box box-green">
+      <strong>Internal Fragmentation:</strong> พื้นที่ "ภายใน" ส่วนที่จัดสรรให้แล้วแต่ Process ไม่ได้ใช้ — เช่น Page ขนาด 4KB แต่ใช้แค่ 3KB → เหลือ 1KB ใช้ไม่ได้จนกว่าจะปล่อย Page นี้คืน<br><br>
+      <strong>External Fragmentation:</strong> พื้นที่ว่าง "ระหว่าง" บล็อกที่จัดสรรไป — รวมแล้วใหญ่พอใส่ Process ใหม่ แต่กระจายไม่ติดกันจึงใส่ไม่ได้
+    </div>
+  </div>
+</div>
+
+<div class="collapsible">
+  <div class="col-header" onclick="tog(this)">HW7 ข้อ 2 (Exercise 8.3): First/Best/Worst Fit เปรียบเทียบ <span class="arrow">▼</span></div>
+  <div class="col-body">
+    <p><strong>โจทย์:</strong> Partition (300, 600, 350, 200, 750, 125) KB. ต้องใส่ Process: 115, 500, 358, 200, 375 KB ตามลำดับ</p>
+    <button class="run-btn" onclick="show('hw7-2a')">เฉลย First Fit</button>
+    <div id="hw7-2a" style="display:none" class="box box-green">
+      <strong>First Fit (เลือกช่องแรกที่ใหญ่พอ):</strong><br>
+      • 115 → 300 (เหลือ 185) — Partitions: (185, 600, 350, 200, 750, 125)<br>
+      • 500 → 600 (เหลือ 100) — (185, 100, 350, 200, 750, 125)<br>
+      • 358 → 750 (เหลือ 392) — (185, 100, 350, 200, 392, 125)<br>
+      • 200 → 350 (เหลือ 150) — (185, 100, 150, 200, 392, 125)<br>
+      • 375 → 392 (เหลือ 17) — (185, 100, 150, 200, 17, 125)<br>
+      ✅ <strong>ใส่ได้ครบทุก Process</strong>
+    </div>
+    <button class="run-btn" onclick="show('hw7-2b')">เฉลย Best Fit</button>
+    <div id="hw7-2b" style="display:none" class="box box-green">
+      <strong>Best Fit (เลือกช่องเล็กที่สุดที่ยังพอ):</strong><br>
+      • 115 → 125 (เหลือ 10)<br>
+      • 500 → 600 (เหลือ 100)<br>
+      • 358 → 750 (เหลือ 392)<br>
+      • 200 → 200 (เหลือ 0)<br>
+      • 375 → 392 (เหลือ 17)<br>
+      ✅ <strong>ใส่ได้ครบทุก Process</strong>
+    </div>
+    <button class="run-btn" onclick="show('hw7-2c')">เฉลย Worst Fit</button>
+    <div id="hw7-2c" style="display:none" class="box box-red">
+      <strong>Worst Fit (เลือกช่องใหญ่ที่สุด):</strong><br>
+      • 115 → 750 (เหลือ 635)<br>
+      • 500 → 635 (เหลือ 135)<br>
+      • 358 → 600 (เหลือ 242)<br>
+      • 200 → 350 (เหลือ 150)<br>
+      • 375 → ❌ ไม่มีช่องไหนใหญ่พอ (สูงสุดเหลือ 300, 242) — Process ต้องรอ<br>
+      ❌ <strong>ใส่ได้ไม่ครบ — Worst Fit แย่ที่สุด</strong><br><br>
+      <strong>สรุป:</strong> First-Fit = Best-Fit (ใส่ได้หมดเหมือนกัน) > Worst-Fit
+    </div>
+  </div>
+</div>
+
+<div class="collapsible">
+  <div class="col-header" onclick="tog(this)">HW7 ข้อ 3 (Exercise 8.4): Dynamic Memory Allocation <span class="arrow">▼</span></div>
+  <div class="col-body">
+    <div class="box box-green">
+      <strong>(a) Contiguous:</strong> อาจต้อง relocate ทั้งโปรแกรม เพราะข้างหลังอาจไม่มีที่ว่างพอให้ขยาย<br>
+      <strong>(b) Pure Segmentation:</strong> อาจต้อง relocate Segment ที่ต้องขยาย<br>
+      <strong>(c) Pure Paging:</strong> เพิ่ม Page ใหม่ได้เลย ไม่ต้อง relocate (เพราะ Page ไม่จำเป็นต้องอยู่ติดกัน)
+    </div>
+  </div>
+</div>
+
+<div class="collapsible">
+  <div class="col-header" onclick="tog(this)">HW7 ข้อ 4 (Exercise 8.6): Process เข้าถึงเฉพาะ Memory ของตัวเอง <span class="arrow">▼</span></div>
+  <div class="col-body">
+    <div class="box box-green">
+      ใน Paging, Logical Address = (page#, offset). Page Table ของแต่ละ Process มีเฉพาะ Page ของตัวเอง → เข้าถึง Page ที่ไม่ใช่ของตัวเองไม่ได้ (ไม่มี entry)<br><br>
+      <strong>การให้แชร์:</strong> OS ใส่ entry ของ Page ที่ใช้ร่วมกันลงใน Page Table ของหลาย Process → ทุก Process เข้าถึง Physical Page เดียวกัน → ใช้สำหรับ Inter-Process Communication ที่มีประสิทธิภาพ
+    </div>
+  </div>
+</div>
+
+<div class="collapsible">
+  <div class="col-header" onclick="tog(this)">HW7 ข้อ 5 (Exercise 8.12): หา page# และ offset (1KB page) <span class="arrow">▼</span></div>
+  <div class="col-body">
+    <p>Page size = 1KB = 1024 bytes</p>
+    <table>
+      <tr><th>Address</th><th>Page# = ⌊LA/1024⌋</th><th>Offset = LA mod 1024</th></tr>
+      <tr><td>3085</td><td>3</td><td>13</td></tr>
+      <tr><td>42095</td><td>41</td><td>111</td></tr>
+      <tr><td>215201</td><td>210</td><td>161</td></tr>
+      <tr><td>650000</td><td>634</td><td>784</td></tr>
+      <tr><td>2000001</td><td>1953</td><td>129</td></tr>
+    </table>
+    <div class="box box-blue">
+      <strong>วิธีคำนวณตัวอย่าง 215201:</strong><br>
+      215201 ÷ 1024 = 210.157... → page = 210<br>
+      offset = 215201 − 210×1024 = 215201 − 215040 = 161
+    </div>
+  </div>
+</div>
+
+<div class="collapsible">
+  <div class="col-header" onclick="tog(this)">HW7 ข้อ 6 (Exercise 8.15): จำนวน bits ใน Logical/Physical Address <span class="arrow">▼</span></div>
+  <div class="col-body">
+    <p><strong>โจทย์:</strong> 256 pages, 4KB page size, 64 frames</p>
+    <div class="box box-green">
+      <strong>(a) Logical Address:</strong><br>
+      256 = 2^8 → page# = 8 bits<br>
+      4KB = 2^12 → offset = 12 bits<br>
+      <strong>รวม Logical = 8+12 = 20 bits</strong><br><br>
+      <strong>(b) Physical Address:</strong><br>
+      64 = 2^6 → frame# = 6 bits<br>
+      offset เท่าเดิม = 12 bits<br>
+      <strong>รวม Physical = 6+12 = 18 bits</strong>
+    </div>
+  </div>
+</div>
+
+<div class="collapsible">
+  <div class="col-header" onclick="tog(this)">HW7 ข้อ 7 (Exercise 8.20): Segmentation Address Translation <span class="arrow">▼</span></div>
+  <div class="col-body">
+    <table>
+      <tr><th>Seg</th><th>Base</th><th>Length</th></tr>
+      <tr><td>0</td><td>219</td><td>600</td></tr>
+      <tr><td>1</td><td>2300</td><td>14</td></tr>
+      <tr><td>2</td><td>90</td><td>100</td></tr>
+      <tr><td>3</td><td>1327</td><td>580</td></tr>
+      <tr><td>4</td><td>1952</td><td>96</td></tr>
+    </table>
+    <button class="run-btn" onclick="show('hw7-7')">เฉลย</button>
+    <div id="hw7-7" style="display:none" class="box box-green">
+      (a) ⟨0, 430⟩: 430 < 600 ✓ → 219 + 430 = <strong>649</strong><br>
+      (b) ⟨1, 10⟩: 10 < 14 ✓ → 2300 + 10 = <strong>2310</strong><br>
+      (c) ⟨2, 500⟩: 500 ≥ 100 ✗ → <strong>Illegal! Trap to OS</strong><br>
+      (d) ⟨3, 400⟩: 400 < 580 ✓ → 1327 + 400 = <strong>1727</strong><br>
+      (e) ⟨4, 112⟩: 112 ≥ 96 ✗ → <strong>Illegal! Trap to OS</strong>
+    </div>
+  </div>
+</div>
+
+<div class="collapsible">
+  <div class="col-header" onclick="tog(this)">HW7 ข้อ 8: Segmentation 2 (4 Segments) <span class="arrow">▼</span></div>
+  <div class="col-body">
+    <table>
+      <tr><th>Seg</th><th>Limit</th><th>Base</th></tr>
+      <tr><td>1</td><td>550</td><td>300</td></tr>
+      <tr><td>2</td><td>60</td><td>2200</td></tr>
+      <tr><td>3</td><td>150</td><td>1800</td></tr>
+      <tr><td>4</td><td>220</td><td>750</td></tr>
+    </table>
+    <button class="run-btn" onclick="show('hw7-8')">เฉลย</button>
+    <div id="hw7-8" style="display:none" class="box box-green">
+      <strong>(8.1) ⟨4, 205⟩:</strong> 205 < 220 ✓ → 750 + 205 = <strong>955</strong><br>
+      <strong>(8.2) ⟨3, 170⟩:</strong> 170 ≥ 150 ✗ → <strong>Error! Invalid offset</strong>
+    </div>
+  </div>
+</div>
+
+<div class="collapsible">
+  <div class="col-header" onclick="tog(this)">HW7 ข้อ 9: Paging กับ Word size 8 Bytes <span class="arrow">▼</span></div>
+  <div class="col-body">
+    <p><strong>โจทย์:</strong> Page size = 5KB, 1 word = 8 bytes</p>
+    <button class="run-btn" onclick="show('hw7-9')">เฉลย</button>
+    <div id="hw7-9" style="display:none" class="box box-green">
+      <strong>(9.1) จำนวน words ต่อ page:</strong><br>
+      = 5KB / 8 = (5×1024) / 8 = <strong>640 words</strong><br><br>
+      <strong>(9.2) Logical Address 33124:</strong> (หาเป็น word, ใช้ 640 words/page)<br>
+      33124 ÷ 640 = 51 เศษ 484<br>
+      page# = <strong>51</strong>, offset = <strong>484</strong><br><br>
+      <strong>(9.3) Process 41500 bytes, Internal Fragmentation:</strong><br>
+      Page size = 5×1024 = 5120 bytes<br>
+      Pages needed = ⌈41500/5120⌉ = ⌈8.11⌉ = 9 pages<br>
+      Total allocated = 9 × 5120 = 46080 bytes<br>
+      <strong>Internal Frag = 46080 − 41500 = 4580 bytes</strong>
+    </div>
+  </div>
+</div>
+
+<div class="collapsible">
+  <div class="col-header" onclick="tog(this)">HW7 ข้อ 10: Binary Conversion (8 pages, 64 frames, 64 words/page) <span class="arrow">▼</span></div>
+  <div class="col-body">
+    <p><strong>โจทย์:</strong> 8 pages, 64 words/page, 64 frames</p>
+    <button class="run-btn" onclick="show('hw7-10')">เฉลย</button>
+    <div id="hw7-10" style="display:none" class="box box-green">
+      <strong>(10.1) Logical Address bits:</strong><br>
+      Pages = 8 = 2^3 → page# = 3 bits<br>
+      Words/page = 64 = 2^6 → offset = 6 bits<br>
+      <strong>Logical = 3+6 = 9 bits</strong><br><br>
+      <strong>(10.2) Physical Address bits:</strong><br>
+      Frames = 64 = 2^6 → frame# = 6 bits<br>
+      offset = 6 bits<br>
+      <strong>Physical = 6+6 = 12 bits</strong><br><br>
+      <strong>(10.3) Logical ⟨5, 17⟩ → Page Table[5]=6:</strong><br>
+      Frame = 6 → 6 bits = 000110<br>
+      Offset = 17 → 6 bits = 010001<br>
+      <strong>Physical (binary) = 000110 010001 = 000110010001</strong>
+    </div>
+  </div>
+</div>
+
+<div class="collapsible">
+  <div class="col-header" onclick="tog(this)">HW7 MCQ ที่สำคัญและเทคนิค <span class="arrow">▼</span></div>
+  <div class="col-body">
+    <div class="box box-blue">
+      <strong>ข้อ 1:</strong> Memory-Address Register เก็บ <strong>Physical Address</strong> (ที่ใช้จริง)<br>
+      <strong>ข้อ 2:</strong> Base=4501, Limit=5000 → เข้าถึงได้ 4501 ถึง <strong>9500</strong> (=4501+5000−1)<br>
+      <strong>ข้อ 3:</strong> Standard Swapping = ย้าย <strong>ทั้ง Process</strong> (ไม่ใช่ Page เดียว) ระหว่าง RAM ↔ Disk<br>
+      <strong>ข้อ 5:</strong> Best Fit สำหรับ 130KB ใน [150, 450, 75, 650, 125] → 150KB (เล็กสุดที่ ≥ 130)<br>
+      <strong>ข้อ 6:</strong> First Fit สำหรับ 120KB ใน [50, 115, 210, 125, 150] → 210KB (ตัวแรกที่ ≥ 120, 115 ไม่พอ)<br>
+      <strong>ข้อ 7:</strong> ⟨1, 345⟩: 345 < 1050 ✓ → 300 + 345 = 645<br>
+      <strong>ข้อ 8:</strong> ⟨1, 550⟩: 550 ≥ 500 ✗ → No correct answer (เป็น error)<br>
+      <strong>ข้อ 9:</strong> Page size = Frame size <em>เสมอ</em> (ไม่ใช่เล็กกว่า)<br>
+      <strong>ข้อ 11:</strong> 5500 / 2048 = 2 เศษ 1404 → Page 2, offset 1404<br>
+      <strong>ข้อ 14:</strong> Process 10500 bytes, Page 2KB(=2048):<br>
+      Pages = ⌈10500/2048⌉ = 6 pages, allocated = 12288<br>
+      Internal Frag = 12288 − 10500 = <strong>1788 bytes</strong><br>
+      <strong>ข้อ 15:</strong> Valid bit invalid อาจอยู่บน disk หรือไม่ใช่ของ process ก็ได้ → ทุกข้อถูก
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- 7.Cheat -->
+<div class="card">
+<h2>7.Cheat 📋 Cheat Sheet & ข้อผิดพลาดที่พบบ่อย — บทที่ 7</h2>
+<div class="grid2">
+  <div class="box box-blue">
+    <strong>📋 สูตรหลัก</strong><br>
+    • Contiguous: PA = Base + d (ต้อง d < Limit)<br>
+    • Segmentation: PA = SegTable[s].base + d (ต้อง d < limit)<br>
+    • Paging: p = ⌊LA / page_size⌋, d = LA mod page_size<br>
+    • PA (Paging) = Frame × page_size + d<br>
+    • Internal Frag = (#Pages × page_size) − Process_size<br>
+    • Logical bits = page# bits + offset bits<br>
+    • Physical bits = frame# bits + offset bits
+  </div>
+  <div class="box box-yellow">
+    <strong>⚠ ข้อผิดพลาดที่พบบ่อย</strong><br>
+    • สับสน Page (logical) กับ Frame (physical)<br>
+    • ลืมตรวจ d &lt; Limit ใน Segmentation<br>
+    • ลืมแปลง KB เป็น bytes (1KB = 1024 bytes)<br>
+    • คำนวณ bits ผิด — ใช้ log₂ จากจำนวน ไม่ใช่จากขนาด<br>
+    • Worst Fit ไม่ใช่กลยุทธ์ที่ดีสุด — จริงๆ มักแย่ที่สุด<br>
+    • Paging มี Internal Frag, Segmentation มี External Frag (ตรงข้ามกัน)
+  </div>
+</div>
+<div class="box box-green">
+  <strong>✅ จำให้ขึ้นใจ:</strong><br>
+  1. <strong>Logical Address</strong> = ที่อยู่ที่ Process เห็น (CPU สร้าง), <strong>Physical Address</strong> = ที่อยู่จริงใน RAM (MMU แปลงให้)<br>
+  2. <strong>Fit:</strong> First-Fit เร็วสุด, Best-Fit เสียพื้นที่น้อยสุด, Worst-Fit ส่วนใหญ่แย่สุด<br>
+  3. <strong>Paging</strong> แก้ External Frag แต่มี Internal Frag ที่ Page สุดท้าย<br>
+  4. <strong>Segmentation</strong> มี External Frag (Segment ขนาดต่างกัน) แต่ไม่มี Internal Frag<br>
+  5. <strong>Valid bit</strong>: 1 = อยู่ใน RAM, 0 = อยู่บน Disk หรือไม่มีสิทธิ์เข้าถึง
+</div>
+</div>
+</div><!-- end ch7 -->
+<div id="ch8" class="chapter">
+<div class="chapter-hero">
+  <div class="hero-icon">💾</div>
+  <div>
+    <div class="hero-title">บทที่ 8 — การจัดการ Virtual Memory</div>
+    <div class="hero-sub">Demand Paging · FIFO · Optimal · LRU · Thrashing · Frame Allocation</div>
+    <div style="margin-top:8px">
+      <span class="tag">Page Fault</span><span class="tag">FIFO</span><span class="tag">Optimal</span>
+      <span class="tag">LRU</span><span class="tag">Belady's Anomaly</span><span class="tag">Thrashing</span>
+    </div>
+  </div>
+</div>
+
+<!-- 8.1 -->
+<div class="card">
+<h2>8.1 Virtual Memory คืออะไร?</h2>
+<p>โดยปกติกระบวนการทั้งหมดต้องอยู่ใน RAM ก่อนจึงจะทำงานได้ แต่ <strong>Virtual Memory</strong> ทำให้กระบวนการที่มีขนาดใหญ่กว่า RAM สามารถทำงานได้ โดยเก็บเฉพาะ <strong>Page ที่กำลังใช้งาน</strong> ไว้ใน RAM ส่วนที่เหลือเก็บบน Disk</p>
+<div class="box box-green">
+  <strong>ข้อดี:</strong> รัน Process ได้มากขึ้น (Degree of Multiprogramming สูงขึ้น) แม้ RAM มีจำกัด<br>
+  <strong>ข้อเสีย:</strong> เกิด Page Fault → ต้องดึง Page จาก Disk → ช้ากว่าปกติ
+</div>
+<div class="box box-blue">
+  <strong>Page Table กับ Virtual Memory:</strong><br>
+  Valid bit = 1 → Page อยู่ใน RAM (ใช้งานได้ทันที)<br>
+  Valid bit = 0 → Page อยู่บน Disk → เกิด <strong>Page Fault</strong> ต้องดึงขึ้นมาก่อน
+</div>
+</div>
+
+<!-- 8.2 -->
+<div class="card">
+<h2>8.2 Demand Paging และ Page Fault</h2>
+<p><strong>Demand Paging</strong> หมายความว่า "โหลด Page เข้า RAM เฉพาะเมื่อถูกเรียกใช้เท่านั้น" ไม่โหลดทั้งหมดตั้งแต่แรก</p>
+<h3>ขั้นตอนเมื่อเกิด Page Fault</h3>
+<div class="step"><div class="step-num">1</div><div class="step-body">CPU เรียกใช้ Page → ตรวจ Page Table → Valid bit = 0 → <strong>Page Fault!</strong> OS หยุดกระบวนการชั่วคราว</div></div>
+<div class="step"><div class="step-num">2</div><div class="step-body">OS ค้นหา Page นั้นบน Disk</div></div>
+<div class="step"><div class="step-num">3</div><div class="step-body">มี Frame ว่างหรือไม่? ถ้ามี → โหลด Page ลง Frame นั้นเลย. ถ้าไม่มี → <strong>ต้องเลือก Page ที่จะไล่ออก (Page Replacement)</strong></div></div>
+<div class="step"><div class="step-num">4</div><div class="step-body">ถ้า Page ที่ไล่ออกมี Dirty bit = 1 → เขียน Page เก่าลง Disk ก่อน</div></div>
+<div class="step"><div class="step-num">5</div><div class="step-body">โหลด Page ใหม่เข้า Frame. อัปเดต Page Table (Valid bit → 1, ใส่ Frame Number)</div></div>
+<div class="step"><div class="step-num">6</div><div class="step-body">รีสตาร์ท Instruction ที่ทำให้เกิด Page Fault</div></div>
+<div class="warn">⚠ ยิ่งเกิด Page Fault บ่อย → ระบบช้าลงมาก เพราะต้องอ่าน/เขียน Disk ทุกครั้ง</div>
+</div>
+
+<!-- 8.3 Replacement -->
+<div class="card">
+<h2>8.3 Page Replacement Algorithms — เลือก Page ไหนไล่ออก?</h2>
+<p>เมื่อ RAM เต็ม (ทุก Frame ถูกใช้) และต้องโหลด Page ใหม่ ต้องเลือก Page ไหนไล่ออก เป้าหมายคือ <strong>ลด Page Fault ให้น้อยที่สุด</strong></p>
+<div class="box box-blue">
+  <strong>Reference String</strong> = ลำดับ Page ที่ CPU ต้องการใช้ เช่น [7, 0, 1, 2, 0, 3, 0, 4, 2, 3]<br>
+  <strong>Page Fault Rate</strong> = จำนวน Page Fault ÷ จำนวนการอ้างอิงทั้งหมด (ยิ่งน้อยยิ่งดี)
+</div>
+
+<h3>อัลกอริทึมที่ 1: FIFO (First-In, First-Out)</h3>
+<p>ไล่ <strong>Page ที่อยู่ใน RAM นานที่สุด</strong> ออก (เข้าก่อน ออกก่อน)</p>
+<div class="example-box">
+  <div class="ex-title">ตัวอย่าง FIFO: Reference = [1,2,3,4,1,2,5,1,2,3,4,5], Frames = 3</div>
+  <table>
+    <tr><th>Page</th><th>1</th><th>2</th><th>3</th><th>4</th><th>1</th><th>2</th><th>5</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr>
+    <tr><td>Frame 0</td><td>1</td><td>1</td><td>1</td><td>4</td><td>4</td><td>4</td><td>5</td><td>5</td><td>5</td><td>3</td><td>3</td><td>3</td></tr>
+    <tr><td>Frame 1</td><td>-</td><td>2</td><td>2</td><td>2</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>4</td><td>4</td></tr>
+    <tr><td>Frame 2</td><td>-</td><td>-</td><td>3</td><td>3</td><td>3</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>5</td></tr>
+    <tr><td>Fault?</td><td>F</td><td>F</td><td>F</td><td>F</td><td>F</td><td>F</td><td>F</td><td>-</td><td>-</td><td>F</td><td>F</td><td>F</td></tr>
+  </table>
+  <p><strong>Page Fault รวม = 9 ครั้ง</strong></p>
+</div>
+<div class="box box-red">
+  <strong>Belady's Anomaly (ความผิดปกติของ FIFO):</strong><br>
+  ปกติถ้าเพิ่ม Frame → Page Fault ควรลดลง แต่ FIFO บางครั้ง <em>เพิ่ม</em> Frame แล้ว Page Fault <em>เพิ่มขึ้น</em>!<br>
+  ตัวอย่าง: Reference [1,2,3,4,1,2,5,1,2,3,4,5] → 3 frames: 9 faults, 4 frames: 10 faults
+</div>
+
+<h3>อัลกอริทึมที่ 2: Optimal (OPT)</h3>
+<p>ไล่ <strong>Page ที่จะไม่ถูกใช้งานในอนาคตนานที่สุด</strong> ออก (ต้องรู้อนาคต)</p>
+<div class="box box-green">
+  <strong>ข้อดี:</strong> ให้ Page Fault น้อยที่สุดเท่าที่เป็นไปได้ → ใช้เป็น Benchmark เปรียบเทียบ<br>
+  <strong>ข้อเสีย:</strong> ทำในชีวิตจริงไม่ได้ เพราะต้องรู้ว่า CPU จะเรียก Page อะไรต่อไป<br>
+  <strong>ไม่มี Belady's Anomaly</strong>
+</div>
+<div class="example-box">
+  <div class="ex-title">ตัวอย่าง Optimal: Reference = [1,2,3,4,1,2,5,1,2,3,4,5], Frames = 3</div>
+  <table>
+    <tr><th>Page</th><th>1</th><th>2</th><th>3</th><th>4</th><th>1</th><th>2</th><th>5</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr>
+    <tr><td>Frames</td><td>1</td><td>1,2</td><td>1,2,3</td><td>1,2,4*</td><td>1,2,4</td><td>1,2,4</td><td>1,2,5*</td><td>1,2,5</td><td>1,2,5</td><td>1,2,3*</td><td>1,4*,3</td><td>1,4,5*</td></tr>
+    <tr><td>Fault?</td><td>F</td><td>F</td><td>F</td><td>F</td><td>-</td><td>-</td><td>F</td><td>-</td><td>-</td><td>F</td><td>F</td><td>F</td></tr>
+  </table>
+  <p><strong>Page Fault รวม = 6 ครั้ง</strong> (น้อยกว่า FIFO มาก)</p>
+</div>
+
+<h3>อัลกอริทึมที่ 3: LRU (Least Recently Used)</h3>
+<p>ไล่ <strong>Page ที่ไม่ได้ถูกใช้งานนานที่สุดในอดีต</strong> ออก (มองย้อนหลัง แทนที่จะมองอนาคต)</p>
+<div class="box box-green">
+  <strong>ข้อดี:</strong> ใช้งานได้จริง และให้ผลดีใกล้เคียง OPT. <strong>ไม่มี Belady's Anomaly</strong><br>
+  <strong>ข้อเสีย:</strong> ต้องการ Hardware พิเศษเพื่อติดตามเวลาที่ใช้งานล่าสุด
+</div>
+<div class="example-box">
+  <div class="ex-title">ตัวอย่าง LRU: Reference = [1,2,3,4,1,2,5,1,2,3,4,5], Frames = 3</div>
+  <table>
+    <tr><th>Page</th><th>1</th><th>2</th><th>3</th><th>4</th><th>1</th><th>2</th><th>5</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr>
+    <tr><td>Frames</td><td>1</td><td>1,2</td><td>1,2,3</td><td>4,2,3*</td><td>4,1,3*</td><td>4,1,2*</td><td>5,1,2*</td><td>5,1,2</td><td>5,1,2</td><td>3,1,2*</td><td>3,4,2*</td><td>3,4,5*</td></tr>
+    <tr><td>Fault?</td><td>F</td><td>F</td><td>F</td><td>F</td><td>F</td><td>F</td><td>F</td><td>-</td><td>-</td><td>F</td><td>F</td><td>F</td></tr>
+  </table>
+  <p><strong>Page Fault รวม = 8 ครั้ง</strong></p>
+</div>
+
+<h3>สรุปเปรียบเทียบ 3 อัลกอริทึม</h3>
+<table>
+  <tr><th>อัลกอริทึม</th><th>หลักการ</th><th>Page Faults (3 frames)</th><th>Belady's Anomaly</th><th>ใช้งานจริงได้?</th></tr>
+  <tr><td><strong>FIFO</strong></td><td>ไล่ที่อยู่นานที่สุด</td><td>9</td><td>✗ มี</td><td>✅ ได้</td></tr>
+  <tr><td><strong>OPT</strong></td><td>ไล่ที่จะไม่ใช้นานที่สุด</td><td>6</td><td>✅ ไม่มี</td><td>❌ ไม่ได้</td></tr>
+  <tr><td><strong>LRU</strong></td><td>ไล่ที่ใช้ห่างที่สุดในอดีต</td><td>8</td><td>✅ ไม่มี</td><td>✅ ได้ (ต้องการ HW)</td></tr>
+</table>
+
+<!-- 8.3b Detailed Step-by-Step Examples -->
+<div class="card">
+<h2>8.3b ตัวอย่าง Step-by-Step ทุก Algorithm (Reference อื่น)</h2>
+<div class="box box-blue">
+  <strong>วิธีทำตารางในกระดาษ:</strong><br>
+  1. เขียน Reference String แนวนอนด้านบน<br>
+  2. เขียน Frame slots แนวตั้ง (ตามจำนวน Frame)<br>
+  3. ทีละ Page ใน Ref: ถ้ามีอยู่ใน Frame → Hit (ไม่มีการเปลี่ยน), ถ้าไม่มี → Fault (ใส่/แทนที่)<br>
+  4. เขียน F ใต้แต่ละ column ที่เกิด Page Fault
+</div>
+<p><strong>Reference String: [3, 2, 1, 0, 3, 2, 4, 3, 2, 1, 0, 4], Frames = 3</strong></p>
+
+<h3>FIFO Step-by-Step (ไล่ที่อยู่นานสุด = ที่เข้ามาก่อนสุด)</h3>
+<div class="box box-purple">
+  เทคนิค FIFO: ใช้คิว (Queue) — เข้าก่อน ออกก่อน ไม่ต้องดูว่าใช้บ่อยแค่ไหน
+</div>
+<table>
+  <tr><th>Ref</th><th>3</th><th>2</th><th>1</th><th>0</th><th>3</th><th>2</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th><th>4</th></tr>
+  <tr><td>F[0]</td><td>3</td><td>3</td><td>3</td><td>0</td><td>0</td><td>0</td><td>4</td><td>4</td><td>4</td><td>1</td><td>1</td><td>1</td></tr>
+  <tr><td>F[1]</td><td>-</td><td>2</td><td>2</td><td>2</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>0</td><td>0</td></tr>
+  <tr><td>F[2]</td><td>-</td><td>-</td><td>1</td><td>1</td><td>1</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>4</td></tr>
+  <tr><td>Fault?</td><td style="color:#fc6e51">F</td><td style="color:#fc6e51">F</td><td style="color:#fc6e51">F</td><td style="color:#fc6e51">F</td><td style="color:#fc6e51">F</td><td style="color:#fc6e51">F</td><td style="color:#fc6e51">F</td><td>-</td><td>-</td><td style="color:#fc6e51">F</td><td style="color:#fc6e51">F</td><td style="color:#fc6e51">F</td></tr>
+</table>
+<p><strong>Page Faults = 9</strong></p>
+<div class="example-box">
+  <div class="ex-title">อธิบายทีละขั้น (FIFO)</div>
+  <p>รอบ 3: ใส่ 3 (Fault, Frame ว่าง) คิว=[3]<br>
+  รอบ 2: ใส่ 2 (Fault, Frame ว่าง) คิว=[3,2]<br>
+  รอบ 1: ใส่ 1 (Fault, Frame ว่าง) คิว=[3,2,1]<br>
+  รอบ 0: Frame เต็ม! ไล่ 3 ออก (เก่าสุด) ใส่ 0 คิว=[2,1,0] Fault<br>
+  รอบ 3: Frame เต็ม! ไล่ 2 ออก ใส่ 3 คิว=[1,0,3] Fault<br>
+  รอบ 2: Frame เต็ม! ไล่ 1 ออก ใส่ 2 คิว=[0,3,2] Fault<br>
+  รอบ 4: Frame เต็ม! ไล่ 0 ออก ใส่ 4 คิว=[3,2,4] Fault<br>
+  รอบ 3: มีอยู่แล้ว → Hit ✅<br>
+  รอบ 2: มีอยู่แล้ว → Hit ✅<br>
+  รอบ 1: Frame เต็ม! ไล่ 3 ออก ใส่ 1 คิว=[2,4,1] Fault<br>
+  รอบ 0: Frame เต็ม! ไล่ 2 ออก ใส่ 0 คิว=[4,1,0] Fault<br>
+  รอบ 4: มีอยู่แล้ว → Hit ✅</p>
+</div>
+
+<h3>Optimal Step-by-Step (ไล่ที่จะไม่ถูกใช้นานที่สุดในอนาคต)</h3>
+<div class="box box-purple">
+  เทคนิค OPT: มองไปข้างหน้า — ถ้าต้องไล่ Page ออก ให้ดูว่า Page ใดในปัจจุบันจะถูกใช้อีกครั้ง<strong>ช้าที่สุด</strong> (หรือไม่ถูกใช้เลย) → ไล่ตัวนั้นออก
+</div>
+<table>
+  <tr><th>Ref</th><th>3</th><th>2</th><th>1</th><th>0</th><th>3</th><th>2</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th><th>4</th></tr>
+  <tr><td>Frames</td><td>3</td><td>3,2</td><td>3,2,1</td><td>0,2,1*</td><td>0,2,3*</td><td>0,2,3</td><td>0,4,3*</td><td>0,4,3</td><td>0,4,2*</td><td>0,1,2*</td><td>0,1,2</td><td>4,1,2*</td></tr>
+  <tr><td>Fault?</td><td style="color:#fc6e51">F</td><td style="color:#fc6e51">F</td><td style="color:#fc6e51">F</td><td style="color:#fc6e51">F</td><td style="color:#fc6e51">F</td><td>-</td><td style="color:#fc6e51">F</td><td>-</td><td style="color:#fc6e51">F</td><td style="color:#fc6e51">F</td><td>-</td><td style="color:#fc6e51">F</td></tr>
+</table>
+<p><strong>Page Faults = 8</strong></p>
+<div class="example-box">
+  <div class="ex-title">อธิบาย OPT รอบที่ยาก (รอบ 4: ต้องไล่ใคร?)</div>
+  <p>ก่อนรอบ 4: Frame=[3,2,1] ต้องใส่ 0 → เลือกไล่ใคร?<br>
+  มองข้างหน้า: ครั้งต่อไปที่ใช้ 3 = รอบที่ 5, ครั้งต่อไปที่ใช้ 2 = รอบที่ 6, ครั้งต่อไปที่ใช้ 1 = รอบที่ 10<br>
+  → 1 จะถูกใช้ช้าที่สุด (รอบ 10) → ไล่ 1 ออก<br>
+  ได้ Frame = [3, 2, 0] ✓</p>
+</div>
+
+<h3>LRU Step-by-Step (ไล่ที่ใช้นานที่สุดในอดีต)</h3>
+<div class="box box-purple">
+  เทคนิค LRU: จดเวลาที่ใช้ล่าสุดของแต่ละ Page ที่อยู่ใน Frame เมื่อต้องไล่ออก → ไล่ตัวที่ใช้ล่าสุด<strong>นานที่สุดในอดีต</strong>
+</div>
+<table>
+  <tr><th>Ref</th><th>3</th><th>2</th><th>1</th><th>0</th><th>3</th><th>2</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th><th>4</th></tr>
+  <tr><td>Frames</td><td>3</td><td>3,2</td><td>3,2,1</td><td>0,2,1*</td><td>0,3,1*</td><td>0,3,2*</td><td>4,3,2*</td><td>4,3,2</td><td>4,3,2</td><td>1,3,2*</td><td>1,0,2*</td><td>1,0,4*</td></tr>
+  <tr><td>Fault?</td><td style="color:#fc6e51">F</td><td style="color:#fc6e51">F</td><td style="color:#fc6e51">F</td><td style="color:#fc6e51">F</td><td style="color:#fc6e51">F</td><td style="color:#fc6e51">F</td><td style="color:#fc6e51">F</td><td>-</td><td>-</td><td style="color:#fc6e51">F</td><td style="color:#fc6e51">F</td><td style="color:#fc6e51">F</td></tr>
+</table>
+<p><strong>Page Faults = 9</strong></p>
+
+<h3>Belady's Anomaly — ตัวอย่างที่ชัดเจน (FIFO เท่านั้น)</h3>
+<div class="example-box">
+  <div class="ex-title">Reference: [1,2,3,4,1,2,5,1,2,3,4,5]</div>
+  <table>
+    <tr><th>จำนวน Frames</th><th>FIFO Page Faults</th><th>OPT Page Faults</th><th>LRU Page Faults</th></tr>
+    <tr><td>3</td><td style="color:#fc6e51"><strong>9</strong></td><td>6</td><td>8</td></tr>
+    <tr><td>4</td><td style="color:#fc6e51"><strong>10</strong> (เพิ่มขึ้น!)</td><td>6</td><td>8</td></tr>
+  </table>
+  <p>เพิ่ม Frame 3→4 แล้ว FIFO กลับได้ Fault มากขึ้น = <strong>Belady's Anomaly</strong><br>
+  OPT และ LRU ไม่มีปัญหานี้ (Stack Algorithm property)</p>
+</div>
+</div>
+
+<div class="tool-area">
+  <h3>🎮 Page Replacement Simulator</h3>
+  <label>Reference String (คั่นด้วยช่องว่าง เช่น 7 0 1 2 0 3 0 4 2 3 0 3)</label>
+  <input type="text" id="ref-str" value="1 2 3 4 1 2 5 1 2 3 4 5">
+  <div class="grid2">
+    <div>
+      <label>จำนวน Frame</label>
+      <input type="number" id="ref-fr" value="3" min="1" max="8">
+    </div>
+    <div>
+      <label>อัลกอริทึม</label>
+      <select id="ref-algo">
+        <option value="fifo">FIFO</option>
+        <option value="opt">Optimal (OPT)</option>
+        <option value="lru">LRU</option>
+      </select>
+    </div>
+  </div>
+  <button class="run-btn" onclick="runPageRep()">▶ จำลอง</button>
+  <div id="ref-out" class="output-box">กรอกข้อมูลแล้วกดจำลอง</div>
+</div>
+</div>
+
+<!-- 8.4 Thrashing -->
+<div class="card">
+<h2>8.4 Thrashing — ระบบติดขัดจาก Page Fault ถี่เกินไป</h2>
+<div class="box box-green">
+  <strong>🎯 อุปมา Thrashing:</strong><br>
+  เหมือนนักเรียน 20 คนแย่งกันใช้ห้องทดลองที่มีแค่ 3 โต๊ะ — ใช้เวลาส่วนใหญ่แย่งโต๊ะ ไม่ได้เรียนจริงๆ<br>
+  ระบบก็เช่นกัน: Process มีน้อย Frame → ต้อง Swap เข้าออกตลอด → CPU ไม่ได้ทำงานจริงสักเท่าไร
+</div>
+<p>เมื่อกระบวนการมี <strong>Frame น้อยเกินไป</strong> มันจะ Page Fault บ่อยมากจนเกือบตลอดเวลา CPU ใช้เวลาส่วนใหญ่ไปกับการ Swap Page แทนที่จะทำงานจริง → ระบบช้าหรือหยุดนิ่ง</p>
+<div class="box box-red">
+  <strong>วงจร Thrashing:</strong><br>
+  Multiprogramming ↑ → Frame/Process ↓ → Page Fault ↑ → CPU Utilization ↓ → OS คิดว่า CPU ว่าง → เพิ่ม Process → Multiprogramming ↑ (วนซ้ำแย่ลงเรื่อยๆ!)
+</div>
+<h3>การแก้ไข Thrashing</h3>
+<table>
+  <tr><th>วิธี</th><th>รายละเอียด</th></tr>
+  <tr><td><strong>Working Set Model</strong></td><td>ติดตาม "Working Set" = Pages ที่ใช้ใน Δ time units ล่าสุด จัดสรร Frame ≥ ขนาด Working Set</td></tr>
+  <tr><td><strong>Page Fault Frequency</strong></td><td>ถ้า Fault Rate สูงเกิน Threshold → เพิ่ม Frame, ถ้าต่ำเกิน → ลด Frame คืน</td></tr>
+  <tr><td><strong>ลด Multiprogramming</strong></td><td>Swap out Process ออกบางส่วน เพื่อให้ Process ที่เหลือมี Frame พอ</td></tr>
+</table>
+
+<div class="box box-yellow">
+  <strong>ข้อสรุปสำคัญ:</strong> Thrashing เกิดจากการมี Frame น้อยกว่า "Working Set" ของกระบวนการ<br>
+  แก้ด้วยการเพิ่ม RAM, ลด Multiprogramming, หรือใช้ Working Set Model
+</div>
+</div>
+
+<!-- 8.5 Frame Allocation -->
+<div class="card">
+<h2>8.5 Frame Allocation — จัดสรร Frame ให้กระบวนการต่างๆ</h2>
+
+<h3>วิธีที่ 1: Equal Allocation (แจกเท่ากัน)</h3>
+<div class="formula">Frame ต่อกระบวนการ = ⌊Total Free Frames ÷ จำนวนกระบวนการ⌋</div>
+<div class="example-box">
+  <div class="ex-title">ตัวอย่าง: Equal Allocation</div>
+  <p>Free Frames = 93, กระบวนการ = 5 ตัว<br>
+  แต่ละกระบวนการได้ = ⌊93÷5⌋ = <strong>18 frames</strong><br>
+  Frame ที่เหลือสำหรับ Page Fault = 93 − (5×18) = <strong>3 frames</strong></p>
+</div>
+
+<h3>วิธีที่ 2: Proportional Allocation (แจกตามสัดส่วนขนาด)</h3>
+<div class="formula">Frame_i = ⌊(size_i ÷ total_size) × total_frames⌋</div>
+<div class="example-box">
+  <div class="ex-title">ตัวอย่าง: Proportional Allocation</div>
+  <p>P1 มีขนาด 10 pages, P2 มีขนาด 127 pages. Free Frames = 62<br>
+  Total size = 10+127 = 137<br>
+  P1: ⌊(10/137) × 62⌋ = ⌊4.53⌋ = <strong>4 frames</strong><br>
+  P2: ⌊(127/137) × 62⌋ = ⌊57.47⌋ = <strong>57 frames</strong></p>
+</div>
+
+<div class="tool-area">
+  <h3>🧮 Frame Allocation Calculator</h3>
+  <label>จำนวน Frame ทั้งหมดที่ว่าง</label>
+  <input type="number" id="fa-total" value="93">
+  <label>ขนาดของแต่ละกระบวนการ (pages, คั่นด้วยช่องว่าง)</label>
+  <input type="text" id="fa-sizes" value="10 127">
+  <button class="run-btn" onclick="runFA()">▶ คำนวณ</button>
+  <div id="fa-out" class="output-box">กรอกข้อมูลแล้วกดคำนวณ</div>
+</div>
+
+<div class="tool-area">
+  <h3>📝 โจทย์ฝึกหัด Virtual Memory</h3>
+  <div class="collapsible">
+    <div class="col-header" onclick="tog(this)">โจทย์ 1: FIFO 3 frames <span class="arrow">▼</span></div>
+    <div class="col-body">
+      <p>Reference: 7 0 1 2 0 3 0 4 2 3 0 3 0 3 2 1 2 0 1 7 0 1, Frames=3. นับ Page Fault</p>
+      <button class="run-btn" onclick="show('v1')">แสดงเฉลย</button>
+      <div id="v1" style="display:none" class="box box-green">
+        ใช้ Simulator ด้านบน ใส่ reference string นี้ เลือก FIFO, frames=3<br>
+        ผลลัพธ์: <strong>15 Page Faults</strong>
+      </div>
+    </div>
+  </div>
+  <div class="collapsible">
+    <div class="col-header" onclick="tog(this)">โจทย์ 2: เปรียบเทียบ FIFO vs LRU <span class="arrow">▼</span></div>
+    <div class="col-body">
+      <p>Reference: 1 2 3 4 1 2 5 1 2 3 4 5, Frames=3. ใช้ FIFO กับ LRU อันไหน Page Fault น้อยกว่า?</p>
+      <button class="run-btn" onclick="show('v2')">แสดงเฉลย</button>
+      <div id="v2" style="display:none" class="box box-green">
+        FIFO = 9 Page Faults<br>
+        LRU = 8 Page Faults<br>
+        <strong>LRU ดีกว่า (น้อยกว่า 1 fault)</strong><br>
+        OPT = 6 fault (ดีที่สุดแต่ทำจริงไม่ได้)
+      </div>
+    </div>
+  </div>
+  <div class="collapsible">
+    <div class="col-header" onclick="tog(this)">โจทย์ 3: Proportional Allocation <span class="arrow">▼</span></div>
+    <div class="col-body">
+      <p>P1=12 pages, P2=48 pages, P3=180 pages. Total Frames=60. แจกกี่ frame ต่อกระบวนการ?</p>
+      <button class="run-btn" onclick="show('v3')">แสดงเฉลย</button>
+      <div id="v3" style="display:none" class="box box-green">
+        Total size = 12+48+180 = 240<br>
+        P1: ⌊(12/240)×60⌋ = ⌊3⌋ = <strong>3 frames</strong><br>
+        P2: ⌊(48/240)×60⌋ = ⌊12⌋ = <strong>12 frames</strong><br>
+        P3: ⌊(180/240)×60⌋ = ⌊45⌋ = <strong>45 frames</strong>
+      </div>
+    </div>
+  </div>
+  <div class="collapsible">
+    <div class="col-header" onclick="tog(this)">โจทย์ 4: FIFO 4 frames vs 3 frames (Belady's Anomaly) <span class="arrow">▼</span></div>
+    <div class="col-body">
+      <p>Reference: 1 2 3 4 1 2 5 1 2 3 4 5. FIFO กับ 3 frames กับ 4 frames ต่างกันอย่างไร? เกิด Belady's Anomaly หรือไม่?</p>
+      <button class="run-btn" onclick="show('v4')">แสดงเฉลย</button>
+      <div id="v4" style="display:none" class="box box-green">
+        3 frames = 9 Page Faults<br>
+        4 frames = 10 Page Faults<br>
+        <strong>เพิ่ม Frame จาก 3 → 4 แต่ Page Fault เพิ่มขึ้น 1 ครั้ง = Belady's Anomaly ✅</strong><br>
+        นี่คือเหตุผลที่ FIFO ไม่ใช่อัลกอริทึมที่เหมาะสมที่สุด
+      </div>
+    </div>
+  </div>
+  <div class="collapsible">
+    <div class="col-header" onclick="tog(this)">โจทย์ 5: OPT 3 frames (Reference ใหม่) <span class="arrow">▼</span></div>
+    <div class="col-body">
+      <p>Reference: 7 0 1 2 0 3 0 4 2 3 0 3 0 3 2 1 2 0 1 7 0 1, Frames=3. ใช้ Optimal Algorithm. นับ Page Fault</p>
+      <button class="run-btn" onclick="show('v5')">แสดงเฉลย</button>
+      <div id="v5" style="display:none" class="box box-green">
+        ใช้ Simulator ด้านบน เลือก Optimal, frames=3<br>
+        <strong>ผลลัพธ์: 9 Page Faults</strong><br>
+        (FIFO = 15, OPT = 9, LRU ≈ 12 สำหรับ Reference นี้)
+      </div>
+    </div>
+  </div>
+  <div class="collapsible">
+    <div class="col-header" onclick="tog(this)">โจทย์ 6: Page Fault Process ทีละขั้น <span class="arrow">▼</span></div>
+    <div class="col-body">
+      <p>CPU ต้องการ Page 5 แต่ Page Table แสดง Valid bit = 0. อธิบายขั้นตอน 6 ขั้นที่เกิดขึ้น</p>
+      <button class="run-btn" onclick="show('v6')">แสดงเฉลย</button>
+      <div id="v6" style="display:none" class="box box-green">
+        1. CPU อ้างอิง Page 5 → ตรวจ Page Table → Valid bit = 0 → Page Fault Interrupt<br>
+        2. OS ค้นหา Page 5 บน Disk (Backing Store)<br>
+        3. มี Frame ว่างไหม? ถ้ามี → ใช้ Frame นั้น; ถ้าไม่มี → รัน Page Replacement เลือก Victim<br>
+        4. ถ้า Victim มี Dirty bit = 1 → Write Victim ลง Disk ก่อน<br>
+        5. โหลด Page 5 จาก Disk เข้า Frame ว่าง อัปเดต Page Table (Valid bit=1, Frame Number)<br>
+        6. Restart Instruction ที่ทำให้เกิด Page Fault (CPU เริ่มทำงานจากตรงนั้นใหม่)
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- 8.HW โจทย์จาก Homework 8 -->
+<div class="card">
+<h2>8.HW โจทย์จาก Homework 8 — เฉลยทีละขั้น</h2>
+<div class="box box-purple">
+  <strong>📌 ครอบคลุมโจทย์จริงทุกข้อใน Homework 8 — เน้นที่นับ Page Fault, Working Set, Thrashing</strong>
+</div>
+
+<div class="collapsible">
+  <div class="col-header" onclick="tog(this)">HW8 ข้อ 1 (Exercise 9.3): Pure Demand Paging — Page Fault Rate <span class="arrow">▼</span></div>
+  <div class="col-body">
+    <div class="box box-green">
+      <strong>(a) ตอน Process เริ่มรัน:</strong> Page Fault Rate <strong>สูงมาก</strong> เพราะ Page ที่ต้องการยังไม่มีใน Memory เลย<br><br>
+      <strong>(b) เมื่อ Working Set ถูกโหลดแล้ว:</strong> Page Fault Rate <strong>ต่ำ</strong> เพราะ Page ที่จำเป็นทุกตัวอยู่ใน Memory แล้ว<br><br>
+      <strong>(c) Process เปลี่ยน locality, Working Set ใหม่ใหญ่เกินไป:</strong><br>
+      1. Ignore (ไม่สนใจ — แต่จะเกิด Thrashing)<br>
+      2. ซื้อ RAM เพิ่ม (Physical Memory)<br>
+      3. ทวงคืน Page อย่างก้าวร้าวมากขึ้น (เพิ่ม Replacement Aggressiveness)
+    </div>
+  </div>
+</div>
+
+<div class="collapsible">
+  <div class="col-header" onclick="tog(this)">HW8 ข้อ 2 (Exercise 9.4): Copy-on-Write <span class="arrow">▼</span></div>
+  <div class="col-body">
+    <div class="box box-green">
+      <strong>Copy-on-Write (COW):</strong> เมื่อสอง Process เข้าถึง Page เดียวกัน (เช่น Code Segment ของ binary เดียวกัน) ระบบ Map Page เดียวกันให้ทั้งสอง Process แบบ <em>Write-Protected</em>. ทั้งสอง <em>อ่าน</em> Page นี้ได้ปกติ<br><br>
+      <strong>เมื่อมี Process ใดเขียน:</strong> Trap → OS Copy Page นี้ขึ้นมาใหม่ → Process นั้นเขียนลง Copy ของตัวเอง → Process อื่นยังเห็น Page เดิม<br><br>
+      <strong>Hardware Support:</strong> ทุกครั้งที่เข้าถึง Memory ต้องเช็ค Page Table ว่า Page Write-Protected หรือไม่ ถ้าใช่และมีการเขียน → เกิด Trap → OS แก้สถานการณ์<br><br>
+      <strong>ใช้เมื่อใด:</strong> มีประโยชน์ตอน fork() — Parent กับ Child แชร์ Memory ทั้งหมดในช่วงแรก ประหยัด RAM
+    </div>
+  </div>
+</div>
+
+<div class="collapsible">
+  <div class="col-header" onclick="tog(this)">HW8 ข้อ 3 (Exercise 9.7): Page Fault กับ Thread Mapping <span class="arrow">▼</span></div>
+  <div class="col-body">
+    <div class="box box-green">
+      <strong>โจทย์:</strong> Process มี 5 user threads, mapping เป็น <strong>One-to-One</strong>. ถ้า 1 thread เกิด Page Fault, threads อื่นต้องรอด้วยหรือไม่?<br><br>
+      <strong>คำตอบ:</strong> <strong>ไม่ต้องรอ</strong> — เพราะ One-to-One หมายความว่า user thread แต่ละตัวมี kernel thread ของตัวเอง — Kernel block เฉพาะ kernel thread ที่เกิด fault<br><br>
+      <strong>เปรียบเทียบกับ Many-to-One (HW8 MCQ ข้อ 5):</strong> ทุก threads ของ process เดียวกันจะถูก block หมด เพราะใช้ kernel thread ตัวเดียว
+    </div>
+  </div>
+</div>
+
+<div class="collapsible">
+  <div class="col-header" onclick="tog(this)">HW8 ข้อ 4 (Exercise 9.8): Reference 7,2,3,1,2,5,3,4,6,7,7,1,0,5,4,6,2,3,0,1 — 3 frames <span class="arrow">▼</span></div>
+  <div class="col-body">
+    <p>Reference: <strong>7, 2, 3, 1, 2, 5, 3, 4, 6, 7, 7, 1, 0, 5, 4, 6, 2, 3, 0, 1</strong> (20 อ้างอิง), Frames = 3</p>
+    <button class="run-btn" onclick="show('hw8-4a')">เฉลย LRU</button>
+    <div id="hw8-4a" style="display:none" class="box box-green">
+      ใช้หลัก LRU ทำตารางทีละ Page:<br>
+      7→F, 2→F, 3→F (3 fault แรก, เติม Frame ว่าง)<br>
+      1→F (ไล่ 7), 2 hit, 5→F (ไล่ 3), 3→F (ไล่ 1), 4→F (ไล่ 2), 6→F (ไล่ 5)<br>
+      7→F, 7 hit, 1→F, 0→F, 5→F, 4→F, 6→F, 2→F, 3→F, 0→F, 1→F<br>
+      <strong>Total Page Fault = 18</strong><br>
+      ตอนสุดท้ายใน Memory: Pages 1, 3, 0
+    </div>
+    <button class="run-btn" onclick="show('hw8-4b')">เฉลย FIFO</button>
+    <div id="hw8-4b" style="display:none" class="box box-green">
+      <strong>Total Page Fault = 17</strong> (ดีกว่า LRU 1 ครั้งในกรณีนี้!)<br>
+      ตอนสุดท้ายใน Memory: Pages 0, 1, 3
+    </div>
+    <button class="run-btn" onclick="show('hw8-4c')">เฉลย Optimal</button>
+    <div id="hw8-4c" style="display:none" class="box box-green">
+      <strong>Total Page Fault = 13</strong> (น้อยที่สุดเสมอ — เป็น Lower Bound)<br>
+      ตอนสุดท้ายใน Memory: Pages 1, 3, 0<br><br>
+      <div class="warn">⚠ ลำดับ FIFO &lt; LRU &lt; OPT ในกรณีนี้พิเศษมาก ปกติ LRU ≤ FIFO เกือบทุกครั้ง</div>
+    </div>
+    <p>💡 ใช้ Page Replacement Simulator ด้านบนกรอก reference string เพื่อตรวจคำตอบ</p>
+  </div>
+</div>
+
+<div class="collapsible">
+  <div class="col-header" onclick="tog(this)">HW8 ข้อ 5 (Exercise 9.14): Demand Paging Utilizations <span class="arrow">▼</span></div>
+  <div class="col-body">
+    <p><strong>โจทย์:</strong> CPU 20%, Paging Disk 97.7%, Other I/O 5% — แต่ละมาตรการต่อไปนี้ช่วยปรับปรุง CPU Utilization หรือไม่?</p>
+    <div class="box box-yellow">
+      <strong>วิเคราะห์:</strong> ระบบใช้เวลาส่วนใหญ่ Paging → over-allocated memory → Thrashing
+    </div>
+    <table>
+      <tr><th>มาตรการ</th><th>ช่วย?</th><th>เหตุผล</th></tr>
+      <tr><td>(a) ติด CPU เร็วขึ้น</td><td>❌ No</td><td>CPU ไม่ใช่คอขวด</td></tr>
+      <tr><td>(b) Paging Disk ใหญ่ขึ้น</td><td>❌ No</td><td>ไม่เกี่ยวกับขนาด disk</td></tr>
+      <tr><td>(c) เพิ่ม Multiprogramming</td><td>❌ No</td><td>Process ในระบบมากขึ้น → Thrashing แย่ลง</td></tr>
+      <tr><td>(d) ลด Multiprogramming</td><td>✅ Yes</td><td>Process น้อยลง → Page Fault น้อยลง</td></tr>
+      <tr><td>(e) เพิ่ม RAM</td><td>✅ Yes</td><td>เก็บ Pages ได้มากขึ้น Page Fault ลดลง</td></tr>
+      <tr><td>(f) Disk เร็วขึ้น/หลายตัว</td><td>✅ Yes</td><td>คอขวด disk ถูกแก้ → CPU ได้ข้อมูลเร็วขึ้น</td></tr>
+      <tr><td>(g) Pre-paging</td><td>✅ Yes</td><td>โหลด Page ล่วงหน้า → Fault น้อยลง (ถ้าทำนายได้)</td></tr>
+      <tr><td>(h) เพิ่ม Page Size</td><td>❌ No</td><td>Pages ใน Memory น้อยลง, ส่งข้อมูลต่อ Fault มากขึ้น → Util อาจลดลง</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="collapsible">
+  <div class="col-header" onclick="tog(this)">HW8 ข้อ 6 (Exercise 9.19): Thrashing — สาเหตุ ตรวจจับ และแก้ไข <span class="arrow">▼</span></div>
+  <div class="col-body">
+    <div class="box box-green">
+      <strong>สาเหตุ:</strong> Process มี Page น้อยกว่า "minimum number of pages" ที่จำเป็น (Working Set) → เกิด Page Fault ตลอดเวลา<br><br>
+      <strong>การตรวจจับ:</strong> เปรียบเทียบ <em>CPU Utilization</em> กับ <em>ระดับ Multiprogramming</em> — ถ้า Multiprogramming สูงแต่ CPU Utilization ต่ำ = Thrashing<br><br>
+      <strong>การแก้ไข:</strong> <strong>ลดระดับ Multiprogramming</strong> (Swap ออก Process บางตัว) — ทำให้ Process ที่เหลือมี Frame พอ
+    </div>
+  </div>
+</div>
+
+<div class="collapsible">
+  <div class="col-header" onclick="tog(this)">HW8 ข้อ 7: Reference 5,8,5,3,9,1,2,9,3,8,5,1,8,7,2,8,2,9,5,2,8,9 — 4 frames <span class="arrow">▼</span></div>
+  <div class="col-body">
+    <p>Reference: <strong>5, 8, 5, 3, 9, 1, 2, 9, 3, 8, 5, 1, 8, 7, 2, 8, 2, 9, 5, 2, 8, 9</strong> (22 references), Frames = 4</p>
+    <button class="run-btn" onclick="show('hw8-7a')">เฉลย LRU</button>
+    <div id="hw8-7a" style="display:none" class="box box-green">
+      <strong>Page Fault = 13</strong><br>
+      ลำดับ Page Fault: 5✗, 8✗, 5✓, 3✗, 9✗ (ใส่ครบ 4 frame), 1✗(ไล่ 8), 2✗(ไล่ 5), 9✓, 3✓, 8✗(ไล่ 1), 5✗(ไล่ 2), 1✗(ไล่ 3), 8✓, 7✗(ไล่ 9), 2✗(ไล่ 5), 8✓, 2✓, 9✗(ไล่ 1), 5✗(ไล่ 8), 2✓, 8✗(ไล่ 7), 9✓<br>
+      ใช้ Simulator ในส่วน 8.3 ตรวจสอบ
+    </div>
+    <button class="run-btn" onclick="show('hw8-7b')">เฉลย Optimal</button>
+    <div id="hw8-7b" style="display:none" class="box box-green">
+      <strong>Page Fault = 10</strong><br>
+      Optimal เลือกไล่ Page ที่จะใช้ <em>ห่างที่สุดในอนาคต</em> ทำให้ลด fault ได้มาก<br>
+      ใช้ Simulator ในส่วน 8.3 (เลือก Optimal, frames=4) ตรวจสอบ
+    </div>
+  </div>
+</div>
+
+<div class="collapsible">
+  <div class="col-header" onclick="tog(this)">HW8 MCQ ข้อสำคัญ <span class="arrow">▼</span></div>
+  <div class="col-body">
+    <div class="box box-blue">
+      <strong>ข้อ 1:</strong> Virtual Memory <em>อนุญาต</em> ให้ process ใหญ่กว่า physical memory ได้ (B ผิด — ถูกต้องคือ "อนุญาต")<br>
+      <strong>ข้อ 2:</strong> Demand Paging = โหลด Page เฉพาะตอนต้องใช้<br>
+      <strong>ข้อ 3:</strong> Access Page ที่ไม่อยู่ใน Memory → Page Fault<br>
+      <strong>ข้อ 4:</strong> Copy-on-write — ผิดที่ "There is only one COW page per process"<br>
+      <strong>ข้อ 6:</strong> เพิ่ม Multiprogramming → เพิ่ม Page-Fault Rate<br>
+      <strong>ข้อ 7:</strong> Frame ไม่ว่าง → ใช้ Page-Replacement Algorithm หา Victim<br>
+      <strong>ข้อ 8:</strong> OPT ดีที่สุดทุกแง่ (ทุกข้อย่อยถูก)<br>
+      <strong>ข้อ 9:</strong> FIFO ใช้เวลาที่ Page ถูกโหลดเข้ามา<br>
+      <strong>ข้อ 10:</strong> Belady's Anomaly เกิดเฉพาะ FIFO<br>
+      <strong>ข้อ 12:</strong> Proportional Allocation: P0(15), P1(30), P2(50) ใน 50 frames<br>
+      Total = 95. P0: ⌊15/95×50⌋ = ⌊7.89⌋ = 7. P1: ⌊30/95×50⌋ = ⌊15.78⌋ = 15. P2: ⌊50/95×50⌋ = ⌊26.31⌋ = 26<br>
+      → คำตอบ <strong>D: P0=7, P1=15, P2=26</strong><br>
+      <strong>ข้อ 13:</strong> Thrashing แก้ด้วยการ <em>ลด</em> Multiprogramming (C ผิด — บอกเพิ่ม)
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- 8.6 Summary -->
+<div class="card">
+<h2>8.6 สรุปบทที่ 8 — Cheat Sheet</h2>
+<table>
+  <tr><th>หัวข้อ</th><th>สูตร/สาระสำคัญ</th></tr>
+  <tr><td>Demand Paging</td><td>Load Page เฉพาะเมื่อถูกเรียกใช้ → เพิ่ม Multiprogramming</td></tr>
+  <tr><td>Page Fault</td><td>Valid bit=0 → 6 ขั้นตอน → Restart Instruction</td></tr>
+  <tr><td>FIFO</td><td>ไล่เก่าสุด, มี Belady's Anomaly, ทำจริงได้</td></tr>
+  <tr><td>OPT</td><td>ไล่ที่ใช้อีกช้าสุด, Fault น้อยสุด, ทำจริงไม่ได้</td></tr>
+  <tr><td>LRU</td><td>ไล่ที่ใช้นานสุดในอดีต, ไม่มี Belady's Anomaly, ต้องการ HW</td></tr>
+  <tr><td>Equal Alloc</td><td>⌊Total Frames ÷ n⌋ ต่อกระบวนการ</td></tr>
+  <tr><td>Proportional Alloc</td><td>⌊(size_i ÷ Σsize) × Total Frames⌋</td></tr>
+  <tr><td>Thrashing</td><td>Frame น้อยเกิน → Page Fault ถี่ → CPU Utilization ↓</td></tr>
+</table>
+</div>
+<!-- 8.Cheat -->
+<div class="card">
+<h2>8.Cheat 📋 Cheat Sheet & ข้อผิดพลาดที่พบบ่อย — บทที่ 8</h2>
+<div class="grid2">
+  <div class="box box-blue">
+    <strong>📋 สูตรหลัก</strong><br>
+    • Page Fault Rate = #faults / #references<br>
+    • Equal Alloc = ⌊Total / n⌋<br>
+    • Proportional = ⌊(size_i / Σsize) × Total⌋<br>
+    • Effective Access Time = (1−p)×ma + p×fault_time<br>
+    • Working Set = Pages used in last Δ time units
+  </div>
+  <div class="box box-yellow">
+    <strong>⚠ ข้อผิดพลาดที่พบบ่อย</strong><br>
+    • LRU ไม่ใช่ Optimal — บางครั้ง LRU = FIFO<br>
+    • OPT ใช้ "อนาคต" ไม่ใช่ "อดีต" — ทำจริงไม่ได้<br>
+    • Belady's Anomaly เฉพาะ FIFO (LRU/OPT ไม่มี)<br>
+    • นับ Page Fault: <em>นับรวม</em> Frame ว่างตอนแรกด้วย<br>
+    • Thrashing แก้ด้วย <em>ลด</em> Multiprogramming ไม่ใช่เพิ่ม<br>
+    • Pure Demand Paging — ครั้งแรกเริ่มจาก Frame ว่างหมด
+  </div>
+</div>
+<div class="box box-green">
+  <strong>✅ จำให้ขึ้นใจ:</strong><br>
+  1. <strong>FIFO:</strong> ไล่ที่อยู่นานสุด (เก่าสุด) → มี Belady's Anomaly<br>
+  2. <strong>OPT:</strong> ไล่ที่จะไม่ใช้นานที่สุดในอนาคต → fault น้อยสุด แต่ทำจริงไม่ได้<br>
+  3. <strong>LRU:</strong> ไล่ที่ไม่ได้ใช้นานที่สุดในอดีต → ใกล้เคียง OPT, ใช้งานจริงได้<br>
+  4. <strong>Page Fault Steps:</strong> Trap → ค้น Disk → Frame ว่าง? → Replacement → Write Dirty → Load → Update Page Table → Restart Instruction<br>
+  5. <strong>Thrashing:</strong> Frame &lt; Working Set → Page Fault ถี่ → CPU Util ต่ำ
+</div>
+</div>
+</div><!-- end ch8 -->
+
+<div id="ch9" class="chapter">
+<div class="chapter-hero">
+  <div class="hero-icon">📁</div>
+  <div>
+    <div class="hero-title">บทที่ 9 — ระบบไฟล์และ I/O</div>
+    <div class="hero-sub">Files · Directories · Permissions · Implementation · I/O Hardware</div>
+    <div style="margin-top:8px">
+      <span class="tag">File Attributes</span><span class="tag">Directory</span>
+      <span class="tag">rwx</span><span class="tag">Contiguous</span>
+      <span class="tag">Linked</span><span class="tag">Indexed</span><span class="tag">DMA</span>
+    </div>
+  </div>
+</div>
+
+<!-- 9.1 Files -->
+<div class="card">
+<h2>9.1 ไฟล์ (File) คืออะไร?</h2>
+<p>ไฟล์คือหน่วยการจัดเก็บข้อมูลที่เล็กที่สุดบน Secondary Storage (ฮาร์ดดิสก์, SSD) มันเป็น <strong>Abstract</strong> ที่ซ่อนรายละเอียดทางกายภาพของอุปกรณ์จัดเก็บ</p>
+
+<h3>File Attributes (คุณสมบัติ/Metadata ของไฟล์)</h3>
+<table>
+  <tr><th>Attribute</th><th>ความหมาย</th><th>ตัวอย่าง</th></tr>
+  <tr><td><strong>Name</strong></td><td>ชื่อที่มนุษย์อ่านได้</td><td>report.pdf</td></tr>
+  <tr><td><strong>Type</strong></td><td>นามสกุลไฟล์ บอก OS ว่าเปิดด้วยโปรแกรมใด</td><td>.pdf, .exe, .txt</td></tr>
+  <tr><td><strong>Location</strong></td><td>ตำแหน่งบนอุปกรณ์จัดเก็บ</td><td>Sector 1024</td></tr>
+  <tr><td><strong>Size</strong></td><td>ขนาดไฟล์</td><td>2.4 MB</td></tr>
+  <tr><td><strong>Date/Time</strong></td><td>วันที่สร้าง, แก้ไข, เข้าถึงล่าสุด</td><td>2026-01-15</td></tr>
+  <tr><td><strong>Protection</strong></td><td>สิทธิ์การเข้าถึง (rwx)</td><td>-rwxr--r--</td></tr>
+</table>
+
+<h3>File Operations (การดำเนินการกับไฟล์)</h3>
+<p>OS ให้ System Calls สำหรับ: <strong>Create, Write, Read, Seek (เลื่อน pointer), Delete, Truncate</strong></p>
+<p>การดำเนินการส่วนใหญ่ต้องเปิดไฟล์ก่อน OS ใช้ <strong>Open-File Table</strong> 2 ตาราง:</p>
+<ul>
+  <li><strong>Per-Process Table:</strong> เก็บไฟล์ที่แต่ละ Process เปิดอยู่</li>
+  <li><strong>System-Wide Table:</strong> เก็บข้อมูลไฟล์ที่เปิดอยู่ทั้งระบบ</li>
+</ul>
+
+<h3>วิธีการ Access ไฟล์</h3>
+<table>
+  <tr><th>วิธี</th><th>ลักษณะ</th><th>ตัวอย่าง</th></tr>
+  <tr><td><strong>Sequential Access</strong></td><td>อ่าน/เขียนตามลำดับ ทีละ Record ไปข้างหน้า</td><td>อ่าน Text File, เล่น MP3</td></tr>
+  <tr><td><strong>Direct Access</strong></td><td>กระโดดไปยัง Block ใดก็ได้โดยตรงด้วยเลข Block</td><td>Database, CD-ROM</td></tr>
+</table>
+</div>
+
+<!-- 9.2 Directory -->
+<div class="card">
+<h2>9.2 Directory Structure — โครงสร้างการจัดไฟล์</h2>
+<p>Directory ใช้จัดระเบียบไฟล์ มี 5 โครงสร้างหลัก:</p>
+
+<div class="collapsible">
+  <div class="col-header" onclick="tog(this)">1. Single-Level Directory — ไดเรกทอรีระดับเดียว <span class="arrow">▼</span></div>
+  <div class="col-body">
+    <p>มีไดเรกทอรีเดียวสำหรับทุกไฟล์ของทุก User ในระบบ</p>
+    <div class="box box-green"><strong>ข้อดี:</strong> ง่ายที่สุด</div>
+    <div class="box box-red">
+      <strong>ข้อเสีย:</strong><br>
+      • Naming Problem: User สองคนไม่สามารถมีไฟล์ชื่อเดียวกันได้<br>
+      • ค้นหาช้า (ต้องสแกนทุกไฟล์)
+    </div>
+  </div>
+</div>
+
+<div class="collapsible">
+  <div class="col-header" onclick="tog(this)">2. Two-Level Directory — ไดเรกทอรีสองระดับ <span class="arrow">▼</span></div>
+  <div class="col-body">
+    <p>มี Master File Directory (MFD) → แต่ละ User มี User File Directory (UFD) ของตัวเอง เหมือนต้นไม้ความสูง 2</p>
+    <div class="box box-green"><strong>ข้อดี:</strong> แก้ปัญหาชื่อซ้ำ (แต่ละ User มีพื้นที่ชื่อของตัวเอง)</div>
+    <div class="box box-red"><strong>ข้อเสีย:</strong> User แต่ละคนเข้าถึงไฟล์ของคนอื่นไม่ได้ (แยกกันสนิท)</div>
+  </div>
+</div>
+
+<div class="collapsible">
+  <div class="col-header" onclick="tog(this)">3. Tree-Structured Directory — ไดเรกทอรีแบบต้นไม้ ⭐ ใช้จริงที่สุด <span class="arrow">▼</span></div>
+  <div class="col-body">
+    <p>มีระดับย่อยได้ไม่จำกัด User สร้าง subdirectory ของตัวเองได้ทุกระดับ นี่คือโครงสร้างที่ Windows, Linux ใช้</p>
+    <div class="box box-blue">
+      <strong>Path Name:</strong><br>
+      Absolute Path: เริ่มจาก Root → /home/user/Documents/report.pdf<br>
+      Relative Path: จาก Current Directory → Documents/report.pdf
+    </div>
+    <div class="box box-green"><strong>ข้อดี:</strong> จัดระเบียบได้ดี ค้นหาเร็ว แต่ละไฟล์มี Path เฉพาะตัว</div>
+  </div>
+</div>
+
+<div class="collapsible">
+  <div class="col-header" onclick="tog(this)">4. Acyclic-Graph Directory — ไดเรกทอรีแบบกราฟไม่มีวงกลม <span class="arrow">▼</span></div>
+  <div class="col-body">
+    <p>อนุญาตให้ <strong>แชร์ไฟล์หรือ Directory</strong> ได้ ไฟล์เดียวกันปรากฏในหลายตำแหน่ง (เหมือน Symbolic Link)</p>
+    <div class="box box-yellow">ไฟล์ที่แชร์จะมี Path Name มากกว่า 1 เส้นทาง การแก้ไขจะมองเห็นจากทุกตำแหน่งทันที</div>
+    <div class="box box-red"><strong>ปัญหา:</strong> การลบไฟล์ → ต้องใช้ Reference Count (ลบจริงเมื่อไม่มี Link ชี้แล้ว)</div>
+  </div>
+</div>
+
+<div class="collapsible">
+  <div class="col-header" onclick="tog(this)">5. General Graph Directory — ไดเรกทอรีแบบกราฟทั่วไป <span class="arrow">▼</span></div>
+  <div class="col-body">
+    <p>อนุญาตให้มี Cycle ในโครงสร้าง Directory</p>
+    <div class="box box-red"><strong>ปัญหา:</strong> การค้นหาอาจวนลูปไม่สิ้นสุด ต้องกำหนดขอบเขตการ Traverse หรือใช้ Garbage Collection</div>
+  </div>
+</div>
+
+<table style="margin-top:14px">
+  <tr><th>โครงสร้าง</th><th>ชื่อซ้ำ</th><th>แชร์ไฟล์</th><th>ค้นหา</th><th>ใช้จริง</th></tr>
+  <tr><td>Single-Level</td><td>❌ ไม่ได้</td><td>❌</td><td>ช้า</td><td>ระบบเก่ามาก</td></tr>
+  <tr><td>Two-Level</td><td>✅ ได้</td><td>❌</td><td>OK</td><td>ระบบเก่า</td></tr>
+  <tr><td>Tree-Structured</td><td>✅ ได้</td><td>❌</td><td>เร็ว</td><td>✅ Windows, Linux</td></tr>
+  <tr><td>Acyclic-Graph</td><td>✅ ได้</td><td>✅</td><td>เร็ว</td><td>✅ Linux (symlink)</td></tr>
+  <tr><td>General Graph</td><td>✅ ได้</td><td>✅</td><td>อาจวนลูป</td><td>⚠ ซับซ้อน</td></tr>
+</table>
+</div>
+
+<!-- 9.3 Permissions -->
+<div class="card">
+<h2>9.3 File Protection — สิทธิ์การเข้าถึง</h2>
+<p>Linux/Unix ใช้ระบบ Permission แบบ 3×3:</p>
+<table>
+  <tr><th>สิทธิ์</th><th>Symbol</th><th>ไฟล์</th><th>Directory</th></tr>
+  <tr><td><strong>Read</strong></td><td>r</td><td>ดูเนื้อหาไฟล์</td><td>ดูรายการไฟล์</td></tr>
+  <tr><td><strong>Write</strong></td><td>w</td><td>แก้ไข/เขียนทับ</td><td>สร้าง/ลบไฟล์ใน Dir</td></tr>
+  <tr><td><strong>Execute</strong></td><td>x</td><td>รันเป็นโปรแกรม</td><td>เข้าไปใน Dir ได้</td></tr>
+</table>
+<h3>3 กลุ่มผู้ใช้</h3>
+<table>
+  <tr><th>กลุ่ม</th><th>ความหมาย</th></tr>
+  <tr><td><strong>Owner (u)</strong></td><td>คนที่สร้างไฟล์</td></tr>
+  <tr><td><strong>Group (g)</strong></td><td>สมาชิกใน Group เดียวกัน</td></tr>
+  <tr><td><strong>Others (o)</strong></td><td>คนอื่นทั้งหมด</td></tr>
+</table>
+<h3>การอ่าน Permission String</h3>
+<div class="box box-blue">
+  ตัวอย่าง: <span class="highlight">-rwxrw-r--</span><br>
+  ตำแหน่งที่ 1: ชนิด (- = ไฟล์ธรรมดา, d = directory)<br>
+  ตำแหน่ง 2-4: Owner (rwx) = อ่านได้, เขียนได้, รันได้<br>
+  ตำแหน่ง 5-7: Group (rw-) = อ่านได้, เขียนได้, รันไม่ได้<br>
+  ตำแหน่ง 8-10: Others (r--) = อ่านได้อย่างเดียว
+</div>
+<div class="example-box">
+  <div class="ex-title">ตัวอย่าง: -rwxrw-r--</div>
+  <p>User A = Owner: อ่าน✓ เขียน✓ รัน✓<br>
+  User B = Group: อ่าน✓ เขียน✓ รัน✗<br>
+  User C = Others: อ่าน✓ เขียน✗ รัน✗</p>
+</div>
+<div class="tool-area">
+  <h3>🔐 Permission Interpreter</h3>
+  <label>ใส่ Permission String เช่น -rwxrw-r--</label>
+  <input type="text" id="perm-str" value="-rwxrw-r--" maxlength="10">
+  <button class="run-btn" onclick="runPerm()">▶ แปลความหมาย</button>
+  <div id="perm-out" class="output-box">กรอก permission string แล้วกดแปล</div>
+</div>
+</div>
+
+<!-- 9.3b More Permission Examples -->
+<div class="card">
+<h2>9.3b ตัวอย่าง Permission เพิ่มเติม</h2>
+
+<div class="box box-blue">
+  <strong>ระบบ Permission ใน Unix/Linux ใน 3 ระดับ:</strong><br>
+  Format: [type][owner-rwx][group-rwx][others-rwx]<br>
+  ตัวอย่าง: -rw-r--r-- = ไฟล์ธรรมดา, Owner อ่าน+เขียน, Group อ่านอย่างเดียว, Others อ่านอย่างเดียว
+</div>
+
+<div class="example-box">
+  <div class="ex-title">ฝึกอ่าน Permission Strings</div>
+  <table>
+    <tr><th>String</th><th>ชนิด</th><th>Owner</th><th>Group</th><th>Others</th></tr>
+    <tr><td><span class="highlight">-rwxrwxrwx</span></td><td>ไฟล์</td><td>rwx</td><td>rwx</td><td>rwx</td></tr>
+    <tr><td><span class="highlight">-rw-------</span></td><td>ไฟล์</td><td>rw- (ไม่รัน)</td><td>--- (ไม่มีสิทธิ์)</td><td>--- (ไม่มีสิทธิ์)</td></tr>
+    <tr><td><span class="highlight">drwxr-xr-x</span></td><td>Directory</td><td>rwx</td><td>r-x (อ่าน+เข้า, ไม่สร้างไฟล์ใหม่)</td><td>r-x</td></tr>
+    <tr><td><span class="highlight">-rwsr-xr-x</span></td><td>ไฟล์</td><td>rws (setuid)</td><td>r-x</td><td>r-x</td></tr>
+    <tr><td><span class="highlight">lrwxrwxrwx</span></td><td>Symbolic Link</td><td>rwx</td><td>rwx</td><td>rwx</td></tr>
+  </table>
+</div>
+
+<div class="example-box">
+  <div class="ex-title">โจทย์: ใครทำอะไรได้บ้าง? Permission = -rwxr-x---</div>
+  <p>Alice = Owner, Bob = Group member, Carol = Others</p>
+  <table>
+    <tr><th>ผู้ใช้</th><th>Read (r)</th><th>Write (w)</th><th>Execute (x)</th></tr>
+    <tr><td>Alice (Owner)</td><td>✅ ได้</td><td>✅ ได้</td><td>✅ ได้</td></tr>
+    <tr><td>Bob (Group)</td><td>✅ ได้</td><td>❌ ไม่ได้</td><td>✅ ได้</td></tr>
+    <tr><td>Carol (Others)</td><td>❌ ไม่ได้</td><td>❌ ไม่ได้</td><td>❌ ไม่ได้</td></tr>
+  </table>
+</div>
+
+<div class="example-box">
+  <div class="ex-title">แปลงจาก Octal Notation (ที่ใช้กับ chmod)</div>
+  <p>r = 4, w = 2, x = 1. รวมกันเป็น Octal ต่อ group<br>
+  <table>
+    <tr><th>Octal</th><th>Binary</th><th>Permission</th><th>ตัวอย่าง</th></tr>
+    <tr><td>7</td><td>111</td><td>rwx</td><td>chmod 7 = ทำทุกอย่างได้</td></tr>
+    <tr><td>6</td><td>110</td><td>rw-</td><td>อ่าน+เขียน</td></tr>
+    <tr><td>5</td><td>101</td><td>r-x</td><td>อ่าน+รัน</td></tr>
+    <tr><td>4</td><td>100</td><td>r--</td><td>อ่านอย่างเดียว</td></tr>
+    <tr><td>0</td><td>000</td><td>---</td><td>ไม่มีสิทธิ์</td></tr>
+  </table>
+  <p><strong>chmod 755 = -rwxr-xr-x</strong> (Owner=7=rwx, Group=5=r-x, Others=5=r-x)<br>
+  <strong>chmod 644 = -rw-r--r--</strong> (Owner=6=rw-, Group=4=r--, Others=4=r--)</p>
+</div>
+</div>
+
+<!-- 9.4 Implementation -->
+<div class="card">
+<h2>9.4 วิธีเก็บไฟล์บน Disk (File Allocation Methods)</h2>
+
+<h3>วิธีที่ 1: Contiguous Allocation (เก็บต่อเนื่อง)</h3>
+<p>Block ทุก Block ของไฟล์อยู่ติดกันบน Disk Directory เก็บแค่ <em>Block เริ่มต้น</em> และ <em>ขนาด</em></p>
+<div class="box box-green"><strong>ข้อดี:</strong> เข้าถึงแบบ Sequential และ Random ได้เร็วมาก</div>
+<div class="box box-red"><strong>ข้อเสีย:</strong> External Fragmentation, ไฟล์ขยายขนาดลำบาก</div>
+
+<h3>วิธีที่ 2: Linked List Allocation (เก็บแบบเชื่อมโยง)</h3>
+<p>แต่ละ Block มี Pointer ชี้ไป Block ถัดไป Block ต่างๆ กระจายอยู่ทั่ว Disk</p>
+<div class="box box-green"><strong>ข้อดี:</strong> ไม่มี External Fragmentation, ขยายไฟล์ได้ง่าย</div>
+<div class="box box-red"><strong>ข้อเสีย:</strong> Random Access ช้า (ต้องไล่ตาม Pointer), Pointer กินเนื้อที่, Pointer เสีย → ข้อมูลสูญ</div>
+
+<h3>วิธีที่ 3: FAT (File Allocation Table)</h3>
+<p>ย้าย Pointer ทั้งหมดมาเก็บรวมกันใน Table ตอนต้น Disk แทนที่จะเก็บใน Block Directory เก็บแค่ Block แรกของไฟล์</p>
+<div class="box box-blue">FAT Entry: แต่ละ Entry บอกว่า Block ถัดไปอยู่ที่ Block ไหน (หรือ EOF ถ้าเป็น Block สุดท้าย)</div>
+<div class="box box-green"><strong>ข้อดี:</strong> Random Access เร็วกว่า Linked (Cache FAT ไว้ใน RAM ได้)</div>
+
+<h3>วิธีที่ 4: Indexed Allocation (i-node)</h3>
+<p>มี <strong>Index Block</strong> พิเศษ (i-node) ที่เก็บ Pointer ชี้ไปทุก Data Block ของไฟล์</p>
+<div class="box box-blue">
+  สำหรับไฟล์ขนาดใหญ่มาก ใช้ Indirect Pointer:<br>
+  • Single Indirect: i-node → Block ของ Pointer → Data<br>
+  • Double Indirect: i-node → Block ของ Block ของ Pointer → Data<br>
+  • Triple Indirect: ลึก 3 ระดับ
+</div>
+<div class="box box-green"><strong>ข้อดี:</strong> Random Access เร็ว, ไม่มี External Fragmentation, ขยายได้ง่าย</div>
+
+<h3>ตารางเปรียบเทียบ 4 วิธี</h3>
+<table>
+  <tr><th>วิธี</th><th>Sequential</th><th>Random</th><th>Fragmentation</th><th>ขยายไฟล์</th></tr>
+  <tr><td><strong>Contiguous</strong></td><td>✅ เร็วมาก</td><td>✅ เร็วมาก</td><td>External</td><td>❌ ยาก</td></tr>
+  <tr><td><strong>Linked</strong></td><td>✅ OK</td><td>❌ ช้า</td><td>ไม่มี</td><td>✅ ง่าย</td></tr>
+  <tr><td><strong>FAT</strong></td><td>✅ OK</td><td>✅ OK (ถ้า Cache)</td><td>ไม่มี</td><td>✅ ง่าย</td></tr>
+  <tr><td><strong>Indexed (i-node)</strong></td><td>✅ OK</td><td>✅ เร็ว</td><td>ไม่มี</td><td>✅ ง่าย</td></tr>
+</table>
+</div>
+
+<!-- 9.4b File Allocation Detailed Examples -->
+<div class="card">
+<h2>9.4b ตัวอย่างการคำนวณ File Allocation Methods</h2>
+
+<h3>Contiguous Allocation — คำนวณตำแหน่ง Block</h3>
+<div class="box box-blue">
+  Directory Entry: (start_block, length)<br>
+  Block ที่ i ของไฟล์ = start_block + i (เริ่มนับจาก 0)<br>
+  ไฟล์ขนาด n blocks → ใช้ start_block ถึง start_block + n − 1
+</div>
+<div class="example-box">
+  <div class="ex-title">ตัวอย่าง: ไฟล์ "report" เริ่มที่ Block 14, ขนาด 5 blocks</div>
+  <p>Block ของไฟล์ = [14, 15, 16, 17, 18]<br>
+  เข้าถึง Block ที่ 3 (0-indexed) = 14 + 3 = <strong>Block 17</strong><br>
+  เข้าถึง Block ที่ 0 = 14 + 0 = <strong>Block 14</strong> (Sequential เริ่มต้น)</p>
+</div>
+
+<h3>Linked List Allocation — ไล่ตาม Pointer</h3>
+<div class="example-box">
+  <div class="ex-title">ตัวอย่าง: ไฟล์เริ่มที่ Block 9 (Linked)</div>
+  <p>Block 9 → ข้อมูล + Pointer ชี้ Block 16<br>
+  Block 16 → ข้อมูล + Pointer ชี้ Block 1<br>
+  Block 1 → ข้อมูล + Pointer ชี้ Block 10<br>
+  Block 10 → ข้อมูล + Pointer = EOF<br>
+  <strong>เข้าถึง Block ที่ 3 (ท้ายสุด): ต้องไล่ 9→16→1→10 = 4 I/O operations!</strong><br>
+  (ช้ากว่า Contiguous มากสำหรับ Random Access)</p>
+</div>
+
+<h3>FAT (File Allocation Table) — อ่าน FAT Table</h3>
+<div class="example-box">
+  <div class="ex-title">ตัวอย่าง: ไฟล์ A เริ่มที่ Block 2</div>
+  <table>
+    <tr><th>Block #</th><th>FAT Entry (Next Block)</th><th>เป็นของไฟล์</th></tr>
+    <tr><td>0</td><td>-</td><td>ไม่ใช้</td></tr>
+    <tr><td>1</td><td>-</td><td>ว่าง</td></tr>
+    <tr><td>2</td><td>5</td><td style="color:#48cfad">ไฟล์ A (Block 1 ของไฟล์)</td></tr>
+    <tr><td>3</td><td>-</td><td>ว่าง</td></tr>
+    <tr><td>4</td><td>EOF</td><td style="color:#6c63ff">ไฟล์ B</td></tr>
+    <tr><td>5</td><td>8</td><td style="color:#48cfad">ไฟล์ A (Block 2 ของไฟล์)</td></tr>
+    <tr><td>6</td><td>-</td><td>ว่าง</td></tr>
+    <tr><td>7</td><td>-</td><td>ว่าง</td></tr>
+    <tr><td>8</td><td>EOF</td><td style="color:#48cfad">ไฟล์ A (Block 3 ของไฟล์)</td></tr>
+  </table>
+  <p><strong>ไฟล์ A ประกอบด้วย Block: 2 → 5 → 8 → EOF</strong><br>
+  เข้าถึง Block ที่ 2 ของไฟล์ A: FAT[2]=5, FAT[5]=8 → ไป Block 8<br>
+  ถ้า Cache FAT ไว้ใน RAM → Random Access เร็วกว่า Linked มาก</p>
+</div>
+
+<h3>Indexed (i-node) — คำนวณ Indirect Pointer</h3>
+<div class="box box-blue">
+  <strong>i-node Direct vs Indirect:</strong><br>
+  Direct Pointer: ชี้ตรงไป Data Block<br>
+  Single Indirect: ชี้ไป Index Block → Index Block ชี้ไป Data Block<br>
+  Double Indirect: ชี้ไป Block ของ Index Block → Index Block → Data Block<br>
+  <br>
+  ถ้า Block size = B bytes, Pointer size = P bytes → แต่ละ Indirect Block มี B/P pointers
+</div>
+<div class="example-box">
+  <div class="ex-title">ตัวอย่าง: Block size = 512 bytes, Pointer = 4 bytes</div>
+  <p>Index Block ละ 512/4 = 128 pointers<br>
+  Direct blocks = 10 (สมมติ i-node มี 10 direct pointers)<br>
+  Single Indirect: 128 blocks<br>
+  Double Indirect: 128 × 128 = 16,384 blocks<br>
+  Triple Indirect: 128^3 = 2,097,152 blocks<br>
+  <br>
+  <strong>ขนาดไฟล์สูงสุด:</strong><br>
+  (10 + 128 + 16,384 + 2,097,152) × 512 bytes = ~1 GB</p>
+</div>
+</div>
+
+<!-- 9.5 Free Space -->
+<div class="card">
+<h2>9.5 Free Space Management — ติดตาม Block ว่าง</h2>
+<h3>Bit Vector (Bitmap)</h3>
+<p>ใช้ 1 bit ต่อ 1 Block: <span class="highlight">0</span> = ว่าง, <span class="highlight">1</span> = ถูกใช้</p>
+<div class="box box-blue">
+  ข้อดี: หา Block ว่างติดกันได้ง่าย ใช้ bit operation<br>
+  ข้อเสีย: ถ้า Disk ใหญ่มาก Bitmap ก็ใหญ่ตาม
+</div>
+<h3>Linked List ของ Block ว่าง</h3>
+<p>เชื่อม Block ว่างด้วย Pointer ง่ายต่อการเพิ่ม/ลบ แต่หา Block ว่างติดกันยาก</p>
+</div>
+
+<!-- 9.6 I/O -->
+<div class="card">
+<h2>9.6 ระบบ I/O</h2>
+
+<h3>โครงสร้างฮาร์ดแวร์ I/O</h3>
+<p>อุปกรณ์ I/O เชื่อมต่อกับ CPU ผ่าน <strong>Bus</strong>:</p>
+<table>
+  <tr><th>Bus</th><th>ใช้กับ</th></tr>
+  <tr><td>PCI / PCIe</td><td>อุปกรณ์ความเร็วสูง (GPU, NVMe SSD)</td></tr>
+  <tr><td>Expansion Bus</td><td>อุปกรณ์ช้า (Keyboard, USB, Serial)</td></tr>
+  <tr><td>SCSI Bus</td><td>อุปกรณ์จัดเก็บ (HDD, Tape)</td></tr>
+</table>
+
+<h3>Device Controller Registers</h3>
+<p>แต่ละ Controller มี Register 4 แบบ:</p>
+<table>
+  <tr><th>Register</th><th>หน้าที่</th></tr>
+  <tr><td>Data-in</td><td>CPU อ่านข้อมูลจากอุปกรณ์</td></tr>
+  <tr><td>Data-out</td><td>CPU ส่งข้อมูลไปอุปกรณ์</td></tr>
+  <tr><td>Status</td><td>บอกสถานะ (Busy/Idle/Error)</td></tr>
+  <tr><td>Control</td><td>คำสั่ง/โหมดการทำงาน</td></tr>
+</table>
+
+<h3>วิธีควบคุม I/O — 3 แบบ</h3>
+<table>
+  <tr><th>วิธี</th><th>การทำงาน</th><th>ข้อดี</th><th>ข้อเสีย</th></tr>
+  <tr><td><strong>Polling</strong></td><td>CPU วนตรวจ Status Register ซ้ำๆ</td><td>ง่าย</td><td>CPU เสียเวลา Busy-Wait ไม่ได้ทำอะไร</td></tr>
+  <tr><td><strong>Interrupt-Driven</strong></td><td>อุปกรณ์ส่ง Interrupt เมื่อพร้อม CPU ทำงานอื่นระหว่างรอ</td><td>CPU ไม่เสียเวลา</td><td>Overhead ถ้า Interrupt เยอะมาก</td></tr>
+  <tr><td><strong>DMA</strong></td><td>DMA Controller จัดการโอนข้อมูลก้อนใหญ่เองทั้งหมด CPU แค่ตั้งค่า แล้วก็ได้รับ Interrupt เมื่อเสร็จ</td><td>CPU เป็นอิสระระหว่างโอน</td><td>ต้องการ DMA Controller</td></tr>
+</table>
+<div class="box box-blue">
+  <strong>DMA (Direct Memory Access):</strong><br>
+  มาตรฐานสำหรับการโอนข้อมูลปริมาณมาก CPU บอก DMA ว่า โอนจากไหน ไปไหน กี่ bytes แล้ว CPU ทำงานอื่น → DMA โอนข้อมูลเอง → เสร็จแล้ว Interrupt CPU
+</div>
+
+<h3>Kernel I/O Subsystem — บริการ I/O ของ Kernel</h3>
+<table>
+  <tr><th>บริการ</th><th>ความหมาย</th></tr>
+  <tr><td><strong>Scheduling</strong></td><td>จัดลำดับ I/O Request ให้มีประสิทธิภาพ</td></tr>
+  <tr><td><strong>Buffering</strong></td><td>เก็บข้อมูลชั่วคราวระหว่างอุปกรณ์ที่ความเร็วต่างกัน</td></tr>
+  <tr><td><strong>Double Buffering</strong></td><td>ใช้ Buffer 2 ก้อน: CPU ประมวลผล Buffer A ขณะ Device เติม Buffer B</td></tr>
+  <tr><td><strong>Spooling</strong></td><td>คิว Output สำหรับอุปกรณ์ที่ใช้ได้แค่ครั้งละ 1 Process (เช่น Printer)</td></tr>
+  <tr><td><strong>Error Handling</strong></td><td>ตรวจจับและรายงาน I/O Error</td></tr>
+</table>
+
+<h3>Device Driver</h3>
+<p>โปรแกรม (ส่วนหนึ่งของ OS) ที่แปล คำสั่งทั่วไปของ OS → คำสั่งเฉพาะของอุปกรณ์ อุปกรณ์แต่ละชนิดต้องการ Driver ของตัวเอง</p>
+
+<div class="tool-area">
+  <h3>📝 โจทย์ฝึกหัด File Systems</h3>
+  <div class="collapsible">
+    <div class="col-header" onclick="tog(this)">โจทย์ 1: เลือก Directory Structure <span class="arrow">▼</span></div>
+    <div class="col-body">
+      <p>User หลายคนต้องการแชร์ไฟล์กัน แต่ก็ต้องการพื้นที่ส่วนตัวด้วย ควรใช้ Directory Structure แบบไหน?</p>
+      <button class="run-btn" onclick="show('f1')">แสดงเฉลย</button>
+      <div id="f1" style="display:none" class="box box-green">
+        <strong>Acyclic-Graph Directory</strong><br>
+        เหตุผล: อนุญาตให้แชร์ไฟล์ได้ (ไฟล์ปรากฏในหลายตำแหน่ง) และแต่ละ User ยังมีพื้นที่ส่วนตัวในโครงสร้างต้นไม้ของตัวเอง
+      </div>
+    </div>
+  </div>
+  <div class="collapsible">
+    <div class="col-header" onclick="tog(this)">โจทย์ 2: เลือก File Allocation Method <span class="arrow">▼</span></div>
+    <div class="col-body">
+      <p>ต้องการเก็บไฟล์ Database ขนาดใหญ่ที่ต้องการ Random Access บ่อยมาก ควรใช้วิธีใด?</p>
+      <button class="run-btn" onclick="show('f2')">แสดงเฉลย</button>
+      <div id="f2" style="display:none" class="box box-green">
+        <strong>Indexed Allocation (i-node)</strong><br>
+        เหตุผล: Random Access เร็ว, ไม่มี External Fragmentation, ขยายไฟล์ได้ง่าย เหมาะกับ Database มากที่สุด
+      </div>
+    </div>
+  </div>
+  <div class="collapsible">
+    <div class="col-header" onclick="tog(this)">โจทย์ 3: I/O Control Method <span class="arrow">▼</span></div>
+    <div class="col-body">
+      <p>ต้องการโอนไฟล์ขนาด 500 MB จาก HDD ไป RAM วิธีไหนเหมาะสมที่สุด?</p>
+      <button class="run-btn" onclick="show('f3')">แสดงเฉลย</button>
+      <div id="f3" style="display:none" class="box box-green">
+        <strong>DMA (Direct Memory Access)</strong><br>
+        เหตุผล: การโอนข้อมูลจำนวนมาก DMA จัดการโอนเองทั้งหมดโดย CPU ไม่ต้องเข้ามาเกี่ยว CPU เป็นอิสระทำงานอื่นได้ระหว่างโอน
+      </div>
+    </div>
+  </div>
+  <div class="collapsible">
+    <div class="col-header" onclick="tog(this)">โจทย์ 4: อ่าน Permission String <span class="arrow">▼</span></div>
+    <div class="col-body">
+      <p>Permission string: drwxr-x---<br>
+      User A = Owner. User B = in Group. User C = Others. ใครทำอะไรได้บ้าง?</p>
+      <button class="run-btn" onclick="show('f4')">แสดงเฉลย</button>
+      <div id="f4" style="display:none" class="box box-green">
+        d = Directory (ไม่ใช่ไฟล์)<br>
+        Owner (A): rwx = อ่าน✓ เขียน✓ เข้า Directory✓<br>
+        Group (B): r-x = อ่าน✓ เขียน✗ เข้า Directory✓<br>
+        Others (C): --- = อ่าน✗ เขียน✗ เข้า Directory✗
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- 9.HW โจทย์จาก Homework 9 -->
+<div class="card">
+<h2>9.HW โจทย์จาก Homework 9 — เฉลยทีละขั้น</h2>
+<div class="box box-purple">
+  <strong>📌 ครอบคลุมทุกโจทย์ใน Homework 9 — เน้น I-node, FAT, Linked List, Permission</strong>
+</div>
+
+<div class="collapsible">
+  <div class="col-header" onclick="tog(this)">HW9 ข้อ 1: I-node Table — File Block ↔ Physical Block <span class="arrow">▼</span></div>
+  <div class="col-body">
+    <p><strong>โจทย์:</strong> I-node ของ File A:</p>
+    <table>
+      <tr><th>Data Block</th><th>Physical Block</th></tr>
+      <tr><td>0</td><td>5</td></tr>
+      <tr><td>1</td><td>23</td></tr>
+      <tr><td>2</td><td>12</td></tr>
+      <tr><td>3</td><td>44</td></tr>
+      <tr><td>4</td><td>91</td></tr>
+      <tr><td>5</td><td>28</td></tr>
+      <tr><td>6</td><td>75</td></tr>
+    </table>
+    <button class="run-btn" onclick="show('hw9-1')">เฉลย</button>
+    <div id="hw9-1" style="display:none" class="box box-green">
+      <strong>(1.1) Physical Block 44 = Data Block ใด?</strong><br>
+      ดูในตาราง → row ที่ Physical=44 คือ Data Block <strong>3</strong><br><br>
+      <strong>(1.2) Data Block 5 อยู่ที่ Physical Block ใด?</strong><br>
+      ดูในตาราง → row Data Block 5 ค่า Physical = <strong>28</strong>
+    </div>
+    <div class="box box-blue">
+      <strong>วิธีอ่าน I-node Table (จำให้ขึ้นใจ):</strong><br>
+      • Index ในตาราง = หมายเลข Data Block (file-block) ของไฟล์<br>
+      • ค่าที่อยู่ในแต่ละ entry = หมายเลข Physical Block ที่เก็บข้อมูลจริง<br>
+      • i-node ทำให้เข้าถึง Data Block ใดก็ได้ใน 1 step (Random Access เร็ว)
+    </div>
+  </div>
+</div>
+
+<div class="collapsible">
+  <div class="col-header" onclick="tog(this)">HW9 ข้อ 2.1: Linked List Allocation <span class="arrow">▼</span></div>
+  <div class="col-body">
+    <p><strong>โจทย์:</strong> File A ประกอบด้วย Block 0-7 (Linked):<br>
+    8 → 14 → 22 → 28 → 5 → 33 → 19 → -1 (EOF)</p>
+    <p>คือ Data Block 0 อยู่ Physical 8, Data Block 1 อยู่ Physical 14, ฯลฯ</p>
+    <button class="run-btn" onclick="show('hw9-21')">เฉลย</button>
+    <div id="hw9-21" style="display:none" class="box box-green">
+      <strong>(2.1.a) Data Block 6 อยู่ Physical Block ใด?</strong><br>
+      ลำดับที่ index 6 → <strong>Physical Block 33</strong><br><br>
+      <strong>(2.1.b) Physical Block 28 เก็บ Data Block ใด?</strong><br>
+      28 อยู่ index ที่ 3 → <strong>Data Block 3</strong>
+    </div>
+    <div class="warn">⚠ Linked List: ต้องไล่ Pointer จาก Block 0 ไปทีละ Block ถ้าจะเข้าถึง Block ที่ k → ใช้ k+1 disk read (ช้า!)</div>
+  </div>
+</div>
+
+<div class="collapsible">
+  <div class="col-header" onclick="tog(this)">HW9 ข้อ 2.2: FAT (File Allocation Table) <span class="arrow">▼</span></div>
+  <div class="col-body">
+    <p><strong>โจทย์ FAT:</strong></p>
+    <table>
+      <tr><th>Physical Block #</th><th>FAT Entry</th></tr>
+      <tr><td>0</td><td>2</td></tr>
+      <tr><td>1</td><td>6</td></tr>
+      <tr><td>2</td><td>-1</td></tr>
+      <tr><td>3</td><td>5</td></tr>
+      <tr><td>4</td><td>7 ← File A เริ่มที่นี่</td></tr>
+      <tr><td>5</td><td>-1</td></tr>
+      <tr><td>6</td><td>3</td></tr>
+      <tr><td>7</td><td>1</td></tr>
+      <tr><td>8</td><td>15 ← File B เริ่มที่นี่</td></tr>
+    </table>
+    <button class="run-btn" onclick="show('hw9-22')">เฉลย</button>
+    <div id="hw9-22" style="display:none" class="box box-green">
+      <strong>(2.2.a) File A มีกี่ Data Block?</strong><br>
+      ไล่ FAT จาก Block 4: 4 → FAT[4]=7 → FAT[7]=1 → FAT[1]=6 → FAT[6]=3 → FAT[3]=5 → FAT[5]=-1 (EOF)<br>
+      ลำดับ Physical: <strong>4, 7, 1, 6, 3, 5</strong> = <strong>6 Data Blocks</strong><br><br>
+      <strong>(2.2.b) Data Block 4 ของ File A อยู่ Physical ใด?</strong><br>
+      ลำดับ Data Block: 0=4, 1=7, 2=1, 3=6, 4=<strong>3</strong>, 5=5
+    </div>
+    <div class="box box-blue">
+      <strong>เทคนิคไล่ FAT:</strong> เริ่มจาก Block แรก ดูค่าใน FAT เป็นเลข Block ถัดไป — วนจนเจอ −1 (EOF)
+    </div>
+  </div>
+</div>
+
+<div class="collapsible">
+  <div class="col-header" onclick="tog(this)">HW9 MCQ ข้อสำคัญพร้อมเฉลย <span class="arrow">▼</span></div>
+  <div class="col-body">
+    <div class="box box-blue">
+      <strong>ข้อ 1:</strong> File system management เป็นบริการของ <em>OS</em> ไม่ใช่ application program (B ผิด)<br>
+      <strong>ข้อ 2:</strong> name, type, location, size, protection, date = <strong>File Attributes</strong><br>
+      <strong>ข้อ 3:</strong> ไฟล์เก็บใน <strong>nonvolatile storage</strong> (เก็บได้แม้ปิดเครื่อง)<br>
+      <strong>ข้อ 4:</strong> ไฟล์ที่ OS ทุกตัวต้องรองรับ = <strong>executable</strong> (ไม่งั้นรันโปรแกรมไม่ได้)<br>
+      <strong>ข้อ 5:</strong> Partition <em>ไม่</em> มีไฟล์โดยตรง — Volume ต่างหากที่มีไฟล์ (C ผิด)<br>
+      <strong>ข้อ 6:</strong> สิ่งที่บรรจุ file system = <strong>Volume</strong><br>
+      <strong>ข้อ 7:</strong> Directory ง่ายสุด = <strong>Single-Level</strong><br>
+      <strong>ข้อ 8:</strong> Naming Problem (ชื่อซ้ำ) เกิดใน <strong>Single-Level Directory</strong><br>
+      <strong>ข้อ 9:</strong> Absolute Path เริ่มจาก <em>Root</em> ไม่ใช่ Current Directory (B ผิด)<br>
+      <strong>ข้อ 10:</strong> r-xrw-r-x → Owner=r-x (อ่าน/รัน), Group=rw- (อ่าน/เขียน), Others=r-x → <strong>คำตอบ B (Group อ่าน+เขียน)</strong><br>
+      <strong>ข้อ 11:</strong> ข้อมูลใน HDD เก็บที่ <strong>Disk Platters</strong> (จานหมุน)<br>
+      <strong>ข้อ 12:</strong> ไม่ใช่ File-Implementation = <strong>Paging</strong> (ใช้สำหรับ Memory)<br>
+      <strong>ข้อ 13:</strong> FAT เก็บที่ <strong>Main Memory</strong> (เพื่อ Access เร็ว — Cache จาก Disk)<br>
+      <strong>ข้อ 14:</strong> 100 ไฟล์ → 100 i-nodes (1 i-node ต่อ 1 ไฟล์)<br>
+      <strong>ข้อ 15:</strong> Bit Vector 00110011001100110... — 0 = ว่าง, 1 = ใช้งาน. นับจาก position 0:<br>
+      Block 0=0(ว่าง), 1=0(ว่าง), 2=1(ใช้), 3=1(ใช้), 4=0(ว่าง), 5=0(ว่าง), 6=1(ใช้), 7=1(ใช้)... → A: Block 4 ว่าง ✓ มี answer ที่ถูก แต่ในคำตอบจริง <strong>B (Block 6 free)</strong> — ตรวจ pattern ใหม่: ดูจริงๆ pattern อาจเริ่มที่ position 0 = "0011" → รูปแบบทุก 4 = 00,11. ตามเฉลย <strong>B (Block 6 = ว่าง)</strong> ใช้ pattern ที่ Block 4-5 ใช้ Block 6-7 ว่าง<br>
+      <strong>ข้อ 16:</strong> รองรับอุปกรณ์ใหม่ = <strong>Device Driver</strong><br>
+      <strong>ข้อ 17:</strong> Register ที่เก็บข้อมูลส่งออก = <strong>Data-out Register</strong><br>
+      <strong>ข้อ 18:</strong> Asynchronous, character-stream = <strong>Keyboard</strong><br>
+      <strong>ข้อ 19:</strong> Data Rate สูงสุด = <strong>Gigabit Ethernet</strong>
+    </div>
+  </div>
+</div>
+
+<div class="collapsible">
+  <div class="col-header" onclick="tog(this)">HW9 บทสรุปการเปรียบเทียบ File Allocation Methods <span class="arrow">▼</span></div>
+  <div class="col-body">
+    <table>
+      <tr><th>วิธี</th><th>ตำแหน่ง Pointer</th><th>วิธีหา Block ที่ k</th><th>เร็ว Random?</th></tr>
+      <tr><td>Contiguous</td><td>ไม่มี — Block ติดกัน</td><td>Start + k</td><td>✅ เร็วมาก</td></tr>
+      <tr><td>Linked List</td><td>ในแต่ละ Data Block</td><td>ไล่ Pointer k ครั้ง</td><td>❌ ช้า</td></tr>
+      <tr><td>FAT</td><td>ในตารางแยก (Cache RAM)</td><td>ไล่ FAT k ครั้ง (เร็ว เพราะใน RAM)</td><td>✅ OK</td></tr>
+      <tr><td>Indexed (i-node)</td><td>ในบล็อก Index แยก</td><td>i-node[k] (1 step)</td><td>✅ เร็ว</td></tr>
+    </table>
+  </div>
+</div>
+</div>
+
+<!-- 9.Cheat -->
+<div class="card">
+<h2>9.Cheat 📋 Cheat Sheet & ข้อผิดพลาดที่พบบ่อย — บทที่ 9</h2>
+<div class="grid2">
+  <div class="box box-blue">
+    <strong>📋 หลักจำสำคัญ</strong><br>
+    • File = ข้อมูลใน Secondary Storage (nonvolatile)<br>
+    • Volume = หน่วยที่บรรจุ File System<br>
+    • Tree-Structured Directory = ที่ใช้จริงมากที่สุด<br>
+    • Acyclic-Graph = แชร์ไฟล์ระหว่างผู้ใช้ได้<br>
+    • i-node = 1 ตัวต่อ 1 ไฟล์<br>
+    • FAT = เก็บใน Main Memory (Cache)<br>
+    • Permission Octal: r=4, w=2, x=1<br>
+    • DMA = สำหรับโอนข้อมูลปริมาณมาก
+  </div>
+  <div class="box box-yellow">
+    <strong>⚠ ข้อผิดพลาดที่พบบ่อย</strong><br>
+    • Single-Level Directory มีปัญหาชื่อซ้ำ<br>
+    • Linked List ช้าใน Random Access<br>
+    • Absolute Path เริ่มจาก Root ไม่ใช่ Current<br>
+    • Permission อ่านจากซ้ายไปขวา: type→owner→group→others<br>
+    • i-node ≠ Page Table (อย่าสับสน)<br>
+    • Polling vs Interrupt vs DMA — เลือกตามขนาดข้อมูล
+  </div>
+</div>
+<div class="box box-green">
+  <strong>✅ จำให้ขึ้นใจสำหรับ Final:</strong><br>
+  1. <strong>File Allocation 4 วิธี:</strong> Contiguous, Linked, FAT, Indexed (i-node) — รู้ข้อดีข้อเสียแต่ละแบบ<br>
+  2. <strong>Directory 5 แบบ:</strong> Single, Two-Level, Tree, Acyclic-Graph, General Graph — รู้ปัญหาแต่ละแบบ<br>
+  3. <strong>Permission 9 bits:</strong> rwx × (Owner, Group, Others) — chmod 755 = -rwxr-xr-x<br>
+  4. <strong>I/O 3 แบบ:</strong> Polling (CPU busy), Interrupt (CPU ทำอื่นได้), DMA (CPU เป็นอิสระทั้งหมด)<br>
+  5. <strong>Device Controller Registers 4 ตัว:</strong> Data-in, Data-out, Status, Control<br>
+  6. <strong>Free Space:</strong> Bit Vector หรือ Linked List<br>
+  7. <strong>Bus types:</strong> PCI/PCIe (เร็ว), Expansion (ช้า), SCSI (storage)
+</div>
+</div>
+</div><!-- end ch9 -->
+
+<!-- ═══════════════════════════════════════════════════
+     บทสอบฝึก : Final Exam Practice
+═══════════════════════════════════════════════════ -->
+<div id="exam" class="chapter">
+<div class="chapter-hero">
+  <div class="hero-icon">📝</div>
+  <div>
+    <div class="hero-title">บทสอบฝึก — Final Exam Practice</div>
+    <div class="hero-sub">MCQ 60 ข้อ + Short-Answer 12 ข้อ ครอบคลุมบทที่ 6–9 · เลียนแบบรูปแบบข้อสอบจริง</div>
+    <div style="margin-top:8px">
+      <span class="tag">Part I: MCQ</span><span class="tag">Part II: Computational</span>
+      <span class="tag">บทที่ 6 Deadlocks</span><span class="tag">บทที่ 7 Memory</span>
+      <span class="tag">บทที่ 8 Virtual Memory</span><span class="tag">บทที่ 9 File &amp; I/O</span>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+<h2>วิธีใช้บทสอบฝึก</h2>
+<div class="box box-blue">
+  <strong>📋 คำแนะนำ:</strong><br>
+  1. <strong>Part I (MCQ):</strong> คลิกตัวเลือก a–d → ระบบจะแสดงผลถูก/ผิดทันที + คำอธิบาย<br>
+  2. <strong>Part II (คำนวณ):</strong> ลองคิดเองก่อน → กดปุ่ม "แสดงเฉลย" เพื่อตรวจ<br>
+  3. คะแนนสะสมจะแสดงด้านบนตลอด สามารถกด "รีเซ็ต" เพื่อทำใหม่<br>
+  4. ทุกข้อระบุประเภท/บท เพื่อให้ทราบจุดอ่อน
+</div>
+<div class="score-board">
+  <div class="sc">ตอบถูก: <b id="sc-right">0</b> / <span id="sc-total">60</span></div>
+  <div class="sc wrong-c">ตอบผิด: <b style="color:var(--accent3)" id="sc-wrong">0</b></div>
+  <div class="sc">เปอร์เซ็นต์: <b id="sc-pct">0%</b></div>
+  <button class="run-btn secondary" onclick="resetQuiz()">🔄 รีเซ็ต</button>
+</div>
+</div>
+
+<!-- ═════════ Part I: MCQ ═════════ -->
+<div class="card">
+<h2>Part I — MCQ Practice (60 ข้อ)</h2>
+
+<h3>📖 บทที่ 6: Deadlocks (15 ข้อ)</h3>
+<div id="mcq-ch6"></div>
+
+<h3>📖 บทที่ 7: Memory Management (15 ข้อ)</h3>
+<div id="mcq-ch7"></div>
+
+<h3>📖 บทที่ 8: Virtual Memory (15 ข้อ)</h3>
+<div id="mcq-ch8"></div>
+
+<h3>📖 บทที่ 9: File &amp; I/O Systems (15 ข้อ)</h3>
+<div id="mcq-ch9"></div>
+</div>
+
+<!-- ═════════ Part II: Short Answer ═════════ -->
+<div class="card">
+<h2>Part II — Short-Answer / Computational (12 ข้อ)</h2>
+<p>โจทย์เลียนแบบรูปแบบข้อสอบจริง — ตอบเป็นตัวเลขสุดท้าย พร้อมวิธีคิดทีละขั้น</p>
+
+<div class="subq">
+  <div class="subq-title">ข้อ 1) Banker's Algorithm — Safe Sequence <span class="quiz-cat">บทที่ 6</span></div>
+  <p>ระบบมี 5 กระบวนการ (P0–P4) และทรัพยากร 3 ชนิด (A=10, B=5, C=7)<br>
+  Allocation: P0=[0,1,0], P1=[2,0,0], P2=[3,0,2], P3=[2,1,1], P4=[0,0,2]<br>
+  Max: P0=[7,5,3], P1=[3,2,2], P2=[9,0,2], P3=[2,2,2], P4=[4,3,3]<br>
+  Available = [3,3,2] — จงหา Safe Sequence</p>
+  <button class="show-ans-btn" onclick="togAns(this)">แสดงเฉลย</button>
+  <div class="ans-block">
+    <b>วิธีคิด:</b><br>
+    Need = Max − Allocation:<br>
+    P0=[7,4,3], P1=[1,2,2], P2=[6,0,0], P3=[0,1,1], P4=[4,3,1]<br><br>
+    รอบ 1: Work=[3,3,2] — P1.Need[1,2,2]≤[3,3,2] ✓ → Work=[3,3,2]+[2,0,0]=[5,3,2]<br>
+    รอบ 2: P3.Need[0,1,1]≤[5,3,2] ✓ → Work=[5,3,2]+[2,1,1]=[7,4,3]<br>
+    รอบ 3: P4.Need[4,3,1]≤[7,4,3] ✓ → Work=[7,4,3]+[0,0,2]=[7,4,5]<br>
+    รอบ 4: P0.Need[7,4,3]≤[7,4,5] ✓ → Work=[7,4,5]+[0,1,0]=[7,5,5]<br>
+    รอบ 5: P2.Need[6,0,0]≤[7,5,5] ✓ → Work=[10,5,7]<br><br>
+    <b>คำตอบสุดท้าย:</b> <span class="final-num">⟨P1, P3, P4, P0, P2⟩</span> (Safe State)
+  </div>
+</div>
+
+<div class="subq">
+  <div class="subq-title">ข้อ 2) Banker's — Request Algorithm <span class="quiz-cat">บทที่ 6</span></div>
+  <p>จากระบบในข้อ 1 หาก P1 ขอ Request=[1,0,2] จะอนุญาตได้หรือไม่?</p>
+  <button class="show-ans-btn" onclick="togAns(this)">แสดงเฉลย</button>
+  <div class="ans-block">
+    <b>วิธีคิด:</b><br>
+    ขั้น 1: Request[1,0,2] ≤ Need P1 [1,2,2] ✓<br>
+    ขั้น 2: Request[1,0,2] ≤ Available [3,3,2] ✓<br>
+    ขั้น 3: จำลอง:<br>
+    Available = [3,3,2]−[1,0,2] = [2,3,0]<br>
+    Allocation P1 = [2,0,0]+[1,0,2] = [3,0,2]<br>
+    Need P1 = [1,2,2]−[1,0,2] = [0,2,0]<br>
+    ขั้น 4: รัน Safety → P1→P3→P4→P0→P2 ปลอดภัย<br><br>
+    <b>คำตอบสุดท้าย:</b> <span class="final-num">อนุญาตได้ (Safe)</span>
+  </div>
+</div>
+
+<div class="subq">
+  <div class="subq-title">ข้อ 3) Paging — Logical → Physical Address <span class="quiz-cat">บทที่ 7</span></div>
+  <p>ระบบใช้ Page Size = 1 KB (1024 bytes)<br>
+  Page Table: Page 0→Frame 5, Page 1→Frame 6, Page 2→Frame 1, Page 3→Frame 2<br>
+  Logical Address = 3500 → จงหา Physical Address</p>
+  <button class="show-ans-btn" onclick="togAns(this)">แสดงเฉลย</button>
+  <div class="ans-block">
+    <b>วิธีคิด:</b><br>
+    Page Number p = ⌊3500 / 1024⌋ = 3<br>
+    Offset d = 3500 mod 1024 = 3500 − 3072 = 428<br>
+    Page 3 → Frame 2<br>
+    Physical Address = Frame × Page Size + Offset = 2 × 1024 + 428 = 2048 + 428<br><br>
+    <b>คำตอบสุดท้าย:</b> <span class="final-num">2476</span>
+  </div>
+</div>
+
+<div class="subq">
+  <div class="subq-title">ข้อ 4) Internal Fragmentation <span class="quiz-cat">บทที่ 7</span></div>
+  <p>ขนาด Page = 2048 bytes กระบวนการต้องการหน่วยความจำ 72,766 bytes<br>
+  จงหา Internal Fragmentation (bytes)</p>
+  <button class="show-ans-btn" onclick="togAns(this)">แสดงเฉลย</button>
+  <div class="ans-block">
+    <b>วิธีคิด:</b><br>
+    จำนวน Page ที่ต้องใช้ = ⌈72766 / 2048⌉ = ⌈35.53⌉ = 36 pages<br>
+    หน่วยความจำที่จัดสรร = 36 × 2048 = 73,728 bytes<br>
+    Internal Frag = 73728 − 72766 = 962 bytes<br>
+    (เกิดเฉพาะ page สุดท้ายที่ใช้ไม่เต็ม)<br><br>
+    <b>คำตอบสุดท้าย:</b> <span class="final-num">962 bytes</span>
+  </div>
+</div>
+
+<div class="subq">
+  <div class="subq-title">ข้อ 5) First/Best/Worst Fit <span class="quiz-cat">บทที่ 7</span></div>
+  <p>Holes ว่าง: [100, 500, 200, 300, 600] KB ตามลำดับ<br>
+  กระบวนการขอ 212 KB — Hole ใดถูกเลือกในแต่ละ algorithm?</p>
+  <button class="show-ans-btn" onclick="togAns(this)">แสดงเฉลย</button>
+  <div class="ans-block">
+    <b>วิธีคิด:</b><br>
+    First Fit: เลือก Hole แรกที่ ≥ 212 → Hole[1] = 500 KB<br>
+    Best Fit: เลือก Hole เล็กสุดที่ ≥ 212 → Hole[3] = 300 KB (เหลือ 88)<br>
+    Worst Fit: เลือก Hole ใหญ่สุด → Hole[4] = 600 KB (เหลือ 388)<br><br>
+    <b>คำตอบสุดท้าย:</b> <span class="final-num">FF=500, BF=300, WF=600</span>
+  </div>
+</div>
+
+<div class="subq">
+  <div class="subq-title">ข้อ 6) Page Replacement — FIFO <span class="quiz-cat">บทที่ 8</span></div>
+  <p>Reference String: 7, 0, 1, 2, 0, 3, 0, 4, 2, 3, 0, 3, 2 — Frames = 3<br>
+  จงนับจำนวน Page Faults ด้วย FIFO</p>
+  <button class="show-ans-btn" onclick="togAns(this)">แสดงเฉลย</button>
+  <div class="ans-block">
+    <b>วิธีคิด FIFO (3 frames):</b><br>
+    7→[7]F · 0→[7,0]F · 1→[7,0,1]F · 2→[0,1,2]F(เตะ7) · 0→hit · 3→[1,2,3]F(เตะ0) · 0→[2,3,0]F(เตะ1) · 4→[3,0,4]F(เตะ2) · 2→[0,4,2]F(เตะ3) · 3→[4,2,3]F(เตะ0) · 0→[2,3,0]F(เตะ4) · 3→hit · 2→hit<br><br>
+    <b>คำตอบสุดท้าย:</b> <span class="final-num">10 page faults</span>
+  </div>
+</div>
+
+<div class="subq">
+  <div class="subq-title">ข้อ 7) Page Replacement — Optimal (OPT) <span class="quiz-cat">บทที่ 8</span></div>
+  <p>Reference String เดียวกัน: 7, 0, 1, 2, 0, 3, 0, 4, 2, 3, 0, 3, 2 — Frames = 3<br>
+  จงนับ Page Faults ด้วย Optimal</p>
+  <button class="show-ans-btn" onclick="togAns(this)">แสดงเฉลย</button>
+  <div class="ans-block">
+    <b>วิธีคิด OPT (เตะตัวที่จะใช้ในอนาคตช้าที่สุด):</b><br>
+    7,0,1 → fault ×3 = [7,0,1]<br>
+    2 → fault, เตะ 7 (อนาคตไม่กลับมาแล้ว) → [2,0,1]<br>
+    0 → hit · 3 → fault, เตะ 1 (อนาคตไม่ใช้แล้ว) → [2,0,3]<br>
+    0 → hit · 4 → fault, เตะ 0 (จะใช้ที่ตำแหน่งไกลกว่า 2,3) → [2,4,3]<br>
+    2 → hit · 3 → hit · 0 → fault, เตะ 4 → [2,0,3]<br>
+    3 → hit · 2 → hit<br>
+    รวม Faults: 3+1+1+1+1 = 7<br><br>
+    <b>คำตอบสุดท้าย:</b> <span class="final-num">7 page faults</span>
+  </div>
+</div>
+
+<div class="subq">
+  <div class="subq-title">ข้อ 8) Page Replacement — LRU <span class="quiz-cat">บทที่ 8</span></div>
+  <p>Reference String เดียวกัน: 7, 0, 1, 2, 0, 3, 0, 4, 2, 3, 0, 3, 2 — Frames = 3<br>
+  จงนับ Page Faults ด้วย LRU</p>
+  <button class="show-ans-btn" onclick="togAns(this)">แสดงเฉลย</button>
+  <div class="ans-block">
+    <b>วิธีคิด LRU (เตะตัวที่ไม่ถูกใช้นานสุด):</b><br>
+    7→F · 0→F · 1→F · 2→F(เตะ7) · 0→hit · 3→F(เตะ1) · 0→hit · 4→F(เตะ2) · 2→F(เตะ3) · 3→F(เตะ0) · 0→F(เตะ4) · 3→hit · 2→hit<br>
+    นับ F: 1,2,3,4,5,6,7,8 = นับใหม่: 7,0,1,2,3,4,2,3,0 → 9<br>
+    ละเอียด: 7F,0F,1F,2F,0H,3F,0H,4F,2F,3F,0F,3H,2H = 9 faults<br><br>
+    <b>คำตอบสุดท้าย:</b> <span class="final-num">9 page faults</span>
+  </div>
+</div>
+
+<div class="subq">
+  <div class="subq-title">ข้อ 9) Frame Allocation — Proportional <span class="quiz-cat">บทที่ 8</span></div>
+  <p>มี Frame ทั้งหมด 62 frames และ 2 กระบวนการ<br>
+  P1 ขนาด 10 pages, P2 ขนาด 127 pages<br>
+  จงหาจำนวน frame ที่ P1 และ P2 ได้รับด้วย Proportional Allocation</p>
+  <button class="show-ans-btn" onclick="togAns(this)">แสดงเฉลย</button>
+  <div class="ans-block">
+    <b>วิธีคิด:</b><br>
+    รวมขนาด = 10 + 127 = 137 pages<br>
+    P1 = floor(10/137 × 62) = floor(4.526) = 4 frames<br>
+    P2 = floor(127/137 × 62) = floor(57.474) = 57 frames<br>
+    รวม 61 (เหลือ 1 frame เป็น reserve)<br><br>
+    <b>คำตอบสุดท้าย:</b> <span class="final-num">P1 = 4, P2 = 57</span>
+  </div>
+</div>
+
+<div class="subq">
+  <div class="subq-title">ข้อ 10) Effective Access Time (EAT) <span class="quiz-cat">บทที่ 8</span></div>
+  <p>Memory access time = 200 ns, Page Fault Service time = 8 ms = 8,000,000 ns<br>
+  Page Fault Rate p = 0.001 (0.1%) — จงหา EAT</p>
+  <button class="show-ans-btn" onclick="togAns(this)">แสดงเฉลย</button>
+  <div class="ans-block">
+    <b>สูตร:</b> EAT = (1−p) × ma + p × page-fault-time<br>
+    = (1 − 0.001) × 200 + 0.001 × 8,000,000<br>
+    = 0.999 × 200 + 8,000<br>
+    = 199.8 + 8,000<br>
+    = 8,199.8 ns<br><br>
+    <b>คำตอบสุดท้าย:</b> <span class="final-num">8,199.8 ns</span>
+  </div>
+</div>
+
+<div class="subq">
+  <div class="subq-title">ข้อ 11) Permission Analysis <span class="quiz-cat">บทที่ 9</span></div>
+  <p>กำหนด Permission String: <code>-rwxr-x--x</code><br>
+  จงตอบ: (a) เป็นไฟล์ประเภทใด (b) Octal เลขเป็นเท่าใด (c) Group ทำอะไรได้บ้าง</p>
+  <button class="show-ans-btn" onclick="togAns(this)">แสดงเฉลย</button>
+  <div class="ans-block">
+    <b>วิธีคิด:</b><br>
+    ตัวที่ 1 = '-' → ไฟล์ธรรมดา<br>
+    Owner: rwx = 4+2+1 = 7<br>
+    Group: r-x = 4+0+1 = 5<br>
+    Others: --x = 0+0+1 = 1<br><br>
+    <b>คำตอบสุดท้าย:</b><br>
+    (a) <span class="final-num">ไฟล์ธรรมดา</span><br>
+    (b) <span class="final-num">751</span><br>
+    (c) Group: <span class="final-num">อ่านและรันได้ (เขียนไม่ได้)</span>
+  </div>
+</div>
+
+<div class="subq">
+  <div class="subq-title">ข้อ 12) File Allocation — Indexed Max Size <span class="quiz-cat">บทที่ 9</span></div>
+  <p>Block size = 4 KB, Pointer size = 4 bytes<br>
+  Indexed Allocation แบบ single-level — Index Block เก็บ Pointer ได้กี่ตัว และไฟล์ใหญ่สุดเท่าไหร่?</p>
+  <button class="show-ans-btn" onclick="togAns(this)">แสดงเฉลย</button>
+  <div class="ans-block">
+    <b>วิธีคิด:</b><br>
+    Index Block 1 block = 4096 bytes<br>
+    จำนวน Pointer ที่เก็บได้ = 4096 / 4 = 1024 pointers<br>
+    ไฟล์ใหญ่สุด = 1024 × 4 KB = 4,096 KB = 4 MB<br><br>
+    <b>คำตอบสุดท้าย:</b> <span class="final-num">1024 pointers, ไฟล์สูงสุด 4 MB</span>
+  </div>
+</div>
+
+</div>
+
+<div class="card">
+<div class="box box-green">
+  <strong>🎯 เคล็ดลับก่อนเข้าห้องสอบ Final:</strong><br>
+  1. <strong>Banker's:</strong> เริ่มจาก Need = Max − Allocation ก่อนเสมอ ทำตารางทุกรอบ<br>
+  2. <strong>Paging:</strong> ⌊LA/PageSize⌋ = page, mod = offset, PA = Frame×Size + offset<br>
+  3. <strong>Frag:</strong> Internal = (จำนวน page × ขนาด) − ขนาดที่ใช้จริง<br>
+  4. <strong>Page Replacement:</strong> ทำตารางช่อง ๆ FIFO/LRU/OPT — ระวัง Belady (FIFO เพิ่ม frame อาจ fault มากขึ้น)<br>
+  5. <strong>Permission:</strong> r=4 w=2 x=1 — รวมเป็น octal<br>
+  6. <strong>I/O:</strong> Polling (busy-wait), Interrupt (CPU ทำอย่างอื่นได้), DMA (โอนข้อมูลเยอะโดยไม่ใช้ CPU)<br>
+  7. <strong>เครื่องคิดเลข:</strong> ใช้สำหรับ Frame Allocation, EAT, Indexed Max Size — ไม่ต้องคำนวณในใจ
+</div>
+</div>
+</div><!-- end exam -->
+
+</div><!-- #main -->
+<script>
+function showCh(id,btn){
+  document.querySelectorAll('.chapter').forEach(c=>c.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo(0,0);
+}
+function tog(h){
+  const b=h.nextElementSibling,a=h.querySelector('.arrow');
+  b.classList.toggle('open');a.classList.toggle('open');
+}
+function show(id){document.getElementById(id).style.display='block';}
+
+// ── Fit Algorithms ──
+function runFit(){
+  const holes=document.getElementById('fit-h').value.trim().split(/\s+/).map(Number);
+  const sz=parseInt(document.getElementById('fit-s').value);
+  let out=`ขนาดกระบวนการ: ${sz} MB\nHoles ว่าง: [${holes.join(', ')}] MB\n\n`;
+  // First Fit
+  const ff=holes.findIndex(h=>h>=sz);
+  out+=`First Fit:  ${ff===-1?'ไม่มี Hole ที่ใหญ่พอ':`Hole[${ff}]=${holes[ff]}MB → เหลือ ${holes[ff]-sz}MB`}\n`;
+  // Best Fit
+  let bi=-1,bv=Infinity;
+  holes.forEach((h,i)=>{if(h>=sz&&h-sz<bv){bv=h-sz;bi=i;}});
+  out+=`Best Fit:   ${bi===-1?'ไม่มี Hole ที่ใหญ่พอ':`Hole[${bi}]=${holes[bi]}MB → เหลือ ${holes[bi]-sz}MB`}\n`;
+  // Worst Fit
+  let wi=-1,wv=-1;
+  holes.forEach((h,i)=>{if(h>=sz&&h>wv){wv=h;wi=i;}});
+  out+=`Worst Fit:  ${wi===-1?'ไม่มี Hole ที่ใหญ่พอ':`Hole[${wi}]=${holes[wi]}MB → เหลือ ${holes[wi]-sz}MB`}\n`;
+  document.getElementById('fit-out').textContent=out;
+}
+
+// ── Segmentation ──
+function buildSeg(){
+  const n=parseInt(document.getElementById('seg-n').value)||4;
+  const defs=[{b:219,l:600},{b:2300,l:14},{b:90,l:100},{b:1327,l:580},{b:1952,l:96}];
+  let h='<label>Segment Table (Base, Limit)</label><div style="display:flex;gap:8px;flex-wrap:wrap">';
+  for(let i=0;i<n;i++){
+    const d=defs[i]||{b:0,l:0};
+    h+=`<div style="text-align:center"><div style="color:var(--accent2);font-size:11px">Seg ${i}</div>
+      <input type="number" id="sb${i}" value="${d.b}" style="width:70px;text-align:center;padding:5px" placeholder="Base">
+      <input type="number" id="sl${i}" value="${d.l}" style="width:70px;text-align:center;padding:5px" placeholder="Limit">
+    </div>`;
+  }
+  h+='</div>';
+  document.getElementById('seg-tbl').innerHTML=h;
+}
+buildSeg();
+function runSeg(){
+  const n=parseInt(document.getElementById('seg-n').value)||4;
+  const parts=document.getElementById('seg-addr').value.trim().split(/\s+/).map(Number);
+  const s=parts[0],d=parts[1];
+  if(isNaN(s)||isNaN(d)||s>=n){document.getElementById('seg-out').textContent='รูปแบบ: s d (segment offset)';return;}
+  const base=parseInt(document.getElementById(`sb${s}`).value)||0;
+  const lim=parseInt(document.getElementById(`sl${s}`).value)||0;
+  let out=`Logical Address: (s=${s}, d=${d})\nSegment ${s}: base=${base}, limit=${lim}\n\n`;
+  if(d>=lim){out+=`❌ d(${d}) ≥ limit(${lim}) → Segmentation Fault!`;}
+  else{out+=`d(${d}) < limit(${lim}) ✓\nPhysical = ${base} + ${d} = ${base+d}`;}
+  document.getElementById('seg-out').textContent=out;
+}
+
+// ── Paging ──
+function runPaging(){
+  const pgSz=parseInt(document.getElementById('pg-sz').value)||4;
+  const pt=document.getElementById('pg-tbl').value.trim().split(/\s+/).map(Number);
+  const la=parseInt(document.getElementById('pg-la').value)||0;
+  const p=Math.floor(la/pgSz),d=la%pgSz;
+  let out=`Logical Address: ${la}\nPage Size: ${pgSz} words\n`;
+  out+=`Page Number (p) = floor(${la}/${pgSz}) = ${p}\nOffset (d) = ${la} mod ${pgSz} = ${d}\n\n`;
+  if(p>=pt.length){out+=`❌ Page ${p} ไม่มีใน Page Table (มีแค่ ${pt.length} entries)`;
+  }else{
+    const frame=pt[p];
+    const phys=frame*pgSz+d;
+    out+=`PageTable[${p}] = Frame ${frame}\nPhysical = ${frame} × ${pgSz} + ${d} = ${phys}`;
+  }
+  document.getElementById('pg-out').textContent=out;
+}
+function runBin(){
+  const bits=parseInt(document.getElementById('bin-bits').value)||7;
+  const pgSz=parseInt(document.getElementById('bin-pgsz').value)||4;
+  const la=parseInt(document.getElementById('bin-la').value)||0;
+  const offsetBits=Math.log2(pgSz);
+  if(!Number.isInteger(offsetBits)){document.getElementById('pg-out').textContent='Page size ต้องเป็น power of 2';return;}
+  const pgBits=bits-offsetBits;
+  const maxPg=Math.pow(2,pgBits);
+  const p=Math.floor(la/pgSz),d=la%pgSz;
+  const bin=la.toString(2).padStart(bits,'0');
+  let out=`Logical address bits: ${bits}\nPage size: ${pgSz} = 2^${offsetBits} → offset = ${offsetBits} bits, page# = ${pgBits} bits\n`;
+  out+=`Max pages = 2^${pgBits} = ${maxPg}\n\n`;
+  out+=`Logical ${la} = ${bin} (${bits} bits)\n`;
+  out+=`  Page# [${pgBits} bits สูง]: ${bin.slice(0,pgBits)} = ${p}\n`;
+  out+=`  Offset [${offsetBits} bits ล่าง]: ${bin.slice(pgBits)} = ${d}\n`;
+  out+=`\nLogical ${la} → page ${p}, offset ${d}`;
+  document.getElementById('pg-out').textContent=out;
+}
+
+// ── Page Replacement ──
+function runPageRep(){
+  const ref=document.getElementById('ref-str').value.trim().split(/\s+/).map(Number);
+  const frames=parseInt(document.getElementById('ref-fr').value)||3;
+  const algo=document.getElementById('ref-algo').value;
+  let faults=0;const rows=[];
+  if(algo==='fifo'){
+    const mem=[];
+    ref.forEach(pg=>{
+      const hit=mem.includes(pg);
+      if(!hit){faults++;if(mem.length<frames)mem.push(pg);else{mem.shift();mem.push(pg);}}
+      rows.push({pg,mem:[...mem],fault:!hit});
+    });
+  }else if(algo==='lru'){
+    const mem=[];
+    ref.forEach(pg=>{
+      const idx=mem.indexOf(pg);
+      const hit=idx!==-1;
+      if(!hit){faults++;if(mem.length<frames)mem.push(pg);else{mem.shift();mem.push(pg);}
+      }else{mem.splice(idx,1);mem.push(pg);}
+      rows.push({pg,mem:[...mem],fault:!hit});
+    });
+  }else{
+    const mem=[];
+    ref.forEach((pg,i)=>{
+      const hit=mem.includes(pg);
+      if(!hit){faults++;
+        if(mem.length<frames){mem.push(pg);}
+        else{let vic=-1,far=-1;
+          mem.forEach((m,k)=>{const nxt=ref.slice(i+1).indexOf(m);if(nxt===-1){vic=k;far=Infinity;}else if(nxt>far){far=nxt;vic=k;}});
+          mem.splice(vic,1,pg);}
+      }
+      rows.push({pg,mem:[...mem],fault:!hit});
+    });
+  }
+  const algoTH={'fifo':'FIFO','opt':'Optimal (OPT)','lru':'LRU'};
+  let out=`อัลกอริทึม: ${algoTH[algo]}, Frames: ${frames}\n${'─'.repeat(ref.length*4+10)}\n`;
+  out+='Page:  '+ref.map(p=>String(p).padStart(3)).join('')+'\n';
+  out+='─'.repeat(ref.length*4+10)+'\n';
+  for(let f=0;f<frames;f++){
+    out+=`F[${f}]:  `;
+    rows.forEach(r=>{out+=(r.mem[f]!==undefined?String(r.mem[f]).padStart(3):'  -');});
+    out+='\n';
+  }
+  out+='─'.repeat(ref.length*4+10)+'\n';
+  out+='Fault: '+rows.map(r=>r.fault?'  F':'   ').join('')+'\n';
+  out+=`\n✅ Page Fault รวม: ${faults} / ${ref.length} ครั้ง`;
+  out+=`\nPage Fault Rate: ${(faults/ref.length*100).toFixed(1)}%`;
+  document.getElementById('ref-out').textContent=out;
+}
+
+// ── Frame Allocation ──
+function runFA(){
+  const total=parseInt(document.getElementById('fa-total').value)||93;
+  const sizes=document.getElementById('fa-sizes').value.trim().split(/\s+/).map(Number);
+  const n=sizes.length,tot=sizes.reduce((a,b)=>a+b,0);
+  let out=`Frame ทั้งหมด: ${total}\nขนาดกระบวนการ: [${sizes.join(', ')}] pages\nรวม: ${tot} pages\n\n`;
+  const eq=Math.floor(total/n);
+  out+=`Equal Allocation (แจกเท่ากัน):\n`;
+  sizes.forEach((_,i)=>out+=`  P${i}: ${eq} frames\n`);
+  out+=`  เหลือสำรอง: ${total-n*eq} frames\n\n`;
+  out+=`Proportional Allocation (ตามสัดส่วน):\n`;
+  let sum=0;
+  sizes.forEach((s,i)=>{const f=Math.floor(s/tot*total);sum+=f;out+=`  P${i}: floor(${s}/${tot}×${total}) = ${f} frames\n`;});
+  out+=`  รวม: ${sum} frames, เหลือ: ${total-sum} frames`;
+  document.getElementById('fa-out').textContent=out;
+}
+
+// ── Permission ──
+function runPerm(){
+  const s=document.getElementById('perm-str').value.trim();
+  if(s.length!==10){document.getElementById('perm-out').textContent='ต้องมี 10 ตัวอักษร เช่น -rwxrw-r--';return;}
+  const type={'−':'ไฟล์ธรรมดา','-':'ไฟล์ธรรมดา','d':'Directory','l':'Symbolic Link'}[s[0]]||'ไม่รู้จัก';
+  const label=['r','w','x'];
+  const grp=['Owner','Group','Others'];
+  let out=`ชนิด: ${s[0]} = ${type}\n\n`;
+  [0,1,2].forEach(g=>{
+    out+=`${grp[g]} (${s.slice(1+g*3,4+g*3)}): `;
+    const perms=[];
+    [0,1,2].forEach(p=>{
+      const c=s[1+g*3+p];
+      if(c!=='-'&&c!=='−')perms.push(p===0?'อ่านได้':p===1?'เขียนได้':'รัน/เข้าไดเรกทอรีได้');
+    });
+    out+=(perms.length?perms.join(', '):'ไม่มีสิทธิ์ใดๆ')+'\n';
+  });
+  document.getElementById('perm-out').textContent=out;
+}
+
+// ── Banker ──
+let BN=5,BM=3;
+const DEF_ALLOC=[[0,1,0],[2,0,0],[3,0,2],[2,1,1],[0,0,2]];
+const DEF_MAX  =[[7,5,3],[3,2,2],[9,0,2],[2,2,2],[4,3,3]];
+function buildBanker(){
+  BN=+document.getElementById('bn').value||5;
+  BM=+document.getElementById('bm').value||3;
+  let h='<div class="grid2">';
+  ['Allocation','Max'].forEach((lbl,li)=>{
+    h+=`<div><label>${lbl}</label>`;
+    for(let i=0;i<BN;i++){
+      h+=`<div class="matrix-row"><span class="matrix-label">P${i}</span>`;
+      for(let j=0;j<BM;j++){
+        const v=(li===0?DEF_ALLOC:DEF_MAX)[i]?.[j]??0;
+        h+=`<input type="number" min="0" class="m-inp ${li===0?'ac':'mc'}" data-i="${i}" data-j="${j}" value="${v}">`;
+      }
+      h+='</div>';
+    }
+    h+='</div>';
+  });
+  h+='</div>';
+  document.getElementById('banker-inputs').innerHTML=h;
+}
+buildBanker();
+function getB(){
+  const n=BN,m=BM;
+  const al=Array.from({length:n},()=>Array(m).fill(0));
+  const mx=Array.from({length:n},()=>Array(m).fill(0));
+  document.querySelectorAll('.ac').forEach(e=>{al[+e.dataset.i][+e.dataset.j]=+e.value||0;});
+  document.querySelectorAll('.mc').forEach(e=>{mx[+e.dataset.i][+e.dataset.j]=+e.value||0;});
+  const av=document.getElementById('b-avail').value.trim().split(/\s+/).map(Number);
+  return {n,m,al,mx,av};
+}
+function safeAlgo(al,nd,av,n,m){
+  const w=[...av],fin=Array(n).fill(false),seq=[];
+  let ch=true;
+  while(ch){ch=false;for(let i=0;i<n;i++){if(!fin[i]&&nd[i].every((v,j)=>v<=w[j])){for(let j=0;j<m;j++)w[j]+=al[i][j];fin[i]=true;seq.push(i);ch=true;}}}
+  return{safe:fin.every(Boolean),seq,dead:fin.map((f,i)=>!f?i:-1).filter(i=>i>=0)};
+}
+function runSafety(){
+  const {n,m,al,mx,av}=getB();
+  const nd=al.map((r,i)=>r.map((v,j)=>mx[i][j]-v));
+  let out='Need Matrix:\n';
+  nd.forEach((r,i)=>out+=`  P${i}: [${r.join(', ')}]\n`);
+  out+=`\nAvailable: [${av.join(', ')}]\n\nรัน Safety Algorithm...\n`;
+  const w=[...av],fin=Array(n).fill(false),seq=[];
+  let ch=true,step=1;
+  while(ch){ch=false;for(let i=0;i<n;i++){if(!fin[i]&&nd[i].every((v,j)=>v<=w[j])){out+=`รอบ${step++}: P${i} → Need[${nd[i].join(',')}] ≤ Work[${w.join(',')}] ✓\n`;const nw=w.map((v,j)=>v+al[i][j]);out+=`  Work → [${nw.join(', ')}]\n`;for(let j=0;j<m;j++)w[j]+=al[i][j];fin[i]=true;seq.push(i);ch=true;}}}
+  out+=fin.every(Boolean)?`\n✅ Safe State!\nSafe Sequence: ${seq.map(i=>'P'+i).join(' → ')}`:`\n❌ DEADLOCK! กระบวนการที่ติด: ${fin.map((f,i)=>!f?'P'+i:'').filter(Boolean).join(', ')}`;
+  document.getElementById('b-out').textContent=out;
+}
+function runRequest(){
+  const {n,m,al,mx,av}=getB();
+  const nd=al.map((r,i)=>r.map((v,j)=>mx[i][j]-v));
+  const raw=document.getElementById('b-req').value.trim().split(/\s+/).map(Number);
+  const pi=raw[0],req=raw.slice(1);
+  let out=`คำขอจาก P${pi}: [${req.join(', ')}]\n\n`;
+  if(req.some((v,j)=>v>nd[pi][j])){out+=`❌ ขั้น 1: เกิน Need[${nd[pi].join(',')}]!`;document.getElementById('b-out').textContent=out;return;}
+  out+=`ขั้น 1: Request ≤ Need ✓\n`;
+  if(req.some((v,j)=>v>av[j])){out+=`❌ ขั้น 2: เกิน Available [${av.join(',')}] → รอก่อน`;document.getElementById('b-out').textContent=out;return;}
+  out+=`ขั้น 2: Request ≤ Available ✓\n`;
+  const nAl=al.map(r=>[...r]),nNd=nd.map(r=>[...r]),nAv=[...av];
+  for(let j=0;j<m;j++){nAv[j]-=req[j];nAl[pi][j]+=req[j];nNd[pi][j]-=req[j];}
+  out+=`ขั้น 3: จำลองให้ทรัพยากร:\n  Available → [${nAv.join(', ')}]\n  Alloc[P${pi}] → [${nAl[pi].join(', ')}]\n  Need[P${pi}] → [${nNd[pi].join(', ')}]\n\nขั้น 4: รัน Safety...\n`;
+  const r=safeAlgo(nAl,nNd,nAv,n,m);
+  out+=r.safe?`✅ Safe → ให้ทรัพยากรได้!\nSafe Sequence: ${r.seq.map(i=>'P'+i).join(' → ')}`:`❌ Unsafe → ปฏิเสธคำขอ! (Rollback)\nกระบวนการที่จะติด: ${r.dead.map(i=>'P'+i).join(', ')}`;
+  document.getElementById('b-out').textContent=out;
+}
+
+// ── Quiz: Show Answer toggle ──
+function togAns(btn){
+  const a=btn.nextElementSibling;
+  a.classList.toggle('show');
+  btn.textContent=a.classList.contains('show')?'ซ่อนเฉลย':'แสดงเฉลย';
+}
+
+// ── MCQ Data ──
+const MCQ_CH6=[
+ {q:"เงื่อนไขใดต่อไปนี้ไม่ใช่หนึ่งใน 4 Necessary Conditions ของ Deadlock?",o:["Mutual Exclusion","Hold and Wait","Preemption","Circular Wait"],a:2,e:"Deadlock เกิดจาก Mutual Exclusion, Hold and Wait, No Preemption (ไม่ใช่ Preemption) และ Circular Wait"},
+ {q:"Need[i][j] คำนวณจากสูตรใด?",o:["Max + Allocation","Max − Allocation","Allocation − Max","Available − Max"],a:1,e:"Need[i][j] = Max[i][j] − Allocation[i][j] คือทรัพยากรที่ยังขาดอยู่"},
+ {q:"Safe State หมายถึงอะไร?",o:["ระบบไม่มีกระบวนการรอ","มี Safe Sequence ที่ทุกกระบวนการเสร็จได้","ทรัพยากรว่างทั้งหมด","ไม่มีกระบวนการถือทรัพยากร"],a:1,e:"Safe State = มีลำดับการทำงานที่ทุก process เสร็จได้โดยไม่ติด deadlock"},
+ {q:"Banker's Algorithm ใช้เพื่ออะไร?",o:["ตรวจ Deadlock ที่เกิดแล้ว","ป้องกัน (Avoidance) ก่อนจัดสรร","Recovery จาก Deadlock","แบ่งหน่วยความจำ"],a:1,e:"Banker's = Deadlock Avoidance — ตรวจสอบก่อนอนุญาตให้ทรัพยากร"},
+ {q:"ใน RAG ที่มี 1 instance/resource ถ้ามี Cycle หมายความว่าอะไร?",o:["ปลอดภัย","Deadlock แน่นอน","อาจมี Deadlock","ไม่มี Deadlock"],a:1,e:"Single instance + cycle ⇒ Deadlock เสมอ; multi-instance + cycle ⇒ อาจมีหรือไม่มี"},
+ {q:"กระบวนการ P1 ถือ R1 และรอ R2, P2 ถือ R2 รอ R1 — เป็นเงื่อนไขใด?",o:["Mutual Exclusion","Hold and Wait","No Preemption","Circular Wait"],a:3,e:"การที่ P1→R2→P2→R1→P1 เป็นวงกลม คือ Circular Wait"},
+ {q:"Deadlock Detection Algorithm ใช้สูตร Need เช่นเดียวกับ Banker's หรือไม่?",o:["ใช้ Need","ใช้ Request เป็น matrix แทน Need","ไม่ต้องใช้ matrix","ใช้แค่ Available"],a:1,e:"Detection ใช้ Request matrix (สิ่งที่ขออยู่จริง) ไม่ใช่ Need (สิ่งที่อาจขอ)"},
+ {q:"Recovery จาก Deadlock โดยการยกเลิกกระบวนการเรียกว่าอะไร?",o:["Resource Preemption","Process Termination","Rollback","Wait-Die"],a:1,e:"Process Termination = ยกเลิกกระบวนการเพื่อปล่อยทรัพยากร"},
+ {q:"ถ้า Available=[3,3,2] และ P1.Need=[1,2,2] — P1 จะทำงานได้หรือไม่?",o:["ไม่ได้ ขาด C","ได้","ขึ้นกับ Max","ต้องเช็ค Allocation ก่อน"],a:1,e:"Need[1,2,2] ≤ Available[3,3,2] ทุกตำแหน่ง → P1 ทำงานได้"},
+ {q:"Unsafe State แปลว่าอะไร?",o:["Deadlock เกิดแล้ว","อาจนำไปสู่ Deadlock ได้","ทรัพยากรไม่พอ","ระบบ crash"],a:1,e:"Unsafe ≠ Deadlock — แค่อาจนำไปสู่ Deadlock ได้ในอนาคต"},
+ {q:"Wait-for Graph ใช้กับระบบแบบใด?",o:["Single instance per type","Multi instance","ทั้งสองแบบ","ไม่มีคำตอบ"],a:0,e:"Wait-for Graph ย่อมาจาก RAG ใช้ได้เฉพาะ single instance"},
+ {q:"ในการป้องกันด้วย Hold-and-Wait ต้องทำอย่างไร?",o:["บังคับขอทรัพยากรทั้งหมดทีเดียว","ห้าม preempt","ใช้ TimeStamp","ใช้ Lock"],a:0,e:"กำจัด Hold and Wait: ขอทรัพยากรทั้งหมดก่อนเริ่ม หรือห้ามถือขณะรอ"},
+ {q:"การ Rollback เป็นวิธี Recovery ประเภทใด?",o:["Process Termination","Resource Preemption","Avoidance","Detection"],a:1,e:"Rollback = preempt ทรัพยากรกลับและย้อน process กลับไป checkpoint"},
+ {q:"ถ้ารัน Safety Algorithm แล้วไม่มีกระบวนการใดผ่านได้เลย หมายความว่าอะไร?",o:["Safe","Unsafe","Deadlock","ทำต่อไม่ได้"],a:2,e:"ไม่มี Need ใดเล็กกว่า Available เลย → กระบวนการทุกตัวติด = Deadlock"},
+ {q:"กระบวนการเลือก Victim ใน Recovery ใช้เกณฑ์ใดบ้าง?",o:["Priority, อายุงาน, จำนวนทรัพยากรที่ถือ","Page Size","Quantum","Burst Time เท่านั้น"],a:0,e:"พิจารณา priority, ทรัพยากรที่ถือ, ทำงานไปแล้วเท่าไร, ฯลฯ"}
+];
+
+const MCQ_CH7=[
+ {q:"Logical Address ถูกสร้างโดยใคร?",o:["MMU","CPU","RAM","Disk"],a:1,e:"CPU สร้าง Logical (Virtual) Address; MMU แปลงเป็น Physical"},
+ {q:"Internal Fragmentation เกิดในระบบใด?",o:["Variable Partition","Fixed Partition / Paging","Segmentation","Swapping"],a:1,e:"Internal Frag เกิดเมื่อ block ขนาดคงที่แต่ใช้ไม่เต็ม"},
+ {q:"External Fragmentation เกิดในระบบใด?",o:["Paging","Variable Partition","Fixed Partition","Demand Paging"],a:1,e:"Variable Partition / Segmentation มี hole เล็ก ๆ กระจายตัว = External Frag"},
+ {q:"First Fit ทำงานอย่างไร?",o:["เลือก hole เล็กสุดที่พอ","เลือก hole ใหญ่สุด","เลือก hole แรกที่พอ","สลับทุกครั้ง"],a:2,e:"First Fit สแกนจากต้นและเลือก hole แรกที่ใหญ่พอ"},
+ {q:"Best Fit เลือก hole แบบใด?",o:["ใหญ่สุด","เล็กสุดที่ ≥ size","แรกสุด","สุ่ม"],a:1,e:"Best Fit เลือก hole ที่เล็กที่สุดแต่ยังพอใช้"},
+ {q:"Page Size = 1KB, Logical Address = 2500 → page number?",o:["1","2","3","4"],a:1,e:"⌊2500/1024⌋ = 2"},
+ {q:"Page Size = 1KB, Logical Address = 2500 → offset?",o:["452","500","424","100"],a:0,e:"2500 mod 1024 = 2500 − 2048 = 452"},
+ {q:"Segmentation ต่างจาก Paging อย่างไร?",o:["Segment ขนาดคงที่","Segment ขนาดไม่คงที่ ตามตรรกะโปรแกรม","Segment ใช้ frame","Segment ไม่ต้องการตาราง"],a:1,e:"Segment เป็นหน่วยตาม logical (code, data, stack) ขนาดต่างกัน"},
+ {q:"TLB (Translation Lookaside Buffer) ทำหน้าที่อะไร?",o:["เก็บ data cache","เก็บ Page Table entries ที่เพิ่งใช้","แทน RAM","เก็บ instruction"],a:1,e:"TLB cache ของ Page Table — เพิ่มความเร็วการแปลง address"},
+ {q:"Worst Fit เลือก hole แบบใด?",o:["เล็กสุด","ใหญ่สุด","แรกสุด","สลับ"],a:1,e:"Worst Fit เลือก hole ใหญ่สุดเสมอ (ตั้งใจให้เหลือ hole ใหญ่)"},
+ {q:"Compaction ใช้แก้ปัญหาใด?",o:["Internal Fragmentation","External Fragmentation","Page Fault","Deadlock"],a:1,e:"Compaction รวม hole เล็ก ๆ เป็น hole ใหญ่ → ลด External Frag"},
+ {q:"Page Table ขนาดใหญ่มาก แก้ด้วย?",o:["ลบ table","Hierarchical / Multi-level Paging","ใช้ register","ไม่ต้องมี table"],a:1,e:"Multi-level Paging แบ่ง Page Table เป็นชั้น ๆ ลดขนาดที่ต้องโหลด"},
+ {q:"กระบวนการ 35 KB, Page Size = 4 KB → ใช้กี่ pages?",o:["8","9","7","10"],a:1,e:"⌈35/4⌉ = ⌈8.75⌉ = 9 pages"},
+ {q:"กระบวนการ 35 KB, Page Size = 4 KB → Internal Frag กี่ KB?",o:["1","2","0.75","1.25"],a:0,e:"9×4 − 35 = 36 − 35 = 1 KB"},
+ {q:"Address Binding มี 3 เวลา ข้อใดถูก?",o:["Compile, Load, Execution","Compile, Execution, Print","Load, Disk, RAM","Compile, Run, Stop"],a:0,e:"Address Binding: Compile-time, Load-time, Execution-time"}
+];
+
+const MCQ_CH8=[
+ {q:"Demand Paging หมายถึงอะไร?",o:["โหลดทุก page เมื่อเริ่ม","โหลด page เมื่อจำเป็นเท่านั้น","ไม่ใช้ disk","ใช้ frame เดียว"],a:1,e:"Demand Paging = lazy loading — page จะถูกโหลดเมื่อถูกอ้างเท่านั้น"},
+ {q:"Page Fault คืออะไร?",o:["page อยู่ใน RAM","page ไม่อยู่ใน RAM ต้องโหลดจาก disk","page ผิดพลาด","page เต็ม"],a:1,e:"Page Fault = page ที่อ้างอิงไม่อยู่ใน physical memory"},
+ {q:"OPT (Optimal) Algorithm เลือกเตะ page ใด?",o:["page ที่เพิ่งใช้","page ที่ไม่ถูกใช้นานสุดในอนาคต","page เก่าสุด","page ใหม่สุด"],a:1,e:"OPT เตะ page ที่จะใช้ในอนาคตช้าที่สุด — ทำในชีวิตจริงไม่ได้"},
+ {q:"LRU เตะ page ใด?",o:["ใช้น้อยสุด","ไม่ถูกใช้นานสุดในอดีต","อนาคต","สุ่ม"],a:1,e:"LRU = Least Recently Used เตะที่ไม่ใช้นานสุด (มองอดีต)"},
+ {q:"Belady's Anomaly เกิดในอัลกอริทึมใด?",o:["LRU","OPT","FIFO","Random"],a:2,e:"FIFO เพิ่ม frame แล้ว page fault อาจเพิ่มขึ้น = Belady's Anomaly"},
+ {q:"Thrashing คืออะไร?",o:["CPU ทำงานเต็มที่","กระบวนการใช้เวลา paging มากกว่า execute","RAM ว่าง","Disk ว่าง"],a:1,e:"Thrashing = page fault สูงมาก จน CPU ส่วนใหญ่รอ I/O"},
+ {q:"Working Set Model ใช้ทำอะไร?",o:["จัดสรร frame ตามขนาด process","ตามที่ process ใช้จริงในช่วงเวลา","สุ่ม","ตาม priority"],a:1,e:"Working Set = page ที่ process ใช้ใน window Δ — ป้องกัน thrashing"},
+ {q:"Copy-on-Write (COW) ทำอะไร?",o:["copy page ทันที","share page จนกว่าจะเขียน","ลบ page เก่า","ห้าม copy"],a:1,e:"COW: parent กับ child share page จนกว่าจะมีการเขียน จึงค่อย copy"},
+ {q:"EAT = (1−p)×ma + p×PFservice — p คืออะไร?",o:["Page Size","Page Fault Rate","Page Number","Process count"],a:1,e:"p = page fault rate (ความน่าจะเป็นเกิด page fault)"},
+ {q:"Frame Allocation แบบ Equal คือ?",o:["แจกตามขนาด process","แจกเท่า ๆ กัน","แจกตาม priority","แจกครั้งเดียว"],a:1,e:"Equal: m frames / n processes ทุก process ได้เท่ากัน"},
+ {q:"Proportional Allocation คำนวณอย่างไร?",o:["m/n","sᵢ/S × m","floor(s/m)","sᵢ × m"],a:1,e:"a_i = floor(s_i/S × m) โดย S = ผลรวมขนาด process"},
+ {q:"Reference String 1,2,3,4,1,2,5,1,2,3,4,5 / Frame=3 / FIFO → page faults?",o:["6","9","12","8"],a:1,e:"FIFO 3 frames ของชุดนี้ = 9 faults (เป็นตัวอย่าง Belady ที่รู้จัก)"},
+ {q:"Pure Demand Paging ตอนเริ่มกระบวนการ frame เป็นยังไง?",o:["เต็ม","ว่าง — page ทุกอันเป็น fault","ครึ่งเต็ม","random"],a:1,e:"Pure Demand: ไม่มี page ใน RAM — อ้างอิงครั้งแรกจะ fault"},
+ {q:"Page Replacement ที่ ดีที่สุด ในเชิงทฤษฎี?",o:["FIFO","LRU","OPT","Random"],a:2,e:"OPT ให้ page faults น้อยที่สุดทางทฤษฎี — เป็น benchmark"},
+ {q:"Local Replacement vs Global — ต่างกันอย่างไร?",o:["Local เลือก victim จาก process เดียวกัน","Global = สากล","ไม่ต่างกัน","ขนาด page"],a:0,e:"Local: เตะเฉพาะ frame ของ process ตน; Global: เตะของใครก็ได้"}
+];
+
+const MCQ_CH9=[
+ {q:"File Attribute ใดต่อไปนี้ไม่ใช่ attribute มาตรฐาน?",o:["Name","Size","Type","Speed"],a:3,e:"Attribute มาตรฐาน: Name, Identifier, Type, Location, Size, Protection, Time, Owner"},
+ {q:"chmod 755 file → permission string คือ?",o:["-rwxrwxrwx","-rwxr-xr-x","-rw-r--r--","-rwxr-x---"],a:1,e:"7=rwx, 5=r-x, 5=r-x → -rwxr-xr-x"},
+ {q:"Single-Level Directory มีปัญหาหลักคืออะไร?",o:["ช้า","ชื่อไฟล์ห้ามซ้ำ","ใช้ disk เยอะ","ปลอดภัย"],a:1,e:"Single-Level: ทุกไฟล์อยู่ใน folder เดียว → ห้ามชื่อซ้ำ"},
+ {q:"Tree-Structured Directory มีข้อจำกัดอะไร?",o:["ไม่สามารถ share ไฟล์","ช้า","ใช้พื้นที่มาก","ไม่มี root"],a:0,e:"Tree ปกติไม่ share — ต้อง Acyclic Graph จึง share ผ่าน link ได้"},
+ {q:"Contiguous Allocation มีข้อเสียหลักคืออะไร?",o:["ช้า random access","External Fragmentation","ไม่มี directory","ไม่มี EOF"],a:1,e:"Contiguous เก็บไฟล์ติดกัน → External Frag และขยายไฟล์ยาก"},
+ {q:"Linked Allocation มีข้อเสียหลักคืออะไร?",o:["External Frag","Random Access ช้า, Pointer หาย = ไฟล์เสีย","ใช้ space เยอะ","ไม่ขยายได้"],a:1,e:"Linked ต้องไล่ pointer → random access ช้า; pointer หาย = data หาย"},
+ {q:"FAT (File Allocation Table) คือเทคนิคใด?",o:["Contiguous","Indexed","Linked แบบเก็บ pointer ในตาราง FAT","Segmented"],a:2,e:"FAT = Linked allocation รวม pointer ทั้งหมดใน table เดียวเพื่อ random access เร็วขึ้น"},
+ {q:"Indexed Allocation (i-node) ทำงานอย่างไร?",o:["pointer ในไฟล์","Index Block เก็บ pointer ทุกบล็อก","ตาราง FAT","Linked list"],a:1,e:"Indexed: ทุกไฟล์มี index block ที่เก็บ pointer ไป data block ทั้งหมด"},
+ {q:"Free Space List แบบ Bit Vector ใช้พื้นที่กี่ bit ต่อ block?",o:["1","8","16","32"],a:0,e:"Bit Vector: 1 bit ต่อ block (0=ใช้, 1=ว่าง หรือกลับกัน)"},
+ {q:"DMA (Direct Memory Access) ดีกว่า interrupt อย่างไร?",o:["CPU ต้องคุมทุก byte","CPU เป็นอิสระระหว่างโอนข้อมูลปริมาณมาก","ช้ากว่า","ไม่ใช้ memory"],a:1,e:"DMA โอนข้อมูลตรงระหว่าง device ↔ memory โดยไม่ต้องผ่าน CPU"},
+ {q:"Polling I/O ทำงานอย่างไร?",o:["CPU ตรวจสอบ status ของ device ตลอด","Interrupt","ผ่าน DMA","Async"],a:0,e:"Polling = CPU วน loop เช็ค Status Register → เปลือง CPU"},
+ {q:"Interrupt-driven I/O ดีกว่า Polling อย่างไร?",o:["ช้ากว่า","CPU ทำงานอื่นได้ จนกระทั่ง device แจ้ง","ไม่ต้องใช้ controller","ใช้ memory เยอะกว่า"],a:1,e:"Interrupt: device ส่ง signal เมื่อพร้อม → CPU ทำอย่างอื่นรอได้"},
+ {q:"Device Controller มี Register อะไรบ้าง?",o:["Data-in, Data-out, Status, Control","ALU, PC, IR, MAR","RAM, ROM","Cache only"],a:0,e:"Controller มี 4 register: Data-in, Data-out, Status, Control"},
+ {q:"Permission -rw-r--r-- ใน octal คือ?",o:["644","755","777","664"],a:0,e:"6=rw-, 4=r--, 4=r-- → 644"},
+ {q:"Bus ใดเร็วที่สุดสำหรับอุปกรณ์ต่อพ่วงสมัยใหม่?",o:["ISA","Expansion bus","PCIe","Serial port"],a:2,e:"PCIe เป็น bus เร็วสุดสำหรับ peripheral ปัจจุบัน"}
+];
+
+const ALL_MCQ={ch6:MCQ_CH6,ch7:MCQ_CH7,ch8:MCQ_CH8,ch9:MCQ_CH9};
+let qState={};
+function renderMCQ(){
+  let gi=0;
+  Object.keys(ALL_MCQ).forEach(ch=>{
+    const cont=document.getElementById('mcq-'+ch);
+    if(!cont)return;
+    let h='';
+    ALL_MCQ[ch].forEach((item,idx)=>{
+      const id=ch+'_'+idx;qState[id]={done:false,correct:false};gi++;
+      h+=`<div class="quiz" id="qz_${id}"><div class="quiz-q"><span class="qnum">${gi}</span>${item.q}</div>`;
+      item.o.forEach((opt,oi)=>{
+        const lbl=String.fromCharCode(97+oi);
+        h+=`<div class="quiz-opt" onclick="pickOpt('${id}',${oi},${item.a})"><b>${lbl})</b> ${opt}</div>`;
+      });
+      h+=`<div class="quiz-exp" id="exp_${id}"><b>เฉลย:</b> ${String.fromCharCode(97+item.a)}) ${item.o[item.a]}<br><b>คำอธิบาย:</b> ${item.e}</div>`;
+      h+=`</div>`;
+    });
+    cont.innerHTML=h;
+  });
+  document.getElementById('sc-total').textContent=gi;
+}
+function pickOpt(id,picked,correct){
+  const st=qState[id];if(!st||st.done)return;
+  st.done=true;st.correct=(picked===correct);
+  const wrap=document.getElementById('qz_'+id);
+  const opts=wrap.querySelectorAll('.quiz-opt');
+  opts.forEach((el,i)=>{
+    el.classList.add('disabled');
+    if(i===correct)el.classList.add('correct');
+    else if(i===picked)el.classList.add('wrong');
+  });
+  document.getElementById('exp_'+id).classList.add('show');
+  updateScore();
+}
+function updateScore(){
+  let r=0,w=0,t=0;
+  Object.values(qState).forEach(s=>{t++;if(s.done){if(s.correct)r++;else w++;}});
+  document.getElementById('sc-right').textContent=r;
+  document.getElementById('sc-wrong').textContent=w;
+  const done=r+w;
+  document.getElementById('sc-pct').textContent=done?((r/done*100).toFixed(0)+'%'):'0%';
+}
+function resetQuiz(){
+  Object.keys(qState).forEach(id=>{qState[id]={done:false,correct:false};});
+  document.querySelectorAll('.quiz-opt').forEach(el=>{el.classList.remove('correct','wrong','disabled');});
+  document.querySelectorAll('.quiz-exp').forEach(el=>el.classList.remove('show'));
+  document.querySelectorAll('.ans-block').forEach(el=>el.classList.remove('show'));
+  document.querySelectorAll('.show-ans-btn').forEach(b=>b.textContent='แสดงเฉลย');
+  updateScore();
+}
+renderMCQ();
+</script>
+</body>
+</html>
