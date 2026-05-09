@@ -3735,27 +3735,92 @@ Internal Fragmentation = (จำนวน Pages × Page Size) − Process Size<b
 <!-- 8.4 Thrashing -->
 <div class="card">
 <h2>8.4 Thrashing — ระบบติดขัดจาก Page Fault ถี่เกินไป</h2>
-<div class="box box-green">
-  <strong>🎯 อุปมา Thrashing:</strong><br>
-  เหมือนนักเรียน 20 คนแย่งกันใช้ห้องทดลองที่มีแค่ 3 โต๊ะ — ใช้เวลาส่วนใหญ่แย่งโต๊ะ ไม่ได้เรียนจริงๆ<br>
-  ระบบก็เช่นกัน: Process มีน้อย Frame → ต้อง Swap เข้าออกตลอด → CPU ไม่ได้ทำงานจริงสักเท่าไร
-</div>
-<p>เมื่อกระบวนการมี <strong>Frame น้อยเกินไป</strong> มันจะ Page Fault บ่อยมากจนเกือบตลอดเวลา CPU ใช้เวลาส่วนใหญ่ไปกับการ Swap Page แทนที่จะทำงานจริง → ระบบช้าหรือหยุดนิ่ง</p>
-<div class="box box-red">
-  <strong>วงจร Thrashing:</strong><br>
-  Multiprogramming ↑ → Frame/Process ↓ → Page Fault ↑ → CPU Utilization ↓ → OS คิดว่า CPU ว่าง → เพิ่ม Process → Multiprogramming ↑ (วนซ้ำแย่ลงเรื่อยๆ!)
-</div>
-<h3>การแก้ไข Thrashing</h3>
-<table>
-  <tr><th>วิธี</th><th>รายละเอียด</th></tr>
-  <tr><td><strong>Working Set Model</strong></td><td>ติดตาม "Working Set" = Pages ที่ใช้ใน Δ time units ล่าสุด จัดสรร Frame ≥ ขนาด Working Set</td></tr>
-  <tr><td><strong>Page Fault Frequency</strong></td><td>ถ้า Fault Rate สูงเกิน Threshold → เพิ่ม Frame, ถ้าต่ำเกิน → ลด Frame คืน</td></tr>
-  <tr><td><strong>ลด Multiprogramming</strong></td><td>Swap out Process ออกบางส่วน เพื่อให้ Process ที่เหลือมี Frame พอ</td></tr>
-</table>
 
-<div class="box box-yellow">
-  <strong>ข้อสรุปสำคัญ:</strong> Thrashing เกิดจากการมี Frame น้อยกว่า "Working Set" ของกระบวนการ<br>
-  แก้ด้วยการเพิ่ม RAM, ลด Multiprogramming, หรือใช้ Working Set Model
+<div class="box box-green">
+  <strong>อุปมา Thrashing:</strong><br>
+  เหมือนทำการบ้านบนโต๊ะที่วางหนังสือได้แค่ 2 เล่ม แต่ต้องใช้ถึง 5 เล่ม<br>
+  → เปิดเล่มที่ 1 ต้องเอาเล่มอื่นลงชั้น → เปิดเล่มที่ 2 ต้องเอาลงอีก → เสียเวลาแค่ <strong>ขนหนังสือ</strong> ไม่ได้อ่านจริงเลย<br>
+  ระบบก็เช่นกัน: Process มี Frame น้อยเกินไป → ต้อง Swap page เข้าออกตลอด → CPU ไม่ได้ประมวลผลจริงเลย
+</div>
+
+<h3>วงจรอุบาทว์ของ Thrashing</h3>
+<div class="box box-red" style="font-size:14px;line-height:2">
+  <div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px">
+    <span style="background:#2b1111;border:1px solid #ff6b6b;padding:4px 10px;border-radius:20px">เพิ่ม Process (Multiprogramming ↑)</span>
+    <span style="color:#ffce54">→</span>
+    <span style="background:#2b1111;border:1px solid #ff6b6b;padding:4px 10px;border-radius:20px">Frame ต่อ Process ลดลง</span>
+    <span style="color:#ffce54">→</span>
+    <span style="background:#2b1111;border:1px solid #ff6b6b;padding:4px 10px;border-radius:20px">Page Fault บ่อยมาก</span>
+    <span style="color:#ffce54">→</span>
+    <span style="background:#2b1111;border:1px solid #ff6b6b;padding:4px 10px;border-radius:20px">CPU รอ disk ตลอด (Utilization ↓)</span>
+    <span style="color:#ffce54">→</span>
+    <span style="background:#1a2744;border:1px solid #4a9eff;padding:4px 10px;border-radius:20px">OS คิดว่า CPU ว่าง → เพิ่ม Process อีก</span>
+    <span style="color:#ff6b6b;font-weight:bold">← วนซ้ำแย่ลงเรื่อยๆ!</span>
+  </div>
+</div>
+
+<h3>3 วิธีแก้ Thrashing</h3>
+
+<div style="display:flex;flex-direction:column;gap:16px;margin-top:8px">
+
+  <!-- วิธีที่ 1: Working Set Model -->
+  <div style="background:#1a1f2e;border:1px solid #48cfad;border-radius:8px;padding:16px">
+    <div style="color:#48cfad;font-weight:bold;font-size:15px;margin-bottom:8px">วิธีที่ 1: Working Set Model</div>
+    <p style="margin:0 0 10px 0">ติดตามว่าแต่ละ Process <strong>ใช้ Page อะไรบ้างในช่วง Δ (delta) steps ล่าสุด</strong> เรียกกลุ่มนั้นว่า "Working Set" → จัดสรร Frame ให้ <strong>≥ ขนาด Working Set</strong> เสมอ ถ้า Frame ไม่พอ → หยุด Process นั้นก่อน ดีกว่าปล่อยให้ Thrash</p>
+    <div class="example-box" style="margin:0">
+      <div class="ex-title">ตัวอย่าง Working Set (Δ = 4)</div>
+      <p style="margin:6px 0">Reference String: <span style="font-family:monospace">1, 2, 3, 1, 2, 4, 5, 4, 5</span></p>
+      <table style="font-size:13px">
+        <tr><th>ณ Step</th><th>4 Steps ล่าสุด</th><th>Working Set</th><th>Frame ที่ต้องการ</th></tr>
+        <tr><td>Step 4</td><td>1,2,3,1</td><td>{1,2,3}</td><td>3 frames</td></tr>
+        <tr><td>Step 6</td><td>3,1,2,4</td><td>{1,2,3,4}</td><td>4 frames</td></tr>
+        <tr><td>Step 9</td><td>4,5,4,5</td><td>{4,5}</td><td>2 frames (ลดลงได้!)</td></tr>
+      </table>
+      <p style="margin:8px 0 0 0;color:#9fa8b3;font-size:13px">OS จัด Frame ให้พอกับ Working Set → Process ไม่ Thrash เพราะ page ที่ใช้อยู่ล้วน fit ใน RAM</p>
+    </div>
+  </div>
+
+  <!-- วิธีที่ 2: Page Fault Frequency -->
+  <div style="background:#1a1f2e;border:1px solid #ffce54;border-radius:8px;padding:16px">
+    <div style="color:#ffce54;font-weight:bold;font-size:15px;margin-bottom:8px">วิธีที่ 2: Page Fault Frequency (PFF)</div>
+    <p style="margin:0 0 10px 0">วัด <strong>อัตรา Page Fault ของแต่ละ Process</strong> แล้วเปรียบกับ threshold บน/ล่าง</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+      <div style="background:#2b1111;border:1px solid #ff6b6b;border-radius:6px;padding:10px;text-align:center">
+        <div style="color:#ff6b6b;font-weight:bold">Fault Rate สูงเกิน threshold บน</div>
+        <div style="color:#9fa8b3;margin-top:6px;font-size:13px">→ Process ขาด Frame<br>→ เพิ่ม Frame ให้</div>
+      </div>
+      <div style="background:#112b1e;border:1px solid #48cfad;border-radius:6px;padding:10px;text-align:center">
+        <div style="color:#48cfad;font-weight:bold">Fault Rate ต่ำกว่า threshold ล่าง</div>
+        <div style="color:#9fa8b3;margin-top:6px;font-size:13px">→ Process มี Frame เหลือ<br>→ ดึง Frame คืนมาให้คนอื่น</div>
+      </div>
+    </div>
+    <div class="example-box" style="margin:0">
+      <div class="ex-title">ตัวอย่าง PFF</div>
+      <p style="margin:6px 0 0 0;font-size:13px">กำหนด threshold: บน = 0.5 fault/step, ล่าง = 0.1 fault/step<br>
+      Process A วัดได้ 0.8 fault/step → <strong style="color:#ff6b6b">เพิ่ม Frame ให้ Process A</strong><br>
+      Process B วัดได้ 0.05 fault/step → <strong style="color:#48cfad">ดึง Frame จาก B มาให้ A</strong><br>
+      ถ้าไม่มี Frame เหลือพอ → ต้อง Swap Process ออก (ไปวิธีที่ 3)</p>
+    </div>
+  </div>
+
+  <!-- วิธีที่ 3: ลด Multiprogramming -->
+  <div style="background:#1a1f2e;border:1px solid #fc6e51;border-radius:8px;padding:16px">
+    <div style="color:#fc6e51;font-weight:bold;font-size:15px;margin-bottom:8px">วิธีที่ 3: ลด Multiprogramming (Swap Out)</div>
+    <p style="margin:0 0 10px 0">เมื่อ RAM ไม่พอแจกให้ทุก Process → <strong>หยุด (Swap out) บาง Process ออก</strong> เพื่อให้ Process ที่เหลือได้ Frame เพียงพอ</p>
+    <div class="example-box" style="margin:0">
+      <div class="ex-title">ตัวอย่าง Swap Out</div>
+      <p style="margin:6px 0 0 0;font-size:13px">มี RAM = 12 frames, Process 4 ตัว (A,B,C,D) แต่ละตัวต้องการ 4 frames → รวม 16 frames แต่มีแค่ 12<br>
+      → ทุก Process ได้ 3 frames → ทุกตัว Thrash!<br><br>
+      <strong>แก้:</strong> Swap out Process D ออก → A, B, C ได้ตัวละ 4 frames → หยุด Thrash<br>
+      D รอใน disk ก่อน → เมื่อ A/B/C เสร็จ ค่อยโหลด D กลับมา</p>
+    </div>
+  </div>
+
+</div>
+
+<div class="box box-yellow" style="margin-top:16px">
+  <strong>สรุปหลักการ:</strong> Thrashing เกิดเพราะ Frame ที่มีน้อยกว่า Working Set ที่ Process ต้องการ<br>
+  วิธีแก้ทั้ง 3 ล้วนมีเป้าหมายเดียวกัน คือ <strong>ทำให้ Frame ที่จัดสรรให้ ≥ Working Set ที่ต้องการจริงๆ</strong>
 </div>
 </div>
 
