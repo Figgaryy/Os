@@ -244,6 +244,139 @@ button.run-btn.secondary{background:#2a3a52}
   <p>แต่ถ้า P3 ถือ R1 อีกตัว, รอไม่มีอะไร:<br>
   P3 ทำงานเสร็จก่อน คืน R1 → P2 ได้รับ R1 ทำงานเสร็จ → P1 ได้รับ R2 → Safe</p>
 </div>
+
+<!-- ===== RAG VISUAL DIAGRAMS ===== -->
+<div style="margin-top:16px">
+  <div class="ex-title" style="margin-bottom:10px">📊 ภาพประกอบ RAG — เห็นภาพชัดขึ้น</div>
+  <div class="grid2">
+    <!-- SVG 1: Deadlock RAG -->
+    <div>
+      <div style="color:#fc6e51;font-size:12px;font-weight:700;margin-bottom:6px;text-align:center">🔴 กรณี Deadlock (มี Cycle)</div>
+      <svg viewBox="0 0 300 250" style="background:#141925;border-radius:8px;width:100%;display:block" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="rd-a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L0,8 L8,4 z" fill="#48cfad"/></marker>
+          <marker id="rd-r" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L0,8 L8,4 z" fill="#fc6e51"/></marker>
+        </defs>
+        <text x="150" y="18" text-anchor="middle" fill="#fc6e51" font-size="12" font-family="sans-serif" font-weight="bold">P1 ⇄ P2 รอกันเป็นวงกลม</text>
+        <!-- P1 -->
+        <circle cx="55" cy="125" r="28" fill="#1e1533" stroke="#6c63ff" stroke-width="2.5"/>
+        <text x="55" y="130" text-anchor="middle" fill="#e8eaf6" font-size="15" font-family="sans-serif" font-weight="bold">P1</text>
+        <!-- P2 -->
+        <circle cx="245" cy="125" r="28" fill="#1e1533" stroke="#6c63ff" stroke-width="2.5"/>
+        <text x="245" y="130" text-anchor="middle" fill="#e8eaf6" font-size="15" font-family="sans-serif" font-weight="bold">P2</text>
+        <!-- R1 (top) -->
+        <rect x="105" y="38" width="60" height="48" fill="#1a2744" stroke="#4a9eff" stroke-width="2" rx="4"/>
+        <text x="135" y="76" text-anchor="middle" fill="#7dd3fc" font-size="13" font-family="sans-serif">R1</text>
+        <circle cx="135" cy="52" r="6" fill="#4a9eff"/>
+        <!-- R2 (bottom) -->
+        <rect x="135" y="170" width="60" height="48" fill="#1a2744" stroke="#4a9eff" stroke-width="2" rx="4"/>
+        <text x="165" y="208" text-anchor="middle" fill="#7dd3fc" font-size="13" font-family="sans-serif">R2</text>
+        <circle cx="165" cy="184" r="6" fill="#4a9eff"/>
+        <!-- R1→P1 (Assignment green) -->
+        <line x1="107" y1="77" x2="85" y2="107" stroke="#48cfad" stroke-width="2.5" marker-end="url(#rd-a)"/>
+        <!-- R2→P2 (Assignment green) -->
+        <line x1="195" y1="194" x2="220" y2="148" stroke="#48cfad" stroke-width="2.5" marker-end="url(#rd-a)"/>
+        <!-- P2→R1 (Request dashed red) -->
+        <line x1="222" y1="101" x2="168" y2="68" stroke="#fc6e51" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#rd-r)"/>
+        <!-- P1→R2 (Request dashed red) -->
+        <line x1="76" y1="148" x2="133" y2="177" stroke="#fc6e51" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#rd-r)"/>
+        <!-- Labels -->
+        <text x="83" y="87" fill="#48cfad" font-size="10" font-family="sans-serif">ถือครอง</text>
+        <text x="175" y="175" fill="#48cfad" font-size="10" font-family="sans-serif">ถือครอง</text>
+        <text x="188" y="80" fill="#fc6e51" font-size="10" font-family="sans-serif">รออยู่</text>
+        <text x="82" y="168" fill="#fc6e51" font-size="10" font-family="sans-serif">รออยู่</text>
+        <rect x="30" y="228" width="240" height="18" rx="4" fill="#2b1111"/>
+        <text x="150" y="241" text-anchor="middle" fill="#fc6e51" font-size="11" font-family="sans-serif" font-weight="bold">🔒 มี Cycle → DEADLOCK!</text>
+      </svg>
+    </div>
+    <!-- SVG 2: Safe RAG (P3 added) -->
+    <div>
+      <div style="color:#48cfad;font-size:12px;font-weight:700;margin-bottom:6px;text-align:center">🟢 กรณี Safe (P3 ช่วยแก้ Deadlock)</div>
+      <svg viewBox="0 0 300 250" style="background:#141925;border-radius:8px;width:100%;display:block" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="rs-a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L0,8 L8,4 z" fill="#48cfad"/></marker>
+          <marker id="rs-r" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L0,8 L8,4 z" fill="#fc6e51"/></marker>
+        </defs>
+        <text x="150" y="18" text-anchor="middle" fill="#48cfad" font-size="11" font-family="sans-serif" font-weight="bold">P3→P2→P1 = Safe Sequence ✓</text>
+        <!-- P1 -->
+        <circle cx="45" cy="115" r="26" fill="#1e1533" stroke="#6c63ff" stroke-width="2"/>
+        <text x="45" y="120" text-anchor="middle" fill="#e8eaf6" font-size="14" font-family="sans-serif" font-weight="bold">P1</text>
+        <!-- P2 -->
+        <circle cx="255" cy="115" r="26" fill="#1e1533" stroke="#6c63ff" stroke-width="2"/>
+        <text x="255" y="120" text-anchor="middle" fill="#e8eaf6" font-size="14" font-family="sans-serif" font-weight="bold">P2</text>
+        <!-- P3 (highlighted as safe starter) -->
+        <circle cx="150" cy="210" r="26" fill="#112b1e" stroke="#48cfad" stroke-width="2.5"/>
+        <text x="150" y="215" text-anchor="middle" fill="#48cfad" font-size="14" font-family="sans-serif" font-weight="bold">P3</text>
+        <!-- R1 (2 instances) -->
+        <rect x="85" y="32" width="70" height="52" fill="#1a2744" stroke="#4a9eff" stroke-width="2" rx="4"/>
+        <text x="120" y="76" text-anchor="middle" fill="#7dd3fc" font-size="12" font-family="sans-serif">R1 ×2</text>
+        <circle cx="108" cy="48" r="5" fill="#4a9eff"/>
+        <circle cx="132" cy="48" r="5" fill="#4a9eff"/>
+        <!-- R2 (1 instance) -->
+        <rect x="185" y="32" width="60" height="52" fill="#1a2744" stroke="#4a9eff" stroke-width="2" rx="4"/>
+        <text x="215" y="76" text-anchor="middle" fill="#7dd3fc" font-size="12" font-family="sans-serif">R2 ×1</text>
+        <circle cx="215" cy="48" r="5" fill="#4a9eff"/>
+        <!-- R1 inst1→P1 -->
+        <line x1="88" y1="76" x2="68" y2="100" stroke="#48cfad" stroke-width="2" marker-end="url(#rs-a)"/>
+        <!-- R1 inst2→P3 -->
+        <line x1="110" y1="84" x2="133" y2="186" stroke="#48cfad" stroke-width="2" marker-end="url(#rs-a)"/>
+        <!-- R2→P2 -->
+        <line x1="215" y1="84" x2="240" y2="98" stroke="#48cfad" stroke-width="2" marker-end="url(#rs-a)"/>
+        <!-- P2→R1 (request dashed) -->
+        <line x1="233" y1="95" x2="158" y2="63" stroke="#fc6e51" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#rs-r)"/>
+        <!-- P1→R2 (request dashed) -->
+        <line x1="68" y1="98" x2="183" y2="60" stroke="#fc6e51" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#rs-r)"/>
+        <!-- P3 label -->
+        <text x="150" y="238" text-anchor="middle" fill="#ffce54" font-size="9" font-family="sans-serif">ไม่รอ → เสร็จก่อน → คืน R1</text>
+        <rect x="20" y="228" width="260" height="16" rx="3" fill="#112b1e" style="display:none"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Wait-For Graph -->
+  <div style="margin-top:12px">
+    <div style="color:#ffce54;font-size:12px;font-weight:700;margin-bottom:6px">📊 Wait-For Graph — ลบ Resource Node ออก แล้วลาก P→P โดยตรง</div>
+    <svg viewBox="0 0 560 145" style="background:#141925;border-radius:8px;width:100%;display:block" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="wf-r" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L0,8 L8,4 z" fill="#fc6e51"/></marker>
+        <marker id="wf-g" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L0,8 L8,4 z" fill="#48cfad"/></marker>
+      </defs>
+      <!-- Left: Deadlock -->
+      <text x="135" y="18" text-anchor="middle" fill="#fc6e51" font-size="11" font-family="sans-serif" font-weight="bold">กรณี Deadlock: มี Cycle</text>
+      <circle cx="60" cy="78" r="26" fill="#1e1533" stroke="#6c63ff" stroke-width="2"/>
+      <text x="60" y="83" text-anchor="middle" fill="#e8eaf6" font-size="14" font-family="sans-serif">P1</text>
+      <circle cx="210" cy="78" r="26" fill="#1e1533" stroke="#6c63ff" stroke-width="2"/>
+      <text x="210" y="83" text-anchor="middle" fill="#e8eaf6" font-size="14" font-family="sans-serif">P2</text>
+      <path d="M84,62 Q135,25 186,62" fill="none" stroke="#fc6e51" stroke-width="2" marker-end="url(#wf-r)"/>
+      <path d="M186,94 Q135,135 84,94" fill="none" stroke="#fc6e51" stroke-width="2" marker-end="url(#wf-r)"/>
+      <text x="135" y="42" text-anchor="middle" fill="#fc6e51" font-size="10" font-family="sans-serif">P1→P2 และ P2→P1 = Cycle!</text>
+      <rect x="22" y="118" width="226" height="20" rx="4" fill="#2b1111"/>
+      <text x="135" y="132" text-anchor="middle" fill="#fc6e51" font-size="11" font-family="sans-serif" font-weight="bold">🔒 DEADLOCK</text>
+      <!-- Divider -->
+      <line x1="280" y1="8" x2="280" y2="138" stroke="#2e3347" stroke-width="1" stroke-dasharray="4,4"/>
+      <!-- Right: Safe -->
+      <text x="420" y="18" text-anchor="middle" fill="#48cfad" font-size="11" font-family="sans-serif" font-weight="bold">กรณี Safe: ไม่มี Cycle (มี P3)</text>
+      <circle cx="305" cy="78" r="26" fill="#1e1533" stroke="#6c63ff" stroke-width="2"/>
+      <text x="305" y="83" text-anchor="middle" fill="#e8eaf6" font-size="14" font-family="sans-serif">P1</text>
+      <circle cx="420" cy="78" r="26" fill="#1e1533" stroke="#6c63ff" stroke-width="2"/>
+      <text x="420" y="83" text-anchor="middle" fill="#e8eaf6" font-size="14" font-family="sans-serif">P2</text>
+      <circle cx="535" cy="78" r="22" fill="#112b1e" stroke="#48cfad" stroke-width="2.5"/>
+      <text x="535" y="83" text-anchor="middle" fill="#48cfad" font-size="14" font-family="sans-serif">P3</text>
+      <line x1="331" y1="78" x2="394" y2="78" stroke="#fc6e51" stroke-width="2" marker-end="url(#wf-r)"/>
+      <line x1="446" y1="78" x2="513" y2="78" stroke="#fc6e51" stroke-width="2" marker-end="url(#wf-r)"/>
+      <text x="535" y="112" text-anchor="middle" fill="#48cfad" font-size="9" font-family="sans-serif">ไม่รอ→เสร็จก่อน</text>
+      <rect x="290" y="118" width="252" height="20" rx="4" fill="#112b1e"/>
+      <text x="416" y="132" text-anchor="middle" fill="#48cfad" font-size="11" font-family="sans-serif" font-weight="bold">P3→P2→P1 ไม่มี Cycle ✓ SAFE</text>
+    </svg>
+    <div class="box box-blue" style="margin-top:8px;font-size:13px">
+      <strong>Legend:</strong>
+      <span style="color:#48cfad">━━▶ Assignment Edge</span> (Resource จัดสรรให้ Process) &nbsp;|&nbsp;
+      <span style="color:#fc6e51">╌╌▶ Request Edge</span> (Process รอ Resource) &nbsp;|&nbsp;
+      <span style="color:#4a9eff">▭</span> Resource (จุดในสี่เหลี่ยม = จำนวน instance) &nbsp;|&nbsp;
+      <span style="color:#6c63ff">⬤</span> Process
+    </div>
+  </div>
+</div>
 </div>
 
 <!-- 6.5 Safety Algorithm -->
@@ -876,6 +1009,63 @@ button.run-btn.secondary{background:#2a3a52}
   <p>RAM ว่าง: [10MB] [5MB] [8MB] กระจายอยู่ 3 ที่ รวม 23 MB<br>
   กระบวนการใหม่ต้องการ 20 MB ต่อเนื่อง → ใส่ไม่ได้! แม้มีพื้นที่รวมพอ</p>
   <p><strong>วิธีแก้:</strong> Compaction (รวมรูว่างเข้าหากัน) หรือใช้ Paging/Segmentation</p>
+  <!-- Memory Layout Visual -->
+  <div style="margin-top:14px">
+    <div class="ex-title" style="margin-bottom:8px">📊 ภาพหน่วยความจำ — External Fragmentation vs หลัง Compaction</div>
+    <svg viewBox="0 0 560 210" style="background:#141925;border-radius:8px;width:100%;display:block" xmlns="http://www.w3.org/2000/svg">
+      <!-- Title Before -->
+      <text x="280" y="18" text-anchor="middle" fill="#ffce54" font-size="12" font-family="sans-serif" font-weight="bold">RAM 60MB — ก่อน Compaction (External Fragmentation)</text>
+      <!-- RAM bar segments -->
+      <!-- OS: 8MB → 8/60*520=69px -->
+      <rect x="20" y="28" width="69" height="38" fill="#1e1533" stroke="#6c63ff" stroke-width="1.5" rx="2"/>
+      <text x="54" y="52" text-anchor="middle" fill="#9fa8b3" font-size="10" font-family="sans-serif">OS 8MB</text>
+      <!-- P1: 12MB → 104px -->
+      <rect x="89" y="28" width="104" height="38" fill="#1a2744" stroke="#4a9eff" stroke-width="1.5" rx="2"/>
+      <text x="141" y="52" text-anchor="middle" fill="#7dd3fc" font-size="11" font-family="sans-serif">P1  12MB</text>
+      <!-- HOLE: 10MB → 87px -->
+      <rect x="193" y="28" width="87" height="38" fill="#1e1012" stroke="#fc6e51" stroke-width="1.5" stroke-dasharray="5,3" rx="2"/>
+      <text x="236" y="47" text-anchor="middle" fill="#fc6e51" font-size="10" font-family="sans-serif">Hole</text>
+      <text x="236" y="60" text-anchor="middle" fill="#fc6e51" font-size="10" font-family="sans-serif">10MB</text>
+      <!-- P2: 18MB → 156px -->
+      <rect x="280" y="28" width="156" height="38" fill="#1a2744" stroke="#4a9eff" stroke-width="1.5" rx="2"/>
+      <text x="358" y="52" text-anchor="middle" fill="#7dd3fc" font-size="11" font-family="sans-serif">P2  18MB</text>
+      <!-- HOLE: 5MB → 43px -->
+      <rect x="436" y="28" width="43" height="38" fill="#1e1012" stroke="#fc6e51" stroke-width="1.5" stroke-dasharray="5,3" rx="2"/>
+      <text x="457" y="47" text-anchor="middle" fill="#fc6e51" font-size="9" font-family="sans-serif">Hole</text>
+      <text x="457" y="60" text-anchor="middle" fill="#fc6e51" font-size="9" font-family="sans-serif">5MB</text>
+      <!-- P3: 7MB → 60px -->
+      <rect x="479" y="28" width="61" height="38" fill="#1a2744" stroke="#4a9eff" stroke-width="1.5" rx="2"/>
+      <text x="509" y="52" text-anchor="middle" fill="#7dd3fc" font-size="10" font-family="sans-serif">P3 7MB</text>
+      <!-- Annotation: total holes -->
+      <text x="280" y="82" text-anchor="middle" fill="#fc6e51" font-size="12" font-family="sans-serif">รวมพื้นที่ว่าง = 10+5 = <tspan font-weight="bold">15MB</tspan> แต่กระจายอยู่ 2 ที่</text>
+      <!-- New process 12MB cannot fit -->
+      <rect x="20" y="90" width="260" height="24" rx="4" fill="#2b1111"/>
+      <text x="150" y="106" text-anchor="middle" fill="#fc6e51" font-size="11" font-family="sans-serif">❌ Process ใหม่ 12MB ต่อเนื่อง → ใส่ไม่ได้!</text>
+      <rect x="290" y="90" width="250" height="24" rx="4" fill="#112b1e"/>
+      <text x="415" y="106" text-anchor="middle" fill="#48cfad" font-size="11" font-family="sans-serif">✓ รวมกัน 15MB พอ แต่แตกกระจาย</text>
+
+      <!-- After Compaction -->
+      <text x="280" y="132" text-anchor="middle" fill="#48cfad" font-size="12" font-family="sans-serif" font-weight="bold">หลัง Compaction — รวมรูว่างเข้าหากัน</text>
+      <!-- OS -->
+      <rect x="20" y="142" width="69" height="38" fill="#1e1533" stroke="#6c63ff" stroke-width="1.5" rx="2"/>
+      <text x="54" y="166" text-anchor="middle" fill="#9fa8b3" font-size="10" font-family="sans-serif">OS 8MB</text>
+      <!-- P1 -->
+      <rect x="89" y="142" width="104" height="38" fill="#1a2744" stroke="#4a9eff" stroke-width="1.5" rx="2"/>
+      <text x="141" y="166" text-anchor="middle" fill="#7dd3fc" font-size="11" font-family="sans-serif">P1  12MB</text>
+      <!-- P2 -->
+      <rect x="193" y="142" width="156" height="38" fill="#1a2744" stroke="#4a9eff" stroke-width="1.5" rx="2"/>
+      <text x="271" y="166" text-anchor="middle" fill="#7dd3fc" font-size="11" font-family="sans-serif">P2  18MB</text>
+      <!-- P3 -->
+      <rect x="349" y="142" width="61" height="38" fill="#1a2744" stroke="#4a9eff" stroke-width="1.5" rx="2"/>
+      <text x="379" y="166" text-anchor="middle" fill="#7dd3fc" font-size="10" font-family="sans-serif">P3 7MB</text>
+      <!-- BIG HOLE -->
+      <rect x="410" y="142" width="130" height="38" fill="#1e2820" stroke="#48cfad" stroke-width="2" stroke-dasharray="0" rx="2"/>
+      <text x="475" y="161" text-anchor="middle" fill="#48cfad" font-size="11" font-family="sans-serif">Free 15MB</text>
+      <text x="475" y="174" text-anchor="middle" fill="#48cfad" font-size="10" font-family="sans-serif">ต่อเนื่อง ✓</text>
+      <!-- Result label -->
+      <text x="475" y="200" text-anchor="middle" fill="#48cfad" font-size="11" font-family="sans-serif" font-weight="bold">✅ ใส่ Process ใหม่ 12MB ได้แล้ว!</text>
+    </svg>
+  </div>
 </div>
 
 <h3>การคำนวณ Physical Address (Contiguous)</h3>
@@ -1042,6 +1232,86 @@ button.run-btn.secondary{background:#2a3a52}
   p = 9 ÷ 4 = 2, d = 9 mod 4 = 1<br>
   Frame = PageTable[2] = 8<br>
   Physical = 8 × 4 + 1 = <strong>33</strong></p>
+</div>
+
+<!-- Paging Translation Visual -->
+<div style="margin-top:14px">
+  <div class="ex-title" style="margin-bottom:8px">📊 ภาพการแปลง Logical → Physical Address (Paging)</div>
+  <svg viewBox="0 0 560 230" style="background:#141925;border-radius:8px;width:100%;display:block" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="pt-a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L0,8 L8,4 z" fill="#9fa8b3"/></marker>
+      <marker id="pt-g" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L0,8 L8,4 z" fill="#48cfad"/></marker>
+      <marker id="pt-b" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L0,8 L8,4 z" fill="#4a9eff"/></marker>
+    </defs>
+
+    <!-- Example label -->
+    <text x="280" y="18" text-anchor="middle" fill="#ffce54" font-size="12" font-family="sans-serif" font-weight="bold">Logical=13, Page Size=4, PageTable=[5,2,8,0,3]</text>
+
+    <!-- STEP 1: Logical Address box -->
+    <rect x="10" y="35" width="90" height="50" fill="#1e1533" stroke="#6c63ff" stroke-width="2" rx="5"/>
+    <text x="55" y="54" text-anchor="middle" fill="#9fa8b3" font-size="10" font-family="sans-serif">Logical Addr</text>
+    <text x="55" y="74" text-anchor="middle" fill="#6c63ff" font-size="20" font-family="sans-serif" font-weight="bold">13</text>
+
+    <!-- Arrow 1 -->
+    <line x1="100" y1="60" x2="118" y2="60" stroke="#9fa8b3" stroke-width="1.5" marker-end="url(#pt-a)"/>
+
+    <!-- STEP 2: Split box -->
+    <rect x="120" y="28" width="120" height="64" fill="#252836" stroke="#2e3347" stroke-width="1.5" rx="5"/>
+    <text x="180" y="44" text-anchor="middle" fill="#ffce54" font-size="10" font-family="sans-serif">แบ่ง: 13÷4=3 เศษ 1</text>
+    <!-- Page# cell -->
+    <rect x="128" y="50" width="50" height="34" fill="#1a2744" stroke="#4a9eff" stroke-width="1.5" rx="3"/>
+    <text x="153" y="63" text-anchor="middle" fill="#9fa8b3" font-size="9" font-family="sans-serif">Page#</text>
+    <text x="153" y="78" text-anchor="middle" fill="#4a9eff" font-size="16" font-family="sans-serif" font-weight="bold">3</text>
+    <!-- Offset cell -->
+    <rect x="182" y="50" width="50" height="34" fill="#1e2820" stroke="#48cfad" stroke-width="1.5" rx="3"/>
+    <text x="207" y="63" text-anchor="middle" fill="#9fa8b3" font-size="9" font-family="sans-serif">Offset</text>
+    <text x="207" y="78" text-anchor="middle" fill="#48cfad" font-size="16" font-family="sans-serif" font-weight="bold">1</text>
+
+    <!-- Arrow from Page# downward to page table -->
+    <line x1="153" y1="84" x2="153" y2="118" stroke="#4a9eff" stroke-width="1.5" marker-end="url(#pt-b)"/>
+    <text x="160" y="106" fill="#4a9eff" font-size="9" font-family="sans-serif">lookup</text>
+
+    <!-- Offset arrow going around to combine box -->
+    <path d="M207,84 L207,100 Q207,115 222,115 L330,115" fill="none" stroke="#48cfad" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#pt-g)"/>
+
+    <!-- STEP 3: Page Table -->
+    <rect x="70" y="120" width="170" height="70" fill="#1a2744" stroke="#4a9eff" stroke-width="2" rx="5"/>
+    <text x="155" y="138" text-anchor="middle" fill="#7dd3fc" font-size="11" font-family="sans-serif" font-weight="bold">Page Table</text>
+    <text x="155" y="153" text-anchor="middle" fill="#9fa8b3" font-size="10" font-family="sans-serif">Page 0→Frame 5 | Page 1→Frame 2</text>
+    <text x="155" y="166" text-anchor="middle" fill="#9fa8b3" font-size="10" font-family="sans-serif">Page 2→Frame 8 | <tspan fill="#ffce54" font-weight="bold">Page 3→Frame 0</tspan></text>
+    <text x="155" y="179" text-anchor="middle" fill="#9fa8b3" font-size="10" font-family="sans-serif">Page 4→Frame 3</text>
+
+    <!-- Arrow from page table right to combine -->
+    <line x1="240" y1="155" x2="328" y2="155" stroke="#9fa8b3" stroke-width="1.5" marker-end="url(#pt-a)"/>
+    <text x="282" y="148" fill="#ffce54" font-size="9" font-family="sans-serif">Frame=0</text>
+
+    <!-- STEP 4: Combine box -->
+    <rect x="330" y="120" width="120" height="70" fill="#252836" stroke="#2e3347" stroke-width="1.5" rx="5"/>
+    <text x="390" y="136" text-anchor="middle" fill="#ffce54" font-size="10" font-family="sans-serif">Physical = Frame×Size+Offset</text>
+    <!-- Frame# cell -->
+    <rect x="338" y="142" width="50" height="34" fill="#1a2744" stroke="#4a9eff" stroke-width="1.5" rx="3"/>
+    <text x="363" y="155" text-anchor="middle" fill="#9fa8b3" font-size="9" font-family="sans-serif">Frame</text>
+    <text x="363" y="170" text-anchor="middle" fill="#4a9eff" font-size="16" font-family="sans-serif" font-weight="bold">0</text>
+    <!-- Offset cell -->
+    <rect x="392" y="142" width="50" height="34" fill="#1e2820" stroke="#48cfad" stroke-width="1.5" rx="3"/>
+    <text x="417" y="155" text-anchor="middle" fill="#9fa8b3" font-size="9" font-family="sans-serif">Offset</text>
+    <text x="417" y="170" text-anchor="middle" fill="#48cfad" font-size="16" font-family="sans-serif" font-weight="bold">1</text>
+
+    <!-- Formula -->
+    <text x="390" y="200" text-anchor="middle" fill="#9fa8b3" font-size="11" font-family="sans-serif">0 × 4 + 1 =</text>
+
+    <!-- Arrow to result -->
+    <line x1="450" y1="155" x2="468" y2="155" stroke="#48cfad" stroke-width="2" marker-end="url(#pt-g)"/>
+
+    <!-- STEP 5: Result -->
+    <rect x="470" y="120" width="80" height="70" fill="#112b1e" stroke="#48cfad" stroke-width="2.5" rx="5"/>
+    <text x="510" y="140" text-anchor="middle" fill="#48cfad" font-size="11" font-family="sans-serif">Physical</text>
+    <text x="510" y="170" text-anchor="middle" fill="#48cfad" font-size="28" font-family="sans-serif" font-weight="bold">1</text>
+
+    <!-- Second example below -->
+    <rect x="10" y="208" width="540" height="18" rx="4" fill="#1e2132"/>
+    <text x="280" y="221" text-anchor="middle" fill="#9fa8b3" font-size="11" font-family="sans-serif">ตัวอย่างที่ 2: Logical=9 → p=2, d=1 → Frame=PageTable[2]=8 → Physical = 8×4+1 = <tspan fill="#48cfad" font-weight="bold">33</tspan></text>
+  </svg>
 </div>
 
 <h3>การแปลงด้วย Binary (สำคัญมากในข้อสอบ!)</h3>
@@ -1529,6 +1799,121 @@ Page Number bits = (Total bits) − (Offset bits)</div>
 <div class="step"><div class="step-num">5</div><div class="step-body">โหลด Page ใหม่เข้า Frame. อัปเดต Page Table (Valid bit → 1, ใส่ Frame Number)</div></div>
 <div class="step"><div class="step-num">6</div><div class="step-body">รีสตาร์ท Instruction ที่ทำให้เกิด Page Fault</div></div>
 <div class="warn">⚠ ยิ่งเกิด Page Fault บ่อย → ระบบช้าลงมาก เพราะต้องอ่าน/เขียน Disk ทุกครั้ง</div>
+
+<!-- Page Fault Flowchart Visual -->
+<div style="margin-top:14px">
+  <div class="ex-title" style="margin-bottom:8px">📊 ภาพขั้นตอนการจัดการ Page Fault (6 ขั้นตอน)</div>
+  <svg viewBox="0 0 560 310" style="background:#141925;border-radius:8px;width:100%;display:block" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="pf-a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L0,8 L8,4 z" fill="#9fa8b3"/></marker>
+      <marker id="pf-y" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L0,8 L8,4 z" fill="#48cfad"/></marker>
+      <marker id="pf-n" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L0,8 L8,4 z" fill="#fc6e51"/></marker>
+    </defs>
+
+    <!-- Step 1: CPU access -->
+    <rect x="180" y="8" width="200" height="38" fill="#1e1533" stroke="#6c63ff" stroke-width="2" rx="6"/>
+    <text x="280" y="24" text-anchor="middle" fill="#e8eaf6" font-size="11" font-family="sans-serif" font-weight="bold">① CPU เข้าถึง Page</text>
+    <text x="280" y="38" text-anchor="middle" fill="#9fa8b3" font-size="10" font-family="sans-serif">ตรวจ Page Table (Valid bit)</text>
+    <line x1="280" y1="46" x2="280" y2="62" stroke="#9fa8b3" stroke-width="1.5" marker-end="url(#pf-a)"/>
+
+    <!-- Diamond: Valid bit? -->
+    <polygon points="280,64 370,90 280,116 190,90" fill="#252836" stroke="#ffce54" stroke-width="2"/>
+    <text x="280" y="87" text-anchor="middle" fill="#ffce54" font-size="10" font-family="sans-serif" font-weight="bold">Valid bit</text>
+    <text x="280" y="101" text-anchor="middle" fill="#ffce54" font-size="10" font-family="sans-serif">= 1 ?</text>
+
+    <!-- YES branch: Page in RAM -->
+    <line x1="370" y1="90" x2="480" y2="90" stroke="#48cfad" stroke-width="2" marker-end="url(#pf-y)"/>
+    <text x="420" y="82" fill="#48cfad" font-size="10" font-family="sans-serif" font-weight="bold">Yes ✓</text>
+    <rect x="480" y="68" width="72" height="44" fill="#112b1e" stroke="#48cfad" stroke-width="2" rx="5"/>
+    <text x="516" y="86" text-anchor="middle" fill="#48cfad" font-size="10" font-family="sans-serif">ใช้งาน</text>
+    <text x="516" y="100" text-anchor="middle" fill="#48cfad" font-size="10" font-family="sans-serif">ได้เลย!</text>
+
+    <!-- NO branch: Page Fault -->
+    <line x1="280" y1="116" x2="280" y2="136" stroke="#fc6e51" stroke-width="2" marker-end="url(#pf-n)"/>
+    <text x="295" y="130" fill="#fc6e51" font-size="10" font-family="sans-serif" font-weight="bold">No → PAGE FAULT!</text>
+
+    <!-- Step 2: OS finds on disk -->
+    <rect x="155" y="138" width="250" height="32" fill="#2b1111" stroke="#fc6e51" stroke-width="1.5" rx="5"/>
+    <text x="280" y="158" text-anchor="middle" fill="#fc6e51" font-size="11" font-family="sans-serif">② OS หา Page บน Disk</text>
+    <line x1="280" y1="170" x2="280" y2="188" stroke="#9fa8b3" stroke-width="1.5" marker-end="url(#pf-a)"/>
+
+    <!-- Diamond: Free frame? -->
+    <polygon points="280,190 370,212 280,234 190,212" fill="#252836" stroke="#ffce54" stroke-width="2"/>
+    <text x="280" y="208" text-anchor="middle" fill="#ffce54" font-size="10" font-family="sans-serif" font-weight="bold">มี Frame</text>
+    <text x="280" y="222" text-anchor="middle" fill="#ffce54" font-size="10" font-family="sans-serif">ว่าง?</text>
+
+    <!-- YES: load directly -->
+    <line x1="190" y1="212" x2="115" y2="212" stroke="#48cfad" stroke-width="1.5" marker-end="url(#pf-y)"/>
+    <text x="150" y="204" fill="#48cfad" font-size="9" font-family="sans-serif" font-weight="bold">Yes</text>
+    <rect x="20" y="196" width="95" height="32" fill="#112b1e" stroke="#48cfad" stroke-width="1.5" rx="4"/>
+    <text x="67" y="216" text-anchor="middle" fill="#48cfad" font-size="10" font-family="sans-serif">③ โหลด Page</text>
+    <!-- merge arrow from yes/no to step 4 -->
+    <line x1="67" y1="228" x2="67" y2="252" stroke="#48cfad" stroke-width="1.5"/>
+    <line x1="67" y1="252" x2="168" y2="252" stroke="#48cfad" stroke-width="1.5" marker-end="url(#pf-y)"/>
+
+    <!-- NO: Page Replacement -->
+    <line x1="370" y1="212" x2="440" y2="212" stroke="#fc6e51" stroke-width="1.5" marker-end="url(#pf-n)"/>
+    <text x="403" y="204" fill="#fc6e51" font-size="9" font-family="sans-serif" font-weight="bold">No</text>
+    <rect x="440" y="192" width="110" height="40" fill="#2b1111" stroke="#fc6e51" stroke-width="1.5" rx="4"/>
+    <text x="495" y="209" text-anchor="middle" fill="#fc6e51" font-size="10" font-family="sans-serif">③ เลือก Victim Page</text>
+    <text x="495" y="224" text-anchor="middle" fill="#9fa8b3" font-size="9" font-family="sans-serif">(FIFO / OPT / LRU)</text>
+    <line x1="495" y1="232" x2="495" y2="252" stroke="#fc6e51" stroke-width="1.5"/>
+    <line x1="495" y1="252" x2="392" y2="252" stroke="#fc6e51" stroke-width="1.5" marker-end="url(#pf-n)"/>
+
+    <!-- Step 4-6: combined -->
+    <line x1="280" y1="234" x2="280" y2="252" stroke="#9fa8b3" stroke-width="1.5"/>
+    <rect x="170" y="254" width="220" height="20" rx="4" fill="#1a2744" stroke="#4a9eff" stroke-width="1.5"/>
+    <text x="280" y="268" text-anchor="middle" fill="#7dd3fc" font-size="10" font-family="sans-serif">④ เขียน Dirty Page กลับ Disk (ถ้ามี)</text>
+    <line x1="280" y1="274" x2="280" y2="282" stroke="#9fa8b3" stroke-width="1.5" marker-end="url(#pf-a)"/>
+    <rect x="170" y="284" width="220" height="20" rx="4" fill="#1a2744" stroke="#4a9eff" stroke-width="1.5"/>
+    <text x="280" y="298" text-anchor="middle" fill="#7dd3fc" font-size="10" font-family="sans-serif">⑤ โหลด Page ใหม่ → อัปเดต Page Table</text>
+
+    <!-- Final step -->
+    <rect x="420" y="275" width="130" height="30" fill="#112b1e" stroke="#48cfad" stroke-width="2" rx="5"/>
+    <text x="485" y="288" text-anchor="middle" fill="#48cfad" font-size="10" font-family="sans-serif" font-weight="bold">⑥ Restart</text>
+    <text x="485" y="300" text-anchor="middle" fill="#48cfad" font-size="9" font-family="sans-serif">Instruction ✓</text>
+    <line x1="390" y1="290" x2="418" y2="290" stroke="#48cfad" stroke-width="1.5" marker-end="url(#pf-y)"/>
+  </svg>
+
+  <!-- Additional visual: Page Fault impact on RAM -->
+  <div style="margin-top:10px">
+    <div class="ex-title" style="margin-bottom:8px">📊 ตัวอย่าง: ก่อน/หลัง Page Fault (3 Frames, Page 5 เข้ามา)</div>
+    <svg viewBox="0 0 560 130" style="background:#141925;border-radius:8px;width:100%;display:block" xmlns="http://www.w3.org/2000/svg">
+      <!-- Before -->
+      <text x="130" y="18" text-anchor="middle" fill="#ffce54" font-size="11" font-family="sans-serif" font-weight="bold">ก่อน Page Fault</text>
+      <rect x="30" y="28" width="80" height="40" fill="#1a2744" stroke="#4a9eff" stroke-width="1.5" rx="3"/>
+      <text x="70" y="44" text-anchor="middle" fill="#9fa8b3" font-size="10" font-family="sans-serif">Frame 0</text>
+      <text x="70" y="60" text-anchor="middle" fill="#7dd3fc" font-size="14" font-family="sans-serif" font-weight="bold">Page 1</text>
+      <rect x="120" y="28" width="80" height="40" fill="#1a2744" stroke="#4a9eff" stroke-width="1.5" rx="3"/>
+      <text x="160" y="44" text-anchor="middle" fill="#9fa8b3" font-size="10" font-family="sans-serif">Frame 1</text>
+      <text x="160" y="60" text-anchor="middle" fill="#7dd3fc" font-size="14" font-family="sans-serif" font-weight="bold">Page 3</text>
+      <rect x="210" y="28" width="80" height="40" fill="#2b1111" stroke="#fc6e51" stroke-width="2" rx="3"/>
+      <text x="250" y="44" text-anchor="middle" fill="#9fa8b3" font-size="10" font-family="sans-serif">Frame 2</text>
+      <text x="250" y="60" text-anchor="middle" fill="#fc6e51" font-size="14" font-family="sans-serif" font-weight="bold">Page 2*</text>
+      <text x="250" y="80" text-anchor="middle" fill="#fc6e51" font-size="9" font-family="sans-serif">Victim (FIFO)</text>
+      <!-- CPU request label -->
+      <text x="130" y="105" text-anchor="middle" fill="#e8eaf6" font-size="11" font-family="sans-serif">CPU ขอ <tspan fill="#fc6e51" font-weight="bold">Page 5</tspan> → ไม่มีใน RAM → <tspan fill="#fc6e51">Page Fault!</tspan></text>
+      <text x="130" y="120" text-anchor="middle" fill="#9fa8b3" font-size="10" font-family="sans-serif">RAM เต็ม → FIFO ไล่ Page 2 ออก (เก่าที่สุด)</text>
+
+      <!-- Arrow -->
+      <text x="310" y="65" text-anchor="middle" fill="#ffce54" font-size="20" font-family="sans-serif">→</text>
+
+      <!-- After -->
+      <text x="430" y="18" text-anchor="middle" fill="#48cfad" font-size="11" font-family="sans-serif" font-weight="bold">หลัง Page Fault (โหลด Page 5 แล้ว)</text>
+      <rect x="330" y="28" width="80" height="40" fill="#1a2744" stroke="#4a9eff" stroke-width="1.5" rx="3"/>
+      <text x="370" y="44" text-anchor="middle" fill="#9fa8b3" font-size="10" font-family="sans-serif">Frame 0</text>
+      <text x="370" y="60" text-anchor="middle" fill="#7dd3fc" font-size="14" font-family="sans-serif" font-weight="bold">Page 1</text>
+      <rect x="420" y="28" width="80" height="40" fill="#1a2744" stroke="#4a9eff" stroke-width="1.5" rx="3"/>
+      <text x="460" y="44" text-anchor="middle" fill="#9fa8b3" font-size="10" font-family="sans-serif">Frame 1</text>
+      <text x="460" y="60" text-anchor="middle" fill="#7dd3fc" font-size="14" font-family="sans-serif" font-weight="bold">Page 3</text>
+      <rect x="510" y="28" width="40" height="40" fill="#112b1e" stroke="#48cfad" stroke-width="2" rx="3"/>
+      <text x="530" y="44" text-anchor="middle" fill="#9fa8b3" font-size="9" font-family="sans-serif">Fr.2</text>
+      <text x="530" y="60" text-anchor="middle" fill="#48cfad" font-size="12" font-family="sans-serif" font-weight="bold">P5✓</text>
+      <text x="430" y="105" text-anchor="middle" fill="#48cfad" font-size="11" font-family="sans-serif">Page Table อัปเดต: Page 5 → Frame 2, Valid=1</text>
+      <text x="430" y="120" text-anchor="middle" fill="#9fa8b3" font-size="10" font-family="sans-serif">Restart Instruction → ทำงานต่อได้ปกติ ✓</text>
+    </svg>
+  </div>
+</div>
 </div>
 
 <!-- 8.3 Replacement -->
