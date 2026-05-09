@@ -1043,6 +1043,162 @@ button.run-btn.secondary{background:#2a3a52}
 </div>
 </div>
 
+<!-- ─── Rollback explanation ─── -->
+<div style="margin:14px 0">
+<div class="ex-title" style="margin-bottom:10px">🔄 แล้ว Rollback ล่ะ — เหมือนกับ "รอ" ไหม?</div>
+
+<div class="box box-yellow" style="margin-bottom:12px">
+  <strong>คำตอบ: ผลสุดท้ายเหมือนกัน (Process รออยู่) แต่ "เส้นทาง" ต่างกันมาก</strong><br>
+  Wait = OS รู้ทันทีว่าของไม่พอ → บล็อกเลย ไม่มีการเปลี่ยนค่าอะไรทั้งนั้น<br>
+  Rollback = ของ<em>พอ</em>จริง OS เลยลองให้จริงๆ ก่อน → แต่ตรวจแล้วเสี่ยง Deadlock → ถอนคืนทุกอย่างกลับ → บล็อก
+</div>
+
+<!-- Side by side flow comparison -->
+<div class="grid2" style="margin-bottom:14px">
+  <!-- Wait flow -->
+  <div>
+    <div style="color:#4a9eff;font-weight:700;font-size:12px;text-align:center;margin-bottom:6px">🕐 Wait — ของไม่พอ (ขั้น ②)</div>
+    <svg viewBox="0 0 250 260" style="background:#141925;border-radius:8px;width:100%;display:block" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="wt2-a" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L0,7 L7,3.5 z" fill="#9fa8b3"/></marker>
+        <marker id="wt2-r" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L0,7 L7,3.5 z" fill="#fc6e51"/></marker>
+      </defs>
+      <!-- Step 1: Request arrives -->
+      <rect x="40" y="10" width="170" height="34" rx="5" fill="#1e1533" stroke="#6c63ff" stroke-width="1.5"/>
+      <text x="125" y="28" text-anchor="middle" fill="#e8eaf6" font-size="10" font-family="sans-serif" font-weight="bold">P0 ขอ [7,4,3]</text>
+      <text x="125" y="39" text-anchor="middle" fill="#9fa8b3" font-size="9" font-family="sans-serif">Available = [3,3,2]</text>
+      <line x1="125" y1="44" x2="125" y2="60" stroke="#9fa8b3" stroke-width="1.5" marker-end="url(#wt2-a)"/>
+      <!-- Step 2: Check -->
+      <rect x="40" y="62" width="170" height="30" rx="5" fill="#2b1111" stroke="#fc6e51" stroke-width="1.5"/>
+      <text x="125" y="79" text-anchor="middle" fill="#fc6e51" font-size="10" font-family="sans-serif">ขั้น ②: 7 &gt; 3 ✗</text>
+      <text x="125" y="88" text-anchor="middle" fill="#9fa8b3" font-size="9" font-family="sans-serif">Available ไม่พอ</text>
+      <line x1="125" y1="92" x2="125" y2="108" stroke="#fc6e51" stroke-width="1.5" marker-end="url(#wt2-r)"/>
+      <!-- No simulation box -->
+      <rect x="20" y="110" width="210" height="30" rx="5" fill="#1e2132" stroke="#2e3347" stroke-width="1.5" stroke-dasharray="5,3"/>
+      <text x="125" y="127" text-anchor="middle" fill="#9fa8b3" font-size="10" font-family="sans-serif">ไม่มีการเปลี่ยนค่าใดๆ เลย</text>
+      <text x="125" y="138" text-anchor="middle" fill="#9fa8b3" font-size="9" font-family="sans-serif">(ข้ามขั้น ③ และ ④ ทั้งหมด)</text>
+      <line x1="125" y1="140" x2="125" y2="156" stroke="#9fa8b3" stroke-width="1.5" marker-end="url(#wt2-a)"/>
+      <!-- Block -->
+      <rect x="40" y="158" width="170" height="34" rx="5" fill="#2b1111" stroke="#fc6e51" stroke-width="2"/>
+      <text x="125" y="175" text-anchor="middle" fill="#fc6e51" font-size="10" font-family="sans-serif" font-weight="bold">บล็อก P0 ทันที</text>
+      <text x="125" y="187" text-anchor="middle" fill="#9fa8b3" font-size="9" font-family="sans-serif">เข้า Waiting Queue</text>
+      <!-- Values unchanged note -->
+      <rect x="20" y="202" width="210" height="52" rx="5" fill="#1e2132" stroke="#2e3347"/>
+      <text x="125" y="218" text-anchor="middle" fill="#ffce54" font-size="10" font-family="sans-serif" font-weight="bold">ค่าที่เปลี่ยน: ไม่มีเลย</text>
+      <text x="125" y="232" text-anchor="middle" fill="#9fa8b3" font-size="9" font-family="sans-serif">Available ยังเป็น [3,3,2]</text>
+      <text x="125" y="246" text-anchor="middle" fill="#9fa8b3" font-size="9" font-family="sans-serif">Alloc, Need ยังเดิมทั้งหมด</text>
+    </svg>
+  </div>
+
+  <!-- Rollback flow -->
+  <div>
+    <div style="color:#fc6e51;font-weight:700;font-size:12px;text-align:center;margin-bottom:6px">🔴 Rollback — ของพอแต่ Unsafe (ขั้น ④)</div>
+    <svg viewBox="0 0 250 260" style="background:#141925;border-radius:8px;width:100%;display:block" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="rb-a" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L0,7 L7,3.5 z" fill="#9fa8b3"/></marker>
+        <marker id="rb-r" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L0,7 L7,3.5 z" fill="#fc6e51"/></marker>
+        <marker id="rb-g" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L0,7 L7,3.5 z" fill="#48cfad"/></marker>
+      </defs>
+      <!-- Step 1: Request arrives -->
+      <rect x="40" y="10" width="170" height="34" rx="5" fill="#1e1533" stroke="#6c63ff" stroke-width="1.5"/>
+      <text x="125" y="28" text-anchor="middle" fill="#e8eaf6" font-size="10" font-family="sans-serif" font-weight="bold">P4 ขอ [3,3,0]</text>
+      <text x="125" y="39" text-anchor="middle" fill="#9fa8b3" font-size="9" font-family="sans-serif">Available = [3,3,2]</text>
+      <line x1="125" y1="44" x2="125" y2="60" stroke="#9fa8b3" stroke-width="1.5" marker-end="url(#rb-a)"/>
+      <!-- Step 2: Check passes -->
+      <rect x="40" y="62" width="170" height="30" rx="5" fill="#112b1e" stroke="#48cfad" stroke-width="1.5"/>
+      <text x="125" y="78" text-anchor="middle" fill="#48cfad" font-size="10" font-family="sans-serif">ขั้น ①②: ผ่าน ✓</text>
+      <text x="125" y="89" text-anchor="middle" fill="#9fa8b3" font-size="9" font-family="sans-serif">3≤3, 3≤3, 0≤2 ✓</text>
+      <line x1="125" y1="92" x2="125" y2="108" stroke="#48cfad" stroke-width="1.5" marker-end="url(#rb-g)"/>
+      <!-- Simulation: values change temporarily -->
+      <rect x="15" y="110" width="220" height="46" rx="5" fill="#2b2410" stroke="#ffce54" stroke-width="1.5"/>
+      <text x="125" y="126" text-anchor="middle" fill="#ffce54" font-size="10" font-family="sans-serif" font-weight="bold">ขั้น ③: จำลองให้จริงๆ</text>
+      <text x="125" y="139" text-anchor="middle" fill="#9fa8b3" font-size="9" font-family="sans-serif">Available → [0,0,2]  (ลดลงจริง)</text>
+      <text x="125" y="150" text-anchor="middle" fill="#9fa8b3" font-size="9" font-family="sans-serif">Alloc[P4] → [3,3,2]  (เพิ่มจริง)</text>
+      <line x1="125" y1="156" x2="125" y2="172" stroke="#9fa8b3" stroke-width="1.5" marker-end="url(#rb-a)"/>
+      <!-- Safety fails -->
+      <rect x="40" y="174" width="170" height="30" rx="5" fill="#2b1111" stroke="#fc6e51" stroke-width="1.5"/>
+      <text x="125" y="190" text-anchor="middle" fill="#fc6e51" font-size="10" font-family="sans-serif">ขั้น ④: Safety = Unsafe ✗</text>
+      <text x="125" y="201" text-anchor="middle" fill="#9fa8b3" font-size="9" font-family="sans-serif">ไม่มีใครเริ่มได้เลย</text>
+      <line x1="125" y1="204" x2="125" y2="218" stroke="#fc6e51" stroke-width="1.5" marker-end="url(#rb-r)"/>
+      <!-- Rollback + block -->
+      <rect x="20" y="220" width="210" height="36" rx="5" fill="#2b1111" stroke="#fc6e51" stroke-width="2"/>
+      <text x="125" y="236" text-anchor="middle" fill="#fc6e51" font-size="10" font-family="sans-serif" font-weight="bold">↩ Rollback ค่าทุกอย่างกลับ</text>
+      <text x="125" y="249" text-anchor="middle" fill="#9fa8b3" font-size="9" font-family="sans-serif">บล็อก P4 เข้า Waiting Queue</text>
+    </svg>
+  </div>
+</div>
+
+<!-- What Rollback actually reverses -->
+<div class="ex-title" style="margin-bottom:8px">📊 Rollback เปลี่ยนค่าอะไรกลับบ้าง? (ตัวอย่าง P4 ขอ [3,3,0])</div>
+<table>
+  <tr><th>ค่า</th><th>ก่อน Request</th><th>หลังจำลอง (ขั้น ③)</th><th>หลัง Rollback</th><th>เปลี่ยนกลับ?</th></tr>
+  <tr>
+    <td><strong>Available</strong></td>
+    <td>[3, 3, 2]</td>
+    <td style="color:#ffce54">[0, 0, 2]</td>
+    <td style="color:#48cfad">[3, 3, 2]</td>
+    <td style="color:#48cfad">✓ คืนกลับ</td>
+  </tr>
+  <tr>
+    <td><strong>Alloc[P4]</strong></td>
+    <td>[0, 0, 2]</td>
+    <td style="color:#ffce54">[3, 3, 2]</td>
+    <td style="color:#48cfad">[0, 0, 2]</td>
+    <td style="color:#48cfad">✓ คืนกลับ</td>
+  </tr>
+  <tr>
+    <td><strong>Need[P4]</strong></td>
+    <td>[4, 3, 1]</td>
+    <td style="color:#ffce54">[1, 0, 1]</td>
+    <td style="color:#48cfad">[4, 3, 1]</td>
+    <td style="color:#48cfad">✓ คืนกลับ</td>
+  </tr>
+  <tr>
+    <td><strong>Request ของ P4</strong></td>
+    <td>—</td>
+    <td>[3, 3, 0] (จำไว้)</td>
+    <td style="color:#ffce54">[3, 3, 0] (ยังรออยู่)</td>
+    <td style="color:#ffce54">ไม่ลบ — OS จำไว้</td>
+  </tr>
+</table>
+
+<!-- Timeline of Rollback process -->
+<div class="ex-title" style="margin-bottom:8px" style="margin-top:12px">📊 เส้นทาง Rollback หลังจากนั้นเป็นอย่างไร?</div>
+<table>
+  <tr><th>เวลา</th><th>เหตุการณ์</th><th>Available</th><th>P4 ทำอะไร</th></tr>
+  <tr>
+    <td>T=0</td>
+    <td>P4 ขอ [3,3,0] → ผ่าน①② → จำลอง → Unsafe → Rollback</td>
+    <td>[3, 3, 2]</td>
+    <td style="color:#fc6e51">ถูกบล็อก เข้า Waiting Queue</td>
+  </tr>
+  <tr>
+    <td>T=1</td>
+    <td>P3 เสร็จ คืน Alloc[P3]=[2,1,1]</td>
+    <td>[5, 4, 3]</td>
+    <td style="color:#ffce54">OS ตรวจคิว → จำลอง P4 ขอ [3,3,0] อีกครั้ง → Safety ผ่านไหม?</td>
+  </tr>
+  <tr>
+    <td>T=2</td>
+    <td>Safety Check ใหม่ด้วย Available=[5,4,3]</td>
+    <td>ลองจำลอง → [2,1,3]</td>
+    <td style="color:#48cfad">Safety ผ่าน ✓ → OS อนุมัติ → P4 ได้ทรัพยากร กลับมาทำงาน!</td>
+  </tr>
+</table>
+
+<div class="box box-blue" style="margin-top:10px">
+  <strong>🔑 สรุปความต่าง Wait vs Rollback ให้ชัด:</strong>
+  <table style="margin-top:8px">
+    <tr><th>ประเด็น</th><th style="color:#4a9eff">Wait (ขั้น ② ไม่ผ่าน)</th><th style="color:#fc6e51">Rollback (ขั้น ④ ไม่ผ่าน)</th></tr>
+    <tr><td>ของพอให้ไหม?</td><td style="color:#fc6e51">ไม่พอ</td><td style="color:#48cfad">พอ</td></tr>
+    <tr><td>OS จำลองค่าไหม?</td><td style="color:#fc6e51">ไม่จำลองเลย</td><td style="color:#ffce54">จำลองจริง แล้วค่อยถอน</td></tr>
+    <tr><td>ค่า Available เปลี่ยนไหม?</td><td style="color:#48cfad">ไม่เปลี่ยนเลย</td><td style="color:#ffce54">เปลี่ยนชั่วคราว แล้วคืนกลับ</td></tr>
+    <tr><td>ปลดล็อคเมื่อ?</td><td>Available มากพอ</td><td>Available พอ <em>และ</em> Safety ผ่าน</td></tr>
+    <tr><td>ผลสุดท้ายของ Process</td><td colspan="2" style="color:#ffce54;text-align:center">เหมือนกัน — รออยู่ใน Waiting Queue ทั้งคู่</td></tr>
+  </table>
+</div>
+</div>
+
 <!-- ─────────── Example 3 ─────────── -->
 <div class="example-box" style="margin-top:14px">
   <div class="ex-title">ตัวอย่างที่ 3: P1 ขอ Request = [2, 3, 0] → ผลเป็นอย่างไร?</div>
