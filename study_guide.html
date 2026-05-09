@@ -2749,24 +2749,150 @@ Internal Fragmentation = (จำนวน Pages × Page Size) − Process Size<b
 </div>
 
 <div class="collapsible">
-  <div class="col-header" onclick="tog(this)">HW7 ข้อ 10: Binary Conversion (8 pages, 64 frames, 64 words/page) <span class="arrow">▼</span></div>
+  <div class="col-header" onclick="tog(this)">HW7 ข้อ 10: Logical/Physical Address Bits + Binary Conversion ⟨5, 17⟩ <span class="arrow">▼</span></div>
   <div class="col-body">
-    <p><strong>โจทย์:</strong> 8 pages, 64 words/page, 64 frames</p>
-    <button class="run-btn" onclick="show('hw7-10')">เฉลย</button>
-    <div id="hw7-10" style="display:none" class="box box-green">
-      <strong>(10.1) Logical Address bits:</strong><br>
-      Pages = 8 = 2^3 → page# = 3 bits<br>
-      Words/page = 64 = 2^6 → offset = 6 bits<br>
-      <strong>Logical = 3+6 = 9 bits</strong><br><br>
-      <strong>(10.2) Physical Address bits:</strong><br>
-      Frames = 64 = 2^6 → frame# = 6 bits<br>
-      offset = 6 bits<br>
-      <strong>Physical = 6+6 = 12 bits</strong><br><br>
-      <strong>(10.3) Logical ⟨5, 17⟩ → Page Table[5]=6:</strong><br>
-      Frame = 6 → 6 bits = 000110<br>
-      Offset = 17 → 6 bits = 010001<br>
-      <strong>Physical (binary) = 000110 010001 = 000110010001</strong>
+
+    <div class="box box-blue" style="margin-bottom:14px">
+      <strong>โจทย์:</strong> Logical address space = <strong>8 pages</strong>, แต่ละ page = <strong>64 words</strong>, Physical memory = <strong>64 frames</strong><br>
+      ตอบ 3 ข้อย่อย: (10.1) bits ของ Logical Address, (10.2) bits ของ Physical Address, (10.3) แปลง ⟨5, 17⟩ เป็น binary
     </div>
+
+    <!-- ====== 10.1 ====== -->
+    <div style="margin-bottom:20px">
+      <div style="color:#ffce54;font-weight:bold;font-size:15px;margin-bottom:10px;border-bottom:1px solid #2e3347;padding-bottom:6px">📌 ข้อ 10.1 — กี่ bits สำหรับ Logical Address?</div>
+      <p style="color:#9fa8b3;font-size:13px;margin-bottom:10px">
+        Logical Address ใน Paging แบ่งเป็น 2 ส่วน: <strong style="color:#4a9eff">Page Number</strong> + <strong style="color:#48cfad">Offset</strong><br>
+        วิธีหา bits: ถ้าต้องแทนค่าได้ถึง N → ต้องใช้ log₂(N) bits
+      </p>
+      <div style="display:flex;flex-direction:column;gap:7px">
+        <div style="background:#1a1f2e;border-left:3px solid #4a9eff;padding:9px 13px;border-radius:0 6px 6px 0;font-size:14px">
+          <strong style="color:#4a9eff">Page Number bits:</strong><br>
+          มี 8 pages → ต้องแทนเลข 0, 1, 2, …, 7<br>
+          8 = 2³ → ต้องใช้ <strong style="color:#4a9eff">3 bits</strong> (3 bits แทนได้ 0–7 ครบพอดี)
+        </div>
+        <div style="background:#1a1f2e;border-left:3px solid #48cfad;padding:9px 13px;border-radius:0 6px 6px 0;font-size:14px">
+          <strong style="color:#48cfad">Offset bits:</strong><br>
+          แต่ละ page มี 64 words → offset ไปได้ถึง 63<br>
+          64 = 2⁶ → ต้องใช้ <strong style="color:#48cfad">6 bits</strong> (6 bits แทนได้ 0–63 ครบพอดี)
+        </div>
+        <div style="background:#112b1e;border:2px solid #48cfad;padding:10px 13px;border-radius:6px;font-size:15px">
+          <strong style="color:#48cfad">Logical Address รวม = 3 + 6 = <span style="font-size:20px">9 bits</span></strong>
+        </div>
+      </div>
+      <div style="margin-top:10px;background:#0d1117;border-radius:8px;padding:12px;text-align:center">
+        <div style="color:#9fa8b3;font-size:11px;margin-bottom:8px">โครงสร้าง 9-bit Logical Address</div>
+        <div style="display:flex;justify-content:center;align-items:center;gap:0;flex-wrap:wrap">
+          <div style="background:#1a2744;border:2px solid #4a9eff;padding:10px 24px;border-radius:8px 0 0 8px;text-align:center">
+            <div style="color:#4a9eff;font-weight:bold;font-size:15px">3 bits</div>
+            <div style="color:#7dd3fc;font-size:12px;margin-top:3px">Page Number (p)</div>
+            <div style="color:#9fa8b3;font-size:10px;margin-top:2px">bits 8–6</div>
+          </div>
+          <div style="background:#1e2820;border:2px solid #48cfad;border-left:none;padding:10px 24px;border-radius:0 8px 8px 0;text-align:center">
+            <div style="color:#48cfad;font-weight:bold;font-size:15px">6 bits</div>
+            <div style="color:#a8f0dd;font-size:12px;margin-top:3px">Offset (d)</div>
+            <div style="color:#9fa8b3;font-size:10px;margin-top:2px">bits 5–0</div>
+          </div>
+        </div>
+        <div style="color:#9fa8b3;font-size:11px;margin-top:8px;font-family:monospace">สูงสุด: 2³ = 8 pages &emsp;|&emsp; ขนาด page: 2⁶ = 64 words</div>
+      </div>
+    </div>
+
+    <!-- ====== 10.2 ====== -->
+    <div style="margin-bottom:20px">
+      <div style="color:#ffce54;font-weight:bold;font-size:15px;margin-bottom:10px;border-bottom:1px solid #2e3347;padding-bottom:6px">📌 ข้อ 10.2 — กี่ bits สำหรับ Physical Address?</div>
+      <p style="color:#9fa8b3;font-size:13px;margin-bottom:10px">
+        Physical Address แบ่งเป็น: <strong style="color:#4a9eff">Frame Number</strong> + <strong style="color:#48cfad">Offset</strong><br>
+        <strong style="color:#ffce54">กฎสำคัญ:</strong> Offset bits ของ Physical = Logical เสมอ เพราะ frame size = page size
+      </p>
+      <div style="display:flex;flex-direction:column;gap:7px">
+        <div style="background:#1a1f2e;border-left:3px solid #4a9eff;padding:9px 13px;border-radius:0 6px 6px 0;font-size:14px">
+          <strong style="color:#4a9eff">Frame Number bits:</strong><br>
+          มี 64 frames → ต้องแทนเลข 0–63<br>
+          64 = 2⁶ → ต้องใช้ <strong style="color:#4a9eff">6 bits</strong>
+        </div>
+        <div style="background:#1a1f2e;border-left:3px solid #48cfad;padding:9px 13px;border-radius:0 6px 6px 0;font-size:14px">
+          <strong style="color:#48cfad">Offset bits:</strong><br>
+          Frame size = Page size = 64 words → <strong style="color:#48cfad">6 bits</strong> เหมือนฝั่ง Logical
+        </div>
+        <div style="background:#112b1e;border:2px solid #48cfad;padding:10px 13px;border-radius:6px;font-size:15px">
+          <strong style="color:#48cfad">Physical Address รวม = 6 + 6 = <span style="font-size:20px">12 bits</span></strong>
+        </div>
+      </div>
+      <div style="margin-top:10px;background:#0d1117;border-radius:8px;padding:12px;text-align:center">
+        <div style="color:#9fa8b3;font-size:11px;margin-bottom:8px">โครงสร้าง 12-bit Physical Address</div>
+        <div style="display:flex;justify-content:center;align-items:center;gap:0;flex-wrap:wrap">
+          <div style="background:#1a2744;border:2px solid #4a9eff;padding:10px 24px;border-radius:8px 0 0 8px;text-align:center">
+            <div style="color:#4a9eff;font-weight:bold;font-size:15px">6 bits</div>
+            <div style="color:#7dd3fc;font-size:12px;margin-top:3px">Frame Number (f)</div>
+            <div style="color:#9fa8b3;font-size:10px;margin-top:2px">bits 11–6</div>
+          </div>
+          <div style="background:#1e2820;border:2px solid #48cfad;border-left:none;padding:10px 24px;border-radius:0 8px 8px 0;text-align:center">
+            <div style="color:#48cfad;font-weight:bold;font-size:15px">6 bits</div>
+            <div style="color:#a8f0dd;font-size:12px;margin-top:3px">Offset (d)</div>
+            <div style="color:#9fa8b3;font-size:10px;margin-top:2px">bits 5–0</div>
+          </div>
+        </div>
+        <div style="color:#9fa8b3;font-size:11px;margin-top:8px;font-family:monospace">สูงสุด: 2⁶ = 64 frames &emsp;|&emsp; ขนาด frame: 2⁶ = 64 words</div>
+      </div>
+      <div style="background:#1a1f2e;border-radius:6px;padding:8px 12px;margin-top:8px;font-size:13px;color:#9fa8b3">
+        💡 Logical มี <strong style="color:#fff">9 bits</strong> แต่ Physical มี <strong style="color:#fff">12 bits</strong> — เพราะ RAM มี frames มากกว่า pages ใน process (64 frames &gt; 8 pages)
+      </div>
+    </div>
+
+    <!-- ====== 10.3 ====== -->
+    <div>
+      <div style="color:#ffce54;font-weight:bold;font-size:15px;margin-bottom:10px;border-bottom:1px solid #2e3347;padding-bottom:6px">📌 ข้อ 10.3 — Physical Address (binary) ของ Logical ⟨5, 17⟩</div>
+
+      <div style="margin-bottom:12px">
+        <div style="color:#9fa8b3;font-size:13px;margin-bottom:6px">Page Table ที่โจทย์ให้มา (แสดงเฉพาะบาง entry):</div>
+        <table>
+          <tr><th>Page</th><th>Frame</th><th>Valid bit</th><th>หมายเหตุ</th></tr>
+          <tr><td>4</td><td>12</td><td style="color:#48cfad">v ✓</td><td style="color:#9fa8b3;font-size:12px">อยู่ใน RAM</td></tr>
+          <tr style="background:#1c2235"><td><strong style="color:#ffce54">5</strong></td><td><strong style="color:#ffce54">6</strong></td><td style="color:#48cfad">v ✓</td><td style="color:#ffce54;font-size:12px">← ข้อนี้ใช้ entry นี้</td></tr>
+          <tr><td>6</td><td>49</td><td style="color:#48cfad">v ✓</td><td style="color:#9fa8b3;font-size:12px">อยู่ใน RAM</td></tr>
+          <tr><td>7</td><td>35</td><td style="color:#48cfad">v ✓</td><td style="color:#9fa8b3;font-size:12px">อยู่ใน RAM</td></tr>
+        </table>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:7px">
+        <div style="background:#1a1f2e;border-left:3px solid #ffce54;padding:9px 13px;border-radius:0 6px 6px 0;font-size:14px">
+          <span style="color:#ffce54;font-weight:bold">① Lookup Page Table:</span><br>
+          Logical ⟨p=<strong style="color:#4a9eff">5</strong>, d=<strong style="color:#48cfad">17</strong>⟩ → PageTable[<strong style="color:#4a9eff">5</strong>] = Frame <strong style="color:#ffce54">6</strong><br>
+          Physical = ⟨f=<strong style="color:#4a9eff">6</strong>, d=<strong style="color:#48cfad">17</strong>⟩
+        </div>
+        <div style="background:#1a1f2e;border-left:3px solid #ffce54;padding:9px 13px;border-radius:0 6px 6px 0;font-size:14px">
+          <span style="color:#ffce54;font-weight:bold">② Frame 6 → Binary (6 bits):</span><br>
+          6 ÷ 2 = 3 R <strong>0</strong> → 3 ÷ 2 = 1 R <strong>1</strong> → 1 ÷ 2 = 0 R <strong>1</strong> (อ่านย้อนหลัง = 110 เติม 0 ข้างหน้า)<br>
+          6₁₀ = <span style="font-family:monospace;color:#4a9eff;font-size:17px;letter-spacing:2px">000110</span>₂
+        </div>
+        <div style="background:#1a1f2e;border-left:3px solid #ffce54;padding:9px 13px;border-radius:0 6px 6px 0;font-size:14px">
+          <span style="color:#ffce54;font-weight:bold">③ Offset 17 → Binary (6 bits):</span><br>
+          17 = 16 + 1 = 2⁴ + 2⁰ → bit 4 และ bit 0 เป็น 1<br>
+          17₁₀ = <span style="font-family:monospace;color:#48cfad;font-size:17px;letter-spacing:2px">010001</span>₂
+        </div>
+        <div style="background:#1a1f2e;border-left:3px solid #ffce54;padding:10px 13px;border-radius:0 6px 6px 0">
+          <div style="font-size:14px"><span style="color:#ffce54;font-weight:bold">④ ประกอบ bits: </span>[Frame 6 bits | Offset 6 bits]</div>
+          <div style="margin-top:9px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+            <span style="font-family:monospace;font-size:20px;letter-spacing:2px;background:#1a2744;border:2px solid #4a9eff;padding:6px 12px;border-radius:6px;color:#4a9eff">000110</span>
+            <span style="color:#6c63ff;font-size:26px;font-weight:bold;line-height:1">|</span>
+            <span style="font-family:monospace;font-size:20px;letter-spacing:2px;background:#1e2820;border:2px solid #48cfad;padding:6px 12px;border-radius:6px;color:#48cfad">010001</span>
+            <div style="font-size:12px;color:#9fa8b3;display:flex;flex-direction:column;gap:2px">
+              <span><span style="color:#4a9eff">■</span> Frame bits (6)</span>
+              <span><span style="color:#48cfad">■</span> Offset bits (6)</span>
+            </div>
+          </div>
+        </div>
+        <div style="background:#112b1e;border:2px solid #48cfad;padding:11px 13px;border-radius:6px">
+          <div style="font-size:15px"><strong style="color:#48cfad">Physical Address (binary) = </strong><span style="font-family:monospace;font-size:20px"><span style="color:#4a9eff">000110</span><span style="color:#48cfad">010001</span></span></div>
+          <div style="color:#9fa8b3;font-size:13px;margin-top:4px">= <strong style="color:#fff">000110010001</strong> (12 bits รวมกัน)</div>
+        </div>
+        <div style="background:#1a1f2e;border-radius:6px;padding:9px 13px;font-size:13px;color:#9fa8b3">
+          ✅ ตรวจสอบ (decimal): Physical = Frame × page size + offset = <strong style="color:#fff">6 × 64 + 17 = 384 + 17 = 401</strong><br>
+          000110010001₂ = 256+128+16+1 = <strong style="color:#fff">401</strong> ✓
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
