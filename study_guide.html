@@ -3230,44 +3230,242 @@ Internal Fragmentation = (จำนวน Pages × Page Size) − Process Size<b
 </div>
 
 <h3>อัลกอริทึมที่ 2: Optimal (OPT)</h3>
-<p>ไล่ <strong>Page ที่จะไม่ถูกใช้งานในอนาคตนานที่สุด</strong> ออก (ต้องรู้อนาคต)</p>
+<p>ไล่ <strong>Page ที่จะถูกใช้อีกครั้งช้าที่สุดในอนาคต</strong> ออก — ถ้ามี Page ที่ไม่ถูกใช้อีกเลย ให้ไล่ตัวนั้นก่อน</p>
 <div class="box box-green">
   <strong>ข้อดี:</strong> ให้ Page Fault น้อยที่สุดเท่าที่เป็นไปได้ → ใช้เป็น Benchmark เปรียบเทียบ<br>
-  <strong>ข้อเสีย:</strong> ทำในชีวิตจริงไม่ได้ เพราะต้องรู้ว่า CPU จะเรียก Page อะไรต่อไป<br>
+  <strong>ข้อเสีย:</strong> ทำในชีวิตจริงไม่ได้ เพราะต้องรู้ล่วงหน้าว่า CPU จะเรียก Page ไหนต่อไป<br>
   <strong>ไม่มี Belady's Anomaly</strong>
 </div>
 <div class="example-box">
   <div class="ex-title">ตัวอย่าง Optimal: Reference = [1,2,3,4,1,2,5,1,2,3,4,5], Frames = 3</div>
+
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;font-size:13px">
+    <div style="background:#1a2744;border:1px solid #4a9eff;border-radius:6px;padding:8px;text-align:center">
+      <div style="color:#4a9eff;font-weight:bold">Frame 0 / 1 / 2</div>
+      <div style="color:#9fa8b3;margin-top:4px">3 ช่องใน RAM<br>แต่ละช่องเก็บ 1 page</div>
+    </div>
+    <div style="background:#1f1515;border:1px solid #ff6b6b;border-radius:6px;padding:8px;text-align:center">
+      <div style="color:#ff6b6b;font-weight:bold">F = Page Fault</div>
+      <div style="color:#9fa8b3;margin-top:4px">หา page ใน RAM <strong>ไม่เจอ</strong><br>ต้องโหลดจาก disk (ช้า)</div>
+    </div>
+    <div style="background:#112b1e;border:1px solid #48cfad;border-radius:6px;padding:8px;text-align:center">
+      <div style="color:#48cfad;font-weight:bold">— = Hit</div>
+      <div style="color:#9fa8b3;margin-top:4px">page <strong>อยู่ใน RAM แล้ว</strong><br>ใช้ได้เลย ไม่ต้องโหลด</div>
+    </div>
+  </div>
+
   <table>
-    <tr><th>Page</th><th>1</th><th>2</th><th>3</th><th>4</th><th>1</th><th>2</th><th>5</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr>
-    <tr><td>Frames</td><td>1</td><td>1,2</td><td>1,2,3</td><td>1,2,4*</td><td>1,2,4</td><td>1,2,4</td><td>1,2,5*</td><td>1,2,5</td><td>1,2,5</td><td>1,2,3*</td><td>1,4*,3</td><td>1,4,5*</td></tr>
-    <tr><td>Fault?</td><td>F</td><td>F</td><td>F</td><td>F</td><td>-</td><td>-</td><td>F</td><td>-</td><td>-</td><td>F</td><td>F</td><td>F</td></tr>
+    <tr><th>Step</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th><th>11</th><th>12</th></tr>
+    <tr><th>Page ที่ขอ</th><th>1</th><th>2</th><th>3</th><th>4</th><th>1</th><th>2</th><th>5</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr>
+    <tr><td>Frame 0</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td style="color:#ff6b6b;font-weight:bold">3↑</td><td>3</td><td>3</td></tr>
+    <tr><td>Frame 1</td><td>-</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td style="color:#ff6b6b;font-weight:bold">4↑</td><td>4</td></tr>
+    <tr><td>Frame 2</td><td>-</td><td>-</td><td>3</td><td style="color:#ff6b6b;font-weight:bold">4↑</td><td>4</td><td>4</td><td style="color:#ff6b6b;font-weight:bold">5↑</td><td>5</td><td>5</td><td>5</td><td>5</td><td>5</td></tr>
+    <tr><td>Fault?</td>
+      <td style="color:#ff6b6b;font-weight:bold">F</td><td style="color:#ff6b6b;font-weight:bold">F</td>
+      <td style="color:#ff6b6b;font-weight:bold">F</td><td style="color:#ff6b6b;font-weight:bold">F</td>
+      <td style="color:#48cfad;font-weight:bold">—</td><td style="color:#48cfad;font-weight:bold">—</td>
+      <td style="color:#ff6b6b;font-weight:bold">F</td>
+      <td style="color:#48cfad;font-weight:bold">—</td><td style="color:#48cfad;font-weight:bold">—</td>
+      <td style="color:#ff6b6b;font-weight:bold">F</td><td style="color:#ff6b6b;font-weight:bold">F</td>
+      <td style="color:#48cfad;font-weight:bold">—</td>
+    </tr>
   </table>
-  <p><strong>Page Fault รวม = 6 ครั้ง</strong> (น้อยกว่า FIFO มาก)</p>
+  <p><strong>Page Fault รวม = 7 ครั้ง</strong> &nbsp;(↑ = page ใหม่เพิ่งถูกโหลดเข้า Frame นั้น)</p>
+
+  <details style="margin-top:12px">
+    <summary style="cursor:pointer;color:#ffce54;font-weight:bold;padding:9px 12px;background:#1a1f2e;border-radius:6px;list-style:none">▶ อ่านทีละ Step — OPT ตัดสินใจไล่ใครออกยังไง?</summary>
+    <div style="margin-top:10px;display:flex;flex-direction:column;gap:6px;font-size:13px">
+
+      <div style="background:#1a1f2e;border-left:3px solid #ff6b6b;padding:8px 13px;border-radius:0 6px 6px 0">
+        <strong style="color:#ff6b6b">Step 1 — ขอ Page 1: FAULT</strong><br>
+        RAM ว่างอยู่ → โหลด 1 เข้า Frame0 | RAM = {1}
+      </div>
+      <div style="background:#1a1f2e;border-left:3px solid #ff6b6b;padding:8px 13px;border-radius:0 6px 6px 0">
+        <strong style="color:#ff6b6b">Step 2 — ขอ Page 2: FAULT</strong><br>
+        2 ไม่อยู่ใน RAM → โหลด 2 เข้า Frame1 | RAM = {1,2}
+      </div>
+      <div style="background:#1a1f2e;border-left:3px solid #ff6b6b;padding:8px 13px;border-radius:0 6px 6px 0">
+        <strong style="color:#ff6b6b">Step 3 — ขอ Page 3: FAULT</strong><br>
+        3 ไม่อยู่ใน RAM → โหลด 3 เข้า Frame2 | RAM = {1,2,3}
+      </div>
+      <div style="background:#1a1f2e;border-left:3px solid #ff6b6b;padding:8px 13px;border-radius:0 6px 6px 0">
+        <strong style="color:#ff6b6b">Step 4 — ขอ Page 4: FAULT (RAM เต็ม!)</strong><br>
+        มองข้างหน้า: <span style="font-family:monospace">1→ step5, 2→step6, 3→step10</span><br>
+        → <strong style="color:#ffce54">3 จะถูกใช้ช้าที่สุด (step 10)</strong> → ไล่ 3 ออก → โหลด 4 เข้า Frame2<br>
+        RAM = {1,2,4}
+      </div>
+      <div style="background:#112b1e;border-left:3px solid #48cfad;padding:8px 13px;border-radius:0 6px 6px 0">
+        <strong style="color:#48cfad">Step 5 — ขอ Page 1: HIT ✅</strong><br>
+        1 อยู่ใน Frame0 อยู่แล้ว | RAM = {1,2,4}
+      </div>
+      <div style="background:#112b1e;border-left:3px solid #48cfad;padding:8px 13px;border-radius:0 6px 6px 0">
+        <strong style="color:#48cfad">Step 6 — ขอ Page 2: HIT ✅</strong><br>
+        2 อยู่ใน Frame1 อยู่แล้ว | RAM = {1,2,4}
+      </div>
+      <div style="background:#1a1f2e;border-left:3px solid #ff6b6b;padding:8px 13px;border-radius:0 6px 6px 0">
+        <strong style="color:#ff6b6b">Step 7 — ขอ Page 5: FAULT (RAM เต็ม!)</strong><br>
+        มองข้างหน้า: <span style="font-family:monospace">1→step8, 2→step9, 4→step11</span><br>
+        → <strong style="color:#ffce54">4 จะถูกใช้ช้าที่สุด (step 11)</strong> → ไล่ 4 ออก → โหลด 5 เข้า Frame2<br>
+        RAM = {1,2,5}
+      </div>
+      <div style="background:#112b1e;border-left:3px solid #48cfad;padding:8px 13px;border-radius:0 6px 6px 0">
+        <strong style="color:#48cfad">Step 8 — ขอ Page 1: HIT ✅</strong><br>
+        1 อยู่ใน Frame0 อยู่แล้ว | RAM = {1,2,5}
+      </div>
+      <div style="background:#112b1e;border-left:3px solid #48cfad;padding:8px 13px;border-radius:0 6px 6px 0">
+        <strong style="color:#48cfad">Step 9 — ขอ Page 2: HIT ✅</strong><br>
+        2 อยู่ใน Frame1 อยู่แล้ว | RAM = {1,2,5}
+      </div>
+      <div style="background:#1a1f2e;border-left:3px solid #ff6b6b;padding:8px 13px;border-radius:0 6px 6px 0">
+        <strong style="color:#ff6b6b">Step 10 — ขอ Page 3: FAULT (RAM เต็ม!)</strong><br>
+        มองข้างหน้า (ref ที่เหลือ: [4,5]): <span style="font-family:monospace">1→ไม่ถูกใช้อีก, 2→ไม่ถูกใช้อีก, 5→step12</span><br>
+        → <strong style="color:#ffce54">1 ไม่ถูกใช้อีกเลย</strong> → ไล่ 1 ออก → โหลด 3 เข้า Frame0<br>
+        RAM = {3,2,5}
+      </div>
+      <div style="background:#1a1f2e;border-left:3px solid #ff6b6b;padding:8px 13px;border-radius:0 6px 6px 0">
+        <strong style="color:#ff6b6b">Step 11 — ขอ Page 4: FAULT (RAM เต็ม!)</strong><br>
+        มองข้างหน้า (ref ที่เหลือ: [5]): <span style="font-family:monospace">3→ไม่ถูกใช้อีก, 2→ไม่ถูกใช้อีก, 5→step12</span><br>
+        → <strong style="color:#ffce54">2 ไม่ถูกใช้อีกเลย</strong> → ไล่ 2 ออก → โหลด 4 เข้า Frame1<br>
+        RAM = {3,4,5}
+      </div>
+      <div style="background:#112b1e;border-left:3px solid #48cfad;padding:8px 13px;border-radius:0 6px 6px 0">
+        <strong style="color:#48cfad">Step 12 — ขอ Page 5: HIT ✅</strong><br>
+        5 อยู่ใน Frame2 อยู่แล้ว (โหลดเข้ามาตั้งแต่ Step 7 และไม่เคยถูกไล่ออก) | RAM = {3,4,5}
+      </div>
+
+      <div style="background:#1a1f2e;border:1px solid #6c63ff;border-radius:6px;padding:10px 13px;margin-top:4px">
+        <strong style="color:#6c63ff">🔑 OPT ตัดสินใจยังไง?</strong><br>
+        มองข้างหน้า — เมื่อต้องไล่ page ออก ให้ดูว่า page ใดใน RAM จะถูกใช้อีกครั้ง<strong>ช้าที่สุด</strong><br>
+        ถ้ามี page ที่<strong>ไม่ถูกใช้อีกเลย</strong> → ไล่ตัวนั้นออกก่อน (ไม่มีประโยชน์อะไรที่จะเก็บไว้)
+      </div>
+    </div>
+  </details>
 </div>
 
 <h3>อัลกอริทึมที่ 3: LRU (Least Recently Used)</h3>
-<p>ไล่ <strong>Page ที่ไม่ได้ถูกใช้งานนานที่สุดในอดีต</strong> ออก (มองย้อนหลัง แทนที่จะมองอนาคต)</p>
+<p>ไล่ <strong>Page ที่ถูกใช้งานครั้งล่าสุดนานที่สุดในอดีต</strong> ออก — มองย้อนหลังแทนมองอนาคต</p>
 <div class="box box-green">
-  <strong>ข้อดี:</strong> ใช้งานได้จริง และให้ผลดีใกล้เคียง OPT. <strong>ไม่มี Belady's Anomaly</strong><br>
-  <strong>ข้อเสีย:</strong> ต้องการ Hardware พิเศษเพื่อติดตามเวลาที่ใช้งานล่าสุด
+  <strong>ข้อดี:</strong> ใช้งานได้จริง และให้ผลใกล้เคียง OPT <strong>ไม่มี Belady's Anomaly</strong><br>
+  <strong>ข้อเสีย:</strong> ต้องการ Hardware พิเศษเพื่อติดตามเวลาที่ใช้งานล่าสุดของแต่ละ Page
 </div>
 <div class="example-box">
   <div class="ex-title">ตัวอย่าง LRU: Reference = [1,2,3,4,1,2,5,1,2,3,4,5], Frames = 3</div>
+
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;font-size:13px">
+    <div style="background:#1a2744;border:1px solid #4a9eff;border-radius:6px;padding:8px;text-align:center">
+      <div style="color:#4a9eff;font-weight:bold">Frame 0 / 1 / 2</div>
+      <div style="color:#9fa8b3;margin-top:4px">3 ช่องใน RAM<br>แต่ละช่องเก็บ 1 page</div>
+    </div>
+    <div style="background:#1f1515;border:1px solid #ff6b6b;border-radius:6px;padding:8px;text-align:center">
+      <div style="color:#ff6b6b;font-weight:bold">F = Page Fault</div>
+      <div style="color:#9fa8b3;margin-top:4px">หา page ใน RAM <strong>ไม่เจอ</strong><br>ต้องโหลดจาก disk (ช้า)</div>
+    </div>
+    <div style="background:#112b1e;border:1px solid #48cfad;border-radius:6px;padding:8px;text-align:center">
+      <div style="color:#48cfad;font-weight:bold">— = Hit</div>
+      <div style="color:#9fa8b3;margin-top:4px">page <strong>อยู่ใน RAM แล้ว</strong><br>ใช้ได้เลย ไม่ต้องโหลด</div>
+    </div>
+  </div>
+
   <table>
-    <tr><th>Page</th><th>1</th><th>2</th><th>3</th><th>4</th><th>1</th><th>2</th><th>5</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr>
-    <tr><td>Frames</td><td>1</td><td>1,2</td><td>1,2,3</td><td>4,2,3*</td><td>4,1,3*</td><td>4,1,2*</td><td>5,1,2*</td><td>5,1,2</td><td>5,1,2</td><td>3,1,2*</td><td>3,4,2*</td><td>3,4,5*</td></tr>
-    <tr><td>Fault?</td><td>F</td><td>F</td><td>F</td><td>F</td><td>F</td><td>F</td><td>F</td><td>-</td><td>-</td><td>F</td><td>F</td><td>F</td></tr>
+    <tr><th>Step</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th><th>11</th><th>12</th></tr>
+    <tr><th>Page ที่ขอ</th><th>1</th><th>2</th><th>3</th><th>4</th><th>1</th><th>2</th><th>5</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr>
+    <tr><td>Frame 0</td><td>1</td><td>1</td><td>1</td><td style="color:#ff6b6b;font-weight:bold">4↑</td><td style="color:#ff6b6b;font-weight:bold">4</td><td style="color:#ff6b6b;font-weight:bold">4</td><td style="color:#ff6b6b;font-weight:bold">5↑</td><td>5</td><td>5</td><td style="color:#ff6b6b;font-weight:bold">3↑</td><td>3</td><td>3</td></tr>
+    <tr><td>Frame 1</td><td>-</td><td>2</td><td>2</td><td>2</td><td style="color:#ff6b6b;font-weight:bold">1↑</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td style="color:#ff6b6b;font-weight:bold">4↑</td><td>4</td></tr>
+    <tr><td>Frame 2</td><td>-</td><td>-</td><td>3</td><td>3</td><td>3</td><td style="color:#ff6b6b;font-weight:bold">2↑</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td style="color:#ff6b6b;font-weight:bold">5↑</td></tr>
+    <tr><td>Fault?</td>
+      <td style="color:#ff6b6b;font-weight:bold">F</td><td style="color:#ff6b6b;font-weight:bold">F</td>
+      <td style="color:#ff6b6b;font-weight:bold">F</td><td style="color:#ff6b6b;font-weight:bold">F</td>
+      <td style="color:#ff6b6b;font-weight:bold">F</td><td style="color:#ff6b6b;font-weight:bold">F</td>
+      <td style="color:#ff6b6b;font-weight:bold">F</td>
+      <td style="color:#48cfad;font-weight:bold">—</td><td style="color:#48cfad;font-weight:bold">—</td>
+      <td style="color:#ff6b6b;font-weight:bold">F</td><td style="color:#ff6b6b;font-weight:bold">F</td>
+      <td style="color:#ff6b6b;font-weight:bold">F</td>
+    </tr>
   </table>
-  <p><strong>Page Fault รวม = 8 ครั้ง</strong></p>
+  <p><strong>Page Fault รวม = 10 ครั้ง</strong> &nbsp;(↑ = page ใหม่เพิ่งถูกโหลดเข้า Frame นั้น)</p>
+
+  <details style="margin-top:12px">
+    <summary style="cursor:pointer;color:#ffce54;font-weight:bold;padding:9px 12px;background:#1a1f2e;border-radius:6px;list-style:none">▶ อ่านทีละ Step — LRU ตัดสินใจไล่ใครออกยังไง?</summary>
+    <div style="margin-top:10px;display:flex;flex-direction:column;gap:6px;font-size:13px">
+
+      <div style="background:#1a1f2e;border-left:3px solid #ff6b6b;padding:8px 13px;border-radius:0 6px 6px 0">
+        <strong style="color:#ff6b6b">Step 1 — ขอ Page 1: FAULT</strong><br>
+        RAM ว่างอยู่ → โหลด 1 เข้า Frame0 | RAM = {1} | ใช้ล่าสุด: <span style="font-family:monospace">1@step1</span>
+      </div>
+      <div style="background:#1a1f2e;border-left:3px solid #ff6b6b;padding:8px 13px;border-radius:0 6px 6px 0">
+        <strong style="color:#ff6b6b">Step 2 — ขอ Page 2: FAULT</strong><br>
+        2 ไม่อยู่ใน RAM → โหลด 2 เข้า Frame1 | RAM = {1,2} | ใช้ล่าสุด: <span style="font-family:monospace">1@1, 2@2</span>
+      </div>
+      <div style="background:#1a1f2e;border-left:3px solid #ff6b6b;padding:8px 13px;border-radius:0 6px 6px 0">
+        <strong style="color:#ff6b6b">Step 3 — ขอ Page 3: FAULT</strong><br>
+        3 ไม่อยู่ใน RAM → โหลด 3 เข้า Frame2 | RAM = {1,2,3} | ใช้ล่าสุด: <span style="font-family:monospace">1@1, 2@2, 3@3</span>
+      </div>
+      <div style="background:#1a1f2e;border-left:3px solid #ff6b6b;padding:8px 13px;border-radius:0 6px 6px 0">
+        <strong style="color:#ff6b6b">Step 4 — ขอ Page 4: FAULT (RAM เต็ม!)</strong><br>
+        ดูว่าใครใช้ล่าสุดนานที่สุด: <span style="font-family:monospace">1@step1, 2@step2, 3@step3</span><br>
+        → <strong style="color:#ffce54">1 ใช้นานที่สุด (step 1)</strong> → ไล่ 1 ออก → โหลด 4 เข้า Frame0<br>
+        RAM = {4,2,3} | ใช้ล่าสุด: <span style="font-family:monospace">2@2, 3@3, 4@4</span>
+      </div>
+      <div style="background:#1a1f2e;border-left:3px solid #ff6b6b;padding:8px 13px;border-radius:0 6px 6px 0">
+        <strong style="color:#ff6b6b">Step 5 — ขอ Page 1: FAULT (ถูกไล่ออกไปแล้วที่ Step 4!)</strong><br>
+        ดูว่าใครใช้ล่าสุดนานที่สุด: <span style="font-family:monospace">2@step2, 3@step3, 4@step4</span><br>
+        → <strong style="color:#ffce54">2 ใช้นานที่สุด (step 2)</strong> → ไล่ 2 ออก → โหลด 1 เข้า Frame1<br>
+        RAM = {4,1,3} | ใช้ล่าสุด: <span style="font-family:monospace">3@3, 4@4, 1@5</span>
+      </div>
+      <div style="background:#1a1f2e;border-left:3px solid #ff6b6b;padding:8px 13px;border-radius:0 6px 6px 0">
+        <strong style="color:#ff6b6b">Step 6 — ขอ Page 2: FAULT</strong><br>
+        ดูว่าใครใช้ล่าสุดนานที่สุด: <span style="font-family:monospace">3@step3, 4@step4, 1@step5</span><br>
+        → <strong style="color:#ffce54">3 ใช้นานที่สุด (step 3)</strong> → ไล่ 3 ออก → โหลด 2 เข้า Frame2<br>
+        RAM = {4,1,2} | ใช้ล่าสุด: <span style="font-family:monospace">4@4, 1@5, 2@6</span>
+      </div>
+      <div style="background:#1a1f2e;border-left:3px solid #ff6b6b;padding:8px 13px;border-radius:0 6px 6px 0">
+        <strong style="color:#ff6b6b">Step 7 — ขอ Page 5: FAULT</strong><br>
+        ดูว่าใครใช้ล่าสุดนานที่สุด: <span style="font-family:monospace">4@step4, 1@step5, 2@step6</span><br>
+        → <strong style="color:#ffce54">4 ใช้นานที่สุด (step 4)</strong> → ไล่ 4 ออก → โหลด 5 เข้า Frame0<br>
+        RAM = {5,1,2} | ใช้ล่าสุด: <span style="font-family:monospace">1@5, 2@6, 5@7</span>
+      </div>
+      <div style="background:#112b1e;border-left:3px solid #48cfad;padding:8px 13px;border-radius:0 6px 6px 0">
+        <strong style="color:#48cfad">Step 8 — ขอ Page 1: HIT ✅</strong><br>
+        1 อยู่ใน Frame1 อยู่แล้ว → อัปเดตเวลา | RAM = {5,1,2} | ใช้ล่าสุด: <span style="font-family:monospace">2@6, 5@7, 1@8</span>
+      </div>
+      <div style="background:#112b1e;border-left:3px solid #48cfad;padding:8px 13px;border-radius:0 6px 6px 0">
+        <strong style="color:#48cfad">Step 9 — ขอ Page 2: HIT ✅</strong><br>
+        2 อยู่ใน Frame2 อยู่แล้ว → อัปเดตเวลา | RAM = {5,1,2} | ใช้ล่าสุด: <span style="font-family:monospace">5@7, 1@8, 2@9</span>
+      </div>
+      <div style="background:#1a1f2e;border-left:3px solid #ff6b6b;padding:8px 13px;border-radius:0 6px 6px 0">
+        <strong style="color:#ff6b6b">Step 10 — ขอ Page 3: FAULT (RAM เต็ม!)</strong><br>
+        ดูว่าใครใช้ล่าสุดนานที่สุด: <span style="font-family:monospace">5@step7, 1@step8, 2@step9</span><br>
+        → <strong style="color:#ffce54">5 ใช้นานที่สุด (step 7)</strong> → ไล่ 5 ออก → โหลด 3 เข้า Frame0<br>
+        RAM = {3,1,2} | ใช้ล่าสุด: <span style="font-family:monospace">1@8, 2@9, 3@10</span>
+      </div>
+      <div style="background:#1a1f2e;border-left:3px solid #ff6b6b;padding:8px 13px;border-radius:0 6px 6px 0">
+        <strong style="color:#ff6b6b">Step 11 — ขอ Page 4: FAULT (RAM เต็ม!)</strong><br>
+        ดูว่าใครใช้ล่าสุดนานที่สุด: <span style="font-family:monospace">1@step8, 2@step9, 3@step10</span><br>
+        → <strong style="color:#ffce54">1 ใช้นานที่สุด (step 8)</strong> → ไล่ 1 ออก → โหลด 4 เข้า Frame1<br>
+        RAM = {3,4,2} | ใช้ล่าสุด: <span style="font-family:monospace">2@9, 3@10, 4@11</span>
+      </div>
+      <div style="background:#1a1f2e;border-left:3px solid #ff6b6b;padding:8px 13px;border-radius:0 6px 6px 0">
+        <strong style="color:#ff6b6b">Step 12 — ขอ Page 5: FAULT (RAM เต็ม!)</strong><br>
+        ดูว่าใครใช้ล่าสุดนานที่สุด: <span style="font-family:monospace">2@step9, 3@step10, 4@step11</span><br>
+        → <strong style="color:#ffce54">2 ใช้นานที่สุด (step 9)</strong> → ไล่ 2 ออก → โหลด 5 เข้า Frame2<br>
+        RAM = {3,4,5}
+      </div>
+
+      <div style="background:#1a1f2e;border:1px solid #6c63ff;border-radius:6px;padding:10px 13px;margin-top:4px">
+        <strong style="color:#6c63ff">🔑 LRU ตัดสินใจยังไง?</strong><br>
+        จด<strong>เวลาที่ใช้ล่าสุด</strong>ของทุก page ใน RAM ไว้ตลอด — เมื่อต้องไล่ใครออก ให้ไล่ page ที่<strong>ใช้ครั้งล่าสุดนานที่สุดในอดีต</strong><br>
+        Hit ก็ต้องอัปเดตเวลาด้วย! (step 8 และ 9 เป็น Hit แต่เวลาของ 1 และ 2 เปลี่ยน → ช่วยให้ไม่ถูกไล่ออกที่ step 10-11)
+      </div>
+    </div>
+  </details>
 </div>
 
 <h3>สรุปเปรียบเทียบ 3 อัลกอริทึม</h3>
 <table>
   <tr><th>อัลกอริทึม</th><th>หลักการ</th><th>Page Faults (3 frames)</th><th>Belady's Anomaly</th><th>ใช้งานจริงได้?</th></tr>
   <tr><td><strong>FIFO</strong></td><td>ไล่ที่อยู่นานที่สุด</td><td>9</td><td>✗ มี</td><td>✅ ได้</td></tr>
-  <tr><td><strong>OPT</strong></td><td>ไล่ที่จะไม่ใช้นานที่สุด</td><td>6</td><td>✅ ไม่มี</td><td>❌ ไม่ได้</td></tr>
-  <tr><td><strong>LRU</strong></td><td>ไล่ที่ใช้ห่างที่สุดในอดีต</td><td>8</td><td>✅ ไม่มี</td><td>✅ ได้ (ต้องการ HW)</td></tr>
+  <tr><td><strong>OPT</strong></td><td>ไล่ที่จะไม่ใช้นานที่สุด</td><td>7</td><td>✅ ไม่มี</td><td>❌ ไม่ได้</td></tr>
+  <tr><td><strong>LRU</strong></td><td>ไล่ที่ใช้ห่างที่สุดในอดีต</td><td>10</td><td>✅ ไม่มี</td><td>✅ ได้ (ต้องการ HW)</td></tr>
 </table>
 
 <!-- 8.3b Detailed Step-by-Step Examples -->
@@ -3315,37 +3513,196 @@ Internal Fragmentation = (จำนวน Pages × Page Size) − Process Size<b
   เทคนิค OPT: มองไปข้างหน้า — ถ้าต้องไล่ Page ออก ให้ดูว่า Page ใดในปัจจุบันจะถูกใช้อีกครั้ง<strong>ช้าที่สุด</strong> (หรือไม่ถูกใช้เลย) → ไล่ตัวนั้นออก
 </div>
 <table>
-  <tr><th>Ref</th><th>3</th><th>2</th><th>1</th><th>0</th><th>3</th><th>2</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th><th>4</th></tr>
-  <tr><td>Frames</td><td>3</td><td>3,2</td><td>3,2,1</td><td>0,2,1*</td><td>0,2,3*</td><td>0,2,3</td><td>0,4,3*</td><td>0,4,3</td><td>0,4,2*</td><td>0,1,2*</td><td>0,1,2</td><td>4,1,2*</td></tr>
-  <tr><td>Fault?</td><td style="color:#fc6e51">F</td><td style="color:#fc6e51">F</td><td style="color:#fc6e51">F</td><td style="color:#fc6e51">F</td><td style="color:#fc6e51">F</td><td>-</td><td style="color:#fc6e51">F</td><td>-</td><td style="color:#fc6e51">F</td><td style="color:#fc6e51">F</td><td>-</td><td style="color:#fc6e51">F</td></tr>
+  <tr><th>Step</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th><th>11</th><th>12</th></tr>
+  <tr><th>Page ที่ขอ</th><th>3</th><th>2</th><th>1</th><th>0</th><th>3</th><th>2</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th><th>4</th></tr>
+  <tr><td>Frame 0</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td style="color:#ff6b6b;font-weight:bold">1↑</td><td style="color:#ff6b6b;font-weight:bold">0↑</td><td>0</td></tr>
+  <tr><td>Frame 1</td><td>-</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td></tr>
+  <tr><td>Frame 2</td><td>-</td><td>-</td><td>1</td><td style="color:#ff6b6b;font-weight:bold">0↑</td><td>0</td><td>0</td><td style="color:#ff6b6b;font-weight:bold">4↑</td><td>4</td><td>4</td><td>4</td><td>4</td><td>4</td></tr>
+  <tr><td>Fault?</td>
+    <td style="color:#ff6b6b;font-weight:bold">F</td><td style="color:#ff6b6b;font-weight:bold">F</td>
+    <td style="color:#ff6b6b;font-weight:bold">F</td><td style="color:#ff6b6b;font-weight:bold">F</td>
+    <td style="color:#48cfad;font-weight:bold">—</td><td style="color:#48cfad;font-weight:bold">—</td>
+    <td style="color:#ff6b6b;font-weight:bold">F</td>
+    <td style="color:#48cfad;font-weight:bold">—</td><td style="color:#48cfad;font-weight:bold">—</td>
+    <td style="color:#ff6b6b;font-weight:bold">F</td><td style="color:#ff6b6b;font-weight:bold">F</td>
+    <td style="color:#48cfad;font-weight:bold">—</td>
+  </tr>
 </table>
-<p><strong>Page Faults = 8</strong></p>
-<div class="example-box">
-  <div class="ex-title">อธิบาย OPT รอบที่ยาก (รอบ 4: ต้องไล่ใคร?)</div>
-  <p>ก่อนรอบ 4: Frame=[3,2,1] ต้องใส่ 0 → เลือกไล่ใคร?<br>
-  มองข้างหน้า: ครั้งต่อไปที่ใช้ 3 = รอบที่ 5, ครั้งต่อไปที่ใช้ 2 = รอบที่ 6, ครั้งต่อไปที่ใช้ 1 = รอบที่ 10<br>
-  → 1 จะถูกใช้ช้าที่สุด (รอบ 10) → ไล่ 1 ออก<br>
-  ได้ Frame = [3, 2, 0] ✓</p>
-</div>
+<p><strong>Page Fault รวม = 7 ครั้ง</strong> &nbsp;(↑ = page ใหม่เพิ่งถูกโหลดเข้า Frame นั้น)</p>
+
+<details style="margin-top:12px">
+  <summary style="cursor:pointer;color:#ffce54;font-weight:bold;padding:9px 12px;background:#1a1f2e;border-radius:6px;list-style:none">▶ อ่านทีละ Step — OPT มองอนาคตยังไง?</summary>
+  <div style="margin-top:10px;display:flex;flex-direction:column;gap:6px;font-size:13px">
+
+    <div style="background:#1a1f2e;border-left:3px solid #ff6b6b;padding:8px 13px;border-radius:0 6px 6px 0">
+      <strong style="color:#ff6b6b">Step 1 — ขอ Page 3: FAULT</strong><br>
+      RAM ว่างอยู่ → โหลด 3 เข้า Frame0 | RAM = {3}
+    </div>
+    <div style="background:#1a1f2e;border-left:3px solid #ff6b6b;padding:8px 13px;border-radius:0 6px 6px 0">
+      <strong style="color:#ff6b6b">Step 2 — ขอ Page 2: FAULT</strong><br>
+      2 ไม่อยู่ใน RAM → โหลด 2 เข้า Frame1 | RAM = {3,2}
+    </div>
+    <div style="background:#1a1f2e;border-left:3px solid #ff6b6b;padding:8px 13px;border-radius:0 6px 6px 0">
+      <strong style="color:#ff6b6b">Step 3 — ขอ Page 1: FAULT</strong><br>
+      1 ไม่อยู่ใน RAM → โหลด 1 เข้า Frame2 | RAM = {3,2,1}
+    </div>
+    <div style="background:#1a1f2e;border-left:3px solid #ff6b6b;padding:8px 13px;border-radius:0 6px 6px 0">
+      <strong style="color:#ff6b6b">Step 4 — ขอ Page 0: FAULT (RAM เต็ม!)</strong><br>
+      มองข้างหน้า: <span style="font-family:monospace">3→step5, 2→step6, 1→step10</span><br>
+      → <strong style="color:#ffce54">1 จะถูกใช้ช้าที่สุด (step 10)</strong> → ไล่ 1 ออก → โหลด 0 เข้า Frame2<br>
+      RAM = {3,2,0}
+    </div>
+    <div style="background:#112b1e;border-left:3px solid #48cfad;padding:8px 13px;border-radius:0 6px 6px 0">
+      <strong style="color:#48cfad">Step 5 — ขอ Page 3: HIT ✅</strong><br>
+      3 อยู่ใน Frame0 อยู่แล้ว | RAM = {3,2,0}
+    </div>
+    <div style="background:#112b1e;border-left:3px solid #48cfad;padding:8px 13px;border-radius:0 6px 6px 0">
+      <strong style="color:#48cfad">Step 6 — ขอ Page 2: HIT ✅</strong><br>
+      2 อยู่ใน Frame1 อยู่แล้ว | RAM = {3,2,0}
+    </div>
+    <div style="background:#1a1f2e;border-left:3px solid #ff6b6b;padding:8px 13px;border-radius:0 6px 6px 0">
+      <strong style="color:#ff6b6b">Step 7 — ขอ Page 4: FAULT (RAM เต็ม!)</strong><br>
+      มองข้างหน้า: <span style="font-family:monospace">3→step8, 2→step9, 0→step11</span><br>
+      → <strong style="color:#ffce54">0 จะถูกใช้ช้าที่สุด (step 11)</strong> → ไล่ 0 ออก → โหลด 4 เข้า Frame2<br>
+      RAM = {3,2,4}
+    </div>
+    <div style="background:#112b1e;border-left:3px solid #48cfad;padding:8px 13px;border-radius:0 6px 6px 0">
+      <strong style="color:#48cfad">Step 8 — ขอ Page 3: HIT ✅</strong><br>
+      3 อยู่ใน Frame0 อยู่แล้ว | RAM = {3,2,4}
+    </div>
+    <div style="background:#112b1e;border-left:3px solid #48cfad;padding:8px 13px;border-radius:0 6px 6px 0">
+      <strong style="color:#48cfad">Step 9 — ขอ Page 2: HIT ✅</strong><br>
+      2 อยู่ใน Frame1 อยู่แล้ว | RAM = {3,2,4}
+    </div>
+    <div style="background:#1a1f2e;border-left:3px solid #ff6b6b;padding:8px 13px;border-radius:0 6px 6px 0">
+      <strong style="color:#ff6b6b">Step 10 — ขอ Page 1: FAULT (RAM เต็ม!)</strong><br>
+      มองข้างหน้า (ref ที่เหลือ: [0,4]): <span style="font-family:monospace">3→ไม่ถูกใช้อีก, 2→ไม่ถูกใช้อีก, 4→step12</span><br>
+      → <strong style="color:#ffce54">3 ไม่ถูกใช้อีกเลย</strong> → ไล่ 3 ออก → โหลด 1 เข้า Frame0<br>
+      RAM = {1,2,4}
+    </div>
+    <div style="background:#1a1f2e;border-left:3px solid #ff6b6b;padding:8px 13px;border-radius:0 6px 6px 0">
+      <strong style="color:#ff6b6b">Step 11 — ขอ Page 0: FAULT (RAM เต็ม!)</strong><br>
+      มองข้างหน้า (ref ที่เหลือ: [4]): <span style="font-family:monospace">1→ไม่ถูกใช้อีก, 2→ไม่ถูกใช้อีก, 4→step12</span><br>
+      → <strong style="color:#ffce54">1 ไม่ถูกใช้อีกเลย</strong> → ไล่ 1 ออก → โหลด 0 เข้า Frame0<br>
+      RAM = {0,2,4}
+    </div>
+    <div style="background:#112b1e;border-left:3px solid #48cfad;padding:8px 13px;border-radius:0 6px 6px 0">
+      <strong style="color:#48cfad">Step 12 — ขอ Page 4: HIT ✅</strong><br>
+      4 อยู่ใน Frame2 อยู่แล้ว | RAM = {0,2,4}
+    </div>
+
+    <div style="background:#1a1f2e;border:1px solid #6c63ff;border-radius:6px;padding:10px 13px;margin-top:4px">
+      <strong style="color:#6c63ff">🔑 กุญแจสำคัญของ OPT:</strong><br>
+      Step 4 และ 7 ไล่ page ที่ "ใช้ช้าสุด" — Step 10 และ 11 ไล่ page ที่ "ไม่ใช้อีกเลย"<br>
+      เมื่อมีหลาย page ที่ไม่ถูกใช้อีก → เลือกไล่ตัวใดก็ได้ (ผลเท่ากัน)
+    </div>
+  </div>
+</details>
 
 <h3>LRU Step-by-Step (ไล่ที่ใช้นานที่สุดในอดีต)</h3>
 <div class="box box-purple">
   เทคนิค LRU: จดเวลาที่ใช้ล่าสุดของแต่ละ Page ที่อยู่ใน Frame เมื่อต้องไล่ออก → ไล่ตัวที่ใช้ล่าสุด<strong>นานที่สุดในอดีต</strong>
 </div>
 <table>
-  <tr><th>Ref</th><th>3</th><th>2</th><th>1</th><th>0</th><th>3</th><th>2</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th><th>4</th></tr>
-  <tr><td>Frames</td><td>3</td><td>3,2</td><td>3,2,1</td><td>0,2,1*</td><td>0,3,1*</td><td>0,3,2*</td><td>4,3,2*</td><td>4,3,2</td><td>4,3,2</td><td>1,3,2*</td><td>1,0,2*</td><td>1,0,4*</td></tr>
-  <tr><td>Fault?</td><td style="color:#fc6e51">F</td><td style="color:#fc6e51">F</td><td style="color:#fc6e51">F</td><td style="color:#fc6e51">F</td><td style="color:#fc6e51">F</td><td style="color:#fc6e51">F</td><td style="color:#fc6e51">F</td><td>-</td><td>-</td><td style="color:#fc6e51">F</td><td style="color:#fc6e51">F</td><td style="color:#fc6e51">F</td></tr>
+  <tr><th>Step</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th><th>11</th><th>12</th></tr>
+  <tr><th>Page ที่ขอ</th><th>3</th><th>2</th><th>1</th><th>0</th><th>3</th><th>2</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th><th>4</th></tr>
+  <tr><td>Frame 0</td><td>3</td><td>3</td><td>3</td><td style="color:#ff6b6b;font-weight:bold">0↑</td><td>0</td><td>0</td><td style="color:#ff6b6b;font-weight:bold">4↑</td><td>4</td><td>4</td><td style="color:#ff6b6b;font-weight:bold">1↑</td><td>1</td><td>1</td></tr>
+  <tr><td>Frame 1</td><td>-</td><td>2</td><td>2</td><td>2</td><td style="color:#ff6b6b;font-weight:bold">3↑</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td style="color:#ff6b6b;font-weight:bold">0↑</td><td>0</td></tr>
+  <tr><td>Frame 2</td><td>-</td><td>-</td><td>1</td><td>1</td><td>1</td><td style="color:#ff6b6b;font-weight:bold">2↑</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td style="color:#ff6b6b;font-weight:bold">4↑</td></tr>
+  <tr><td>Fault?</td>
+    <td style="color:#ff6b6b;font-weight:bold">F</td><td style="color:#ff6b6b;font-weight:bold">F</td>
+    <td style="color:#ff6b6b;font-weight:bold">F</td><td style="color:#ff6b6b;font-weight:bold">F</td>
+    <td style="color:#ff6b6b;font-weight:bold">F</td><td style="color:#ff6b6b;font-weight:bold">F</td>
+    <td style="color:#ff6b6b;font-weight:bold">F</td>
+    <td style="color:#48cfad;font-weight:bold">—</td><td style="color:#48cfad;font-weight:bold">—</td>
+    <td style="color:#ff6b6b;font-weight:bold">F</td><td style="color:#ff6b6b;font-weight:bold">F</td>
+    <td style="color:#ff6b6b;font-weight:bold">F</td>
+  </tr>
 </table>
-<p><strong>Page Faults = 9</strong></p>
+<p><strong>Page Fault รวม = 10 ครั้ง</strong> &nbsp;(↑ = page ใหม่เพิ่งถูกโหลดเข้า Frame นั้น)</p>
+
+<details style="margin-top:12px">
+  <summary style="cursor:pointer;color:#ffce54;font-weight:bold;padding:9px 12px;background:#1a1f2e;border-radius:6px;list-style:none">▶ อ่านทีละ Step — LRU ดูอดีตยังไง?</summary>
+  <div style="margin-top:10px;display:flex;flex-direction:column;gap:6px;font-size:13px">
+
+    <div style="background:#1a1f2e;border-left:3px solid #ff6b6b;padding:8px 13px;border-radius:0 6px 6px 0">
+      <strong style="color:#ff6b6b">Step 1 — ขอ Page 3: FAULT</strong><br>
+      RAM ว่างอยู่ → โหลด 3 เข้า Frame0 | RAM = {3} | ใช้ล่าสุด: <span style="font-family:monospace">3@step1</span>
+    </div>
+    <div style="background:#1a1f2e;border-left:3px solid #ff6b6b;padding:8px 13px;border-radius:0 6px 6px 0">
+      <strong style="color:#ff6b6b">Step 2 — ขอ Page 2: FAULT</strong><br>
+      2 ไม่อยู่ใน RAM → โหลด 2 เข้า Frame1 | RAM = {3,2} | ใช้ล่าสุด: <span style="font-family:monospace">3@1, 2@2</span>
+    </div>
+    <div style="background:#1a1f2e;border-left:3px solid #ff6b6b;padding:8px 13px;border-radius:0 6px 6px 0">
+      <strong style="color:#ff6b6b">Step 3 — ขอ Page 1: FAULT</strong><br>
+      1 ไม่อยู่ใน RAM → โหลด 1 เข้า Frame2 | RAM = {3,2,1} | ใช้ล่าสุด: <span style="font-family:monospace">3@1, 2@2, 1@3</span>
+    </div>
+    <div style="background:#1a1f2e;border-left:3px solid #ff6b6b;padding:8px 13px;border-radius:0 6px 6px 0">
+      <strong style="color:#ff6b6b">Step 4 — ขอ Page 0: FAULT (RAM เต็ม!)</strong><br>
+      ดูว่าใครใช้ล่าสุดนานที่สุด: <span style="font-family:monospace">3@step1, 2@step2, 1@step3</span><br>
+      → <strong style="color:#ffce54">3 ใช้นานที่สุด (step 1)</strong> → ไล่ 3 ออก → โหลด 0 เข้า Frame0<br>
+      RAM = {0,2,1} | ใช้ล่าสุด: <span style="font-family:monospace">2@2, 1@3, 0@4</span>
+    </div>
+    <div style="background:#1a1f2e;border-left:3px solid #ff6b6b;padding:8px 13px;border-radius:0 6px 6px 0">
+      <strong style="color:#ff6b6b">Step 5 — ขอ Page 3: FAULT (ถูกไล่ออกไปแล้วที่ Step 4!)</strong><br>
+      ดูว่าใครใช้ล่าสุดนานที่สุด: <span style="font-family:monospace">2@step2, 1@step3, 0@step4</span><br>
+      → <strong style="color:#ffce54">2 ใช้นานที่สุด (step 2)</strong> → ไล่ 2 ออก → โหลด 3 เข้า Frame1<br>
+      RAM = {0,3,1} | ใช้ล่าสุด: <span style="font-family:monospace">1@3, 0@4, 3@5</span>
+    </div>
+    <div style="background:#1a1f2e;border-left:3px solid #ff6b6b;padding:8px 13px;border-radius:0 6px 6px 0">
+      <strong style="color:#ff6b6b">Step 6 — ขอ Page 2: FAULT</strong><br>
+      ดูว่าใครใช้ล่าสุดนานที่สุด: <span style="font-family:monospace">1@step3, 0@step4, 3@step5</span><br>
+      → <strong style="color:#ffce54">1 ใช้นานที่สุด (step 3)</strong> → ไล่ 1 ออก → โหลด 2 เข้า Frame2<br>
+      RAM = {0,3,2} | ใช้ล่าสุด: <span style="font-family:monospace">0@4, 3@5, 2@6</span>
+    </div>
+    <div style="background:#1a1f2e;border-left:3px solid #ff6b6b;padding:8px 13px;border-radius:0 6px 6px 0">
+      <strong style="color:#ff6b6b">Step 7 — ขอ Page 4: FAULT</strong><br>
+      ดูว่าใครใช้ล่าสุดนานที่สุด: <span style="font-family:monospace">0@step4, 3@step5, 2@step6</span><br>
+      → <strong style="color:#ffce54">0 ใช้นานที่สุด (step 4)</strong> → ไล่ 0 ออก → โหลด 4 เข้า Frame0<br>
+      RAM = {4,3,2} | ใช้ล่าสุด: <span style="font-family:monospace">3@5, 2@6, 4@7</span>
+    </div>
+    <div style="background:#112b1e;border-left:3px solid #48cfad;padding:8px 13px;border-radius:0 6px 6px 0">
+      <strong style="color:#48cfad">Step 8 — ขอ Page 3: HIT ✅</strong><br>
+      3 อยู่ใน Frame1 อยู่แล้ว → อัปเดตเวลา | RAM = {4,3,2} | ใช้ล่าสุด: <span style="font-family:monospace">2@6, 4@7, 3@8</span>
+    </div>
+    <div style="background:#112b1e;border-left:3px solid #48cfad;padding:8px 13px;border-radius:0 6px 6px 0">
+      <strong style="color:#48cfad">Step 9 — ขอ Page 2: HIT ✅</strong><br>
+      2 อยู่ใน Frame2 อยู่แล้ว → อัปเดตเวลา | RAM = {4,3,2} | ใช้ล่าสุด: <span style="font-family:monospace">4@7, 3@8, 2@9</span>
+    </div>
+    <div style="background:#1a1f2e;border-left:3px solid #ff6b6b;padding:8px 13px;border-radius:0 6px 6px 0">
+      <strong style="color:#ff6b6b">Step 10 — ขอ Page 1: FAULT (RAM เต็ม!)</strong><br>
+      ดูว่าใครใช้ล่าสุดนานที่สุด: <span style="font-family:monospace">4@step7, 3@step8, 2@step9</span><br>
+      → <strong style="color:#ffce54">4 ใช้นานที่สุด (step 7)</strong> → ไล่ 4 ออก → โหลด 1 เข้า Frame0<br>
+      RAM = {1,3,2} | ใช้ล่าสุด: <span style="font-family:monospace">3@8, 2@9, 1@10</span>
+    </div>
+    <div style="background:#1a1f2e;border-left:3px solid #ff6b6b;padding:8px 13px;border-radius:0 6px 6px 0">
+      <strong style="color:#ff6b6b">Step 11 — ขอ Page 0: FAULT (RAM เต็ม!)</strong><br>
+      ดูว่าใครใช้ล่าสุดนานที่สุด: <span style="font-family:monospace">3@step8, 2@step9, 1@step10</span><br>
+      → <strong style="color:#ffce54">3 ใช้นานที่สุด (step 8)</strong> → ไล่ 3 ออก → โหลด 0 เข้า Frame1<br>
+      RAM = {1,0,2} | ใช้ล่าสุด: <span style="font-family:monospace">2@9, 1@10, 0@11</span>
+    </div>
+    <div style="background:#1a1f2e;border-left:3px solid #ff6b6b;padding:8px 13px;border-radius:0 6px 6px 0">
+      <strong style="color:#ff6b6b">Step 12 — ขอ Page 4: FAULT (RAM เต็ม!)</strong><br>
+      ดูว่าใครใช้ล่าสุดนานที่สุด: <span style="font-family:monospace">2@step9, 1@step10, 0@step11</span><br>
+      → <strong style="color:#ffce54">2 ใช้นานที่สุด (step 9)</strong> → ไล่ 2 ออก → โหลด 4 เข้า Frame2<br>
+      RAM = {1,0,4}
+    </div>
+
+    <div style="background:#1a1f2e;border:1px solid #6c63ff;border-radius:6px;padding:10px 13px;margin-top:4px">
+      <strong style="color:#6c63ff">🔑 สังเกตที่ Step 8–9:</strong><br>
+      แม้จะ Hit แต่ก็ต้องอัปเดตเวลาของ 3 และ 2 ด้วย → ทำให้ Step 10-12 ไล่ 4, 3, 2 ออกตามลำดับ<br>
+      ถ้าไม่อัปเดตเวลา Hit จะไล่ผิดตัว → ผลลัพธ์ผิด!
+    </div>
+  </div>
+</details>
 
 <h3>Belady's Anomaly — ตัวอย่างที่ชัดเจน (FIFO เท่านั้น)</h3>
 <div class="example-box">
   <div class="ex-title">Reference: [1,2,3,4,1,2,5,1,2,3,4,5]</div>
   <table>
     <tr><th>จำนวน Frames</th><th>FIFO Page Faults</th><th>OPT Page Faults</th><th>LRU Page Faults</th></tr>
-    <tr><td>3</td><td style="color:#fc6e51"><strong>9</strong></td><td>6</td><td>8</td></tr>
-    <tr><td>4</td><td style="color:#fc6e51"><strong>10</strong> (เพิ่มขึ้น!)</td><td>6</td><td>8</td></tr>
+    <tr><td>3</td><td style="color:#fc6e51"><strong>9</strong></td><td>7</td><td>10</td></tr>
+    <tr><td>4</td><td style="color:#fc6e51"><strong>10</strong> (เพิ่มขึ้น!)</td><td>7</td><td>10</td></tr>
   </table>
   <p>เพิ่ม Frame 3→4 แล้ว FIFO กลับได้ Fault มากขึ้น = <strong>Belady's Anomaly</strong><br>
   OPT และ LRU ไม่มีปัญหานี้ (Stack Algorithm property)</p>
