@@ -123,6 +123,85 @@ button.run-btn.secondary{background:#2a3a52}
   </div>
 </div>
 
+<!-- 6.KEY -->
+<div class="card" style="border:2px solid #ffce54">
+<h2 style="color:#ffce54">🎯 สิ่งที่ต้องรู้เพื่อตอบโจทย์บทที่ 6 (Deadlock)</h2>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+
+  <div style="background:#1a1f2e;border:1px solid #ff6b6b;border-radius:8px;padding:14px">
+    <div style="color:#ff6b6b;font-weight:bold;margin-bottom:8px">📌 สูตรที่ต้องจำ</div>
+    <div style="font-family:monospace;font-size:13px;line-height:2">
+      <div><span style="color:#ffce54">Need</span> = Max − Allocation</div>
+      <div><span style="color:#ffce54">Work</span> = Available (ตอนเริ่ม)</div>
+      <div><span style="color:#ffce54">Finish[i]</span> = false ทุกตัวตอนเริ่ม</div>
+    </div>
+  </div>
+
+  <div style="background:#1a1f2e;border:1px solid #48cfad;border-radius:8px;padding:14px">
+    <div style="color:#48cfad;font-weight:bold;margin-bottom:8px">📌 4 เงื่อนไข Deadlock (ต้องครบทุกข้อ)</div>
+    <div style="font-size:13px;line-height:1.8">
+      1. <strong>Mutual Exclusion</strong> — ใช้คนเดียวได้<br>
+      2. <strong>Hold &amp; Wait</strong> — ถือรัพยากรไว้แล้วรออีก<br>
+      3. <strong>No Preemption</strong> — แย่งไม่ได้<br>
+      4. <strong>Circular Wait</strong> — รอกันเป็นวงกลม
+    </div>
+  </div>
+
+  <div style="background:#1a1f2e;border:1px solid #4a9eff;border-radius:8px;padding:14px">
+    <div style="color:#4a9eff;font-weight:bold;margin-bottom:8px">📌 Safety Algorithm (ตรวจว่า Safe ไหม)</div>
+    <div style="font-size:13px;line-height:1.8">
+      1. Work = Available, Finish = [false, false, ...]<br>
+      2. หา Process <em>i</em> ที่ <strong>Need[i] ≤ Work</strong> และ Finish[i]=false<br>
+      3. Work += Allocation[i], Finish[i] = true, วนซ้ำ<br>
+      4. ถ้า Finish ทุกตัว = true → <strong style="color:#48cfad">Safe ✓</strong><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;ถ้าไม่ครบ → <strong style="color:#ff6b6b">Unsafe / Deadlock ✗</strong>
+    </div>
+  </div>
+
+  <div style="background:#1a1f2e;border:1px solid #fc6e51;border-radius:8px;padding:14px">
+    <div style="color:#fc6e51;font-weight:bold;margin-bottom:8px">📌 Request Algorithm (จะให้ทรัพยากรไหม)</div>
+    <div style="font-size:13px;line-height:1.8">
+      ตรวจ 3 ข้อตามลำดับ:<br>
+      1. <strong>Request ≤ Need</strong> ? ถ้าไม่ → Error<br>
+      2. <strong>Request ≤ Available</strong> ? ถ้าไม่ → รอก่อน<br>
+      3. จำลองให้ → รัน Safety → Safe? ให้จริง : ยกเลิก
+    </div>
+  </div>
+
+</div>
+
+<div style="background:#1a1f2e;border:1px solid #6c63ff;border-radius:8px;padding:14px;margin-bottom:12px">
+  <div style="color:#6c63ff;font-weight:bold;margin-bottom:8px">📌 Detection Algorithm (ระบบไม่ป้องกัน — ตรวจหา Deadlock)</div>
+  <div style="font-size:13px;line-height:1.8;display:grid;grid-template-columns:1fr 1fr;gap:8px">
+    <div>
+      เหมือน Safety แต่ใช้ <strong>Request</strong> แทน Need<br>
+      Work = Available<br>
+      Finish[i] = true ถ้า Allocation[i] = 0<br>
+      หา i ที่ <strong>Request[i] ≤ Work</strong> แล้ว Work += Allocation[i]<br>
+      ตัวที่ Finish ยังเป็น false = <strong style="color:#ff6b6b">อยู่ใน Deadlock</strong>
+    </div>
+    <div>
+      <strong>RAG (Resource Allocation Graph):</strong><br>
+      → Request Edge: Process → Resource<br>
+      → Assignment Edge: Resource → Process<br>
+      มี <strong>Cycle</strong> + instance เดียว = Deadlock แน่<br>
+      หลาย instance → ต้องรัน Detection Algorithm
+    </div>
+  </div>
+</div>
+
+<div style="background:#2b1a00;border:1px solid #ffce54;border-radius:8px;padding:12px">
+  <div style="color:#ffce54;font-weight:bold;margin-bottom:6px">⚡ ถ้าเห็นโจทย์แบบนี้ → ทำแบบนี้</div>
+  <div style="font-size:13px;display:grid;grid-template-columns:1fr 1fr;gap:6px">
+    <div style="background:#1a1200;padding:8px;border-radius:6px">โจทย์ให้ Max, Allocation, Available<br>→ คำนวณ Need ก่อน แล้วรัน <strong>Safety Algorithm</strong></div>
+    <div style="background:#1a1200;padding:8px;border-radius:6px">โจทย์ถามว่า "ให้ Request ได้ไหม"<br>→ รัน <strong>Request Algorithm</strong> ตรวจ 3 ขั้น</div>
+    <div style="background:#1a1200;padding:8px;border-radius:6px">โจทย์ให้ Allocation, Request, Available<br>→ รัน <strong>Detection Algorithm</strong></div>
+    <div style="background:#1a1200;padding:8px;border-radius:6px">โจทย์วาด Graph มีลูกศรวนกลับ<br>→ ดูว่ามี Cycle ไหม → ถ้ามี = Deadlock</div>
+  </div>
+</div>
+</div>
+
 <!-- 6.1 -->
 <div class="card">
 <h2>6.1 การจัดสรรทรัพยากรคืออะไร?</h2>
@@ -1841,6 +1920,71 @@ button.run-btn.secondary{background:#2a3a52}
   </div>
 </div>
 
+<!-- 7.KEY -->
+<div class="card" style="border:2px solid #ffce54">
+<h2 style="color:#ffce54">🎯 สิ่งที่ต้องรู้เพื่อตอบโจทย์บทที่ 7 (Memory Management)</h2>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+
+  <div style="background:#1a1f2e;border:1px solid #ff6b6b;border-radius:8px;padding:14px">
+    <div style="color:#ff6b6b;font-weight:bold;margin-bottom:8px">📌 สูตร Paging (ต้องจำ)</div>
+    <div style="font-family:monospace;font-size:13px;line-height:2.2">
+      <div><span style="color:#ffce54">Page number (p)</span> = LA ÷ Page Size</div>
+      <div><span style="color:#ffce54">Offset (d)</span> = LA mod Page Size</div>
+      <div><span style="color:#ffce54">Physical Address</span> = Frame[p] × Page Size + d</div>
+      <div style="border-top:1px solid #333;margin-top:4px;padding-top:4px">
+        <span style="color:#ffce54">Bits offset</span> = log₂(Page Size)<br>
+        <span style="color:#ffce54">Bits page#</span> = Total bits − Bits offset
+      </div>
+    </div>
+  </div>
+
+  <div style="background:#1a1f2e;border:1px solid #48cfad;border-radius:8px;padding:14px">
+    <div style="color:#48cfad;font-weight:bold;margin-bottom:8px">📌 Fragmentation ต่างกันยังไง</div>
+    <div style="font-size:13px;line-height:1.9">
+      <strong style="color:#ff6b6b">Internal Fragmentation</strong> — เนื้อที่เสียภายใน block<br>
+      = Page Size − (Process Size mod Page Size)<br>
+      (เกิดจาก Paging / Fixed partition)<br><br>
+      <strong style="color:#ffce54">External Fragmentation</strong> — เนื้อที่เสียระหว่าง block<br>
+      เกิดจาก Contiguous Allocation / Segmentation<br>
+      แก้ด้วย Compaction
+    </div>
+  </div>
+
+  <div style="background:#1a1f2e;border:1px solid #4a9eff;border-radius:8px;padding:14px">
+    <div style="color:#4a9eff;font-weight:bold;margin-bottom:8px">📌 First / Best / Worst Fit</div>
+    <div style="font-size:13px;line-height:1.9">
+      <strong>First Fit</strong> — เลือก hole แรกที่พอดีหรือใหญ่กว่า<br>
+      <strong>Best Fit</strong> — เลือก hole เล็กที่สุดที่พอดี (เหลือเศษน้อยสุด)<br>
+      <strong>Worst Fit</strong> — เลือก hole ใหญ่ที่สุด (เหลือเศษมากสุด)<br><br>
+      <span style="color:#9fa8b3">เร็วสุด: First Fit | External Frag น้อยสุด: Best Fit</span>
+    </div>
+  </div>
+
+  <div style="background:#1a1f2e;border:1px solid #fc6e51;border-radius:8px;padding:14px">
+    <div style="color:#fc6e51;font-weight:bold;margin-bottom:8px">📌 Logical Address → Binary แบบเร็ว</div>
+    <div style="font-size:13px;line-height:1.9">
+      Page Size = 2ⁿ bytes → offset = <strong>n bits ท้าย</strong><br>
+      ตัวอย่าง Page Size = 64 = 2⁶ → offset 6 bits<br><br>
+      LA = 401 = <span style="font-family:monospace">000110<strong style="color:#ffce54">010001</strong></span><br>
+      → p = 000110 = 6, d = 010001 = 17<br>
+      → PA = Frame[6] × 64 + 17
+    </div>
+  </div>
+
+</div>
+
+<div style="background:#2b1a00;border:1px solid #ffce54;border-radius:8px;padding:12px">
+  <div style="color:#ffce54;font-weight:bold;margin-bottom:6px">⚡ ถ้าเห็นโจทย์แบบนี้ → ทำแบบนี้</div>
+  <div style="font-size:13px;display:grid;grid-template-columns:1fr 1fr;gap:6px">
+    <div style="background:#1a1200;padding:8px;border-radius:6px">"Logical Address = X, Page Size = Y, Page Table = [...]"<br>→ p = X÷Y, d = X mod Y, PA = PageTable[p]×Y + d</div>
+    <div style="background:#1a1200;padding:8px;border-radius:6px">"Address space 32-bit, Page size 4KB"<br>→ offset = log₂(4096) = 12 bits, page# = 32−12 = 20 bits</div>
+    <div style="background:#1a1200;padding:8px;border-radius:6px">"Process ขนาด X bytes, Page size Y bytes — Internal Frag?"<br>→ Y − (X mod Y) [ถ้า X mod Y = 0 → Frag = 0]</div>
+    <div style="background:#1a1200;padding:8px;border-radius:6px">"มี hole [100,500,200,300,600] Process ต้องการ 212"<br>→ First=500, Best=300, Worst=600</div>
+  </div>
+</div>
+</div>
+
 <!-- 7.1 -->
 <div class="card">
 <h2>7.1 พื้นฐาน: Logical vs Physical Address</h2>
@@ -2963,6 +3107,69 @@ Internal Fragmentation = (จำนวน Pages × Page Size) − Process Size<b
       <span class="tag">LRU</span><span class="tag">Belady's Anomaly</span><span class="tag">Thrashing</span>
     </div>
   </div>
+</div>
+
+<!-- 8.KEY -->
+<div class="card" style="border:2px solid #ffce54">
+<h2 style="color:#ffce54">🎯 สิ่งที่ต้องรู้เพื่อตอบโจทย์บทที่ 8 (Virtual Memory)</h2>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+
+  <div style="background:#1a1f2e;border:1px solid #ff6b6b;border-radius:8px;padding:14px">
+    <div style="color:#ff6b6b;font-weight:bold;margin-bottom:8px">📌 3 อัลกอริทึม Page Replacement</div>
+    <div style="font-size:13px;line-height:1.9">
+      <strong style="color:#4a9eff">FIFO</strong> — ไล่ที่ <em>เข้า RAM ก่อนสุด</em> (ใช้ Queue)<br>
+      <span style="color:#9fa8b3">มี Belady's Anomaly — frames ↑ อาจ fault ↑</span><br><br>
+      <strong style="color:#48cfad">OPT</strong> — ไล่ที่ <em>จะใช้ช้าสุดในอนาคต</em> (ทำจริงไม่ได้)<br>
+      <span style="color:#9fa8b3">fault น้อยสุด ใช้เป็น benchmark เท่านั้น</span><br><br>
+      <strong style="color:#ffce54">LRU</strong> — ไล่ที่ <em>ใช้ล่าสุดนานที่สุดในอดีต</em><br>
+      <span style="color:#9fa8b3">ต้องจด timestamp ทุกครั้งที่ใช้ รวมถึง Hit</span>
+    </div>
+  </div>
+
+  <div style="background:#1a1f2e;border:1px solid #48cfad;border-radius:8px;padding:14px">
+    <div style="color:#48cfad;font-weight:bold;margin-bottom:8px">📌 วิธีทำตาราง Page Replacement</div>
+    <div style="font-size:13px;line-height:1.9">
+      1. เขียน Reference String แนวนอน<br>
+      2. เขียน Frame 0/1/2 แนวตั้ง<br>
+      3. ทีละ step: page นี้อยู่ใน frame ไหม?<br>
+      &nbsp;&nbsp;ใช่ → <strong style="color:#48cfad">HIT (—)</strong> ไม่ต้องเปลี่ยน<br>
+      &nbsp;&nbsp;ไม่ใช่ → <strong style="color:#ff6b6b">FAULT (F)</strong> โหลดเข้า + ไล่ออกตามอัลกอ<br>
+      4. นับจำนวน F ทั้งหมด
+    </div>
+  </div>
+
+  <div style="background:#1a1f2e;border:1px solid #4a9eff;border-radius:8px;padding:14px">
+    <div style="color:#4a9eff;font-weight:bold;margin-bottom:8px">📌 Thrashing และ Frame Allocation</div>
+    <div style="font-size:13px;line-height:1.9">
+      <strong>Thrashing</strong> = frame น้อย → fault ถี่ → CPU ว่าง → OS เพิ่ม process → แย่ลง<br>
+      แก้: Working Set Model / PFF / Swap out<br><br>
+      <strong>Equal Allocation</strong> = ⌊Free Frames ÷ จำนวน Process⌋<br>
+      <strong>Proportional</strong> = ⌊(size_i ÷ total) × total_frames⌋
+    </div>
+  </div>
+
+  <div style="background:#1a1f2e;border:1px solid #fc6e51;border-radius:8px;padding:14px">
+    <div style="color:#fc6e51;font-weight:bold;margin-bottom:8px">📌 สูตร Effective Access Time (EAT)</div>
+    <div style="font-family:monospace;font-size:13px;line-height:2.2">
+      <div>p = Page Fault Rate (0 ≤ p ≤ 1)</div>
+      <div><span style="color:#ffce54">EAT</span> = (1−p) × mem_access</div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ p × page_fault_time</div>
+      <div style="color:#9fa8b3;font-size:12px;margin-top:4px">ยิ่ง p ต่ำ EAT ยิ่งใกล้ mem_access (เร็ว)</div>
+    </div>
+  </div>
+
+</div>
+
+<div style="background:#2b1a00;border:1px solid #ffce54;border-radius:8px;padding:12px">
+  <div style="color:#ffce54;font-weight:bold;margin-bottom:6px">⚡ ถ้าเห็นโจทย์แบบนี้ → ทำแบบนี้</div>
+  <div style="font-size:13px;display:grid;grid-template-columns:1fr 1fr;gap:6px">
+    <div style="background:#1a1200;padding:8px;border-radius:6px">"Reference = [...], Frames = 3, FIFO/OPT/LRU"<br>→ วาดตาราง Frame 0/1/2 ทีละ step นับ F</div>
+    <div style="background:#1a1200;padding:8px;border-radius:6px">"OPT ต้องไล่ใคร" → มองข้างหน้า ไล่ที่ใช้ช้าสุด<br>ถ้ามีหลายตัวไม่ถูกใช้อีก → เลือกตัวใดก็ได้</div>
+    <div style="background:#1a1200;padding:8px;border-radius:6px">"LRU ต้องไล่ใคร" → ดู timestamp ล่าสุดของทุก frame<br>ไล่ตัวที่ timestamp เก่าสุด (อดีตไกลสุด)</div>
+    <div style="background:#1a1200;padding:8px;border-radius:6px">"Free frames = 93, processes = 5" (Equal)<br>→ ⌊93÷5⌋ = 18 frames/process, เหลือ 93−90 = 3</div>
+  </div>
+</div>
 </div>
 
 <!-- 8.1 -->
@@ -4201,6 +4408,72 @@ Internal Fragmentation = (จำนวน Pages × Page Size) − Process Size<b
       <span class="tag">Linked</span><span class="tag">Indexed</span><span class="tag">DMA</span>
     </div>
   </div>
+</div>
+
+<!-- 9.KEY -->
+<div class="card" style="border:2px solid #ffce54">
+<h2 style="color:#ffce54">🎯 สิ่งที่ต้องรู้เพื่อตอบโจทย์บทที่ 9 (File Systems & I/O)</h2>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+
+  <div style="background:#1a1f2e;border:1px solid #ff6b6b;border-radius:8px;padding:14px">
+    <div style="color:#ff6b6b;font-weight:bold;margin-bottom:8px">📌 Permission String อ่านยังไง</div>
+    <div style="font-size:13px;line-height:1.9">
+      Format: <span style="font-family:monospace"><span style="color:#9fa8b3">-</span><span style="color:#48cfad">rwx</span><span style="color:#ffce54">rw-</span><span style="color:#ff6b6b">r--</span></span><br>
+      ตัวแรก: ชนิด (<code>-</code>=ไฟล์, <code>d</code>=dir, <code>l</code>=link)<br>
+      2–4: Owner | 5–7: Group | 8–10: Others<br><br>
+      <strong>Octal:</strong> r=4, w=2, x=1, รวมต่อกลุ่ม<br>
+      rwx=7, rw-=6, r-x=5, r--=4, ---=0<br>
+      <span style="color:#9fa8b3">chmod 755 = rwxr-xr-x, chmod 644 = rw-r--r--</span>
+    </div>
+  </div>
+
+  <div style="background:#1a1f2e;border:1px solid #48cfad;border-radius:8px;padding:14px">
+    <div style="color:#48cfad;font-weight:bold;margin-bottom:8px">📌 4 วิธี File Allocation เปรียบเทียบ</div>
+    <div style="font-size:13px;line-height:1.9">
+      <strong style="color:#4a9eff">Contiguous</strong> — block i = start + i (เร็วสุด, Random OK)<br>
+      <span style="color:#ff6b6b">ข้อเสีย: External Frag, ขยายยาก</span><br>
+      <strong style="color:#ffce54">Linked</strong> — ไล่ pointer; block n ต้องใช้ n I/O<br>
+      <span style="color:#ff6b6b">ข้อเสีย: Random Access ช้า</span><br>
+      <strong style="color:#fc6e51">FAT</strong> — table ของ next-block, chain จบด้วย EOF<br>
+      <strong style="color:#48cfad">Indexed (i-node)</strong> — direct + indirect pointers
+    </div>
+  </div>
+
+  <div style="background:#1a1f2e;border:1px solid #4a9eff;border-radius:8px;padding:14px">
+    <div style="color:#4a9eff;font-weight:bold;margin-bottom:8px">📌 i-node — คำนวณขนาดไฟล์สูงสุด</div>
+    <div style="font-size:13px;line-height:1.9">
+      Pointers per block = Block Size ÷ Pointer Size<br>
+      <span style="color:#9fa8b3">(เช่น 512B ÷ 4B = 128 pointers/block)</span><br><br>
+      <strong>Direct</strong> → Data (n blocks)<br>
+      <strong>Single Indirect</strong> → 128 blocks<br>
+      <strong>Double Indirect</strong> → 128² = 16,384 blocks<br>
+      <strong>Triple Indirect</strong> → 128³ = 2,097,152 blocks<br>
+      ขนาดสูงสุด = (n + 128 + 128² + 128³) × Block Size
+    </div>
+  </div>
+
+  <div style="background:#1a1f2e;border:1px solid #fc6e51;border-radius:8px;padding:14px">
+    <div style="color:#fc6e51;font-weight:bold;margin-bottom:8px">📌 3 วิธี I/O Control</div>
+    <div style="font-size:13px;line-height:1.9">
+      <strong style="color:#ff6b6b">Polling</strong> — CPU วนถามซ้ำ (Busy-Wait) ช้า เสีย CPU<br>
+      <strong style="color:#48cfad">Interrupt</strong> — อุปกรณ์แจ้งเมื่อพร้อม CPU ทำงานอื่นได้<br>
+      <strong style="color:#ffce54">DMA</strong> — โอนข้อมูลจำนวนมาก CPU ไม่ต้องเข้าร่วม<br>
+      <span style="color:#9fa8b3">DMA เหมาะกับข้อมูลเยอะ (ไฟล์ใหญ่, Disk I/O)</span>
+    </div>
+  </div>
+
+</div>
+
+<div style="background:#2b1a00;border:1px solid #ffce54;border-radius:8px;padding:12px">
+  <div style="color:#ffce54;font-weight:bold;margin-bottom:6px">⚡ ถ้าเห็นโจทย์แบบนี้ → ทำแบบนี้</div>
+  <div style="font-size:13px;display:grid;grid-template-columns:1fr 1fr;gap:6px">
+    <div style="background:#1a1200;padding:8px;border-radius:6px">"permission = -rwxr-x--- ใครทำอะไรได้"<br>→ แยก 3 กลุ่ม owner/group/others แล้วแปลแต่ละ bit</div>
+    <div style="background:#1a1200;padding:8px;border-radius:6px">"ไฟล์เริ่มที่ block 14, ขนาด 5 blocks" (Contiguous)<br>→ blocks = [14,15,16,17,18], block i = 14+i</div>
+    <div style="background:#1a1200;padding:8px;border-radius:6px">"FAT: 2→5→8→EOF, ขอ block ที่ 2 ของไฟล์"<br>→ FAT[2]=5, FAT[5]=8 → ตอบ block 8</div>
+    <div style="background:#1a1200;padding:8px;border-radius:6px">"Block=512B, Pointer=4B, 10 direct — max file size?"<br>→ 128 ptr/block → (10+128+16384+2097152)×512</div>
+  </div>
+</div>
 </div>
 
 <!-- 9.1 Files -->
