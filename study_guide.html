@@ -903,6 +903,146 @@ button.run-btn.secondary{background:#2a3a52}
   </div>
 </div>
 
+<!-- ─── "รอ" คืออะไร ─── -->
+<div style="margin:14px 0">
+<div class="ex-title" style="margin-bottom:10px">🤔 "รอ" หมายความว่าอะไรกันแน่?</div>
+
+<div class="box box-purple" style="margin-bottom:12px">
+  <strong>คำตอบสั้น:</strong> Process ถูก <em>หยุดชั่วคราว</em> — OS บันทึก Request ไว้ในคิว แล้ว Process นั้นก็นอนรออยู่เฉยๆ ไม่ได้ทำงานต่อ ไม่ยกเลิก ไม่หาย — จนกว่าจะมีทรัพยากรว่างพอ OS ถึงจะปลุกขึ้นมาตรวจใหม่อีกครั้ง
+</div>
+
+<!-- Timeline SVG showing what "wait" looks like -->
+<svg viewBox="0 0 560 210" style="background:#141925;border-radius:8px;width:100%;display:block;margin-bottom:12px" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="wt-a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L0,8 L8,4 z" fill="#9fa8b3"/></marker>
+    <marker id="wt-g" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L0,8 L8,4 z" fill="#48cfad"/></marker>
+    <marker id="wt-r" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L0,8 L8,4 z" fill="#fc6e51"/></marker>
+  </defs>
+
+  <!-- Timeline bar (horizontal) -->
+  <text x="20" y="18" fill="#ffce54" font-size="12" font-family="sans-serif" font-weight="bold">Timeline — สิ่งที่เกิดขึ้นจริงเมื่อ Process "รอ"</text>
+  <line x1="20" y1="55" x2="540" y2="55" stroke="#2e3347" stroke-width="2"/>
+
+  <!-- Event 1: P0 requests -->
+  <circle cx="60" cy="55" r="6" fill="#6c63ff"/>
+  <line x1="60" y1="61" x2="60" y2="95" stroke="#6c63ff" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <rect x="10" y="96" width="100" height="36" rx="4" fill="#1e1533" stroke="#6c63ff" stroke-width="1.5"/>
+  <text x="60" y="111" text-anchor="middle" fill="#e8eaf6" font-size="10" font-family="sans-serif" font-weight="bold">P0 ขอ [7,4,3]</text>
+  <text x="60" y="124" text-anchor="middle" fill="#9fa8b3" font-size="9" font-family="sans-serif">Available=[3,3,2]</text>
+
+  <!-- Event 2: P0 blocked -->
+  <circle cx="180" cy="55" r="6" fill="#fc6e51"/>
+  <line x1="180" y1="61" x2="180" y2="95" stroke="#fc6e51" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <rect x="130" y="96" width="100" height="36" rx="4" fill="#2b1111" stroke="#fc6e51" stroke-width="1.5"/>
+  <text x="180" y="111" text-anchor="middle" fill="#fc6e51" font-size="10" font-family="sans-serif" font-weight="bold">OS บล็อก P0</text>
+  <text x="180" y="124" text-anchor="middle" fill="#9fa8b3" font-size="9" font-family="sans-serif">บันทึก Request ไว้</text>
+
+  <!-- P0 sleeping bar -->
+  <rect x="186" y="46" width="174" height="18" rx="4" fill="#1a1520" stroke="#6c63ff" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="273" y="59" text-anchor="middle" fill="#6c63ff" font-size="9" font-family="sans-serif">P0 นอนรอ... (ไม่ได้ทำงาน)</text>
+
+  <!-- Event 3: P1 or other process finishes -->
+  <circle cx="360" cy="55" r="6" fill="#ffce54"/>
+  <line x1="360" y1="61" x2="360" y2="95" stroke="#ffce54" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <rect x="310" y="96" width="100" height="36" rx="4" fill="#2b2410" stroke="#ffce54" stroke-width="1.5"/>
+  <text x="360" y="111" text-anchor="middle" fill="#ffce54" font-size="10" font-family="sans-serif" font-weight="bold">P1 เสร็จงาน</text>
+  <text x="360" y="124" text-anchor="middle" fill="#9fa8b3" font-size="9" font-family="sans-serif">คืน A=2 → Avail=[5,3,2]</text>
+
+  <!-- Event 4: OS re-checks -->
+  <circle cx="470" cy="55" r="6" fill="#48cfad"/>
+  <line x1="470" y1="61" x2="470" y2="95" stroke="#48cfad" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <rect x="420" y="96" width="112" height="36" rx="4" fill="#112b1e" stroke="#48cfad" stroke-width="1.5"/>
+  <text x="476" y="111" text-anchor="middle" fill="#48cfad" font-size="10" font-family="sans-serif" font-weight="bold">OS ตรวจใหม่</text>
+  <text x="476" y="124" text-anchor="middle" fill="#9fa8b3" font-size="9" font-family="sans-serif">P0 ยังรอ A=7, Avail=5 ✗</text>
+
+  <!-- Arrows on timeline -->
+  <line x1="66" y1="55" x2="174" y2="55" stroke="#9fa8b3" stroke-width="1.5" marker-end="url(#wt-a)"/>
+  <line x1="354" y1="55" x2="186" y2="55" stroke="#ffce54" stroke-width="1.5" marker-end="url(#wt-r)"/>
+  <line x1="366" y1="55" x2="464" y2="55" stroke="#9fa8b3" stroke-width="1.5" marker-end="url(#wt-a)"/>
+
+  <!-- Bottom note -->
+  <rect x="20" y="148" width="520" height="55" rx="6" fill="#1e2132" stroke="#2e3347"/>
+  <text x="280" y="166" text-anchor="middle" fill="#ffce54" font-size="11" font-family="sans-serif" font-weight="bold">สิ่งที่ OS ทำขณะ P0 "รอ"</text>
+  <text x="30" y="182" fill="#9fa8b3" font-size="10" font-family="sans-serif">• บันทึก Request ของ P0 ไว้ในคิวของ Blocked Queue</text>
+  <text x="30" y="196" fill="#9fa8b3" font-size="10" font-family="sans-serif">• P0 ไม่ได้ทำงาน ไม่ได้รับ CPU time จน Available พอ — ทุกครั้งที่มี Process คืน Resource OS จะตรวจคิวใหม่</text>
+</svg>
+
+<!-- 3-way comparison: Wait vs Error vs Rollback -->
+<div class="ex-title" style="margin-bottom:8px">📊 เปรียบเทียบ 3 ผลลัพธ์ที่เป็นไปได้ — ต่างกันอย่างไร?</div>
+<table>
+  <tr>
+    <th>ผลลัพธ์</th>
+    <th>เกิดขึ้นเมื่อ</th>
+    <th>Request หายไปไหม?</th>
+    <th>Process ทำงานต่อได้ไหม?</th>
+    <th>แก้ได้เมื่อไหร่?</th>
+  </tr>
+  <tr>
+    <td style="color:#ffce54;font-weight:700">🕐 รอ (Wait)</td>
+    <td>ขั้น ② ไม่ผ่าน<br><small>Request &gt; Available</small></td>
+    <td style="color:#48cfad"><strong>ไม่หาย</strong><br>OS จำไว้ในคิว</td>
+    <td style="color:#fc6e51">ไม่ได้ — หยุดรอ</td>
+    <td>เมื่อ Available มากพอ<br>OS ปลุกขึ้นมาตรวจใหม่</td>
+  </tr>
+  <tr>
+    <td style="color:#fc6e51;font-weight:700">❌ Error</td>
+    <td>ขั้น ① ไม่ผ่าน<br><small>Request &gt; Need</small></td>
+    <td style="color:#fc6e51"><strong>ยกเลิก</strong><br>OS ปฏิเสธทันที</td>
+    <td style="color:#fc6e51">ไม่ได้ — Error trap</td>
+    <td>ไม่แก้ — Process ผิดพลาด<br>(ขอเกิน Max ที่ประกาศไว้)</td>
+  </tr>
+  <tr>
+    <td style="color:#fc6e51;font-weight:700">🔴 Rollback</td>
+    <td>ขั้น ④ ไม่ผ่าน<br><small>Safety = Unsafe</small></td>
+    <td style="color:#ffce54"><strong>รอเหมือนกัน</strong><br>แต่ค่าทุกอย่าง Rollback</td>
+    <td style="color:#fc6e51">ไม่ได้ — รอก่อน</td>
+    <td>เมื่อระบบปลอดภัยมากพอ<br>OS อนุมัติในรอบต่อไป</td>
+  </tr>
+</table>
+
+<div class="box box-yellow" style="margin-top:10px">
+  <strong>💡 ความต่างสำคัญ: รอ vs Rollback</strong><br>
+  <strong>รอ (Wait)</strong> = OS <em>รู้เลยว่า</em> ของไม่พอ ไม่ต้องลองจำลองด้วยซ้ำ → หยุดทันที<br>
+  <strong>Rollback</strong> = ของ<em>พอ</em>ให้ได้ แต่ถ้าให้ไปจะเสี่ยง Deadlock → OS ลองจำลองก่อน แล้วถึงตัดสินใจปฏิเสธ<br><br>
+  ทั้งสองผล Process ยัง "รอ" อยู่เหมือนกัน แค่ <em>เหตุผลต่างกัน</em>
+</div>
+
+<!-- Concrete wait scenario -->
+<div class="example-box" style="margin-top:12px">
+  <div class="ex-title">ตัวอย่างเส้นทาง "รอ" ของ P0 จากตัวอย่างที่ 2 — เกิดอะไรขึ้นหลังจากนั้น?</div>
+  <table>
+    <tr><th>เวลา</th><th>เหตุการณ์</th><th>Available (A,B,C)</th><th>P0 ทำอะไร</th></tr>
+    <tr>
+      <td>T=0</td>
+      <td>P0 ขอ [7,4,3] → Available=[3,3,2] ไม่พอ</td>
+      <td>[3, 3, 2]</td>
+      <td style="color:#fc6e51">ถูกบล็อก เข้า Waiting Queue</td>
+    </tr>
+    <tr>
+      <td>T=1</td>
+      <td>P1 ทำงานเสร็จ คืน Alloc[P1]=[2,0,0]</td>
+      <td>[3+2, 3, 2] = <strong>[5,3,2]</strong></td>
+      <td style="color:#9fa8b3">รออยู่... OS ตรวจคิว: P0 ขอ A=7 &gt; 5 ✗ ยังรอ</td>
+    </tr>
+    <tr>
+      <td>T=2</td>
+      <td>P3 ทำงานเสร็จ คืน Alloc[P3]=[2,1,1]</td>
+      <td>[5+2, 3+1, 2+1] = <strong>[7,4,3]</strong></td>
+      <td style="color:#ffce54">OS ตรวจคิว: P0 ขอ [7,4,3] ≤ [7,4,3] ✓ → รัน Safety!</td>
+    </tr>
+    <tr>
+      <td>T=3</td>
+      <td>Safety ผ่าน → OS อนุมัติ Request ของ P0</td>
+      <td>[7−7, 4−4, 3−3] = <strong>[0,0,0]</strong></td>
+      <td style="color:#48cfad">P0 ได้รับทรัพยากร กลับมาทำงานต่อ ✓</td>
+    </tr>
+  </table>
+  <div class="box box-green" style="margin-top:8px">
+    ✅ P0 <strong>ไม่ได้หายไปไหน</strong> — แค่นอนรออยู่ใน OS จนกว่า P3 จะเสร็จและคืนของ แล้ว OS จะตรวจให้ใหม่อัตโนมัติ
+  </div>
+</div>
+</div>
+
 <!-- ─────────── Example 3 ─────────── -->
 <div class="example-box" style="margin-top:14px">
   <div class="ex-title">ตัวอย่างที่ 3: P1 ขอ Request = [2, 3, 0] → ผลเป็นอย่างไร?</div>
