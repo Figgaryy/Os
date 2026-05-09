@@ -3841,15 +3841,21 @@ Internal Fragmentation = (จำนวน Pages × Page Size) − Process Size<b
           <td style="color:#ff6b6b;font-weight:bold">6 faults 🔴</td>
           <td style="color:#4a9eff">2 faults 🔵</td>
           <td style="color:#48cfad">0 faults 🟢</td>
-          <td style="font-size:12px">A เกินขีดบนอีก, C ต่ำอีก<br>แต่ไม่มี Free Frame เหลือ!<br>→ <strong style="color:#fc6e51">Swap C ออก</strong> ให้ A ใช้ frame ของ C</td>
+          <td style="font-size:12px">A เกินขีดบน, C ต่ำกว่าขีดล่าง<br>→ <strong>ดึง 1 Frame จาก C ให้ A</strong><br><span style="color:#9fa8b3">(A=5, B=5, C=2)</span></td>
         </tr>
       </table>
 
-      <div style="margin-top:12px;background:#1a2744;border-left:3px solid #4a9eff;padding:10px 13px;border-radius:0 6px 6px 0;font-size:13px">
+      <div style="margin-top:10px;background:#2b1111;border:1px solid #fc6e51;border-radius:6px;padding:10px 13px;font-size:13px">
+        <strong style="color:#fc6e51">แล้ว Swap Out เกิดขึ้นเมื่อไร?</strong><br>
+        เมื่อมี Process เกินขีดบน <strong>แต่ไม่มี Process ไหนเลย</strong> ที่ต่ำกว่าขีดล่าง (ไม่มีใครคืน Frame ได้)<br>
+        ตัวอย่าง: A=8🔴, B=4🔵, C=3🔵 → ไม่มีใครต่ำกว่าขีดล่าง → ไม่มี Frame ว่างให้ A<br>
+        → OS ต้อง <strong style="color:#fc6e51">Swap Process ใดสักตัวออก</strong> เพื่อปลดปล่อย Frame ให้ A
+      </div>
+
+      <div style="margin-top:10px;background:#1a2744;border-left:3px solid #4a9eff;padding:10px 13px;border-radius:0 6px 6px 0;font-size:13px">
         <strong style="color:#4a9eff">สรุปการทำงานของ PFF:</strong><br>
         PFF ปรับ Frame แบบ <strong>dynamic ตลอดเวลา</strong> — ไม่ได้กำหนดตายตัวแต่แรก<br>
-        Process ที่ Fault เยอะ = ต้องการ Frame มากขึ้น | Process ที่ Fault น้อย = คืน Frame ได้<br>
-        ถ้าไม่มี Free Frame เหลือแจก → ต้อง Swap Process ออก (เชื่อมกับวิธีที่ 3)
+        มี Process ต่ำกว่าขีดล่าง → ดึง Frame จากตัวนั้นมาแจก | ไม่มีใครคืนได้เลย → Swap ออก
       </div>
     </div>
   </div>
