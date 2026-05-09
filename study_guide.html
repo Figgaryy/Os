@@ -1290,84 +1290,287 @@ button.run-btn.secondary{background:#2a3a52}
 <!-- 6.7 Detection -->
 <div class="card">
 <h2>6.7 Detection Algorithm — ตรวจจับ Deadlock ที่เกิดขึ้นแล้ว</h2>
-<p>ถ้า OS ไม่ใช้วิธีป้องกัน Deadlock เลย ก็ต้องใช้ Detection Algorithm หา Deadlock ที่เกิดขึ้นแล้ว</p>
-<div class="box box-yellow">
-  <strong>ความต่างจาก Safety Algorithm:</strong><br>
-  • ใช้ <strong>Request matrix</strong> (สิ่งที่ขออยู่ตอนนี้) แทน Need matrix (สิ่งที่ยังขาดอยู่)<br>
-  • Finish[i] = <strong>true ตั้งแต่แรก</strong> ถ้า Allocation[i] = 0 (ไม่ได้ถือทรัพยากรเลย)<br>
-  • Finish[i] = <strong>false</strong> ถ้า Allocation[i] ≠ 0
+
+<div class="box box-green">
+  <strong>🎯 อุปมาให้เข้าใจง่าย:</strong><br>
+  Safety Algorithm = <strong>ตำรวจจราจร</strong> — ยืนป้องกันไม่ให้รถชนกันตั้งแต่แรก<br>
+  Detection Algorithm = <strong>ตำรวจสืบสวน</strong> — มาหลังเกิดเหตุแล้ว สำรวจดูว่า "ใครติดอยู่บ้าง?"<br><br>
+  OS ที่ใช้ Detection จะ <em>ปล่อยให้ระบบทำงานอิสระ</em> แล้วมาตรวจเป็นระยะว่าเกิด Deadlock ขึ้นหรือยัง
 </div>
+
+<!-- Safety vs Detection comparison -->
+<h3>เปรียบเทียบ Safety vs Detection — ต่างกันตรงไหน?</h3>
+<table>
+  <tr><th>ประเด็น</th><th style="color:#48cfad">Safety Algorithm</th><th style="color:#fc6e51">Detection Algorithm</th></tr>
+  <tr><td><strong>เป้าหมาย</strong></td><td>ป้องกัน (ก่อนให้ทรัพยากร)</td><td>ตรวจจับ (หลังเกิดเหตุ)</td></tr>
+  <tr><td><strong>Matrix ที่ใช้</strong></td><td>Need[i] = Max−Alloc <br><small>(อาจขอได้สูงสุดอีกเท่าไร)</small></td><td>Request[i] = ขอจริงอยู่ตอนนี้ <br><small>(ไม่ได้มองอนาคต)</small></td></tr>
+  <tr><td><strong>Finish[i] เริ่มต้น</strong></td><td>false <em>ทุกตัว</em></td><td>true ถ้า Alloc[i]=0<br>false ถ้า Alloc[i]≠0</td></tr>
+  <tr><td><strong>ผลลัพธ์</strong></td><td>Safe/Unsafe</td><td>ระบุได้เลยว่า Process ไหน Deadlock</td></tr>
+</table>
+
+<!-- Why Finish[i]=true when Alloc=0 -->
+<div class="box box-blue" style="margin-top:12px">
+  <strong>❓ ทำไม Finish[i] = true เลย ถ้า Alloc[i] = 0?</strong><br><br>
+  <strong>ตรรกะ:</strong> ถ้า Process ไม่ได้ถือทรัพยากรอะไรเลย → มันไม่ได้บล็อกใคร → ต่อให้มันกำลังรออะไรอยู่ก็ตาม มันสามารถได้รับแล้วเสร็จงานได้ (ไม่เป็นส่วนของวงกลม Deadlock)<br><br>
+  <strong>เปรียบ:</strong> คนที่ไม่ได้กอดเก้าอี้ใดๆ ไว้เลย — ถึงแม้รออยู่ก็ไม่ทำให้คนอื่นติด
+</div>
+
+<!-- Algorithm steps visual -->
 <h3>ขั้นตอน Detection Algorithm</h3>
-<div class="step"><div class="step-num">0</div><div class="step-body">Work = Available. Finish[i] = true ถ้า Allocation[i]=0, false ถ้า Allocation[i]≠0</div></div>
-<div class="step"><div class="step-num">1</div><div class="step-body">หากระบวนการ i ที่: Finish[i]=false <strong>และ</strong> Request[i] ≤ Work</div></div>
-<div class="step"><div class="step-num">2</div><div class="step-body">Work = Work + Allocation[i]. Finish[i] = true → กลับขั้นตอน 1</div></div>
-<div class="step"><div class="step-num">3</div><div class="step-body">กระบวนการใดที่ Finish[i] = false → <span class="badge badge-red">อยู่ใน Deadlock</span></div></div>
+<svg viewBox="0 0 560 90" style="background:#141925;border-radius:8px;width:100%;display:block;margin:10px 0" xmlns="http://www.w3.org/2000/svg">
+  <defs><marker id="dt-a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L0,8 L8,4 z" fill="#9fa8b3"/></marker></defs>
+  <rect x="8"   y="16" width="124" height="58" rx="5" fill="#1e1533" stroke="#6c63ff" stroke-width="1.5"/>
+  <text x="70"  y="34" text-anchor="middle" fill="#6c63ff" font-size="10" font-family="sans-serif" font-weight="bold">⓪ ตั้งค่าเริ่มต้น</text>
+  <text x="70"  y="48" text-anchor="middle" fill="#9fa8b3" font-size="9"  font-family="sans-serif">Work = Available</text>
+  <text x="70"  y="60" text-anchor="middle" fill="#48cfad" font-size="9"  font-family="sans-serif">Finish[i]=true ถ้า Alloc=0</text>
+  <text x="70"  y="71" text-anchor="middle" fill="#fc6e51" font-size="9"  font-family="sans-serif">Finish[i]=false ถ้า Alloc≠0</text>
+  <line x1="132" y1="45" x2="148" y2="45" stroke="#9fa8b3" stroke-width="1.5" marker-end="url(#dt-a)"/>
+  <rect x="150" y="16" width="124" height="58" rx="5" fill="#1a2744" stroke="#4a9eff" stroke-width="1.5"/>
+  <text x="212" y="34" text-anchor="middle" fill="#4a9eff" font-size="10" font-family="sans-serif" font-weight="bold">① หา Process i</text>
+  <text x="212" y="48" text-anchor="middle" fill="#9fa8b3" font-size="9"  font-family="sans-serif">Finish[i] = false</text>
+  <text x="212" y="60" text-anchor="middle" fill="#9fa8b3" font-size="9"  font-family="sans-serif">และ Request[i] ≤ Work</text>
+  <text x="212" y="71" text-anchor="middle" fill="#ffce54" font-size="9"  font-family="sans-serif">(ถ้าหาไม่ได้ → ไปขั้น ③)</text>
+  <line x1="274" y1="45" x2="290" y2="45" stroke="#9fa8b3" stroke-width="1.5" marker-end="url(#dt-a)"/>
+  <rect x="292" y="16" width="124" height="58" rx="5" fill="#112b1e" stroke="#48cfad" stroke-width="1.5"/>
+  <text x="354" y="34" text-anchor="middle" fill="#48cfad" font-size="10" font-family="sans-serif" font-weight="bold">② ปลด i ออก</text>
+  <text x="354" y="48" text-anchor="middle" fill="#9fa8b3" font-size="9"  font-family="sans-serif">Work += Alloc[i]</text>
+  <text x="354" y="60" text-anchor="middle" fill="#9fa8b3" font-size="9"  font-family="sans-serif">Finish[i] = true</text>
+  <text x="354" y="71" text-anchor="middle" fill="#ffce54" font-size="9"  font-family="sans-serif">→ วนกลับขั้น ①</text>
+  <line x1="416" y1="45" x2="432" y2="45" stroke="#9fa8b3" stroke-width="1.5" marker-end="url(#dt-a)"/>
+  <rect x="434" y="16" width="118" height="58" rx="5" fill="#2b1111" stroke="#fc6e51" stroke-width="1.5"/>
+  <text x="493" y="34" text-anchor="middle" fill="#fc6e51" font-size="10" font-family="sans-serif" font-weight="bold">③ ตรวจผล</text>
+  <text x="493" y="48" text-anchor="middle" fill="#48cfad" font-size="9"  font-family="sans-serif">Finish[i]=true ทุกตัว</text>
+  <text x="493" y="60" text-anchor="middle" fill="#48cfad" font-size="9"  font-family="sans-serif">→ ไม่มี Deadlock ✓</text>
+  <text x="493" y="71" text-anchor="middle" fill="#fc6e51" font-size="9"  font-family="sans-serif">Finish[i]=false → Deadlock!</text>
+</svg>
+
+<!-- Example 1: with deadlock, fully worked out -->
 <div class="example-box">
-  <div class="ex-title">ตัวอย่าง Detection</div>
-  <p>3 กระบวนการ, 2 ชนิด (A, B). Available=[0,0]</p>
+  <div class="ex-title">ตัวอย่างที่ 1: 3 Process, 2 ทรัพยากร (A,B) — มี Deadlock</div>
+
+  <!-- Input state -->
+  <div style="font-weight:700;color:#ffce54;margin-bottom:6px">① ตารางข้อมูลเริ่มต้น (Available = [0, 0])</div>
   <table>
-    <tr><th>Process</th><th>Alloc A B</th><th>Request A B</th><th>Finish เริ่มต้น</th></tr>
-    <tr><td>P0</td><td>1 0</td><td>0 0</td><td>false (Alloc≠0)</td></tr>
-    <tr><td>P1</td><td>0 2</td><td>2 0</td><td>false (Alloc≠0)</td></tr>
-    <tr><td>P2</td><td>1 1</td><td>0 1</td><td>false (Alloc≠0)</td></tr>
+    <tr><th>Process</th><th>Alloc A B</th><th>Request A B</th><th>Finish เริ่มต้น</th><th>เหตุผล</th></tr>
+    <tr><td><strong>P0</strong></td><td>1  0</td><td>0  0</td>
+        <td style="color:#fc6e51">false</td><td style="color:#9fa8b3">Alloc=[1,0] ≠ 0</td></tr>
+    <tr><td><strong>P1</strong></td><td>0  2</td><td>2  0</td>
+        <td style="color:#fc6e51">false</td><td style="color:#9fa8b3">Alloc=[0,2] ≠ 0</td></tr>
+    <tr><td><strong>P2</strong></td><td>1  1</td><td>0  1</td>
+        <td style="color:#fc6e51">false</td><td style="color:#9fa8b3">Alloc=[1,1] ≠ 0</td></tr>
   </table>
-  <p>Work=[0,0]. P0: Request[0,0] ≤ [0,0] ✓ → Work=[0+1,0+0]=[1,0]. Finish[P0]=true<br>
-  P1: Request[2,0] ≤ [1,0]? ✗. P2: Request[0,1] ≤ [1,0]? ✗ (1>0)<br>
-  หาไม่ได้แล้ว → <strong>P1 และ P2 อยู่ใน Deadlock</strong></p>
+
+  <!-- Trace table -->
+  <div style="font-weight:700;color:#ffce54;margin:10px 0 6px">② Trace ทีละรอบ (Work เริ่มต้น = [0, 0])</div>
+  <table>
+    <tr><th>รอบ</th><th>ลอง P</th><th>Request</th><th>Work ตอนนั้น</th><th>ผ่าน?</th><th>Work ใหม่ (+=Alloc)</th><th>Finish</th></tr>
+    <tr>
+      <td>1</td><td><strong>P0</strong></td><td>[0,0]</td><td>[0,0]</td>
+      <td style="color:#48cfad">0≤0 ✓, 0≤0 ✓ → ผ่าน</td>
+      <td>[0<b>+1</b>, 0<b>+0</b>] = <strong>[1,0]</strong></td>
+      <td style="color:#48cfad">true ✓</td>
+    </tr>
+    <tr>
+      <td>2</td><td>P1</td><td>[2,0]</td><td>[1,0]</td>
+      <td style="color:#fc6e51"><b>2&gt;1</b> ✗ — ข้าม</td><td>—</td><td>false</td>
+    </tr>
+    <tr>
+      <td>2</td><td>P2</td><td>[0,1]</td><td>[1,0]</td>
+      <td style="color:#fc6e51"><b>1&gt;0</b> (B) ✗ — ข้าม</td><td>—</td><td>false</td>
+    </tr>
+    <tr style="background:#2b1111">
+      <td colspan="7" style="text-align:center;color:#fc6e51;font-weight:700">
+        ❌ วนแล้ว ไม่มีใครเพิ่มได้อีก → หยุด</td>
+    </tr>
+  </table>
+
+  <!-- Final state visual -->
+  <div style="font-weight:700;color:#ffce54;margin:10px 0 6px">③ ผลสุดท้าย — สถานะแต่ละ Process</div>
+  <svg viewBox="0 0 560 80" style="background:#0d1015;border-radius:6px;width:100%;display:block;margin-bottom:8px" xmlns="http://www.w3.org/2000/svg">
+    <!-- P0: finished -->
+    <rect x="20"  y="10" width="155" height="60" rx="6" fill="#112b1e" stroke="#48cfad" stroke-width="2"/>
+    <text x="97"  y="32" text-anchor="middle" fill="#48cfad" font-size="13" font-family="sans-serif" font-weight="bold">P0</text>
+    <text x="97"  y="48" text-anchor="middle" fill="#48cfad" font-size="11" font-family="sans-serif">Finish = true</text>
+    <text x="97"  y="62" text-anchor="middle" fill="#48cfad" font-size="10" font-family="sans-serif">✅ เสร็จแล้ว (ปลอดภัย)</text>
+    <!-- P1: deadlock -->
+    <rect x="195" y="10" width="155" height="60" rx="6" fill="#2b1111" stroke="#fc6e51" stroke-width="2.5"/>
+    <text x="272" y="32" text-anchor="middle" fill="#fc6e51" font-size="13" font-family="sans-serif" font-weight="bold">P1</text>
+    <text x="272" y="48" text-anchor="middle" fill="#fc6e51" font-size="11" font-family="sans-serif">Finish = false</text>
+    <text x="272" y="62" text-anchor="middle" fill="#fc6e51" font-size="10" font-family="sans-serif">🔴 DEADLOCK!</text>
+    <!-- P2: deadlock -->
+    <rect x="370" y="10" width="165" height="60" rx="6" fill="#2b1111" stroke="#fc6e51" stroke-width="2.5"/>
+    <text x="452" y="32" text-anchor="middle" fill="#fc6e51" font-size="13" font-family="sans-serif" font-weight="bold">P2</text>
+    <text x="452" y="48" text-anchor="middle" fill="#fc6e51" font-size="11" font-family="sans-serif">Finish = false</text>
+    <text x="452" y="62" text-anchor="middle" fill="#fc6e51" font-size="10" font-family="sans-serif">🔴 DEADLOCK!</text>
+  </svg>
+  <div class="box box-red" style="margin:0">
+    <strong>สรุป: P1 และ P2 ติด Deadlock</strong><br>
+    P1 รอ A จาก P0 (P0 เสร็จแล้ว คืน A=1) แต่ P1 ต้องการ A=2 แต่ตอนนี้มีแค่ 1<br>
+    P2 รอ B แต่ B ทั้งหมด (2 ชิ้น) ถูก P1 ถือ → P1 ก็รออยู่ → วนเวียน
+  </div>
 </div>
 </div>
 
 <!-- 6.7b More Detection Examples -->
 <div class="card">
 <h2>6.7b ตัวอย่างเพิ่มเติม Detection Algorithm</h2>
-<div class="box box-yellow">
-  <strong>ข้อแตกต่างสำคัญระหว่าง Safety vs Detection:</strong><br>
-  <table style="margin:8px 0">
-    <tr><th>หัวข้อ</th><th>Safety Algorithm</th><th>Detection Algorithm</th></tr>
-    <tr><td>ใช้เมื่อ</td><td>ก่อนให้ทรัพยากร (ป้องกัน)</td><td>ตรวจสอบว่าเกิด Deadlock แล้วหรือยัง</td></tr>
-    <tr><td>Matrix ที่ใช้</td><td>Need = Max−Alloc</td><td>Request = สิ่งที่ขออยู่ตอนนี้จริงๆ</td></tr>
-    <tr><td>Finish เริ่มต้น</td><td>false ทั้งหมด</td><td>true ถ้า Alloc=0, false ถ้า Alloc≠0</td></tr>
-    <tr><td>เปรียบกับ</td><td>เช็คว่ายังปลอดภัยอยู่</td><td>ตรวจจับหลังเกิดเหตุ</td></tr>
+
+<!-- Example 2: No deadlock -->
+<div class="example-box">
+  <div class="ex-title">ตัวอย่างที่ 2: 5 Process, 3 ทรัพยากร (A,B,C) — ไม่มี Deadlock</div>
+
+  <div style="font-weight:700;color:#ffce54;margin-bottom:6px">① ตารางข้อมูลเริ่มต้น (Available = [0, 0, 0])</div>
+  <table>
+    <tr><th>Process</th><th>Alloc A B C</th><th>Request A B C</th><th>Finish เริ่มต้น</th></tr>
+    <tr><td><strong>P0</strong></td><td>0  1  0</td><td>0  0  0</td><td style="color:#fc6e51">false (Alloc≠0)</td></tr>
+    <tr><td><strong>P1</strong></td><td>2  0  0</td><td>2  0  2</td><td style="color:#fc6e51">false (Alloc≠0)</td></tr>
+    <tr><td><strong>P2</strong></td><td>3  0  3</td><td>0  0  0</td><td style="color:#fc6e51">false (Alloc≠0)</td></tr>
+    <tr><td><strong>P3</strong></td><td>2  1  1</td><td>1  0  0</td><td style="color:#fc6e51">false (Alloc≠0)</td></tr>
+    <tr><td><strong>P4</strong></td><td>0  0  2</td><td>0  0  2</td><td style="color:#fc6e51">false (Alloc≠0)</td></tr>
   </table>
+
+  <div style="font-weight:700;color:#ffce54;margin:10px 0 6px">② Trace ทีละรอบ (Work เริ่ม = [0,0,0])</div>
+  <table>
+    <tr><th>รอบ</th><th>ลอง P</th><th>Request</th><th>Work</th><th>ผ่าน?</th><th>Work ใหม่</th><th>Finish</th></tr>
+    <tr>
+      <td>1</td><td><strong>P0</strong></td><td>[0,0,0]</td><td>[0,0,0]</td>
+      <td style="color:#48cfad">✓ ทุก type</td>
+      <td>[0+0, 0+1, 0+0] = <strong>[0,1,0]</strong></td>
+      <td style="color:#48cfad">true</td>
+    </tr>
+    <tr>
+      <td>2</td><td>P1</td><td>[2,0,2]</td><td>[0,1,0]</td>
+      <td style="color:#fc6e51">A: 2&gt;0 ✗</td><td>—</td><td>false</td>
+    </tr>
+    <tr>
+      <td>2</td><td><strong>P2</strong></td><td>[0,0,0]</td><td>[0,1,0]</td>
+      <td style="color:#48cfad">✓ ทุก type</td>
+      <td>[0+3, 1+0, 0+3] = <strong>[3,1,3]</strong></td>
+      <td style="color:#48cfad">true</td>
+    </tr>
+    <tr>
+      <td>3</td><td><strong>P3</strong></td><td>[1,0,0]</td><td>[3,1,3]</td>
+      <td style="color:#48cfad">✓ ทุก type</td>
+      <td>[3+2, 1+1, 3+1] = <strong>[5,2,4]</strong></td>
+      <td style="color:#48cfad">true</td>
+    </tr>
+    <tr>
+      <td>4</td><td><strong>P4</strong></td><td>[0,0,2]</td><td>[5,2,4]</td>
+      <td style="color:#48cfad">✓ ทุก type</td>
+      <td>[5+0, 2+0, 4+2] = <strong>[5,2,6]</strong></td>
+      <td style="color:#48cfad">true</td>
+    </tr>
+    <tr>
+      <td>5</td><td><strong>P1</strong></td><td>[2,0,2]</td><td>[5,2,6]</td>
+      <td style="color:#48cfad">✓ ทุก type</td>
+      <td>[5+2, 2+0, 6+0] = <strong>[7,2,6]</strong></td>
+      <td style="color:#48cfad">true</td>
+    </tr>
+  </table>
+
+  <div style="font-weight:700;color:#ffce54;margin:10px 0 6px">③ ผลสุดท้าย</div>
+  <svg viewBox="0 0 560 70" style="background:#0d1015;border-radius:6px;width:100%;display:block;margin-bottom:8px" xmlns="http://www.w3.org/2000/svg">
+    <rect x="8"   y="8" width="96" height="54" rx="5" fill="#112b1e" stroke="#48cfad" stroke-width="2"/>
+    <text x="56"  y="30" text-anchor="middle" fill="#48cfad" font-size="13" font-family="sans-serif" font-weight="bold">P0 ✅</text>
+    <text x="56"  y="54" text-anchor="middle" fill="#9fa8b3" font-size="9"  font-family="sans-serif">true (รอบ 1)</text>
+    <rect x="114" y="8" width="96" height="54" rx="5" fill="#112b1e" stroke="#48cfad" stroke-width="2"/>
+    <text x="162" y="30" text-anchor="middle" fill="#48cfad" font-size="13" font-family="sans-serif" font-weight="bold">P1 ✅</text>
+    <text x="162" y="54" text-anchor="middle" fill="#9fa8b3" font-size="9"  font-family="sans-serif">true (รอบ 5)</text>
+    <rect x="220" y="8" width="96" height="54" rx="5" fill="#112b1e" stroke="#48cfad" stroke-width="2"/>
+    <text x="268" y="30" text-anchor="middle" fill="#48cfad" font-size="13" font-family="sans-serif" font-weight="bold">P2 ✅</text>
+    <text x="268" y="54" text-anchor="middle" fill="#9fa8b3" font-size="9"  font-family="sans-serif">true (รอบ 2)</text>
+    <rect x="326" y="8" width="96" height="54" rx="5" fill="#112b1e" stroke="#48cfad" stroke-width="2"/>
+    <text x="374" y="30" text-anchor="middle" fill="#48cfad" font-size="13" font-family="sans-serif" font-weight="bold">P3 ✅</text>
+    <text x="374" y="54" text-anchor="middle" fill="#9fa8b3" font-size="9"  font-family="sans-serif">true (รอบ 3)</text>
+    <rect x="432" y="8" width="120" height="54" rx="5" fill="#112b1e" stroke="#48cfad" stroke-width="2"/>
+    <text x="492" y="30" text-anchor="middle" fill="#48cfad" font-size="13" font-family="sans-serif" font-weight="bold">P4 ✅</text>
+    <text x="492" y="54" text-anchor="middle" fill="#9fa8b3" font-size="9"  font-family="sans-serif">true (รอบ 4)</text>
+  </svg>
+  <div class="box box-green" style="margin:0">✅ <strong>ไม่มี Deadlock</strong> — Finish ทุกตัว = true | ลำดับที่เสร็จ: P0 → P2 → P3 → P4 → P1</div>
 </div>
 
-<div class="example-box">
-  <div class="ex-title">ตัวอย่างที่ 2: 5 กระบวนการ 3 ทรัพยากร</div>
-  <p>Available = [0, 0, 0]</p>
+<!-- Example 3: Partial deadlock -->
+<div class="example-box" style="margin-top:14px">
+  <div class="ex-title">ตัวอย่างที่ 3: 5 Process — Deadlock บางส่วน (ที่นิยมออกสอบ!)</div>
+
+  <div style="font-weight:700;color:#ffce54;margin-bottom:6px">① ตารางข้อมูลเริ่มต้น (Available = [0, 0, 0])</div>
   <table>
-    <tr><th>P</th><th>Alloc A B C</th><th>Request A B C</th><th>Finish เริ่มต้น</th></tr>
-    <tr><td>P0</td><td>0 1 0</td><td>0 0 0</td><td>false (Alloc≠0)</td></tr>
-    <tr><td>P1</td><td>2 0 0</td><td>2 0 2</td><td>false (Alloc≠0)</td></tr>
-    <tr><td>P2</td><td>3 0 3</td><td>0 0 0</td><td>false (Alloc≠0)</td></tr>
-    <tr><td>P3</td><td>2 1 1</td><td>1 0 0</td><td>false (Alloc≠0)</td></tr>
-    <tr><td>P4</td><td>0 0 2</td><td>0 0 2</td><td>false (Alloc≠0)</td></tr>
+    <tr><th>Process</th><th>Alloc A B C</th><th>Request A B C</th><th>Finish เริ่มต้น</th><th>เหตุผล</th></tr>
+    <tr><td><strong>P0</strong></td><td style="color:#48cfad">0  0  0</td><td>0  0  0</td>
+        <td style="color:#48cfad"><strong>true</strong></td>
+        <td style="color:#48cfad">Alloc = 0 ทั้งหมด → ข้ามได้เลย</td></tr>
+    <tr><td><strong>P1</strong></td><td>1  0  1</td><td>0  1  0</td>
+        <td style="color:#fc6e51">false</td><td style="color:#9fa8b3">Alloc≠0</td></tr>
+    <tr><td><strong>P2</strong></td><td>0  1  0</td><td>1  0  0</td>
+        <td style="color:#fc6e51">false</td><td style="color:#9fa8b3">Alloc≠0</td></tr>
+    <tr><td><strong>P3</strong></td><td>0  0  1</td><td>0  1  0</td>
+        <td style="color:#fc6e51">false</td><td style="color:#9fa8b3">Alloc≠0</td></tr>
+    <tr><td><strong>P4</strong></td><td>0  1  0</td><td>0  0  1</td>
+        <td style="color:#fc6e51">false</td><td style="color:#9fa8b3">Alloc≠0</td></tr>
   </table>
-  <p><strong>Work = [0,0,0]</strong></p>
-  <p>P0: Request=[0,0,0] ≤ [0,0,0] ✓ → Finish[P0]=true, Work=[0+0,0+1,0+0]=[0,1,0]<br>
-  P1: Request=[2,0,2] ≤ [0,1,0]? A:2>0 ✗ข้าม<br>
-  P2: Request=[0,0,0] ≤ [0,1,0] ✓ → Finish[P2]=true, Work=[0+3,1+0,0+3]=[3,1,3]<br>
-  P3: Request=[1,0,0] ≤ [3,1,3] ✓ → Finish[P3]=true, Work=[3+2,1+1,3+1]=[5,2,4]<br>
-  P4: Request=[0,0,2] ≤ [5,2,4] ✓ → Finish[P4]=true, Work=[5+0,2+0,4+2]=[5,2,6]<br>
-  P1: Request=[2,0,2] ≤ [5,2,6] ✓ → Finish[P1]=true</p>
-  <p>✅ <strong>ไม่มี Deadlock! ทุกกระบวนการ Finish=true</strong></p>
+
+  <div style="font-weight:700;color:#ffce54;margin:10px 0 6px">② Trace ทีละรอบ (Work เริ่ม = [0,0,0])</div>
+  <table>
+    <tr><th>รอบ</th><th>ลอง P</th><th>Request</th><th>Work</th><th>ผ่าน?</th><th>Work ใหม่</th><th>Finish</th></tr>
+    <tr style="background:#1a2520">
+      <td>—</td><td><em>P0</em></td><td>[0,0,0]</td><td>—</td>
+      <td style="color:#48cfad">ข้ามได้เลย (Finish=true แล้ว)</td><td>—</td>
+      <td style="color:#48cfad">true (เดิม)</td>
+    </tr>
+    <tr>
+      <td>1</td><td>P1</td><td>[0,1,0]</td><td>[0,0,0]</td>
+      <td style="color:#fc6e51">B: 1&gt;0 ✗</td><td>—</td><td>false</td>
+    </tr>
+    <tr>
+      <td>1</td><td>P2</td><td>[1,0,0]</td><td>[0,0,0]</td>
+      <td style="color:#fc6e51">A: 1&gt;0 ✗</td><td>—</td><td>false</td>
+    </tr>
+    <tr>
+      <td>1</td><td>P3</td><td>[0,1,0]</td><td>[0,0,0]</td>
+      <td style="color:#fc6e51">B: 1&gt;0 ✗</td><td>—</td><td>false</td>
+    </tr>
+    <tr>
+      <td>1</td><td>P4</td><td>[0,0,1]</td><td>[0,0,0]</td>
+      <td style="color:#fc6e51">C: 1&gt;0 ✗</td><td>—</td><td>false</td>
+    </tr>
+    <tr style="background:#2b1111">
+      <td colspan="7" style="text-align:center;color:#fc6e51;font-weight:700">
+        ❌ ไม่มีใครผ่านได้เลยในรอบนี้ → หยุด</td>
+    </tr>
+  </table>
+
+  <div style="font-weight:700;color:#ffce54;margin:10px 0 6px">③ ผลสุดท้าย</div>
+  <svg viewBox="0 0 560 70" style="background:#0d1015;border-radius:6px;width:100%;display:block;margin-bottom:8px" xmlns="http://www.w3.org/2000/svg">
+    <rect x="8"   y="8" width="100" height="54" rx="5" fill="#112b1e" stroke="#48cfad" stroke-width="2"/>
+    <text x="58"  y="30" text-anchor="middle" fill="#48cfad" font-size="13" font-family="sans-serif" font-weight="bold">P0 ✅</text>
+    <text x="58"  y="54" text-anchor="middle" fill="#9fa8b3" font-size="9"  font-family="sans-serif">true (ตั้งต้น)</text>
+    <rect x="118" y="8" width="100" height="54" rx="5" fill="#2b1111" stroke="#fc6e51" stroke-width="2.5"/>
+    <text x="168" y="30" text-anchor="middle" fill="#fc6e51" font-size="13" font-family="sans-serif" font-weight="bold">P1 🔴</text>
+    <text x="168" y="54" text-anchor="middle" fill="#fc6e51" font-size="9"  font-family="sans-serif">DEADLOCK</text>
+    <rect x="228" y="8" width="100" height="54" rx="5" fill="#2b1111" stroke="#fc6e51" stroke-width="2.5"/>
+    <text x="278" y="30" text-anchor="middle" fill="#fc6e51" font-size="13" font-family="sans-serif" font-weight="bold">P2 🔴</text>
+    <text x="278" y="54" text-anchor="middle" fill="#fc6e51" font-size="9"  font-family="sans-serif">DEADLOCK</text>
+    <rect x="338" y="8" width="100" height="54" rx="5" fill="#2b1111" stroke="#fc6e51" stroke-width="2.5"/>
+    <text x="388" y="30" text-anchor="middle" fill="#fc6e51" font-size="13" font-family="sans-serif" font-weight="bold">P3 🔴</text>
+    <text x="388" y="54" text-anchor="middle" fill="#fc6e51" font-size="9"  font-family="sans-serif">DEADLOCK</text>
+    <rect x="448" y="8" width="104" height="54" rx="5" fill="#2b1111" stroke="#fc6e51" stroke-width="2.5"/>
+    <text x="500" y="30" text-anchor="middle" fill="#fc6e51" font-size="13" font-family="sans-serif" font-weight="bold">P4 🔴</text>
+    <text x="500" y="54" text-anchor="middle" fill="#fc6e51" font-size="9"  font-family="sans-serif">DEADLOCK</text>
+  </svg>
+  <div class="box box-red" style="margin:0">
+    🔴 <strong>P1, P2, P3, P4 ทั้ง 4 ตัวติด Deadlock</strong><br>
+    ทุกคนรอกันเป็นวงกลม: P1 รอ B ที่ P2 หรือ P4 ถือ, P2 รอ A ที่ P1 ถือ, P3 รอ B, P4 รอ C ที่ P3 ถือ<br>
+    Available = [0,0,0] ตั้งแต่แรก ไม่มีตัวใดเริ่มคืนให้ได้ → ระบบล็อกทั้งหมด
+  </div>
 </div>
 
-<div class="example-box">
-  <div class="ex-title">ตัวอย่างที่ 3: มีบางกระบวนการที่ติด Deadlock</div>
-  <p>Available = [1, 0, 0]</p>
-  <table>
-    <tr><th>P</th><th>Alloc A B C</th><th>Request A B C</th><th>Finish เริ่มต้น</th></tr>
-    <tr><td>P0</td><td>0 0 0</td><td>0 0 0</td><td style="color:#48cfad">true (Alloc=0 ทั้งหมด)</td></tr>
-    <tr><td>P1</td><td>1 0 1</td><td>0 1 0</td><td>false</td></tr>
-    <tr><td>P2</td><td>0 1 0</td><td>1 0 0</td><td>false</td></tr>
-    <tr><td>P3</td><td>0 0 1</td><td>0 0 1</td><td>false</td></tr>
-  </table>
-  <p>Work=[1,0,0]. (P0 ข้ามได้เพราะ Finish=true แล้ว)<br>
-  P1: Request=[0,1,0] → B:1>0 ✗<br>
-  P2: Request=[1,0,0] ≤ [1,0,0] ✓ → Finish[P2]=true, Work=[1+0,0+1,0+0]=[1,1,0]<br>
-  P1: Request=[0,1,0] ≤ [1,1,0] ✓ → Finish[P1]=true, Work=[1+1,1+0,0+1]=[2,1,1]<br>
-  P3: Request=[0,0,1] ≤ [2,1,1] ✓ → Finish[P3]=true</p>
-  <p>✅ <strong>ไม่มี Deadlock</strong></p>
+<!-- Key differences callout -->
+<div class="box box-purple" style="margin-top:14px">
+  <strong>🎯 จุดที่ต้องระวังในข้อสอบ Detection Algorithm:</strong><br>
+  1. <strong>ใช้ Request ไม่ใช่ Need</strong> — Request คือ "ขออยู่ตอนนี้จริงๆ" ไม่ใช่ยอดสูงสุดที่อาจขอ<br>
+  2. <strong>Finish เริ่มต้นต่างกัน</strong> — ถ้า Alloc=0 ให้ true เลย (ข้ามได้ทันที)<br>
+  3. <strong>ถ้า Request[i]=[0,0,0]</strong> — Process นั้นไม่ได้รออะไรอยู่เลย → ผ่านทันที (Request ≤ Work เสมอ)<br>
+  4. <strong>Process ที่ Finish=false คือผู้ติด Deadlock</strong> — ระบุชื่อได้ทันที
 </div>
 </div>
 
