@@ -296,6 +296,61 @@ button.run-btn.secondary{background:#2a3a52}
   <tr><td>4</td><td><strong>Circular Wait</strong></td><td>มีวงกลมของกระบวนการที่รอกัน: P1→P2→P3→P1</td><td>กำหนดลำดับเลขให้ทรัพยากร ขอได้เฉพาะเลขที่สูงกว่า</td></tr>
 </table>
 <div class="warn">⚠ จำให้ขึ้นใจ: ต้องมีครบ 4 ข้อพร้อมกัน ถึงจะเกิด Deadlock ขาดข้อใดข้อหนึ่งก็ไม่เกิด</div>
+
+<!-- Scenario walkthrough -->
+<div style="background:#1a2235;border:1.5px solid #ffce54;border-radius:8px;padding:12px 16px;margin-top:12px">
+  <div style="color:#ffce54;font-weight:700;font-size:13px;margin-bottom:10px">🔍 ตัวอย่าง: ระบุว่าครบ 4 เงื่อนไขไหม?</div>
+  <div style="font-size:12px;color:#c9d1e0;margin-bottom:8px">
+    <strong>สถานการณ์:</strong> P1 ถือ Printer อยู่ และรอ Scanner. P2 ถือ Scanner อยู่ และรอ Printer
+  </div>
+  <div style="display:grid;grid-template-columns:auto 1fr 1fr;gap:5px 12px;font-size:12px;align-items:start">
+    <span style="color:#ffce54;font-weight:700">#</span>
+    <span style="color:#ffce54;font-weight:700">เงื่อนไข</span>
+    <span style="color:#ffce54;font-weight:700">ในสถานการณ์นี้</span>
+
+    <span style="color:#48cfad">1</span>
+    <span style="color:#c9d1e0">Mutual Exclusion</span>
+    <span style="color:#48cfad">✅ Printer/Scanner ใช้ได้ครั้งละ 1 คน</span>
+
+    <span style="color:#48cfad">2</span>
+    <span style="color:#c9d1e0">Hold and Wait</span>
+    <span style="color:#48cfad">✅ P1 ถือ Printer อยู่ แต่ยังรอ Scanner</span>
+
+    <span style="color:#48cfad">3</span>
+    <span style="color:#c9d1e0">No Preemption</span>
+    <span style="color:#48cfad">✅ ไม่มีใครบังคับดึง Printer/Scanner คืนได้</span>
+
+    <span style="color:#48cfad">4</span>
+    <span style="color:#c9d1e0">Circular Wait</span>
+    <span style="color:#48cfad">✅ P1→รอ Scanner→ P2→รอ Printer→ P1 (วงกลม)</span>
+  </div>
+  <div style="margin-top:8px;padding:6px 10px;background:#2a2000;border-radius:4px;font-size:12px;color:#ffce54">
+    ครบ 4 ข้อ → <strong>เกิด Deadlock แน่นอน!</strong>
+  </div>
+</div>
+
+<!-- Prevention explanation -->
+<div style="background:#1a2235;border:1.5px solid #a78bfa;border-radius:8px;padding:12px 16px;margin-top:10px">
+  <div style="color:#a78bfa;font-weight:700;font-size:13px;margin-bottom:10px">🛡 วิธีทำลายแต่ละเงื่อนไข — เพื่อป้องกัน Deadlock</div>
+  <div style="display:flex;flex-direction:column;gap:8px;font-size:12px">
+    <div style="background:#141925;border-radius:5px;padding:8px 12px">
+      <span style="color:#ff6b6b;font-weight:700">ทำลาย Mutual Exclusion:</span>
+      <span style="color:#c9d1e0"> ทำให้ทรัพยากรแชร์ได้ เช่น Read-only file หลายคนเปิดพร้อมกันได้ — แต่ทำไม่ได้กับ Printer, RAM เพราะต้อง exclusive จริงๆ → ใช้ได้น้อยมาก</span>
+    </div>
+    <div style="background:#141925;border-radius:5px;padding:8px 12px">
+      <span style="color:#ffce54;font-weight:700">ทำลาย Hold and Wait:</span>
+      <span style="color:#c9d1e0"> บังคับให้ Process ขอทรัพยากรทั้งหมดตั้งแต่แรกก่อนเริ่ม ถ้าไม่ได้ครบ → ไม่ให้เลย / หรือ Process ต้องปล่อยของทั้งหมดก่อนจะขอเพิ่ม — ข้อเสีย: อาจรอนานและ Resource ถูกกักไว้โดยไม่ใช้</span>
+    </div>
+    <div style="background:#141925;border-radius:5px;padding:8px 12px">
+      <span style="color:#48cfad;font-weight:700">ทำลาย No Preemption:</span>
+      <span style="color:#c9d1e0"> OS บังคับดึงทรัพยากรคืนได้เลย ถ้า Process ที่ถือทรัพยากรต้องรอ → OS ดึงคืนและให้ Process อื่นก่อน — ใช้ได้กับ CPU, Memory แต่ไม่เหมาะกับ Printer (งานพิมพ์ค้างกลางคัน)</span>
+    </div>
+    <div style="background:#141925;border-radius:5px;padding:8px 12px">
+      <span style="color:#4a9eff;font-weight:700">ทำลาย Circular Wait (ใช้บ่อยที่สุด):</span>
+      <span style="color:#c9d1e0"> กำหนดลำดับเลขให้ทรัพยากรทุกชนิด เช่น Printer=1, Scanner=2, Tape=3 — Process ขอได้เฉพาะเลขที่สูงกว่าที่ถืออยู่ → วงกลมเกิดไม่ได้ เพราะทุก Process ต้องขอในทิศทางเดียวกัน</span>
+    </div>
+  </div>
+</div>
 </div>
 
 <!-- 6.4 RAG -->
@@ -1657,19 +1712,72 @@ button.run-btn.secondary{background:#2a3a52}
 <div class="card">
 <h2>6.8 Recovery — การกู้คืนจาก Deadlock</h2>
 <p>เมื่อตรวจพบ Deadlock มี 2 วิธีในการแก้ไข:</p>
-<h3>วิธีที่ 1: Process Termination (ยุติกระบวนการ)</h3>
-<table>
-  <tr><th>แบบ</th><th>วิธี</th><th>ข้อดี</th><th>ข้อเสีย</th></tr>
-  <tr><td><strong>ยุติทั้งหมด</strong></td><td>Kill ทุกกระบวนการที่ติด Deadlock ทันที</td><td>ง่าย รวดเร็ว</td><td>สูญเสียงานที่ทำไปแล้วทั้งหมด</td></tr>
-  <tr><td><strong>ยุติทีละตัว</strong></td><td>Kill ทีละกระบวนการ → รัน Detection ใหม่ → ถ้าหาย Deadlock หยุด</td><td>สูญเสียน้อยกว่า</td><td>ใช้เวลานาน (รัน Detection ซ้ำหลายรอบ)</td></tr>
-</table>
-<h3>วิธีที่ 2: Resource Preemption (บังคับดึงทรัพยากรคืน)</h3>
-<p>เลือก "เหยื่อ" (Victim Process) แล้วบังคับดึงทรัพยากรที่ถืออยู่คืน มี 3 ประเด็นที่ต้องพิจารณา:</p>
-<ul>
-  <li><strong>เลือกเหยื่อ:</strong> เลือกกระบวนการที่สูญเสียน้อยที่สุด (เช่น ทำงานไปน้อยที่สุด)</li>
-  <li><strong>Rollback:</strong> ย้อนกระบวนการเหยื่อไปยัง safe checkpoint</li>
-  <li><strong>Starvation:</strong> ต้องมีกลไกป้องกันไม่ให้กระบวนการเดิมถูกเลือกเป็นเหยื่อซ้ำแล้วซ้ำเล่า</li>
-</ul>
+
+<!-- Method 1: Process Termination -->
+<div style="background:#1a2235;border:1.5px solid #ff6b6b;border-radius:8px;padding:12px 16px;margin-bottom:10px">
+  <div style="color:#ff6b6b;font-weight:700;font-size:13px;margin-bottom:10px">วิธีที่ 1: Process Termination — ยุติกระบวนการ</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12px;margin-bottom:10px">
+    <div style="background:#2a0a0a;border-radius:6px;padding:10px 12px">
+      <div style="color:#ff6b6b;font-weight:700;margin-bottom:4px">แบบที่ 1: Kill ทั้งหมดพร้อมกัน</div>
+      <div style="color:#c9d1e0;line-height:1.7">Kill ทุก Process ที่ติด Deadlock ในคราวเดียว<br>
+      <span style="color:#48cfad">✅ ง่าย รวดเร็ว Deadlock หายทันที</span><br>
+      <span style="color:#ff6b6b">❌ สูญเสียงานของทุก Process — คุ้มหรือไม่?</span></div>
+    </div>
+    <div style="background:#2a1a0a;border-radius:6px;padding:10px 12px">
+      <div style="color:#ffce54;font-weight:700;margin-bottom:4px">แบบที่ 2: Kill ทีละตัว</div>
+      <div style="color:#c9d1e0;line-height:1.7">Kill 1 ตัว → รัน Detection ใหม่ → ถ้า Deadlock หาย: หยุด ถ้ายังมี: Kill อีกตัว<br>
+      <span style="color:#48cfad">✅ สูญเสียน้อยที่สุด</span><br>
+      <span style="color:#ff6b6b">❌ ช้า — ต้องรัน Detection ซ้ำหลายรอบ</span></div>
+    </div>
+  </div>
+  <div style="background:#141925;border-radius:6px;padding:10px 12px;font-size:12px">
+    <div style="color:#ffce54;font-weight:700;margin-bottom:6px">🎯 เกณฑ์เลือกว่าจะ Kill Process ไหนก่อน</div>
+    <div style="display:grid;grid-template-columns:auto 1fr;gap:4px 10px;font-size:11px">
+      <span style="color:#a78bfa">1.</span><span style="color:#c9d1e0">Priority ต่ำ — Process ที่ไม่สำคัญ Kill ก่อน</span>
+      <span style="color:#a78bfa">2.</span><span style="color:#c9d1e0">ทำงานไปน้อยที่สุด — เสียดายน้อยกว่า</span>
+      <span style="color:#a78bfa">3.</span><span style="color:#c9d1e0">ใช้ Resources น้อย — คืนได้เยอะ แต่ overhead น้อย</span>
+      <span style="color:#a78bfa">4.</span><span style="color:#c9d1e0">ยังเหลืองานเยอะ — จะต้องรันนานอีกมาก ตัดทิ้งเสียดายน้อยกว่า</span>
+      <span style="color:#a78bfa">5.</span><span style="color:#c9d1e0">Interactive หรือ Batch — Batch job Kill ง่ายกว่า เพราะ restart ใหม่ได้</span>
+    </div>
+  </div>
+</div>
+
+<!-- Method 2: Resource Preemption -->
+<div style="background:#1a2235;border:1.5px solid #a78bfa;border-radius:8px;padding:12px 16px;margin-bottom:10px">
+  <div style="color:#a78bfa;font-weight:700;font-size:13px;margin-bottom:10px">วิธีที่ 2: Resource Preemption — บังคับดึงทรัพยากรคืน</div>
+  <p style="font-size:12px;color:#c9d1e0;margin:0 0 10px">เลือก "เหยื่อ" (Victim Process) แล้วบังคับดึงทรัพยากรที่ถืออยู่คืน ให้ Process อื่นได้ใช้แทน</p>
+
+  <div style="display:flex;flex-direction:column;gap:8px;font-size:12px">
+    <div style="background:#141925;border-radius:5px;padding:8px 12px">
+      <div style="color:#4a9eff;font-weight:700;margin-bottom:3px">① เลือกเหยื่อ (Victim Selection)</div>
+      <div style="color:#c9d1e0">เลือก Process ที่ถ้า Kill/Preempt แล้วสูญเสียน้อยที่สุด เช่น ทำงานไปน้อย, Resource ที่ถืออยู่น้อย, Priority ต่ำ</div>
+    </div>
+    <div style="background:#141925;border-radius:5px;padding:8px 12px">
+      <div style="color:#48cfad;font-weight:700;margin-bottom:3px">② Rollback — ย้อนกลับ</div>
+      <div style="color:#c9d1e0">หลังดึงทรัพยากรคืน Process เหยื่อต้องถูก Roll back ไปยัง <strong>Safe Checkpoint</strong> ที่บันทึกไว้ก่อนหน้า ไม่ใช่ Kill ทิ้งทั้งหมด<br>
+      <span style="color:#7a8a9e;font-size:11px">ตัวอย่าง: Process กำลัง compile ไฟล์ — rollback ไปจุดที่ compile ครึ่งทาง แล้วทำต่อทีหลัง</span></div>
+    </div>
+    <div style="background:#2a0a2a;border-radius:5px;padding:8px 12px">
+      <div style="color:#ff6b6b;font-weight:700;margin-bottom:3px">③ Starvation — ปัญหาการถูกเลือกซ้ำ</div>
+      <div style="color:#c9d1e0">ถ้าใช้เกณฑ์เดิมซ้ำๆ อาจเลือก Process เดิมเป็นเหยื่อทุกครั้ง → Process นั้นไม่มีวันเสร็จ<br>
+      <span style="color:#ffce54">แก้: นับ "จำนวนครั้งที่ถูกเลือก" ถ้าถูกเลือกมากเกินไป → เพิ่ม priority ให้ไม่ถูกเลือกอีก</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- Worked example -->
+<div style="background:#1a2235;border:1.5px solid #ffce54;border-radius:8px;padding:12px 16px;margin-bottom:10px">
+  <div style="color:#ffce54;font-weight:700;font-size:13px;margin-bottom:10px">📌 ตัวอย่าง: ระบบติด Deadlock จะ Recover ยังไง?</div>
+  <div style="font-size:12px;color:#c9d1e0;line-height:1.8">
+    <strong>สถานการณ์:</strong> P1 ถือ Printer, รอ Scanner. P2 ถือ Scanner, รอ Tape. P3 ถือ Tape, รอ Printer<br>
+    → Circular Wait: P1→P2→P3→P1 = <span style="color:#ff6b6b">Deadlock!</span><br><br>
+    <strong style="color:#4a9eff">วิธี Process Termination (Kill ทีละตัว):</strong><br>
+    P3 ทำงานไปน้อยสุด → Kill P3 → P3 คืน Tape → P2 ได้ Tape → P2 เสร็จ → P2 คืน Scanner → P1 ได้ Scanner → P1 เสร็จ ✅<br>
+    Kill แค่ 1 Process ก็หาย Deadlock<br><br>
+    <strong style="color:#a78bfa">วิธี Resource Preemption:</strong><br>
+    ดึง Tape คืนจาก P3 (เลือก P3 เพราะทำงานไปน้อยสุด) → P3 Rollback → P2 ได้ Tape → chain คลาย ✅
+  </div>
+</div>
 
 <div class="tool-area">
   <h3>📝 โจทย์ฝึกหัด (สไตล์ Homework)</h3>
@@ -2007,11 +2115,53 @@ button.run-btn.secondary{background:#2a3a52}
 <div class="card">
 <h2>7.2 Swapping — สลับกระบวนการเข้าออก RAM</h2>
 <p>เมื่อ RAM เต็ม OS จะย้ายกระบวนการที่ "รอ" หรือ "ไม่ active" ไปเก็บไว้ที่ฮาร์ดดิสก์ชั่วคราว เรียกว่า <strong>Swap Out</strong> และดึงกลับมาเมื่อต้องการเรียก <strong>Swap In</strong></p>
-<div class="box box-yellow">
-  <strong>ปัญหาของ Swapping แบบเต็มกระบวนการ:</strong><br>
-  ถ้ากระบวนการขนาด 100 MB ต้อง swap ที่ความเร็ว 50 MB/s → ใช้เวลา 2 วินาที แต่กระบวนการทั่วไปรันได้แค่ไม่กี่ ms<br>
-  → เสียเวลา Swap มากกว่าเวลาทำงานจริง = ไม่คุ้ม<br>
-  ระบบทันสมัยจึงใช้ Virtual Memory (Demand Paging) แทน
+
+<!-- Visual flow -->
+<div style="background:#1a2235;border-radius:8px;padding:12px 16px;margin-bottom:10px">
+  <div style="display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;font-size:12px;text-align:center">
+    <div style="background:#1e3a1e;border:1.5px solid #48cfad;border-radius:6px;padding:8px 14px;min-width:90px">
+      <div style="color:#48cfad;font-weight:700">RAM</div>
+      <div style="color:#c9d1e0;font-size:11px">P1 (running)<br>P2 (waiting)</div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#ffce54;font-size:11px">
+      <span>Swap Out P2 →</span>
+      <span style="font-size:18px">⇄</span>
+      <span>← Swap In P2</span>
+    </div>
+    <div style="background:#1a2a3a;border:1.5px solid #4a9eff;border-radius:6px;padding:8px 14px;min-width:90px">
+      <div style="color:#4a9eff;font-weight:700">Disk (Swap Area)</div>
+      <div style="color:#c9d1e0;font-size:11px">P2 (saved)<br>P3 (saved)</div>
+    </div>
+  </div>
+</div>
+
+<!-- Step by step -->
+<div style="background:#141925;border:1.5px solid #a78bfa;border-radius:8px;padding:12px 16px;margin-bottom:10px">
+  <div style="color:#a78bfa;font-weight:700;font-size:13px;margin-bottom:8px">Step-by-step: RAM เต็ม → Swap</div>
+  <div style="display:grid;grid-template-columns:auto 1fr;gap:5px 12px;font-size:12px">
+    <span style="color:#7a8a9e">Step 1</span><span style="color:#c9d1e0">OS ตรวจพบว่า RAM เต็ม มี Process ใหม่ต้องการ RAM</span>
+    <span style="color:#7a8a9e">Step 2</span><span style="color:#c9d1e0">OS เลือก Process ที่ <strong>ไม่ active / รออยู่</strong> (เช่น P2 กำลัง Blocked รอ I/O)</span>
+    <span style="color:#7a8a9e">Step 3</span><span style="color:#c9d1e0"><strong style="color:#ff6b6b">Swap Out:</strong> คัดลอก P2 ทั้งหมด (code + data + stack) ไปเก็บที่ Disk → RAM ว่าง</span>
+    <span style="color:#7a8a9e">Step 4</span><span style="color:#c9d1e0">Process ใหม่โหลดเข้า RAM ทำงานได้</span>
+    <span style="color:#7a8a9e">Step 5</span><span style="color:#c9d1e0">เมื่อ P2 พร้อมทำงานอีก → <strong style="color:#48cfad">Swap In:</strong> คัดลอก P2 กลับจาก Disk → RAM</span>
+  </div>
+</div>
+
+<!-- Performance problem -->
+<div style="background:#2a1500;border-left:4px solid #ffce54;border-radius:6px;padding:10px 14px;margin-bottom:10px;font-size:12px;line-height:1.8">
+  <strong style="color:#ffce54">⚠️ ปัญหาด้านประสิทธิภาพ — ทำไมถึงไม่ใช้แล้ว?</strong><br>
+  <span style="color:#c9d1e0">
+  กระบวนการขนาด <strong>100 MB</strong>, ความเร็ว Disk = <strong>50 MB/s</strong><br>
+  Swap Out: 100÷50 = <strong>2 วินาที</strong> | Swap In: อีก 2 วินาที = รวม <strong>4 วินาที</strong> ต่อ swap ครั้งเดียว<br>
+  แต่ CPU time quantum ทั่วไป = แค่ <strong>10–100 ms</strong><br>
+  → เสียเวลา Swap <span style="color:#ff6b6b">มากกว่าเวลาทำงานจริง 40–400 เท่า</span> = ไม่คุ้มเลย
+  </span>
+</div>
+
+<div style="background:#1e2a1e;border-left:4px solid #48cfad;border-radius:6px;padding:10px 14px;margin-bottom:10px;font-size:12px">
+  <strong style="color:#48cfad">✅ ทางออก: Virtual Memory (Demand Paging)</strong><br>
+  <span style="color:#c9d1e0">แทนที่จะ Swap ทั้ง Process (100 MB) → Swap เฉพาะ <strong>Page ที่ไม่ใช้</strong> (4 KB ต่อ page)<br>
+  → เวลา Swap ลดจาก วินาที เหลือแค่ millisecond → นี่คือเหตุผลที่ OS สมัยใหม่ใช้ Virtual Memory แทน</span>
 </div>
 </div>
 
@@ -3176,14 +3326,59 @@ Internal Fragmentation = (จำนวน Pages × Page Size) − Process Size<b
 <div class="card">
 <h2>8.1 Virtual Memory คืออะไร?</h2>
 <p>โดยปกติกระบวนการทั้งหมดต้องอยู่ใน RAM ก่อนจึงจะทำงานได้ แต่ <strong>Virtual Memory</strong> ทำให้กระบวนการที่มีขนาดใหญ่กว่า RAM สามารถทำงานได้ โดยเก็บเฉพาะ <strong>Page ที่กำลังใช้งาน</strong> ไว้ใน RAM ส่วนที่เหลือเก็บบน Disk</p>
-<div class="box box-green">
-  <strong>ข้อดี:</strong> รัน Process ได้มากขึ้น (Degree of Multiprogramming สูงขึ้น) แม้ RAM มีจำกัด<br>
-  <strong>ข้อเสีย:</strong> เกิด Page Fault → ต้องดึง Page จาก Disk → ช้ากว่าปกติ
+
+<!-- Analogy -->
+<div style="background:#1e2a1e;border-left:4px solid #48cfad;border-radius:6px;padding:10px 14px;margin-bottom:10px;font-size:12px;line-height:1.8">
+  <strong style="color:#48cfad">อุปมา:</strong> หนังสือในห้องสมุด<br>
+  RAM = โต๊ะทำงาน (วางได้แค่ 4 เล่ม)<br>
+  Disk = ชั้นหนังสือ (เก็บได้เป็นพัน)<br>
+  Virtual Memory = คุณไม่ต้องเอาหนังสือทุกเล่มมาวางโต๊ะตั้งแต่แรก — หยิบมาเฉพาะเล่มที่กำลังอ่าน ถ้าต้องการเล่มอื่นค่อยไปหยิบ (Page Fault)
 </div>
-<div class="box box-blue">
-  <strong>Page Table กับ Virtual Memory:</strong><br>
-  Valid bit = 1 → Page อยู่ใน RAM (ใช้งานได้ทันที)<br>
-  Valid bit = 0 → Page อยู่บน Disk → เกิด <strong>Page Fault</strong> ต้องดึงขึ้นมาก่อน
+
+<!-- Concrete example: process bigger than RAM -->
+<div style="background:#141925;border:1.5px solid #a78bfa;border-radius:8px;padding:12px 16px;margin-bottom:10px">
+  <div style="color:#a78bfa;font-weight:700;font-size:13px;margin-bottom:8px">🔢 ตัวอย่าง: Process 200 MB รันบน RAM 100 MB ได้ยังไง?</div>
+  <div style="font-size:12px;color:#c9d1e0;line-height:1.8">
+    Process ขนาด 200 MB ถูกแบ่งเป็น Page ขนาด 4 KB = <strong>51,200 pages</strong><br>
+    RAM 100 MB = เก็บได้แค่ <strong>25,600 pages</strong><br><br>
+    OS โหลดเฉพาะ Page ที่ต้องใช้ตอนนั้น เช่น code ที่กำลัง execute และ data ที่กำลัง access<br>
+    Page ที่ยังไม่ใช้ (เช่น error handler ที่ไม่เคย trigger) ไม่ถูกโหลดเลย<br><br>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;text-align:center;margin-top:6px">
+      <div style="background:#1e3a1e;border-radius:4px;padding:6px;font-size:11px">
+        <div style="color:#48cfad;font-weight:700">RAM (active pages)</div>
+        <div style="color:#c9d1e0">Page 0–100<br>Page 500–520<br><span style="color:#7a8a9e">...ที่กำลังใช้</span></div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:center;color:#ffce54;font-size:20px">⇄</div>
+      <div style="background:#1a2a3a;border-radius:4px;padding:6px;font-size:11px">
+        <div style="color:#4a9eff;font-weight:700">Disk (inactive pages)</div>
+        <div style="color:#c9d1e0">Page 101–499<br>Page 521–51199<br><span style="color:#7a8a9e">...รอถูกเรียก</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Multiprogramming benefit -->
+<div style="background:#141925;border:1.5px solid #ffce54;border-radius:8px;padding:12px 16px;margin-bottom:10px">
+  <div style="color:#ffce54;font-weight:700;font-size:13px;margin-bottom:8px">📈 ประโยชน์: รัน Process ได้มากขึ้น</div>
+  <div style="font-size:12px;color:#c9d1e0;line-height:1.8">
+    <strong>ไม่มี Virtual Memory:</strong> RAM 100 MB, Process แต่ละตัว 20 MB → รันได้แค่ <span style="color:#ff6b6b">5 Process</span><br>
+    <strong>มี Virtual Memory:</strong> Process แต่ละตัวอาจใช้ RAM จริงแค่ 5 MB ณ เวลานั้น → รันได้ถึง <span style="color:#48cfad">20 Process</span><br><br>
+    <span style="color:#7a8a9e">เพราะ process ส่วนใหญ่ไม่ได้ใช้ทุก page พร้อมกัน (Principle of Locality)</span>
+  </div>
+</div>
+
+<!-- Valid bit table -->
+<div class="box box-blue" style="font-size:12px">
+  <strong>Page Table กับ Virtual Memory — Valid bit:</strong>
+  <div style="margin-top:8px;display:grid;grid-template-columns:auto auto 1fr;gap:4px 12px;font-family:monospace;font-size:11px">
+    <span style="color:#ffce54">Valid bit</span><span style="color:#48cfad">= 1</span><span style="color:#c9d1e0">→ Page อยู่ใน RAM → ใช้งานได้ทันที (0 overhead)</span>
+    <span style="color:#ffce54">Valid bit</span><span style="color:#ff6b6b">= 0</span><span style="color:#c9d1e0">→ Page อยู่บน Disk → เกิด <strong>Page Fault</strong> → OS ต้องโหลดขึ้น RAM ก่อน</span>
+  </div>
+</div>
+
+<div class="box box-green">
+  <strong>ข้อดี:</strong> รัน Process ได้มากขึ้น (Degree of Multiprogramming สูงขึ้น) แม้ RAM มีจำกัด — Process ใหญ่กว่า RAM ก็รันได้<br>
+  <strong>ข้อเสีย:</strong> เกิด Page Fault → ต้องดึง Page จาก Disk → ช้ากว่าปกติมาก (Disk ช้ากว่า RAM ~100,000 เท่า)
 </div>
 </div>
 
@@ -4091,6 +4286,7 @@ Internal Fragmentation = (จำนวน Pages × Page Size) − Process Size<b
 <!-- 8.5 Frame Allocation -->
 <div class="card">
 <h2>8.5 Frame Allocation — จัดสรร Frame ให้กระบวนการต่างๆ</h2>
+<p style="font-size:13px;color:#c9d1e0;margin-bottom:12px">OS ต้องแบ่ง Frame (ช่องใน RAM) ให้แต่ละ Process — ถ้าให้น้อยเกินไป → Page Fault บ่อย → Thrashing; ถ้าให้เท่ากันหมด → Process เล็กได้เยอะเกิน Process ใหญ่ได้น้อยเกิน</p>
 
 <h3>วิธีที่ 1: Equal Allocation (แจกเท่ากัน)</h3>
 <div class="formula">Frame ต่อกระบวนการ = ⌊Total Free Frames ÷ จำนวนกระบวนการ⌋</div>
@@ -4098,7 +4294,10 @@ Internal Fragmentation = (จำนวน Pages × Page Size) − Process Size<b
   <div class="ex-title">ตัวอย่าง: Equal Allocation</div>
   <p>Free Frames = 93, กระบวนการ = 5 ตัว<br>
   แต่ละกระบวนการได้ = ⌊93÷5⌋ = <strong>18 frames</strong><br>
-  Frame ที่เหลือสำหรับ Page Fault = 93 − (5×18) = <strong>3 frames</strong></p>
+  Frame ที่เหลือ = 93 − (5×18) = <strong>3 frames</strong> (เก็บไว้สำรอง)</p>
+  <div style="margin-top:8px;padding:7px 10px;background:#2a1010;border-radius:5px;font-size:11px;color:#ffce54">
+    ⚠️ ปัญหา: P1 มีขนาด 2 pages ได้ 18 frames (เกินมาก!) ส่วน P5 มีขนาด 100 pages ได้แค่ 18 frames (น้อยเกิน) → ไม่ยุติธรรม
+  </div>
 </div>
 
 <h3>วิธีที่ 2: Proportional Allocation (แจกตามสัดส่วนขนาด)</h3>
@@ -4108,7 +4307,50 @@ Internal Fragmentation = (จำนวน Pages × Page Size) − Process Size<b
   <p>P1 มีขนาด 10 pages, P2 มีขนาด 127 pages. Free Frames = 62<br>
   Total size = 10+127 = 137<br>
   P1: ⌊(10/137) × 62⌋ = ⌊4.53⌋ = <strong>4 frames</strong><br>
-  P2: ⌊(127/137) × 62⌋ = ⌊57.47⌋ = <strong>57 frames</strong></p>
+  P2: ⌊(127/137) × 62⌋ = ⌊57.47⌋ = <strong>57 frames</strong><br>
+  รวม = 4+57 = 61 frames (เหลือ 1 สำรอง)</p>
+  <div style="margin-top:8px;padding:7px 10px;background:#1e2a1e;border-radius:5px;font-size:11px;color:#48cfad">
+    ✅ ยุติธรรมกว่า — Process ใหญ่ได้ frames เยอะกว่า Process เล็ก ตามสัดส่วนจริง
+  </div>
+</div>
+
+<!-- Comparison table -->
+<div style="background:#1a2235;border:1.5px solid #ffce54;border-radius:8px;padding:12px 16px;margin-top:4px;margin-bottom:12px">
+  <div style="color:#ffce54;font-weight:700;font-size:13px;margin-bottom:10px">📊 Equal vs Proportional — เปรียบเทียบ</div>
+  <table style="width:100%;border-collapse:collapse;font-size:12px">
+    <tr style="background:#252f40">
+      <th style="padding:6px 10px;text-align:left;color:#7a8a9e">เกณฑ์</th>
+      <th style="padding:6px 10px;text-align:center;color:#4a9eff">Equal</th>
+      <th style="padding:6px 10px;text-align:center;color:#48cfad">Proportional</th>
+    </tr>
+    <tr style="border-top:1px solid #252f40">
+      <td style="padding:6px 10px;color:#7a8a9e">วิธีคำนวณ</td>
+      <td style="padding:6px 10px;color:#c9d1e0;text-align:center">แบ่งเท่ากันทุก Process</td>
+      <td style="padding:6px 10px;color:#c9d1e0;text-align:center">แบ่งตามขนาด (size)</td>
+    </tr>
+    <tr style="background:#1e2a3a;border-top:1px solid #252f40">
+      <td style="padding:6px 10px;color:#7a8a9e">ความยุติธรรม</td>
+      <td style="padding:6px 10px;color:#ff6b6b;text-align:center">ไม่ยุติธรรม</td>
+      <td style="padding:6px 10px;color:#48cfad;text-align:center">ยุติธรรมตามสัดส่วน</td>
+    </tr>
+    <tr style="border-top:1px solid #252f40">
+      <td style="padding:6px 10px;color:#7a8a9e">ความซับซ้อน</td>
+      <td style="padding:6px 10px;color:#48cfad;text-align:center">ง่ายมาก</td>
+      <td style="padding:6px 10px;color:#ffce54;text-align:center">ต้องคำนวณสัดส่วน</td>
+    </tr>
+    <tr style="background:#1e2a3a;border-top:1px solid #252f40">
+      <td style="padding:6px 10px;color:#7a8a9e">เหมาะกับ</td>
+      <td style="padding:6px 10px;color:#c9d1e0;text-align:center">Process ขนาดใกล้เคียงกัน</td>
+      <td style="padding:6px 10px;color:#c9d1e0;text-align:center">Process ขนาดต่างกันมาก</td>
+    </tr>
+  </table>
+</div>
+
+<!-- Min frames rule -->
+<div style="background:#2a1010;border-left:4px solid #ff6b6b;border-radius:6px;padding:10px 14px;margin-bottom:12px;font-size:12px">
+  <strong style="color:#ff6b6b">⚠️ กฎสำคัญ: จำนวน Frame ขั้นต่ำ</strong><br>
+  <span style="color:#c9d1e0">ทุก Process ต้องได้รับ Frame อย่างน้อย <strong>จำนวนขั้นต่ำ</strong> ที่กำหนดโดย ISA<br>
+  เช่น ถ้า instruction หนึ่งอ้าง address ได้ 3 ระดับ → ต้องมีอย่างน้อย 3 frames ไม่งั้น Page Fault วนไม่สิ้นสุด</span>
 </div>
 
 <div class="tool-area">
@@ -5735,10 +5977,11 @@ Internal Fragmentation = (จำนวน Pages × Page Size) − Process Size<b
     <span style="background:#48cfad;color:#141925;font-size:11px;font-weight:700;padding:2px 10px;border-radius:10px">2</span>
     <span style="color:#48cfad;font-weight:700;font-size:14px">Linked List ของ Block ว่าง</span>
   </div>
-  <p style="font-size:13px;color:#c9d1e0;margin:0 0 10px">เชื่อม Block ว่างเข้าด้วยกันด้วย Pointer (เก็บ Pointer ใน Block นั้นเอง)</p>
+  <p style="font-size:13px;color:#c9d1e0;margin:0 0 10px">เชื่อม Block ว่างเข้าด้วยกันด้วย Pointer — <strong>เก็บ Pointer ของ Block ถัดไปไว้ภายใน Block ว่างนั้นเอง</strong> ไม่ต้องใช้พื้นที่พิเศษ</p>
+
+  <!-- Diagram -->
   <svg width="100%" height="46" viewBox="0 0 420 46" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" style="display:block;max-width:500px;margin:0 auto 10px">
     <text x="4" y="11" font-family="monospace" font-size="9" fill="#7a8a9e">Free list head →</text>
-    <!-- Free blocks linked -->
     <rect x="100" y="14" width="60" height="22" rx="3" fill="#1e3a1e" stroke="#48cfad" stroke-width="1.5"/>
     <text x="130" y="28" font-family="monospace" font-size="9" fill="#48cfad" text-anchor="middle">Block 2</text>
     <line x1="160" y1="25" x2="185" y2="25" stroke="#48cfad" stroke-width="1.5" marker-end="url(#arrowFree)"/>
@@ -5749,14 +5992,69 @@ Internal Fragmentation = (จำนวน Pages × Page Size) − Process Size<b
     <text x="300" y="28" font-family="monospace" font-size="9" fill="#48cfad" text-anchor="middle">Block 7</text>
     <line x1="330" y1="25" x2="355" y2="25" stroke="#48cfad" stroke-width="1.5" marker-end="url(#arrowFree)"/>
     <rect x="355" y="14" width="54" height="22" rx="3" fill="#1e3a1e" stroke="#48cfad" stroke-width="1.5"/>
-    <text x="382" y="28" font-family="monospace" font-size="9" fill="#48cfad" text-anchor="middle">Block 8…</text>
+    <text x="382" y="28" font-family="monospace" font-size="9" fill="#48cfad" text-anchor="middle">NULL</text>
     <defs>
       <marker id="arrowFree" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 z" fill="#48cfad"/></marker>
     </defs>
   </svg>
+
+  <!-- Alloc walkthrough -->
+  <div style="background:#141925;border-radius:6px;padding:10px 14px;margin-bottom:10px;font-size:12px">
+    <div style="color:#ffce54;font-weight:700;margin-bottom:6px">📥 การ Allocate Block (ขอใช้พื้นที่ใหม่)</div>
+    <div style="display:grid;grid-template-columns:auto 1fr;gap:4px 10px;font-family:monospace;font-size:11px">
+      <span style="color:#7a8a9e">Step 1</span><span style="color:#c9d1e0">อ่าน head pointer → ชี้ไปที่ Block 2 (block ว่างแรก)</span>
+      <span style="color:#7a8a9e">Step 2</span><span style="color:#c9d1e0">อ่าน next pointer ภายใน Block 2 → ได้ Block 3</span>
+      <span style="color:#7a8a9e">Step 3</span><span style="color:#c9d1e0">อัปเดต head = Block 3 (ตัดหัว list)</span>
+      <span style="color:#7a8a9e">Step 4</span><span style="color:#c9d1e0">ให้ Block 2 แก่ File → <span style="color:#ff6b6b">Free list: Block3→Block7→NULL</span></span>
+    </div>
+  </div>
+
+  <!-- Dealloc walkthrough -->
+  <div style="background:#141925;border-radius:6px;padding:10px 14px;margin-bottom:10px;font-size:12px">
+    <div style="color:#4a9eff;font-weight:700;margin-bottom:6px">📤 การ Deallocate Block (คืนพื้นที่)</div>
+    <div style="display:grid;grid-template-columns:auto 1fr;gap:4px 10px;font-family:monospace;font-size:11px">
+      <span style="color:#7a8a9e">Step 1</span><span style="color:#c9d1e0">File ลบแล้ว คืน Block 5 กลับมา</span>
+      <span style="color:#7a8a9e">Step 2</span><span style="color:#c9d1e0">เขียน next pointer ใน Block 5 = head เดิม (Block 3)</span>
+      <span style="color:#7a8a9e">Step 3</span><span style="color:#c9d1e0">อัปเดต head = Block 5</span>
+      <span style="color:#7a8a9e">Step 4</span><span style="color:#c9d1e0"><span style="color:#48cfad">Free list: Block5→Block3→Block7→NULL</span></span>
+    </div>
+  </div>
+
+  <!-- Bitmap vs Linked comparison -->
+  <div style="background:#141925;border-radius:6px;padding:10px 14px;margin-bottom:10px;font-size:12px">
+    <div style="color:#a78bfa;font-weight:700;margin-bottom:8px">⚖️ Bitmap vs Linked List — เปรียบเทียบ</div>
+    <table style="width:100%;border-collapse:collapse;font-size:11px">
+      <tr style="background:#252f40">
+        <th style="padding:5px 8px;text-align:left;color:#7a8a9e">เกณฑ์</th>
+        <th style="padding:5px 8px;text-align:center;color:#4a9eff">Bitmap</th>
+        <th style="padding:5px 8px;text-align:center;color:#48cfad">Linked List</th>
+      </tr>
+      <tr style="border-top:1px solid #252f40">
+        <td style="padding:5px 8px;color:#7a8a9e">พื้นที่ที่ใช้เก็บ</td>
+        <td style="padding:5px 8px;color:#c9d1e0;text-align:center">แยกต่างหาก (1 bit/block)</td>
+        <td style="padding:5px 8px;color:#c9d1e0;text-align:center">ใน block ว่างเลย (ไม่เปลือง)</td>
+      </tr>
+      <tr style="background:#1e2a3a;border-top:1px solid #252f40">
+        <td style="padding:5px 8px;color:#7a8a9e">หา block ว่างติดกัน</td>
+        <td style="padding:5px 8px;color:#48cfad;text-align:center">ง่าย (ดู bit pattern)</td>
+        <td style="padding:5px 8px;color:#ff6b6b;text-align:center">ยาก (ต้องไล่ list ทั้งหมด)</td>
+      </tr>
+      <tr style="border-top:1px solid #252f40">
+        <td style="padding:5px 8px;color:#7a8a9e">Alloc/Dealloc</td>
+        <td style="padding:5px 8px;color:#ffce54;text-align:center">flip 1 bit (เร็ว)</td>
+        <td style="padding:5px 8px;color:#ffce54;text-align:center">แก้ pointer (เร็ว)</td>
+      </tr>
+      <tr style="background:#1e2a3a;border-top:1px solid #252f40">
+        <td style="padding:5px 8px;color:#7a8a9e">นิยมใช้</td>
+        <td style="padding:5px 8px;color:#48cfad;text-align:center">OS สมัยใหม่ส่วนใหญ่</td>
+        <td style="padding:5px 8px;color:#7a8a9e;text-align:center">ระบบเก่า / Embedded</td>
+      </tr>
+    </table>
+  </div>
+
   <div style="display:flex;gap:8px;flex-wrap:wrap">
-    <div class="box box-green" style="flex:1;min-width:160px;margin:0;font-size:12px"><strong>ข้อดี:</strong> ไม่ต้องการพื้นที่พิเศษ — Pointer อยู่ใน Block ว่างนั้นเอง</div>
-    <div class="box box-red" style="flex:1;min-width:160px;margin:0;font-size:12px"><strong>ข้อเสีย:</strong> หา Block ว่างติดกันยาก ต้องไล่ List</div>
+    <div class="box box-green" style="flex:1;min-width:160px;margin:0;font-size:12px"><strong>ข้อดี:</strong> ไม่ต้องการพื้นที่พิเศษ — Pointer อยู่ใน Block ว่างนั้นเอง ประหยัด RAM</div>
+    <div class="box box-red" style="flex:1;min-width:160px;margin:0;font-size:12px"><strong>ข้อเสีย:</strong> หา Block ว่างติดกันยาก ต้องไล่ List ทั้งหมด ไม่เหมาะกับ Contiguous Allocation</div>
   </div>
 </div>
 </div>
