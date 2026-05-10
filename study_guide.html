@@ -5765,6 +5765,14 @@ Internal Fragmentation = (จำนวน Pages × Page Size) − Process Size<b
 <div class="card">
 <h2>9.6 ระบบ I/O</h2>
 
+<!-- Big picture intro -->
+<div style="background:#1a2235;border-left:4px solid #48cfad;border-radius:6px;padding:12px 16px;margin-bottom:16px;font-size:13px;line-height:1.8">
+  <strong style="color:#48cfad">ภาพรวม:</strong> ทุกครั้งที่ program อ่านไฟล์ / พิมพ์งาน / รับข้อมูลจาก network —
+  CPU ต้องคุยกับ <strong>Hardware Device</strong> ซึ่งช้ากว่า CPU มาก<br>
+  คำถามคือ: <span style="color:#ffce54">CPU จะ "รอ" device แบบไหน ไม่ให้เสียเวลาสูญเปล่า?</span><br>
+  คำตอบ → 3 วิธีควบคุม I/O: <strong style="color:#ff6b6b">Polling</strong> / <strong style="color:#48cfad">Interrupt</strong> / <strong style="color:#a78bfa">DMA</strong>
+</div>
+
 <!-- I/O Control Methods: 3-column visual comparison -->
 <h3>วิธีควบคุม I/O — 3 แบบ (ที่ออกสอบบ่อยที่สุด)</h3>
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px">
@@ -5800,6 +5808,12 @@ Internal Fragmentation = (จำนวน Pages × Page Size) − Process Size<b
     </svg>
     <div style="font-size:11px;color:#c9d1e0;margin-bottom:4px">CPU วนตรวจ Status Register ซ้ำๆ ตลอดเวลา</div>
     <div style="font-size:10px;color:#ff6b6b">CPU เสียเวลา Busy-Wait ทั้งหมด</div>
+    <div style="margin-top:8px;font-size:10px;background:#1e1010;border-radius:4px;padding:6px 8px;font-family:monospace;color:#ff9999;line-height:1.7">
+      loop:<br>
+      &nbsp;&nbsp;read Status Register<br>
+      &nbsp;&nbsp;if busy → loop (ทำซ้ำ)<br>
+      &nbsp;&nbsp;if ready → read Data
+    </div>
   </div>
 
   <!-- Interrupt -->
@@ -5881,63 +5895,366 @@ Internal Fragmentation = (จำนวน Pages × Page Size) − Process Size<b
   </div>
 </div>
 
-<!-- Quick comparison strip -->
-<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:16px;font-size:11px;text-align:center">
-  <div style="background:#2a0000;border-radius:4px;padding:6px;color:#ff6b6b"><strong>Polling</strong><br>CPU ทำทุกอย่าง<br>เสียเวลา 100%</div>
-  <div style="background:#1e3a1e;border-radius:4px;padding:6px;color:#48cfad"><strong>Interrupt</strong><br>CPU รอ IRQ<br>ทำงานอื่นได้บ้าง</div>
-  <div style="background:#1e1a2e;border-radius:4px;padding:6px;color:#a78bfa"><strong>DMA</strong><br>CPU อิสระ<br>DMA ทำเอง</div>
+<!-- Detailed step-by-step for each method -->
+<div style="margin-bottom:16px">
+
+  <!-- POLLING detail -->
+  <details open style="background:#1a0a0a;border:1.5px solid #ff6b6b;border-radius:8px;padding:12px 16px;margin-bottom:10px">
+    <summary style="color:#ff6b6b;font-weight:700;font-size:13px;cursor:pointer;list-style:none">🔴 Polling — รายละเอียด</summary>
+    <div style="margin-top:10px;font-size:12px;line-height:1.8;color:#c9d1e0">
+      <p><strong style="color:#ff6b6b">หลักการ:</strong> CPU วนลูปตรวจ Status Register ของ Device ซ้ำๆ จนกว่า Device จะพร้อม</p>
+      <div style="background:#141925;border-radius:6px;padding:10px 14px;margin:8px 0">
+        <div style="color:#ffce54;font-weight:700;margin-bottom:6px">Step-by-step (ตัวอย่าง: อ่านข้อมูลจาก Keyboard)</div>
+        <div style="display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-family:monospace;font-size:11px">
+          <span style="color:#7a8a9e">Step 1</span><span>CPU เขียนคำสั่ง "Read" ลง <span style="color:#a78bfa">Control Register</span> ของ Keyboard Controller</span>
+          <span style="color:#7a8a9e">Step 2</span><span>CPU วนอ่าน <span style="color:#ffce54">Status Register</span> → ถ้า bit "busy" = 1 → วนต่อ</span>
+          <span style="color:#7a8a9e">Step 3</span><span>Keyboard พิมพ์ key → controller เซ็ต busy = 0, เก็บค่าใน <span style="color:#48cfad">Data-in Register</span></span>
+          <span style="color:#7a8a9e">Step 4</span><span>CPU loop ตรวจจับ busy = 0 → หยุด loop, อ่านค่าจาก Data-in Register</span>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">
+        <div style="background:#2a1010;border-radius:5px;padding:8px 10px">
+          <div style="color:#48cfad;font-weight:700;margin-bottom:4px">✅ ข้อดี</div>
+          <div style="font-size:11px">• Simple มาก ไม่ซับซ้อน<br>• เหมาะกับ Device ที่เร็วมาก (overhead ต่ำ)<br>• ใช้ใน Embedded/Real-time ที่ต้องการ response ทันที</div>
+        </div>
+        <div style="background:#2a1010;border-radius:5px;padding:8px 10px">
+          <div style="color:#ff6b6b;font-weight:700;margin-bottom:4px">❌ ข้อเสีย</div>
+          <div style="font-size:11px">• CPU เสียเวลา 100% กับการรอ (Busy-Wait)<br>• ไม่สามารถทำงานอื่นขณะรอได้<br>• ถ้า Device ช้า (HDD) → CPU สูญเปล่ามาก</div>
+        </div>
+      </div>
+      <div style="margin-top:8px;padding:6px 10px;background:#1e1010;border-radius:4px;font-size:11px;color:#ffce54">
+        💡 <strong>ใช้เมื่อไหร่?</strong> Device ตอบสนองเร็วมากจนไม่คุ้มที่จะใช้ Interrupt (เช่น GPU rendering loop, Sensor อ่านค่าถี่มาก)
+      </div>
+    </div>
+  </details>
+
+  <!-- INTERRUPT detail -->
+  <details open style="background:#0a1a0a;border:1.5px solid #48cfad;border-radius:8px;padding:12px 16px;margin-bottom:10px">
+    <summary style="color:#48cfad;font-weight:700;font-size:13px;cursor:pointer;list-style:none">🟢 Interrupt-Driven I/O — รายละเอียด</summary>
+    <div style="margin-top:10px;font-size:12px;line-height:1.8;color:#c9d1e0">
+      <p><strong style="color:#48cfad">หลักการ:</strong> CPU ส่งคำสั่งไปให้ Device แล้ว<strong>ไปทำงานอื่น</strong> เมื่อ Device เสร็จจะส่ง <strong style="color:#ffce54">Interrupt (IRQ)</strong> มาขัดจังหวะ CPU</p>
+      <div style="background:#141925;border-radius:6px;padding:10px 14px;margin:8px 0">
+        <div style="color:#ffce54;font-weight:700;margin-bottom:6px">Step-by-step (ตัวอย่าง: อ่านข้อมูลจาก HDD)</div>
+        <div style="display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-family:monospace;font-size:11px">
+          <span style="color:#7a8a9e">Step 1</span><span>CPU ส่งคำสั่ง "อ่าน sector 42" → HDD Controller (ผ่าน Control Register)</span>
+          <span style="color:#7a8a9e">Step 2</span><span>CPU <strong style="color:#48cfad">กลับไปทำงานอื่น</strong> (run Process อื่น, ทำ computation อื่น)</span>
+          <span style="color:#7a8a9e">Step 3</span><span>HDD หมุนไปหา sector, อ่านข้อมูลเสร็จ → ส่ง <span style="color:#ffce54">IRQ signal</span> ไปที่ CPU</span>
+          <span style="color:#7a8a9e">Step 4</span><span>CPU หยุดงานปัจจุบัน → บันทึก context → กระโดดไปทำ <span style="color:#a78bfa">ISR (Interrupt Service Routine)</span></span>
+          <span style="color:#7a8a9e">Step 5</span><span>ISR อ่านข้อมูลจาก Data-in Register → เก็บไว้ใน buffer → Return</span>
+          <span style="color:#7a8a9e">Step 6</span><span>CPU restore context → ทำงานที่หยุดค้างต่อ</span>
+        </div>
+      </div>
+      <div style="background:#1a1a0a;border-radius:5px;padding:8px 10px;margin-bottom:8px">
+        <div style="color:#ffce54;font-weight:700;margin-bottom:4px">⚠️ ปัญหา: Interrupt Overhead</div>
+        <div style="font-size:11px;color:#c9d1e0">ถ้า Device ส่ง IRQ บ่อยมาก (เช่น Network card รับ packet 100,000 ครั้ง/วินาที)<br>
+        CPU ต้องหยุด-บันทึก-กระโดด-restore บ่อยมาก จน <strong style="color:#ff6b6b">overhead สูงกว่าประโยชน์</strong><br>
+        → แก้โดยใช้ <strong>Interrupt Coalescing</strong> (รวม IRQ หลายๆ ตัวก่อนค่อย interrupt ครั้งเดียว)</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div style="background:#0a2a1a;border-radius:5px;padding:8px 10px">
+          <div style="color:#48cfad;font-weight:700;margin-bottom:4px">✅ ข้อดี</div>
+          <div style="font-size:11px">• CPU ไม่ต้องรอ — ทำงานอื่นได้<br>• เหมาะกับ Device ที่ช้า (HDD, Keyboard)<br>• ใช้งานทั่วไปใน OS สมัยใหม่</div>
+        </div>
+        <div style="background:#2a1a0a;border-radius:5px;padding:8px 10px">
+          <div style="color:#ffce54;font-weight:700;margin-bottom:4px">❌ ข้อเสีย</div>
+          <div style="font-size:11px">• IRQ บ่อย → overhead สูง<br>• ต้องบันทึก/restore context ทุกครั้ง<br>• ยังต้องให้ CPU copy ข้อมูลจาก register เข้า RAM เอง</div>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- DMA detail -->
+  <details open style="background:#0e0a1a;border:1.5px solid #a78bfa;border-radius:8px;padding:12px 16px;margin-bottom:10px">
+    <summary style="color:#a78bfa;font-weight:700;font-size:13px;cursor:pointer;list-style:none">🟣 DMA (Direct Memory Access) — รายละเอียด</summary>
+    <div style="margin-top:10px;font-size:12px;line-height:1.8;color:#c9d1e0">
+      <p><strong style="color:#a78bfa">หลักการ:</strong> มี <strong>DMA Controller</strong> เป็นตัวกลาง — CPU แค่ "ตั้งค่า" แล้วปล่อยให้ DMA โอนข้อมูลระหว่าง Device กับ RAM เองทั้งหมด CPU เป็นอิสระ 100%</p>
+      <div style="background:#141925;border-radius:6px;padding:10px 14px;margin:8px 0">
+        <div style="color:#ffce54;font-weight:700;margin-bottom:6px">Step-by-step (ตัวอย่าง: โอนไฟล์ 500 MB จาก HDD → RAM)</div>
+        <div style="display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-family:monospace;font-size:11px">
+          <span style="color:#7a8a9e">Step 1</span><span>CPU บอก DMA Controller: <span style="color:#a78bfa">Source</span>=HDD, <span style="color:#48cfad">Dest</span>=RAM addr 0x1000, <span style="color:#ffce54">Size</span>=500MB</span>
+          <span style="color:#7a8a9e">Step 2</span><span>CPU <strong style="color:#48cfad">กลับไปทำงานอื่นได้เลย</strong> — DMA รับช่วงต่อ</span>
+          <span style="color:#7a8a9e">Step 3</span><span>DMA ขอใช้ Bus → อ่านจาก HDD → เขียนตรงเข้า RAM โดยตรง (CPU ไม่แตะเลย)</span>
+          <span style="color:#7a8a9e">Step 4</span><span>DMA โอนเสร็จ → ส่ง <span style="color:#ffce54">IRQ</span> แค่ <strong>ครั้งเดียว</strong> ไปบอก CPU ว่าเสร็จแล้ว</span>
+          <span style="color:#7a8a9e">Step 5</span><span>CPU อ่านข้อมูลจาก RAM ได้เลย (ไม่ต้อง copy เอง)</span>
+        </div>
+      </div>
+      <div style="background:#1a1030;border-radius:5px;padding:8px 10px;margin-bottom:8px">
+        <div style="color:#a78bfa;font-weight:700;margin-bottom:4px">🔑 ความแตกต่างสำคัญจาก Interrupt</div>
+        <div style="font-size:11px;color:#c9d1e0">
+          <strong style="color:#ffce54">Interrupt:</strong> CPU ต้อง copy ข้อมูลจาก Data Register → RAM เอง (ทีละ byte/word)<br>
+          <strong style="color:#a78bfa">DMA:</strong> DMA Controller copy ข้อมูลทั้งก้อนตรงเข้า RAM — CPU ไม่ต้องยุ่ง<br>
+          → DMA เหมาะกับข้อมูล <strong>ปริมาณมาก</strong> เช่น HDD, Network, USB drive
+        </div>
+      </div>
+      <div style="background:#0e1a20;border-radius:5px;padding:8px 10px;margin-bottom:8px">
+        <div style="color:#4a9eff;font-weight:700;margin-bottom:4px">⚙️ Cycle Stealing คืออะไร?</div>
+        <div style="font-size:11px;color:#c9d1e0">
+          DMA ต้องขอใช้ Memory Bus เพื่อโอนข้อมูล → แต่ CPU ก็ใช้ Bus เช่นกัน<br>
+          DMA จะ "ขโมย" รอบ Bus จาก CPU ชั่วคราว (Cycle Stealing) → CPU อาจช้าลงเล็กน้อยขณะ DMA ทำงาน<br>
+          แต่โดยรวมยังดีกว่า Polling/Interrupt มากสำหรับข้อมูลปริมาณมาก
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div style="background:#1a0a2a;border-radius:5px;padding:8px 10px">
+          <div style="color:#a78bfa;font-weight:700;margin-bottom:4px">✅ ข้อดี</div>
+          <div style="font-size:11px">• CPU ว่างเกือบ 100% ขณะโอน<br>• IRQ แค่ครั้งเดียวตอนเสร็จ<br>• เหมาะสำหรับข้อมูลใหญ่</div>
+        </div>
+        <div style="background:#1a1a0a;border-radius:5px;padding:8px 10px">
+          <div style="color:#ffce54;font-weight:700;margin-bottom:4px">❌ ข้อเสีย</div>
+          <div style="font-size:11px">• ซับซ้อนกว่า (ต้องมี DMA Controller)<br>• Cycle Stealing ทำให้ CPU ช้าลงบ้าง<br>• ไม่คุ้มถ้าข้อมูลน้อยมาก</div>
+        </div>
+      </div>
+    </div>
+  </details>
 </div>
 
-<!-- Hardware structure (compact) -->
+<!-- Summary comparison table -->
+<div style="background:#1a2235;border-radius:8px;padding:12px 16px;margin-bottom:16px;overflow-x:auto">
+  <div style="color:#ffce54;font-weight:700;font-size:13px;margin-bottom:10px">📊 เปรียบเทียบ 3 วิธี (ตารางสรุปสำหรับสอบ)</div>
+  <table style="width:100%;border-collapse:collapse;font-size:11px">
+    <tr style="background:#252f40">
+      <th style="padding:6px 10px;color:#7a8a9e;text-align:left">หัวข้อ</th>
+      <th style="padding:6px 10px;color:#ff6b6b;text-align:center">Polling</th>
+      <th style="padding:6px 10px;color:#48cfad;text-align:center">Interrupt</th>
+      <th style="padding:6px 10px;color:#a78bfa;text-align:center">DMA</th>
+    </tr>
+    <tr style="border-top:1px solid #252f40">
+      <td style="padding:6px 10px;color:#7a8a9e">CPU ระหว่างรอ</td>
+      <td style="padding:6px 10px;color:#ff6b6b;text-align:center">Busy-Wait (สูญเปล่า)</td>
+      <td style="padding:6px 10px;color:#48cfad;text-align:center">ทำงานอื่นได้</td>
+      <td style="padding:6px 10px;color:#a78bfa;text-align:center">ทำงานอื่นได้ (อิสระสุด)</td>
+    </tr>
+    <tr style="background:#1e2a3a;border-top:1px solid #252f40">
+      <td style="padding:6px 10px;color:#7a8a9e">ใครโอนข้อมูล?</td>
+      <td style="padding:6px 10px;color:#c9d1e0;text-align:center">CPU</td>
+      <td style="padding:6px 10px;color:#c9d1e0;text-align:center">CPU</td>
+      <td style="padding:6px 10px;color:#a78bfa;text-align:center">DMA Controller</td>
+    </tr>
+    <tr style="border-top:1px solid #252f40">
+      <td style="padding:6px 10px;color:#7a8a9e">จำนวน Interrupt</td>
+      <td style="padding:6px 10px;color:#c9d1e0;text-align:center">ไม่มี</td>
+      <td style="padding:6px 10px;color:#ffce54;text-align:center">ทุกครั้งที่มีข้อมูล</td>
+      <td style="padding:6px 10px;color:#48cfad;text-align:center">ครั้งเดียวตอนเสร็จ</td>
+    </tr>
+    <tr style="background:#1e2a3a;border-top:1px solid #252f40">
+      <td style="padding:6px 10px;color:#7a8a9e">เหมาะกับ</td>
+      <td style="padding:6px 10px;color:#c9d1e0;text-align:center">Device เร็ว/Realtime</td>
+      <td style="padding:6px 10px;color:#c9d1e0;text-align:center">Device ช้า, ข้อมูลน้อย</td>
+      <td style="padding:6px 10px;color:#c9d1e0;text-align:center">ข้อมูลปริมาณมาก (HDD)</td>
+    </tr>
+    <tr style="border-top:1px solid #252f40">
+      <td style="padding:6px 10px;color:#7a8a9e">ความซับซ้อน</td>
+      <td style="padding:6px 10px;color:#48cfad;text-align:center">ต่ำสุด</td>
+      <td style="padding:6px 10px;color:#ffce54;text-align:center">ปานกลาง</td>
+      <td style="padding:6px 10px;color:#ff6b6b;text-align:center">สูงสุด</td>
+    </tr>
+  </table>
+</div>
+
+<!-- Hardware structure -->
 <h3>โครงสร้างฮาร์ดแวร์ I/O</h3>
-<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px">
-  <div style="background:#1a2235;border-radius:6px;padding:10px 14px;flex:1;min-width:180px">
-    <div style="color:#4a9eff;font-weight:700;font-size:12px;margin-bottom:6px">Bus ที่ใช้เชื่อมต่อ CPU</div>
-    <div style="display:flex;flex-direction:column;gap:4px;font-size:12px">
-      <div style="background:#252f40;border-radius:3px;padding:4px 8px;color:#c9d1e0"><span style="color:#4a9eff">PCIe</span> — GPU, NVMe SSD (ความเร็วสูง)</div>
-      <div style="background:#252f40;border-radius:3px;padding:4px 8px;color:#c9d1e0"><span style="color:#ffce54">Expansion Bus</span> — Keyboard, USB, Serial</div>
-      <div style="background:#252f40;border-radius:3px;padding:4px 8px;color:#c9d1e0"><span style="color:#48cfad">SCSI Bus</span> — HDD, Tape (จัดเก็บ)</div>
+
+<!-- Device Controller Registers -->
+<div style="background:#1a2235;border:1.5px solid #fc6e51;border-radius:8px;padding:12px 16px;margin-bottom:12px">
+  <div style="color:#fc6e51;font-weight:700;font-size:13px;margin-bottom:10px">Device Controller Registers — 4 ช่องทางที่ CPU คุยกับ Device</div>
+  <p style="font-size:12px;color:#c9d1e0;margin:0 0 10px">ทุก Device มี Controller ที่มี Register 4 ประเภท — CPU เขียน/อ่าน register เหล่านี้เพื่อสั่งงาน device</p>
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;font-size:12px">
+    <div style="background:#252f40;border-radius:5px;padding:8px 12px">
+      <div style="color:#48cfad;font-weight:700">Data-in Register</div>
+      <div style="color:#c9d1e0;margin-top:3px">Device → CPU: เก็บข้อมูลที่ Device อ่านได้ รอให้ CPU มาหยิบ</div>
+      <div style="color:#7a8a9e;font-size:10px;margin-top:2px">ตัวอย่าง: Keyboard เก็บค่า key ที่กด</div>
     </div>
-  </div>
-  <div style="background:#1a2235;border-radius:6px;padding:10px 14px;flex:1;min-width:180px">
-    <div style="color:#fc6e51;font-weight:700;font-size:12px;margin-bottom:6px">Device Controller Registers (4 แบบ)</div>
-    <div style="display:flex;flex-direction:column;gap:4px;font-size:12px">
-      <div style="background:#252f40;border-radius:3px;padding:4px 8px;color:#c9d1e0"><span style="color:#48cfad">Data-in</span> — CPU อ่านข้อมูลจากอุปกรณ์</div>
-      <div style="background:#252f40;border-radius:3px;padding:4px 8px;color:#c9d1e0"><span style="color:#fc6e51">Data-out</span> — CPU ส่งข้อมูลไปอุปกรณ์</div>
-      <div style="background:#252f40;border-radius:3px;padding:4px 8px;color:#c9d1e0"><span style="color:#ffce54">Status</span> — Busy / Idle / Error</div>
-      <div style="background:#252f40;border-radius:3px;padding:4px 8px;color:#c9d1e0"><span style="color:#a78bfa">Control</span> — คำสั่ง / โหมดการทำงาน</div>
+    <div style="background:#252f40;border-radius:5px;padding:8px 12px">
+      <div style="color:#fc6e51;font-weight:700">Data-out Register</div>
+      <div style="color:#c9d1e0;margin-top:3px">CPU → Device: CPU เขียนข้อมูลที่ต้องการให้ Device ส่งออก</div>
+      <div style="color:#7a8a9e;font-size:10px;margin-top:2px">ตัวอย่าง: CPU เขียนตัวอักษรที่ต้องการพิมพ์</div>
+    </div>
+    <div style="background:#252f40;border-radius:5px;padding:8px 12px">
+      <div style="color:#ffce54;font-weight:700">Status Register</div>
+      <div style="color:#c9d1e0;margin-top:3px">CPU อ่านเพื่อรู้สถานะ Device: <span style="color:#ff6b6b">busy</span> / <span style="color:#48cfad">ready</span> / <span style="color:#ff6b6b">error</span></div>
+      <div style="color:#7a8a9e;font-size:10px;margin-top:2px">ตัวอย่าง: Polling วนอ่าน register นี้ซ้ำๆ</div>
+    </div>
+    <div style="background:#252f40;border-radius:5px;padding:8px 12px">
+      <div style="color:#a78bfa;font-weight:700">Control Register</div>
+      <div style="color:#c9d1e0;margin-top:3px">CPU เขียนคำสั่งสั่ง Device: เริ่มทำงาน / หยุด / เปลี่ยนโหมด</div>
+      <div style="color:#7a8a9e;font-size:10px;margin-top:2px">ตัวอย่าง: บอก HDD ว่าจะอ่านหรือเขียน sector ไหน</div>
     </div>
   </div>
 </div>
 
-<!-- Kernel I/O Subsystem -->
-<h3>Kernel I/O Subsystem — บริการ I/O ของ Kernel</h3>
-<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;margin-bottom:14px">
-  <div style="background:#1e2a3a;border-left:3px solid #4a9eff;border-radius:4px;padding:8px 10px">
-    <div style="color:#4a9eff;font-size:11px;font-weight:700">Scheduling</div>
-    <div style="color:#c9d1e0;font-size:11px;margin-top:2px">จัดลำดับ I/O Request ให้มีประสิทธิภาพ</div>
-  </div>
-  <div style="background:#1e2a3a;border-left:3px solid #48cfad;border-radius:4px;padding:8px 10px">
-    <div style="color:#48cfad;font-size:11px;font-weight:700">Buffering</div>
-    <div style="color:#c9d1e0;font-size:11px;margin-top:2px">เก็บข้อมูลชั่วคราวระหว่างอุปกรณ์ที่ความเร็วต่างกัน</div>
-  </div>
-  <div style="background:#1e2a3a;border-left:3px solid #ffce54;border-radius:4px;padding:8px 10px">
-    <div style="color:#ffce54;font-size:11px;font-weight:700">Double Buffering</div>
-    <div style="color:#c9d1e0;font-size:11px;margin-top:2px">Buffer A: CPU ประมวลผล | Buffer B: Device เติม (สลับกัน)</div>
-  </div>
-  <div style="background:#1e2a3a;border-left:3px solid #fc6e51;border-radius:4px;padding:8px 10px">
-    <div style="color:#fc6e51;font-size:11px;font-weight:700">Spooling</div>
-    <div style="color:#c9d1e0;font-size:11px;margin-top:2px">คิว Output สำหรับอุปกรณ์ครั้งละ 1 Process เช่น Printer</div>
-  </div>
-  <div style="background:#1e2a3a;border-left:3px solid #ff6b6b;border-radius:4px;padding:8px 10px">
-    <div style="color:#ff6b6b;font-size:11px;font-weight:700">Error Handling</div>
-    <div style="color:#c9d1e0;font-size:11px;margin-top:2px">ตรวจจับและรายงาน I/O Error</div>
-  </div>
-  <div style="background:#1e2a3a;border-left:3px solid #a78bfa;border-radius:4px;padding:8px 10px">
-    <div style="color:#a78bfa;font-size:11px;font-weight:700">Device Driver</div>
-    <div style="color:#c9d1e0;font-size:11px;margin-top:2px">แปล OS command → คำสั่งเฉพาะอุปกรณ์ (ต่างชนิด ต่าง Driver)</div>
+<!-- Bus types -->
+<div style="background:#1a2235;border:1.5px solid #4a9eff;border-radius:8px;padding:12px 16px;margin-bottom:16px">
+  <div style="color:#4a9eff;font-weight:700;font-size:13px;margin-bottom:8px">Bus — สายทางเชื่อมต่อระหว่าง CPU กับ Devices</div>
+  <p style="font-size:12px;color:#c9d1e0;margin:0 0 8px">Bus คือ "ทางหลวง" ของข้อมูล — Device ต่างชนิดต้องการ Bus ต่างแบบ ขึ้นอยู่กับความเร็วที่ต้องการ</p>
+  <div style="display:flex;flex-direction:column;gap:6px;font-size:12px">
+    <div style="background:#252f40;border-radius:4px;padding:6px 10px;display:flex;justify-content:space-between;align-items:center">
+      <span><span style="color:#4a9eff;font-weight:700">PCIe (PCI Express)</span> — GPU, NVMe SSD</span>
+      <span style="background:#1a2a3a;color:#4a9eff;padding:2px 8px;border-radius:10px;font-size:10px">ความเร็วสูงสุด</span>
+    </div>
+    <div style="background:#252f40;border-radius:4px;padding:6px 10px;display:flex;justify-content:space-between;align-items:center">
+      <span><span style="color:#ffce54;font-weight:700">Expansion Bus</span> — Keyboard, Mouse, USB, Serial Port</span>
+      <span style="background:#2a2000;color:#ffce54;padding:2px 8px;border-radius:10px;font-size:10px">ความเร็วปานกลาง</span>
+    </div>
+    <div style="background:#252f40;border-radius:4px;padding:6px 10px;display:flex;justify-content:space-between;align-items:center">
+      <span><span style="color:#48cfad;font-weight:700">SCSI Bus</span> — HDD, Tape Drive (enterprise storage)</span>
+      <span style="background:#1e3a1e;color:#48cfad;padding:2px 8px;border-radius:10px;font-size:10px">ความเร็วปานกลาง</span>
+    </div>
   </div>
 </div>
+
+<!-- Kernel I/O Subsystem — expanded -->
+<h3>Kernel I/O Subsystem — บริการที่ OS จัดให้สำหรับ I/O</h3>
+<p style="font-size:12px;color:#c9d1e0;margin-bottom:12px">Kernel ไม่ได้แค่ส่งคำสั่งไป Device — มันมีระบบย่อยหลายอย่างเพื่อให้ I/O มีประสิทธิภาพและเชื่อถือได้</p>
+
+<!-- I/O Scheduling -->
+<details open style="background:#1a2235;border:1.5px solid #4a9eff;border-radius:8px;padding:12px 16px;margin-bottom:8px">
+  <summary style="color:#4a9eff;font-weight:700;font-size:13px;cursor:pointer;list-style:none">📅 I/O Scheduling — จัดลำดับ request ให้เร็วขึ้น</summary>
+  <div style="margin-top:10px;font-size:12px;line-height:1.8;color:#c9d1e0">
+    <p>Process หลายตัวขอ I/O พร้อมกัน → Kernel เก็บเป็น <strong>Queue</strong> แล้วจัดลำดับให้เหมาะสม</p>
+    <div style="background:#141925;border-radius:6px;padding:10px 14px;margin-bottom:8px">
+      <div style="color:#ffce54;font-weight:700;margin-bottom:6px">ตัวอย่าง: HDD มี 5 request รอ — sector 10, 55, 3, 70, 22</div>
+      <div style="display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-family:monospace;font-size:11px">
+        <span style="color:#ff6b6b">FCFS</span><span style="color:#c9d1e0">ทำตามลำดับ: 10→55→3→70→22 (หัว HDD วิ่งกลับไปกลับมาไกลมาก)</span>
+        <span style="color:#48cfad">Elevator</span><span style="color:#c9d1e0">เรียง + กวาดไปทิศเดียวก่อน: 3→10→22→55→70 (หัว HDD วิ่งน้อยกว่ามาก)</span>
+      </div>
+    </div>
+    <div style="padding:6px 10px;background:#1e2a3a;border-radius:4px;font-size:11px;color:#4a9eff">
+      💡 Elevator Algorithm (SCAN) ใช้กับ HDD เพราะลดระยะที่หัวอ่านต้องวิ่ง → ลดเวลา seek
+    </div>
+  </div>
+</details>
+
+<!-- Buffering -->
+<details open style="background:#1a2235;border:1.5px solid #48cfad;border-radius:8px;padding:12px 16px;margin-bottom:8px">
+  <summary style="color:#48cfad;font-weight:700;font-size:13px;cursor:pointer;list-style:none">🗄 Buffering — พื้นที่กันกระแทกระหว่างความเร็วที่ต่างกัน</summary>
+  <div style="margin-top:10px;font-size:12px;line-height:1.8;color:#c9d1e0">
+    <p><strong>ปัญหา:</strong> Network ส่งข้อมูลมา 1 GB/s แต่ CPU ประมวลผลได้แค่ 200 MB/s → ถ้าไม่มี buffer ข้อมูลหาย</p>
+    <p><strong>แก้ด้วย Buffer:</strong> เก็บข้อมูลขาเข้าชั่วคราว → CPU ค่อยๆ ดึงมาประมวลผลตามสะดวก</p>
+    <div style="background:#141925;border-radius:6px;padding:10px 14px;margin-bottom:8px">
+      <div style="color:#ffce54;font-weight:700;margin-bottom:6px">Double Buffering (ใช้ 2 Buffer สลับกัน)</div>
+      <div style="font-family:monospace;font-size:11px;line-height:2;color:#c9d1e0">
+        ขณะที่ <span style="color:#48cfad">Buffer A</span>: CPU กำลังประมวลผล<br>
+        ขณะเดียวกัน <span style="color:#4a9eff">Buffer B</span>: Device เติมข้อมูลใหม่เข้ามา<br>
+        → พอ A เสร็จ สลับ: B ส่งให้ CPU, A รับข้อมูลใหม่<br>
+        → CPU ไม่ต้องรอ Device เลย (ทำงานต่อเนื่อง)
+      </div>
+      <div style="margin-top:8px;display:flex;gap:8px;font-size:11px;text-align:center">
+        <div style="flex:1;background:#1e3a1e;border-radius:4px;padding:6px;color:#48cfad">Buffer A<br><span style="font-size:10px;color:#7a8a9e">CPU ประมวลผล</span></div>
+        <div style="display:flex;align-items:center;color:#ffce54;font-size:16px">⇄</div>
+        <div style="flex:1;background:#1a2a3a;border-radius:4px;padding:6px;color:#4a9eff">Buffer B<br><span style="font-size:10px;color:#7a8a9e">Device เติม</span></div>
+      </div>
+    </div>
+    <div style="padding:6px 10px;background:#1e3a2e;border-radius:4px;font-size:11px;color:#ffce54">
+      💡 ใช้ใน: Video streaming, Audio playback, Network receive — ทุกที่ที่ producer/consumer ความเร็วต่างกัน
+    </div>
+  </div>
+</details>
+
+<!-- Caching -->
+<details open style="background:#1a2235;border:1.5px solid #ffce54;border-radius:8px;padding:12px 16px;margin-bottom:8px">
+  <summary style="color:#ffce54;font-weight:700;font-size:13px;cursor:pointer;list-style:none">⚡ Caching — เก็บข้อมูลที่ใช้บ่อยไว้ใกล้ CPU</summary>
+  <div style="margin-top:10px;font-size:12px;line-height:1.8;color:#c9d1e0">
+    <p><strong>Buffer vs Cache ต่างกันยังไง?</strong></p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+      <div style="background:#252f40;border-radius:5px;padding:8px 10px">
+        <div style="color:#48cfad;font-weight:700">Buffer</div>
+        <div style="font-size:11px;margin-top:3px">เก็บข้อมูลชั่วคราว <strong>ระหว่างโอน</strong><br>มีแค่ copy เดียว ในนั้น<br>เมื่อ CPU อ่านแล้ว → ลบทิ้ง</div>
+      </div>
+      <div style="background:#252f40;border-radius:5px;padding:8px 10px">
+        <div style="color:#ffce54;font-weight:700">Cache</div>
+        <div style="font-size:11px;margin-top:3px">เก็บสำเนาข้อมูลที่ <strong>เคยใช้แล้ว</strong><br>ข้อมูลจริงยังอยู่ใน Storage<br>ถ้าใช้ซ้ำ → อ่านจาก Cache แทน (เร็วกว่ามาก)</div>
+      </div>
+    </div>
+    <div style="padding:6px 10px;background:#2a2000;border-radius:4px;font-size:11px;color:#ffce54">
+      💡 ตัวอย่าง: เปิดไฟล์ภาพเดิมซ้ำๆ → OS ดึงจาก Cache ใน RAM แทนที่จะอ่าน HDD ทุกครั้ง
+    </div>
+  </div>
+</details>
+
+<!-- Spooling -->
+<details open style="background:#1a2235;border:1.5px solid #fc6e51;border-radius:8px;padding:12px 16px;margin-bottom:8px">
+  <summary style="color:#fc6e51;font-weight:700;font-size:13px;cursor:pointer;list-style:none">🖨 Spooling — คิว Output สำหรับ Device ที่แชร์ไม่ได้</summary>
+  <div style="margin-top:10px;font-size:12px;line-height:1.8;color:#c9d1e0">
+    <p><strong>ปัญหา:</strong> Printer ใช้ได้ครั้งละ 1 Process เท่านั้น — ถ้า Process A กำลังพิมพ์อยู่ Process B ต้องรอ</p>
+    <p><strong>แก้ด้วย Spooling:</strong> Process ทุกตัว "พิมพ์" ลง <strong>Disk (Spool Queue)</strong> ก่อน — Kernel จัดการส่งต่อให้ Printer ทีละงาน</p>
+    <div style="background:#141925;border-radius:6px;padding:10px 14px;margin:8px 0;font-family:monospace;font-size:11px;line-height:2">
+      Process A พิมพ์ → <span style="color:#fc6e51">Spool file A</span> บน Disk<br>
+      Process B พิมพ์ → <span style="color:#ffce54">Spool file B</span> บน Disk<br>
+      Process C พิมพ์ → <span style="color:#4a9eff">Spool file C</span> บน Disk<br>
+      <span style="color:#48cfad">Printer daemon</span> ส่ง A → พิมพ์เสร็จ → ส่ง B → พิมพ์เสร็จ → ส่ง C
+    </div>
+    <p style="font-size:11px;color:#7a8a9e">ข้อดี: Process ไม่ต้องรอ Printer ตั้งแต่ต้น — สามารถ "ส่งงาน" แล้วกลับไปทำอื่นได้ทันที</p>
+    <div style="padding:6px 10px;background:#2a1a0a;border-radius:4px;font-size:11px;color:#ffce54">
+      💡 ใช้กับ: Printer, Plotter, FAX — device ที่ต้องใช้ต่อเนื่องไม่ขัดกัน
+    </div>
+  </div>
+</details>
+
+<!-- Device Driver -->
+<details open style="background:#1a2235;border:1.5px solid #a78bfa;border-radius:8px;padding:12px 16px;margin-bottom:8px">
+  <summary style="color:#a78bfa;font-weight:700;font-size:13px;cursor:pointer;list-style:none">🔌 Device Driver — ล่ามระหว่าง OS กับ Hardware</summary>
+  <div style="margin-top:10px;font-size:12px;line-height:1.8;color:#c9d1e0">
+    <p><strong>ปัญหา:</strong> OS ไม่รู้วิธีคุยกับ Hardware ทุกชนิด — Printer แต่ละ model มีคำสั่งต่างกัน</p>
+    <p><strong>แก้ด้วย Device Driver:</strong> โปรแกรมที่ <strong>manufacturer เขียน</strong> เพื่อแปล OS command → คำสั่งเฉพาะของ Hardware นั้น</p>
+    <div style="background:#141925;border-radius:6px;padding:10px 14px;margin:8px 0;font-family:monospace;font-size:11px;line-height:2.2">
+      User Program: <span style="color:#c9d1e0">write("Hello")</span><br>
+      ↓ OS / Kernel I/O Subsystem<br>
+      <span style="color:#a78bfa">Device Driver (Printer)</span>: แปลเป็น ESC/P commands<br>
+      ↓<br>
+      <span style="color:#4a9eff">Device Controller</span>: ส่ง electrical signal ไปยัง Printer<br>
+      ↓<br>
+      <span style="color:#48cfad">Printer</span>: พิมพ์ "Hello" ออกมา
+    </div>
+    <div style="padding:6px 10px;background:#1a1030;border-radius:4px;font-size:11px;color:#a78bfa">
+      💡 เปลี่ยน Printer model → ต้องติดตั้ง Driver ใหม่ เพราะคำสั่งต่างกัน แต่ User Program ยัง write("Hello") เหมือนเดิม
+    </div>
+  </div>
+</details>
+
+<!-- Blocking vs Non-blocking -->
+<details open style="background:#1a2235;border:1.5px solid #ff6b6b;border-radius:8px;padding:12px 16px;margin-bottom:8px">
+  <summary style="color:#ff6b6b;font-weight:700;font-size:13px;cursor:pointer;list-style:none">⏳ Blocking vs Non-blocking I/O — Process รอหรือไม่รอ?</summary>
+  <div style="margin-top:10px;font-size:12px;line-height:1.8;color:#c9d1e0">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+      <div style="background:#2a0a0a;border-radius:6px;padding:10px 12px">
+        <div style="color:#ff6b6b;font-weight:700;margin-bottom:4px">Blocking I/O</div>
+        <div style="font-size:11px;line-height:1.7">Process เรียก read() → <strong>หยุดรอ</strong> จนข้อมูลมาครบ<br>
+        ถึงค่อย return และทำงานต่อ<br><br>
+        <span style="color:#7a8a9e">ตัวอย่าง: อ่านไฟล์ด้วย fread() แบบปกติ</span><br>
+        ข้อดี: เขียน code ง่าย เหมือนทำงานตามลำดับ<br>
+        ข้อเสีย: Process ไม่ทำอะไรได้เลยระหว่างรอ</div>
+      </div>
+      <div style="background:#0a1a2a;border-radius:6px;padding:10px 12px">
+        <div style="color:#4a9eff;font-weight:700;margin-bottom:4px">Non-blocking I/O</div>
+        <div style="font-size:11px;line-height:1.7">Process เรียก read() → <strong>return ทันที</strong> แม้ข้อมูลยังไม่พร้อม<br>
+        Process ทำงานอื่นไปก่อน แล้วค่อยกลับมาเช็ค<br><br>
+        <span style="color:#7a8a9e">ตัวอย่าง: Network socket แบบ async</span><br>
+        ข้อดี: Process ไม่ถูก block<br>
+        ข้อเสีย: code ซับซ้อน ต้อง check สถานะเอง</div>
+      </div>
+    </div>
+    <div style="background:#141925;border-radius:5px;padding:8px 12px;font-size:11px">
+      <strong style="color:#ffce54">Asynchronous I/O</strong> (คล้าย Non-blocking แต่ต่าง):<br>
+      Process ส่ง request แล้วลืมไปเลย — OS จะ <strong>callback/notify</strong> เมื่อเสร็จ ไม่ต้อง check เอง
+    </div>
+  </div>
+</details>
+
+<!-- Error Handling -->
+<details open style="background:#1a2235;border:1.5px solid #ff6b6b;border-radius:8px;padding:12px 16px;margin-bottom:16px">
+  <summary style="color:#ff6b6b;font-weight:700;font-size:13px;cursor:pointer;list-style:none">❌ Error Handling — จัดการข้อผิดพลาด I/O</summary>
+  <div style="margin-top:10px;font-size:12px;line-height:1.8;color:#c9d1e0">
+    <p>OS ต้องรับมือเมื่อ I/O ล้มเหลว — ตรวจผ่าน Status Register:</p>
+    <div style="display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-family:monospace;font-size:11px;background:#141925;border-radius:6px;padding:8px 12px">
+      <span style="color:#ff6b6b">Transient Error</span><span style="color:#c9d1e0">ชั่วคราว เช่น network packet หาย → OS retry อัตโนมัติ</span>
+      <span style="color:#ff6b6b">Permanent Error</span><span style="color:#c9d1e0">ถาวร เช่น HDD sector เสีย → OS รายงาน error ไปยัง Process</span>
+      <span style="color:#ff6b6b">Device Error</span><span style="color:#c9d1e0">อุปกรณ์เสีย เช่น Printer หมึกหมด → OS ส่ง error code กลับ</span>
+    </div>
+    <div style="margin-top:8px;padding:6px 10px;background:#2a0a0a;border-radius:4px;font-size:11px;color:#ffce54">
+      💡 OS ส่ง Error Code กลับให้ Process เช่น errno ใน C / Exception ใน Java — Process ต้องจัดการเอง
+    </div>
+  </div>
+</details>
 
 <div class="tool-area">
   <h3>📝 โจทย์ฝึกหัด File Systems</h3>
