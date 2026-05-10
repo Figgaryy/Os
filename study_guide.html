@@ -4520,21 +4520,153 @@ Internal Fragmentation = (จำนวน Pages × Page Size) − Process Size<b
 <div class="collapsible">
   <div class="col-header" onclick="tog(this)">HW8 ข้อ 5 (Exercise 9.14): Demand Paging Utilizations <span class="arrow">▼</span></div>
   <div class="col-body">
-    <p><strong>โจทย์:</strong> CPU 20%, Paging Disk 97.7%, Other I/O 5% — แต่ละมาตรการต่อไปนี้ช่วยปรับปรุง CPU Utilization หรือไม่?</p>
-    <div class="box box-yellow">
-      <strong>วิเคราะห์:</strong> ระบบใช้เวลาส่วนใหญ่ Paging → over-allocated memory → Thrashing
+    <p><strong>โจทย์:</strong> ระบบ Demand Paging ตรวจวัด Utilization ได้ดังนี้</p>
+    <ul>
+      <li><strong>CPU Utilization = 20%</strong></li>
+      <li><strong>Paging Disk = 97.7%</strong></li>
+      <li><strong>Other I/O devices = 5%</strong></li>
+    </ul>
+    <p>คำถาม: แต่ละมาตรการ (a)–(h) ต่อไปนี้ <em>จะเพิ่ม CPU Utilization หรือไม่</em>? อธิบาย</p>
+
+    <div class="box box-red">
+      <strong>🔍 Step 1 — วินิจฉัยปัญหาของระบบก่อนตอบ</strong><br>
+      ตัวเลขบอกอะไร?<br>
+      • CPU เพียง 20% → CPU <strong>ว่างถึง 80%</strong> ของเวลา (ไม่มีงานทำ)<br>
+      • Paging Disk 97.7% → Disk ที่ใช้สลับ Page <strong>ทำงานเกือบเต็มกำลัง</strong><br>
+      • Other I/O 5% → อุปกรณ์ I/O อื่นแทบว่าง<br><br>
+      <strong>สรุปอาการ:</strong> ระบบกำลัง <span style="color:#c00"><strong>Thrashing</strong></span> — Process ในระบบมีมากเกินไปเทียบกับ RAM ทำให้แต่ละ Process ได้ Frame ไม่พอเก็บ Working Set → เกิด Page Fault ตลอดเวลา → Paging Disk แน่น → CPU ต้องรอข้อมูลตลอด → Utilization ตก<br><br>
+      <strong>คอขวด (Bottleneck) = Paging Disk</strong> ไม่ใช่ CPU
     </div>
+
+    <div class="box box-yellow">
+      <strong>🎯 Step 2 — หลักคิดในการตอบ</strong><br>
+      มาตรการที่จะ <strong>เพิ่ม CPU Utilization</strong> ได้ ต้องทำอย่างใดอย่างหนึ่งต่อไปนี้:<br>
+      ✅ ลด <strong>จำนวน Page Fault</strong> (ลดงานของ Paging Disk)<br>
+      ✅ ทำให้แต่ละ Page Fault <strong>เสร็จเร็วขึ้น</strong> (ลดเวลารอของ CPU)<br><br>
+      มาตรการที่ <strong>ไม่ช่วย</strong> คือมาตรการที่:<br>
+      ❌ ปรับสิ่งที่ <em>ไม่ใช่</em> คอขวด (เช่น CPU ที่ยังว่างอยู่ตั้ง 80%)<br>
+      ❌ เพิ่มภาระให้ Paging Disk แย่ลงไปอีก
+    </div>
+
+    <h4 style="margin-top:18px">📋 ตารางสรุปคำตอบ</h4>
     <table>
-      <tr><th>มาตรการ</th><th>ช่วย?</th><th>เหตุผล</th></tr>
-      <tr><td>(a) ติด CPU เร็วขึ้น</td><td>❌ No</td><td>CPU ไม่ใช่คอขวด</td></tr>
-      <tr><td>(b) Paging Disk ใหญ่ขึ้น</td><td>❌ No</td><td>ไม่เกี่ยวกับขนาด disk</td></tr>
-      <tr><td>(c) เพิ่ม Multiprogramming</td><td>❌ No</td><td>Process ในระบบมากขึ้น → Thrashing แย่ลง</td></tr>
-      <tr><td>(d) ลด Multiprogramming</td><td>✅ Yes</td><td>Process น้อยลง → Page Fault น้อยลง</td></tr>
-      <tr><td>(e) เพิ่ม RAM</td><td>✅ Yes</td><td>เก็บ Pages ได้มากขึ้น Page Fault ลดลง</td></tr>
-      <tr><td>(f) Disk เร็วขึ้น/หลายตัว</td><td>✅ Yes</td><td>คอขวด disk ถูกแก้ → CPU ได้ข้อมูลเร็วขึ้น</td></tr>
-      <tr><td>(g) Pre-paging</td><td>✅ Yes</td><td>โหลด Page ล่วงหน้า → Fault น้อยลง (ถ้าทำนายได้)</td></tr>
-      <tr><td>(h) เพิ่ม Page Size</td><td>❌ No</td><td>Pages ใน Memory น้อยลง, ส่งข้อมูลต่อ Fault มากขึ้น → Util อาจลดลง</td></tr>
+      <tr><th>มาตรการ</th><th>ช่วย?</th><th>เหตุผลสั้น</th></tr>
+      <tr><td>(a) Install a faster CPU</td><td>❌ No</td><td>CPU ไม่ใช่คอขวด — เร็วขึ้นก็แค่ idle เร็วขึ้น</td></tr>
+      <tr><td>(b) Install a bigger paging disk</td><td>❌ No</td><td>ขนาด ≠ ความเร็ว — bottleneck คือ throughput ไม่ใช่ capacity</td></tr>
+      <tr><td>(c) Increase degree of multiprogramming</td><td>❌ No (แย่ลง)</td><td>Process มากขึ้น → Frame/Process ลดลง → Thrashing หนักขึ้น</td></tr>
+      <tr><td>(d) Decrease degree of multiprogramming</td><td>✅ Yes</td><td>Process น้อยลง → แต่ละ Process มี Frame พอ Working Set → Fault ลด</td></tr>
+      <tr><td>(e) Install more main memory</td><td>✅ Yes</td><td>RAM มากขึ้น → เก็บ Page ได้มากขึ้น → Fault ลด → Disk โล่ง</td></tr>
+      <tr><td>(f) Faster hard disk / multiple disks</td><td>✅ Yes</td><td>Disk โล่งเร็วขึ้น → CPU รอน้อยลง</td></tr>
+      <tr><td>(g) Add prepaging</td><td>✅ Yes (ถ้าทำนายแม่น)</td><td>โหลด Page ล่วงหน้า → ลด Fault ระหว่างทำงาน</td></tr>
+      <tr><td>(h) Increase page size</td><td>❌ No (มักทำให้แย่ลง)</td><td>Page ใหญ่ → Frame ใน RAM น้อย + transfer ต่อ Fault นาน</td></tr>
     </table>
+
+    <h4 style="margin-top:20px">🔬 อธิบายแต่ละข้อแบบละเอียด</h4>
+
+    <div class="box box-red">
+      <strong>(a) Install a faster CPU — ❌ ไม่ช่วย</strong><br><br>
+      <strong>เหตุผล:</strong> CPU ปัจจุบันใช้ไปเพียง 20% หมายความว่า CPU <em>ว่างอยู่แล้ว 80%</em> ของเวลา — มันไม่ใช่ทรัพยากรที่ขาด<br><br>
+      <strong>ลองคิดเปรียบเทียบ:</strong> เหมือนเอาเชฟเก่งกว่าเดิมมาทำงานในครัวที่วัตถุดิบส่งมาช้า — เชฟจะทำเสร็จเร็วก็จริง แต่หลังจากนั้นก็ต้อง <strong>รอวัตถุดิบ (page) อยู่ดี</strong><br><br>
+      <strong>ผลลัพธ์:</strong> CPU Utilization อาจ <em>ลดลง</em> ด้วยซ้ำ เพราะงานเดิมเสร็จเร็วขึ้น แล้วก็ไป idle รอ Paging Disk เหมือนเดิม
+    </div>
+
+    <div class="box box-red">
+      <strong>(b) Install a bigger paging disk — ❌ ไม่ช่วย</strong><br><br>
+      <strong>เหตุผล:</strong> Disk 97.7% ที่บอกคือ <strong>เปอร์เซ็นต์เวลาที่ Disk กำลังทำงาน</strong> (busy time) ไม่ใช่เปอร์เซ็นต์พื้นที่ที่เต็ม<br><br>
+      <strong>หัวใจที่ต้องเข้าใจ:</strong>
+      <ul>
+        <li>Disk ใหญ่ขึ้น = เก็บข้อมูลได้มากขึ้น (capacity)</li>
+        <li>แต่ <strong>ความเร็วในการอ่าน/เขียน (throughput)</strong> ไม่ได้เพิ่มขึ้น</li>
+        <li>คอขวดของระบบนี้คือ <em>ความเร็ว</em> ของ Paging Disk ไม่ใช่ <em>ความจุ</em></li>
+      </ul>
+      <strong>เปรียบเทียบ:</strong> เหมือนถนนรถติด แล้วเราขยาย <em>ลานจอดรถ</em> — รถบนถนนก็ยังติดเหมือนเดิม
+    </div>
+
+    <div class="box box-red">
+      <strong>(c) Increase the degree of multiprogramming — ❌ ทำให้แย่ลง</strong><br><br>
+      <strong>เหตุผล:</strong> เพิ่ม Process ที่อยู่ใน Memory พร้อมกัน → <strong>RAM ที่มีอยู่ต้องถูกแบ่งเป็นชิ้นเล็กลง</strong> → แต่ละ Process ได้ Frame น้อยลง → ไม่พอเก็บ Working Set<br><br>
+      <strong>ผลลูกโซ่:</strong>
+      <pre style="background:#fff3f3;padding:8px;border-left:3px solid #c00">
+Multiprogramming ↑
+  → Frames per Process ↓
+    → Page Fault Rate ↑
+      → Paging Disk Queue ยาวขึ้น
+        → CPU รอนานขึ้น
+          → CPU Utilization ↓ (แย่ลงไปอีก!)
+      </pre>
+      <strong>หลักการสำคัญ:</strong> ในกราฟ Thrashing ปกติ CPU Utilization จะเพิ่มตาม Multiprogramming ถึงจุดหนึ่ง แล้ว <strong>ตกลงเป็นหน้าผา</strong> เมื่อเข้าสู่ Thrashing — และระบบนี้อยู่ <em>หลังจุดยอด</em> แล้ว
+    </div>
+
+    <div class="box box-green">
+      <strong>(d) Decrease the degree of multiprogramming — ✅ ช่วย</strong><br><br>
+      <strong>เหตุผล:</strong> นี่คือ <strong>วิธีแก้ Thrashing คลาสสิก</strong> — ลดจำนวน Process ที่อยู่พร้อมกัน → Process ที่เหลือได้ Frame เพียงพอกับ Working Set → Page Fault ลด → CPU ได้ทำงานจริง<br><br>
+      <strong>วิธีปฏิบัติ:</strong> OS อาจ Suspend (swap-out) Process บางตัวออกไปทั้ง Process แล้วเอากลับมาทีหลังเมื่อระบบโล่ง<br><br>
+      <strong>ผลลูกโซ่:</strong>
+      <pre style="background:#f0fff0;padding:8px;border-left:3px solid #2a8">
+Multiprogramming ↓
+  → Frames per Process ↑
+    → Working Set fit ใน RAM
+      → Page Fault Rate ↓
+        → Paging Disk Idle ขึ้น
+          → CPU ได้รัน → Utilization ↑
+      </pre>
+    </div>
+
+    <div class="box box-green">
+      <strong>(e) Install more main memory — ✅ ช่วย</strong><br><br>
+      <strong>เหตุผล:</strong> RAM มากขึ้น → เก็บ Page ของหลาย Process ได้มากขึ้น → Working Set ของทุก Process fit ใน Memory → Page Fault ลดลงอย่างมาก<br><br>
+      <strong>เปรียบเทียบกับ (d):</strong>
+      <ul>
+        <li>(d) คือลด Process ลงเพื่อให้ Frame ที่มีอยู่พอ</li>
+        <li>(e) คือเพิ่ม Frame ทั้งหมด เพื่อรองรับ Process จำนวนเดิม → <strong>ดีกว่าในแง่ Throughput</strong> เพราะไม่ต้องลด workload</li>
+      </ul>
+      <strong>ข้อเสีย:</strong> ต้องลงทุนซื้อ Hardware เพิ่ม
+    </div>
+
+    <div class="box box-green">
+      <strong>(f) Install a faster hard disk or multiple disks — ✅ ช่วย</strong><br><br>
+      <strong>เหตุผล:</strong> วิธีนี้ <em>ไม่ลด</em> จำนวน Page Fault แต่ทำให้แต่ละ Fault <strong>เสร็จเร็วขึ้น</strong> → CPU รอแต่ละครั้งสั้นลง → ได้กลับมาทำงานเร็วขึ้น<br><br>
+      <strong>กรณี Multiple Disks:</strong> สามารถทำ I/O หลาย Request พร้อมกัน (Parallelism) → Throughput ของระบบ Paging รวมเพิ่มขึ้น<br><br>
+      <strong>ทำไมต่างจาก (b):</strong>
+      <ul>
+        <li>(b) เพิ่ม <em>ขนาด</em> disk → ไม่ได้แก้คอขวด</li>
+        <li>(f) เพิ่ม <em>ความเร็ว/จำนวน</em> disk → แก้คอขวดโดยตรง</li>
+      </ul>
+    </div>
+
+    <div class="box box-green">
+      <strong>(g) Add prepaging — ✅ ช่วย (ถ้าทำนายแม่น)</strong><br><br>
+      <strong>Prepaging คืออะไร:</strong> แทนที่จะรอให้เกิด Page Fault ก่อนค่อยโหลด ระบบ <strong>โหลด Page ที่คาดว่าจะต้องใช้ล่วงหน้า</strong> เป็นกลุ่ม (เช่น ตอนสตาร์ต Process หรือคืนจาก Suspend)<br><br>
+      <strong>ทำไมช่วย:</strong> ลดจำนวน Page Fault ระหว่างที่ Process รัน → ลดเวลา CPU รอ Disk<br><br>
+      <strong>คำเตือน:</strong> หากทำนายผิด (โหลด Page ที่ไม่ได้ใช้) → <strong>เปลือง I/O และ Memory</strong> → อาจทำให้ระบบแย่ลงด้วยซ้ำ → ผลคือ <em>"ขึ้นกับว่าทำนายแม่นแค่ไหน"</em>
+    </div>
+
+    <div class="box box-red">
+      <strong>(h) Increase the page size — ❌ มักทำให้แย่ลง</strong><br><br>
+      <strong>ผลของการเพิ่ม Page Size (เช่น จาก 4KB เป็น 16KB):</strong>
+      <ol>
+        <li><strong>จำนวน Frame ใน RAM ลดลง</strong> (RAM เท่าเดิม แต่ Page ใหญ่ขึ้น) → Process มี Frame น้อยลง → Page Fault อาจ <em>เพิ่ม</em></li>
+        <li><strong>เวลาขนต่อ Fault นานขึ้น</strong> (ต้องอ่านข้อมูลมากขึ้นต่อครั้ง) → CPU รอแต่ละครั้งนานขึ้น</li>
+        <li><strong>Internal Fragmentation เพิ่ม</strong> (โดยเฉพาะกับข้อมูลที่ไม่ต่อเนื่องกัน)</li>
+      </ol>
+      <strong>ข้อดีเพียงข้อเดียว:</strong> ถ้า Process มี <em>Spatial Locality สูง</em> (อ่านข้อมูลเรียงต่อกัน) Page ใหญ่อาจดีเพราะลดจำนวน Fault ตามปริมาณข้อมูล<br><br>
+      <strong>แต่ในระบบที่ Thrashing อยู่แล้ว:</strong> ผลเสียจากข้อ 1 และ 2 มักหนักกว่า → <strong>โดยทั่วไปไม่ช่วย</strong>
+    </div>
+
+    <div class="box box-blue">
+      <strong>📝 สรุปแนวคิดสำหรับสอบ</strong><br>
+      เมื่อเจอโจทย์ Utilization แบบนี้ ให้ทำ 3 ขั้น:<br>
+      <strong>1.</strong> หา <strong>คอขวด</strong> (อันที่ % สูงสุด หรืออันที่ทำให้ CPU ว่าง)<br>
+      <strong>2.</strong> ตรวจว่ามาตรการนั้น <strong>แตะคอขวดโดยตรงหรือไม่</strong>:
+      <ul>
+        <li>ลดงาน (page fault)? → ✅</li>
+        <li>เพิ่ม throughput ของคอขวด? → ✅</li>
+        <li>ปรับสิ่งที่ไม่ได้คอขวด? → ❌</li>
+        <li>เพิ่มภาระให้คอขวด? → ❌ (และมักทำให้แย่ลง)</li>
+      </ul>
+      <strong>3.</strong> มาตรการที่ "ช่วย" ในข้อนี้คือ <strong>(d), (e), (f), (g)</strong> — รวม 4 ข้อ<br>
+      มาตรการที่ "ไม่ช่วย / ทำให้แย่ลง" คือ <strong>(a), (b), (c), (h)</strong> — รวม 4 ข้อ
+    </div>
   </div>
 </div>
 
