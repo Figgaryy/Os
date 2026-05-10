@@ -5542,26 +5542,56 @@ Internal Fragmentation = (จำนวน Pages × Page Size) − Process Size<b
     คำนวณขนาดไฟล์สูงสุดและ Indirect Pointers
   </summary>
   <div style="margin-top:10px">
-    <div class="box box-blue" style="font-size:12px;margin-bottom:10px">
-      <strong>สูตร:</strong> Pointers per Indirect Block = Block_size ÷ Pointer_size
+
+    <!-- Q: Direct = 10 always? -->
+    <div style="background:#1e2a1e;border-left:3px solid #48cfad;border-radius:6px;padding:10px 14px;margin-bottom:10px;font-size:12px">
+      <div style="color:#48cfad;font-weight:700;margin-bottom:5px">❓ Direct Pointer = 10 เสมอไหม?</div>
+      <div style="color:#c9d1e0;line-height:1.7">
+        <strong style="color:#ffce54">ไม่ตายตัว</strong> — ขึ้นอยู่กับ OS / Implementation<br>
+        <div style="margin-top:6px;display:grid;grid-template-columns:auto 1fr;gap:3px 12px">
+          <span style="color:#ff6b6b">Unix แบบดั้งเดิม (UFS)</span><span style="color:#c9d1e0">→ 10 direct pointers</span>
+          <span style="color:#4a9eff">Linux ext2/ext3</span><span style="color:#c9d1e0">→ 12 direct pointers</span>
+          <span style="color:#a78bfa">ข้อสอบ/ตำรา</span><span style="color:#c9d1e0">→ กำหนดมาให้ในโจทย์ — ต้องอ่านโจทย์ให้ดี</span>
+        </div>
+        <div style="margin-top:8px;padding:6px 10px;background:#141925;border-radius:4px;color:#ffce54">
+          💡 <strong>สรุป:</strong> ในข้อสอบ — โจทย์จะบอกว่า "มี N direct pointers" เสมอ ไม่ต้องจำ 10 เป็นค่าตายตัว
+        </div>
+      </div>
     </div>
-    <div style="background:#141925;border-radius:6px;padding:12px 14px;font-size:12px">
-      <div style="color:#ffce54;font-weight:700;margin-bottom:8px">ตัวอย่าง: Block=512B, Pointer=4B → 512÷4 = <span style="color:#a78bfa">128 pointers/block</span></div>
-      <div style="display:grid;grid-template-columns:auto 1fr auto;gap:5px 12px;align-items:center">
+
+    <!-- Formula -->
+    <div class="box box-blue" style="font-size:12px;margin-bottom:10px">
+      <strong>สูตรหลัก:</strong>
+      <div style="margin-top:6px;font-family:monospace;font-size:12px;line-height:2">
+        <span style="color:#ffce54">n</span> = Block_size ÷ Pointer_size &nbsp;<span style="color:#7a8a9e">(จำนวน pointer ใน 1 indirect block)</span><br>
+        <span style="color:#a78bfa">Single Indirect</span> = n blocks<br>
+        <span style="color:#ffce54">Double Indirect</span> = n × n = n² blocks<br>
+        <span style="color:#ff6b6b">Triple Indirect</span> = n × n × n = n³ blocks<br>
+        <span style="color:#48cfad">Max file size</span> = (direct + n + n² + n³) × Block_size
+      </div>
+    </div>
+
+    <!-- Example with 512B / 4B = 128 -->
+    <div style="background:#141925;border-radius:6px;padding:12px 14px;font-size:12px;margin-bottom:10px">
+      <div style="color:#ffce54;font-weight:700;margin-bottom:8px">
+        ตัวอย่างที่ 1: Block=512B, Pointer=4B, Direct=10
+        <span style="color:#7a8a9e;font-weight:400;font-size:11px"> → n = 512÷4 = <span style="color:#a78bfa">128</span></span>
+      </div>
+      <div style="display:grid;grid-template-columns:auto 1fr auto;gap:6px 12px;align-items:center">
         <div style="background:#1e1a2e;border:1px solid #a78bfa;border-radius:3px;padding:3px 8px;font-family:monospace;font-size:11px;color:#a78bfa;text-align:center">Direct (×10)</div>
-        <div style="color:#c9d1e0;font-size:11px">10 blocks</div>
+        <div style="color:#c9d1e0;font-size:11px">10 blocks <span style="color:#7a8a9e">(กำหนดโดยโจทย์)</span></div>
         <div style="color:#7a8a9e;font-size:10px">= 10 × 512 = 5 KB</div>
 
         <div style="background:#1a2a3a;border:1px solid #4a9eff;border-radius:3px;padding:3px 8px;font-family:monospace;font-size:11px;color:#4a9eff;text-align:center">Single Ind.</div>
-        <div style="color:#c9d1e0;font-size:11px">128 blocks</div>
+        <div style="color:#c9d1e0;font-size:11px">128 blocks <span style="color:#7a8a9e">(= n)</span></div>
         <div style="color:#7a8a9e;font-size:10px">= 128 × 512 = 64 KB</div>
 
         <div style="background:#2a2000;border:1px solid #ffce54;border-radius:3px;padding:3px 8px;font-family:monospace;font-size:11px;color:#ffce54;text-align:center">Double Ind.</div>
-        <div style="color:#c9d1e0;font-size:11px">128 × 128 = 16,384 blocks</div>
+        <div style="color:#c9d1e0;font-size:11px">128² = 16,384 blocks <span style="color:#7a8a9e">(= n²)</span></div>
         <div style="color:#7a8a9e;font-size:10px">= 8 MB</div>
 
         <div style="background:#2a1010;border:1px solid #ff6b6b;border-radius:3px;padding:3px 8px;font-family:monospace;font-size:11px;color:#ff6b6b;text-align:center">Triple Ind.</div>
-        <div style="color:#c9d1e0;font-size:11px">128³ = 2,097,152 blocks</div>
+        <div style="color:#c9d1e0;font-size:11px">128³ = 2,097,152 blocks <span style="color:#7a8a9e">(= n³)</span></div>
         <div style="color:#7a8a9e;font-size:10px">= 1 GB</div>
       </div>
       <div style="margin-top:10px;padding:8px 12px;background:#1e1a2e;border-radius:4px;font-family:monospace;font-size:11px">
@@ -5571,6 +5601,39 @@ Internal Fragmentation = (จำนวน Pages × Page Size) − Process Size<b
         <span style="color:#48cfad;font-weight:700">~1 GB</span>
       </div>
     </div>
+
+    <!-- Example 2 with different block size (ext2 style) -->
+    <div style="background:#141925;border-radius:6px;padding:12px 14px;font-size:12px">
+      <div style="color:#4a9eff;font-weight:700;margin-bottom:8px">
+        ตัวอย่างที่ 2: Block=1024B, Pointer=4B, Direct=12
+        <span style="color:#7a8a9e;font-weight:400;font-size:11px"> → n = 1024÷4 = <span style="color:#a78bfa">256</span></span>
+      </div>
+      <div style="display:grid;grid-template-columns:auto 1fr auto;gap:6px 12px;align-items:center">
+        <div style="background:#1e1a2e;border:1px solid #a78bfa;border-radius:3px;padding:3px 8px;font-family:monospace;font-size:11px;color:#a78bfa;text-align:center">Direct (×12)</div>
+        <div style="color:#c9d1e0;font-size:11px">12 blocks</div>
+        <div style="color:#7a8a9e;font-size:10px">= 12 × 1024 = 12 KB</div>
+
+        <div style="background:#1a2a3a;border:1px solid #4a9eff;border-radius:3px;padding:3px 8px;font-family:monospace;font-size:11px;color:#4a9eff;text-align:center">Single Ind.</div>
+        <div style="color:#c9d1e0;font-size:11px">256 blocks</div>
+        <div style="color:#7a8a9e;font-size:10px">= 256 KB</div>
+
+        <div style="background:#2a2000;border:1px solid #ffce54;border-radius:3px;padding:3px 8px;font-family:monospace;font-size:11px;color:#ffce54;text-align:center">Double Ind.</div>
+        <div style="color:#c9d1e0;font-size:11px">256² = 65,536 blocks</div>
+        <div style="color:#7a8a9e;font-size:10px">= 64 MB</div>
+
+        <div style="background:#2a1010;border:1px solid #ff6b6b;border-radius:3px;padding:3px 8px;font-family:monospace;font-size:11px;color:#ff6b6b;text-align:center">Triple Ind.</div>
+        <div style="color:#c9d1e0;font-size:11px">256³ = 16,777,216 blocks</div>
+        <div style="color:#7a8a9e;font-size:10px">= 16 GB</div>
+      </div>
+      <div style="margin-top:10px;padding:8px 12px;background:#1e1a2e;border-radius:4px;font-family:monospace;font-size:11px">
+        <span style="color:#7a8a9e">Max file size = </span>
+        <span style="color:#4a9eff">(12 + 256 + 65,536 + 16,777,216)</span>
+        <span style="color:#7a8a9e"> × 1024 B ≈ </span>
+        <span style="color:#48cfad;font-weight:700">~16 GB</span>
+      </div>
+      <div style="margin-top:6px;font-size:11px;color:#7a8a9e">→ Block ใหญ่ขึ้น + Direct มากขึ้น = ไฟล์สูงสุดใหญ่ขึ้นมาก</div>
+    </div>
+
   </div>
 </details>
 </div>
