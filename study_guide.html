@@ -6025,73 +6025,73 @@ Multiprogramming ↓
     <span style="background:#4a9eff;color:#141925;font-size:11px;font-weight:700;padding:2px 10px;border-radius:10px">1</span>
     <span style="color:#4a9eff;font-weight:700;font-size:14px">Bit Vector (Bitmap)</span>
   </div>
-  <p style="font-size:13px;color:#c9d1e0;margin:0 0 10px">1 bit ต่อ 1 Block — <strong style="color:#48cfad">0 = ว่าง (free)</strong>, <strong style="color:#ff6b6b">1 = ใช้งาน (used)</strong></p>
+  <p style="font-size:13px;color:#c9d1e0;margin:0 0 10px">1 bit ต่อ 1 Block — <strong style="color:#48cfad">1 = ว่าง (free)</strong>, <strong style="color:#ff6b6b">0 = ใช้งาน (used / allocated)</strong> <span style="color:#7a8a9e">(ตาม Lecture Note 9)</span></p>
 
   <!-- Bitmap row -->
   <div style="overflow-x:auto;margin-bottom:10px">
   <svg width="520" height="64" viewBox="0 0 520 64" xmlns="http://www.w3.org/2000/svg" style="display:block;min-width:380px">
     <text x="4" y="11" font-family="monospace" font-size="9" fill="#7a8a9e">Block#:</text>
-    <!-- bits: 1=used(red), 0=free(green) pattern: 1,1,0,0,1,1,1,0,0,0,1,0,0,1,1,0,0,0,0,1 -->
+    <!-- bits: 1=free(green), 0=used(red) — Lecture convention. Pattern: blocks 0,1,4,5,6,10 used (0); blocks 2,3,7,8,9,11,12 free (1) -->
     <!-- Helper: each cell 24px wide starting x=4 -->
     <!-- Block 0: used -->
     <rect x="4"   y="16" width="22" height="22" rx="2" fill="#3a1010" stroke="#ff6b6b" stroke-width="1.5"/>
-    <text x="15"  y="31" font-family="monospace" font-size="10" fill="#ff6b6b" text-anchor="middle" font-weight="bold">1</text>
+    <text x="15"  y="31" font-family="monospace" font-size="10" fill="#ff6b6b" text-anchor="middle" font-weight="bold">0</text>
     <text x="15"  y="50" font-family="monospace" font-size="8"  fill="#7a8a9e" text-anchor="middle">0</text>
     <!-- Block 1: used -->
     <rect x="28"  y="16" width="22" height="22" rx="2" fill="#3a1010" stroke="#ff6b6b" stroke-width="1.5"/>
-    <text x="39"  y="31" font-family="monospace" font-size="10" fill="#ff6b6b" text-anchor="middle" font-weight="bold">1</text>
+    <text x="39"  y="31" font-family="monospace" font-size="10" fill="#ff6b6b" text-anchor="middle" font-weight="bold">0</text>
     <text x="39"  y="50" font-family="monospace" font-size="8"  fill="#7a8a9e" text-anchor="middle">1</text>
     <!-- Block 2: free -->
     <rect x="52"  y="16" width="22" height="22" rx="2" fill="#1e3a1e" stroke="#48cfad" stroke-width="1.5"/>
-    <text x="63"  y="31" font-family="monospace" font-size="10" fill="#48cfad" text-anchor="middle" font-weight="bold">0</text>
+    <text x="63"  y="31" font-family="monospace" font-size="10" fill="#48cfad" text-anchor="middle" font-weight="bold">1</text>
     <text x="63"  y="50" font-family="monospace" font-size="8"  fill="#7a8a9e" text-anchor="middle">2</text>
     <!-- Block 3: free -->
     <rect x="76"  y="16" width="22" height="22" rx="2" fill="#1e3a1e" stroke="#48cfad" stroke-width="1.5"/>
-    <text x="87"  y="31" font-family="monospace" font-size="10" fill="#48cfad" text-anchor="middle" font-weight="bold">0</text>
+    <text x="87"  y="31" font-family="monospace" font-size="10" fill="#48cfad" text-anchor="middle" font-weight="bold">1</text>
     <text x="87"  y="50" font-family="monospace" font-size="8"  fill="#7a8a9e" text-anchor="middle">3</text>
     <!-- Block 4: used -->
     <rect x="100" y="16" width="22" height="22" rx="2" fill="#3a1010" stroke="#ff6b6b" stroke-width="1.5"/>
-    <text x="111" y="31" font-family="monospace" font-size="10" fill="#ff6b6b" text-anchor="middle" font-weight="bold">1</text>
+    <text x="111" y="31" font-family="monospace" font-size="10" fill="#ff6b6b" text-anchor="middle" font-weight="bold">0</text>
     <text x="111" y="50" font-family="monospace" font-size="8"  fill="#7a8a9e" text-anchor="middle">4</text>
     <!-- Block 5: used -->
     <rect x="124" y="16" width="22" height="22" rx="2" fill="#3a1010" stroke="#ff6b6b" stroke-width="1.5"/>
-    <text x="135" y="31" font-family="monospace" font-size="10" fill="#ff6b6b" text-anchor="middle" font-weight="bold">1</text>
+    <text x="135" y="31" font-family="monospace" font-size="10" fill="#ff6b6b" text-anchor="middle" font-weight="bold">0</text>
     <text x="135" y="50" font-family="monospace" font-size="8"  fill="#7a8a9e" text-anchor="middle">5</text>
     <!-- Block 6: used -->
     <rect x="148" y="16" width="22" height="22" rx="2" fill="#3a1010" stroke="#ff6b6b" stroke-width="1.5"/>
-    <text x="159" y="31" font-family="monospace" font-size="10" fill="#ff6b6b" text-anchor="middle" font-weight="bold">1</text>
+    <text x="159" y="31" font-family="monospace" font-size="10" fill="#ff6b6b" text-anchor="middle" font-weight="bold">0</text>
     <text x="159" y="50" font-family="monospace" font-size="8"  fill="#7a8a9e" text-anchor="middle">6</text>
     <!-- Block 7: free -->
     <rect x="172" y="16" width="22" height="22" rx="2" fill="#1e3a1e" stroke="#48cfad" stroke-width="1.5"/>
-    <text x="183" y="31" font-family="monospace" font-size="10" fill="#48cfad" text-anchor="middle" font-weight="bold">0</text>
+    <text x="183" y="31" font-family="monospace" font-size="10" fill="#48cfad" text-anchor="middle" font-weight="bold">1</text>
     <text x="183" y="50" font-family="monospace" font-size="8"  fill="#7a8a9e" text-anchor="middle">7</text>
     <!-- Block 8: free -->
     <rect x="196" y="16" width="22" height="22" rx="2" fill="#1e3a1e" stroke="#48cfad" stroke-width="1.5"/>
-    <text x="207" y="31" font-family="monospace" font-size="10" fill="#48cfad" text-anchor="middle" font-weight="bold">0</text>
+    <text x="207" y="31" font-family="monospace" font-size="10" fill="#48cfad" text-anchor="middle" font-weight="bold">1</text>
     <text x="207" y="50" font-family="monospace" font-size="8"  fill="#7a8a9e" text-anchor="middle">8</text>
     <!-- Block 9: free -->
     <rect x="220" y="16" width="22" height="22" rx="2" fill="#1e3a1e" stroke="#48cfad" stroke-width="1.5"/>
-    <text x="231" y="31" font-family="monospace" font-size="10" fill="#48cfad" text-anchor="middle" font-weight="bold">0</text>
+    <text x="231" y="31" font-family="monospace" font-size="10" fill="#48cfad" text-anchor="middle" font-weight="bold">1</text>
     <text x="231" y="50" font-family="monospace" font-size="8"  fill="#7a8a9e" text-anchor="middle">9</text>
     <!-- Block 10: used -->
     <rect x="244" y="16" width="22" height="22" rx="2" fill="#3a1010" stroke="#ff6b6b" stroke-width="1.5"/>
-    <text x="255" y="31" font-family="monospace" font-size="10" fill="#ff6b6b" text-anchor="middle" font-weight="bold">1</text>
+    <text x="255" y="31" font-family="monospace" font-size="10" fill="#ff6b6b" text-anchor="middle" font-weight="bold">0</text>
     <text x="255" y="50" font-family="monospace" font-size="8"  fill="#7a8a9e" text-anchor="middle">10</text>
     <!-- Block 11: free -->
     <rect x="268" y="16" width="22" height="22" rx="2" fill="#1e3a1e" stroke="#48cfad" stroke-width="1.5"/>
-    <text x="279" y="31" font-family="monospace" font-size="10" fill="#48cfad" text-anchor="middle" font-weight="bold">0</text>
+    <text x="279" y="31" font-family="monospace" font-size="10" fill="#48cfad" text-anchor="middle" font-weight="bold">1</text>
     <text x="279" y="50" font-family="monospace" font-size="8"  fill="#7a8a9e" text-anchor="middle">11</text>
     <!-- Block 12: free -->
     <rect x="292" y="16" width="22" height="22" rx="2" fill="#1e3a1e" stroke="#48cfad" stroke-width="1.5"/>
-    <text x="303" y="31" font-family="monospace" font-size="10" fill="#48cfad" text-anchor="middle" font-weight="bold">0</text>
+    <text x="303" y="31" font-family="monospace" font-size="10" fill="#48cfad" text-anchor="middle" font-weight="bold">1</text>
     <text x="303" y="50" font-family="monospace" font-size="8"  fill="#7a8a9e" text-anchor="middle">12</text>
     <!-- ... label -->
     <text x="320" y="30" font-family="monospace" font-size="14" fill="#7a8a9e">…</text>
     <!-- legend -->
     <rect x="360" y="16" width="14" height="14" rx="2" fill="#1e3a1e" stroke="#48cfad" stroke-width="1.5"/>
-    <text x="378" y="27" font-family="monospace" font-size="9" fill="#48cfad">0 = Free</text>
+    <text x="378" y="27" font-family="monospace" font-size="9" fill="#48cfad">1 = Free</text>
     <rect x="440" y="16" width="14" height="14" rx="2" fill="#3a1010" stroke="#ff6b6b" stroke-width="1.5"/>
-    <text x="458" y="27" font-family="monospace" font-size="9" fill="#ff6b6b">1 = Used</text>
+    <text x="458" y="27" font-family="monospace" font-size="9" fill="#ff6b6b">0 = Used</text>
     <!-- Brace for contiguous free blocks 7-9 -->
     <line x1="172" y1="42" x2="242" y2="42" stroke="#48cfad" stroke-width="1.2"/>
     <line x1="172" y1="40" x2="172" y2="44" stroke="#48cfad" stroke-width="1.2"/>
@@ -6995,7 +6995,7 @@ Multiprogramming ↓
       <div style="background:#141925;border-radius:5px;padding:7px 10px"><span style="color:#ff6b6b;font-weight:700">ข้อ 12 → C</span> <strong>Paging</strong> ไม่ใช่วิธี file allocation — Paging ใช้สำหรับ Memory Management</div>
       <div style="background:#141925;border-radius:5px;padding:7px 10px"><span style="color:#48cfad;font-weight:700">ข้อ 13 → A</span> FAT เก็บใน <strong>Main Memory (RAM)</strong> เพื่อ access เร็ว (load มาจาก disk ตอน mount)</div>
       <div style="background:#141925;border-radius:5px;padding:7px 10px"><span style="color:#48cfad;font-weight:700">ข้อ 14 → C</span> 100 files → <strong>100 i-nodes</strong> (ทุกไฟล์มี i-node ของตัวเอง 1 ตัว)</div>
-      <div style="background:#141925;border-radius:5px;padding:7px 10px"><span style="color:#48cfad;font-weight:700">ข้อ 15 → B</span> Bit vector: 0=ว่าง, 1=ใช้. Pattern 00110011… → Block 0=0✓,1=0✓,2=1,3=1,4=0✓,5=0✓,6=1,7=1 → Block 6 ใช้อยู่ ตรวจ B: "Block 6 is free" ต้องเทียบกับ bit 6 = 1 (ใช้) → B ผิด → ตามเฉลยจริง <strong>A (Block 4 is free)</strong> เพราะ bit 4 = 0</div>
+      <div style="background:#141925;border-radius:5px;padding:7px 10px"><span style="color:#48cfad;font-weight:700">ข้อ 15 → A</span> Bit vector ตาม Lecture: <strong>1 = ว่าง (free), 0 = ใช้ (allocated)</strong>. อ่าน bit ทีละตัวตรง index ของ block — เริ่มจาก Block 0. Block ที่ bit = 1 คือ "ว่าง" — ตรวจกับตัวเลือกที่ถามว่า block ใดว่าง</div>
       <div style="background:#141925;border-radius:5px;padding:7px 10px"><span style="color:#48cfad;font-weight:700">ข้อ 16 → D</span> รองรับอุปกรณ์ใหม่ = <strong>Device Driver</strong> (แปลคำสั่ง OS → คำสั่งเฉพาะ hardware)</div>
       <div style="background:#141925;border-radius:5px;padding:7px 10px"><span style="color:#48cfad;font-weight:700">ข้อ 17 → B</span> Register เก็บข้อมูลที่จะส่ง<strong>ออก</strong>ไป device = <strong>Data-out Register</strong></div>
       <div style="background:#141925;border-radius:5px;padding:7px 10px"><span style="color:#48cfad;font-weight:700">ข้อ 18 → A</span> Asynchronous + character-stream = <strong>Keyboard</strong> (กด key เมื่อไหรก็ได้ ส่งเป็น char ทีละตัว)</div>
@@ -7392,7 +7392,7 @@ Multiprogramming ↓
   <tr>
     <td><strong>Bit Vector (Free Space)</strong></td>
     <td>9.5 Free Space Management</td>
-    <td>0 = Block ว่าง, 1 = Block ใช้อยู่ (ในหนังสือเรียน)</td>
+    <td>1 = Block ว่าง (free), 0 = Block ใช้อยู่ (allocated) — ตาม Lecture Note 9</td>
     <td>HW9 ข้อ 15: อ่าน bit ทีละตัวให้ตรง index — เริ่มจาก Block 0!</td>
   </tr>
   <tr>
@@ -8492,7 +8492,7 @@ const MCQ_CH9=[
  {q:"Linked Allocation มีข้อเสียหลักคืออะไร?",o:["External Frag","Random Access ช้า, Pointer หาย = ไฟล์เสีย","ใช้ space เยอะ","ไม่ขยายได้"],a:1,e:"Linked ต้องไล่ pointer → random access ช้า; pointer หาย = data หาย"},
  {q:"FAT (File Allocation Table) คือเทคนิคใด?",o:["Contiguous","Indexed","Linked แบบเก็บ pointer ในตาราง FAT","Segmented"],a:2,e:"FAT = Linked allocation รวม pointer ทั้งหมดใน table เดียวเพื่อ random access เร็วขึ้น"},
  {q:"Indexed Allocation (i-node) ทำงานอย่างไร?",o:["pointer ในไฟล์","Index Block เก็บ pointer ทุกบล็อก","ตาราง FAT","Linked list"],a:1,e:"Indexed: ทุกไฟล์มี index block ที่เก็บ pointer ไป data block ทั้งหมด"},
- {q:"Free Space List แบบ Bit Vector ใช้พื้นที่กี่ bit ต่อ block?",o:["1","8","16","32"],a:0,e:"Bit Vector: 1 bit ต่อ block (0=ใช้, 1=ว่าง หรือกลับกัน)"},
+ {q:"Free Space List แบบ Bit Vector ใช้พื้นที่กี่ bit ต่อ block?",o:["1","8","16","32"],a:0,e:"Bit Vector: 1 bit ต่อ block. ตาม Lecture Note 9: 1 = ว่าง (free), 0 = ใช้ (allocated/occupied)"},
  {q:"DMA (Direct Memory Access) ดีกว่า interrupt อย่างไร?",o:["CPU ต้องคุมทุก byte","CPU เป็นอิสระระหว่างโอนข้อมูลปริมาณมาก","ช้ากว่า","ไม่ใช้ memory"],a:1,e:"DMA โอนข้อมูลตรงระหว่าง device ↔ memory โดยไม่ต้องผ่าน CPU"},
  {q:"Polling I/O ทำงานอย่างไร?",o:["CPU ตรวจสอบ status ของ device ตลอด","Interrupt","ผ่าน DMA","Async"],a:0,e:"Polling = CPU วน loop เช็ค Status Register → เปลือง CPU"},
  {q:"Interrupt-driven I/O ดีกว่า Polling อย่างไร?",o:["ช้ากว่า","CPU ทำงานอื่นได้ จนกระทั่ง device แจ้ง","ไม่ต้องใช้ controller","ใช้ memory เยอะกว่า"],a:1,e:"Interrupt: device ส่ง signal เมื่อพร้อม → CPU ทำอย่างอื่นรอได้"},
