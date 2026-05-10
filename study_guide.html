@@ -6610,124 +6610,263 @@ Internal Fragmentation = (จำนวน Pages × Page Size) − Process Size<b
 <div class="card">
 <h2>9.HW โจทย์จาก Homework 9 — เฉลยทีละขั้น</h2>
 <div class="box box-purple">
-  <strong>📌 ครอบคลุมทุกโจทย์ใน Homework 9 — เน้น I-node, FAT, Linked List, Permission</strong>
+  <strong>📌 Short-Answer ทุกข้อพร้อมอธิบาย WHY ทีละขั้น — อ่านแล้วทำข้อสอบได้เลย</strong>
 </div>
 
+<!-- ===== Q1: I-node ===== -->
 <div class="collapsible">
-  <div class="col-header" onclick="tog(this)">HW9 ข้อ 1: I-node Table — File Block ↔ Physical Block <span class="arrow">▼</span></div>
+  <div class="col-header" onclick="tog(this)">HW9 ข้อ 1: I-node Table — อ่านตารางยังไง? <span class="arrow">▼</span></div>
   <div class="col-body">
-    <p><strong>โจทย์:</strong> I-node ของ File A:</p>
-    <table>
-      <tr><th>Data Block</th><th>Physical Block</th></tr>
-      <tr><td>0</td><td>5</td></tr>
-      <tr><td>1</td><td>23</td></tr>
-      <tr><td>2</td><td>12</td></tr>
-      <tr><td>3</td><td>44</td></tr>
-      <tr><td>4</td><td>91</td></tr>
-      <tr><td>5</td><td>28</td></tr>
+
+    <!-- Concept box -->
+    <div style="background:#1a1030;border-left:4px solid #a78bfa;border-radius:6px;padding:10px 14px;margin-bottom:12px;font-size:12px;line-height:1.8">
+      <strong style="color:#a78bfa">หลักการ I-node Table:</strong><br>
+      I-node คือ "สารบัญ" ของไฟล์ — ตารางมี 2 คอลัมน์:<br>
+      &nbsp;&nbsp;• คอลัมน์ซ้าย = <strong style="color:#ffce54">Data Block #</strong> (ลำดับที่ n ของไฟล์ เริ่มจาก 0)<br>
+      &nbsp;&nbsp;• คอลัมน์ขวา = <strong style="color:#4a9eff">Physical Block #</strong> (ที่อยู่บน disk จริงๆ)<br>
+      ถามว่า "physical block X เก็บ data block ไหน?" → <strong>หาค่า X ในคอลัมน์ขวา</strong><br>
+      ถามว่า "data block N อยู่ physical block ไหน?" → <strong>ดูแถวที่ N คอลัมน์ขวา</strong>
+    </div>
+
+    <!-- Table -->
+    <p style="font-size:12px;color:#c9d1e0;margin-bottom:6px"><strong>I-node ของ File A (จากโจทย์):</strong></p>
+    <table style="width:auto;min-width:280px;font-size:12px;margin-bottom:12px">
+      <tr><th>Data Block #</th><th>Physical Block #</th></tr>
+      <tr><td>0</td><td>51</td></tr>
+      <tr><td>1</td><td>232</td></tr>
+      <tr><td>2</td><td>123</td></tr>
+      <tr style="background:#1e2a1e"><td><strong style="color:#ffce54">3</strong></td><td><strong style="color:#48cfad">44</strong> ← Q1.1</td></tr>
+      <tr><td>4</td><td>915</td></tr>
+      <tr style="background:#1a2235"><td><strong style="color:#ffce54">5</strong></td><td><strong style="color:#4a9eff">28</strong> ← Q1.2</td></tr>
       <tr><td>6</td><td>75</td></tr>
     </table>
-    <button class="run-btn" onclick="show('hw9-1')">เฉลย</button>
-    <div id="hw9-1" style="display:none" class="box box-green">
-      <strong>(1.1) Physical Block 44 = Data Block ใด?</strong><br>
-      ดูในตาราง → row ที่ Physical=44 คือ Data Block <strong>3</strong><br><br>
-      <strong>(1.2) Data Block 5 อยู่ที่ Physical Block ใด?</strong><br>
-      ดูในตาราง → row Data Block 5 ค่า Physical = <strong>28</strong>
+
+    <!-- Q1.1 -->
+    <div style="background:#141925;border:1.5px solid #48cfad;border-radius:7px;padding:10px 14px;margin-bottom:10px;font-size:12px">
+      <div style="color:#48cfad;font-weight:700;margin-bottom:6px">Q1.1 — Physical block 44 เก็บ data block อะไร?</div>
+      <div style="color:#c9d1e0;line-height:1.8">
+        <strong>คำถามถามว่า:</strong> ค่า 44 อยู่ในแถวไหน? (หาในคอลัมน์ขวา)<br>
+        <div style="font-family:monospace;font-size:11px;background:#0e1520;border-radius:4px;padding:6px 10px;margin:6px 0">
+          Data block 0 → 51 &nbsp;&nbsp;❌<br>
+          Data block 1 → 232 ❌<br>
+          Data block 2 → 123 ❌<br>
+          Data block <span style="color:#48cfad;font-weight:700">3 → 44</span> &nbsp;✅ ← เจอแล้ว!
+        </div>
+        <strong style="color:#48cfad">คำตอบ: Data Block 3</strong>
+      </div>
     </div>
-    <div class="box box-blue">
-      <strong>วิธีอ่าน I-node Table (จำให้ขึ้นใจ):</strong><br>
-      • Index ในตาราง = หมายเลข Data Block (file-block) ของไฟล์<br>
-      • ค่าที่อยู่ในแต่ละ entry = หมายเลข Physical Block ที่เก็บข้อมูลจริง<br>
-      • i-node ทำให้เข้าถึง Data Block ใดก็ได้ใน 1 step (Random Access เร็ว)
+
+    <!-- Q1.2 -->
+    <div style="background:#141925;border:1.5px solid #4a9eff;border-radius:7px;padding:10px 14px;margin-bottom:10px;font-size:12px">
+      <div style="color:#4a9eff;font-weight:700;margin-bottom:6px">Q1.2 — Data block 5 อยู่ที่ physical block อะไร?</div>
+      <div style="color:#c9d1e0;line-height:1.8">
+        <strong>คำถามถามว่า:</strong> แถว data block 5 มีค่า physical อะไร? (ดูคอลัมน์ขวาของแถว 5)<br>
+        <div style="font-family:monospace;font-size:11px;background:#0e1520;border-radius:4px;padding:6px 10px;margin:6px 0">
+          ไปที่แถว data block = 5 → Physical Block = <span style="color:#4a9eff;font-weight:700">28</span> ✅
+        </div>
+        <strong style="color:#4a9eff">คำตอบ: Physical Block 28</strong>
+      </div>
+    </div>
+
+    <div class="box box-blue" style="font-size:12px">
+      <strong>💡 จุดสำคัญ I-node:</strong> เข้าถึง data block ใดก็ได้ใน <strong>1 ขั้นตอน</strong> — แค่ดู i-node[N] ก็ได้ physical address เลย ไม่ต้องไล่ pointer (นี่คือข้อดีหลักของ i-node เทียบกับ Linked List)
     </div>
   </div>
 </div>
 
+<!-- ===== Q2.1: Linked List ===== -->
 <div class="collapsible">
-  <div class="col-header" onclick="tog(this)">HW9 ข้อ 2.1: Linked List Allocation <span class="arrow">▼</span></div>
+  <div class="col-header" onclick="tog(this)">HW9 ข้อ 2.1: Linked List Allocation — ไล่ pointer ทีละก้าว <span class="arrow">▼</span></div>
   <div class="col-body">
-    <p><strong>โจทย์:</strong> File A ประกอบด้วย Block 0-7 (Linked):<br>
-    8 → 14 → 22 → 28 → 5 → 33 → 19 → -1 (EOF)</p>
-    <p>คือ Data Block 0 อยู่ Physical 8, Data Block 1 อยู่ Physical 14, ฯลฯ</p>
-    <button class="run-btn" onclick="show('hw9-21')">เฉลย</button>
-    <div id="hw9-21" style="display:none" class="box box-green">
-      <strong>(2.1.a) Data Block 6 อยู่ Physical Block ใด?</strong><br>
-      ลำดับที่ index 6 → <strong>Physical Block 33</strong><br><br>
-      <strong>(2.1.b) Physical Block 28 เก็บ Data Block ใด?</strong><br>
-      28 อยู่ index ที่ 3 → <strong>Data Block 3</strong>
+
+    <div style="background:#1a0a0a;border-left:4px solid #ff6b6b;border-radius:6px;padding:10px 14px;margin-bottom:12px;font-size:12px;line-height:1.8">
+      <strong style="color:#ff6b6b">หลักการ Linked List:</strong><br>
+      แต่ละ physical block เก็บ <strong>ข้อมูล + pointer ไปยัง block ถัดไป</strong><br>
+      ต้องไล่จากต้นสายไปทีละก้าว — ข้ามไม่ได้<br>
+      หา data block ที่ N → ต้องไล่ N ก้าว (ช้า!)
     </div>
-    <div class="warn">⚠ Linked List: ต้องไล่ Pointer จาก Block 0 ไปทีละ Block ถ้าจะเข้าถึง Block ที่ k → ใช้ k+1 disk read (ช้า!)</div>
+
+    <!-- Chain diagram -->
+    <p style="font-size:12px;color:#c9d1e0;margin-bottom:6px"><strong>Chain ของ File A (จากโจทย์):</strong></p>
+    <div style="overflow-x:auto;margin-bottom:12px">
+      <table style="font-size:11px;border-collapse:collapse;min-width:560px">
+        <tr style="background:#252f40">
+          <th style="padding:5px 10px;color:#ffce54">Data Block #</th>
+          <td style="padding:5px 12px;color:#ffce54;text-align:center">1</td>
+          <td style="padding:5px 12px;color:#ffce54;text-align:center">2</td>
+          <td style="padding:5px 12px;color:#ffce54;text-align:center">3</td>
+          <td style="padding:5px 12px;color:#ffce54;text-align:center;background:#1e2a1e"><strong>4</strong></td>
+          <td style="padding:5px 12px;color:#ffce54;text-align:center">5</td>
+          <td style="padding:5px 12px;color:#ffce54;text-align:center;background:#1a1030"><strong>6</strong></td>
+          <td style="padding:5px 12px;color:#ffce54;text-align:center">7</td>
+        </tr>
+        <tr>
+          <th style="padding:5px 10px;color:#4a9eff;background:#252f40">Physical Block #</th>
+          <td style="padding:5px 12px;color:#c9d1e0;text-align:center">8</td>
+          <td style="padding:5px 12px;color:#c9d1e0;text-align:center">14</td>
+          <td style="padding:5px 12px;color:#c9d1e0;text-align:center">22</td>
+          <td style="padding:5px 12px;color:#48cfad;text-align:center;background:#1e2a1e;font-weight:700">28 ←Q2.1.b</td>
+          <td style="padding:5px 12px;color:#c9d1e0;text-align:center">5</td>
+          <td style="padding:5px 12px;color:#ff6b6b;text-align:center;background:#1a1030;font-weight:700">33 ←Q2.1.a</td>
+          <td style="padding:5px 12px;color:#c9d1e0;text-align:center">19</td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- Q2.1.a -->
+    <div style="background:#141925;border:1.5px solid #ff6b6b;border-radius:7px;padding:10px 14px;margin-bottom:10px;font-size:12px">
+      <div style="color:#ff6b6b;font-weight:700;margin-bottom:6px">Q2.1.a — Data block 6 อยู่ที่ physical block อะไร?</div>
+      <div style="color:#c9d1e0;line-height:1.8">
+        ต้องนับไปตามโซ่ทีละก้าว:<br>
+        <div style="font-family:monospace;font-size:11px;background:#0e1520;border-radius:4px;padding:6px 10px;margin:6px 0">
+          Block 1 → physical 8<br>
+          Block 2 → physical 14<br>
+          Block 3 → physical 22<br>
+          Block 4 → physical 28<br>
+          Block 5 → physical 5<br>
+          Block <span style="color:#ff6b6b;font-weight:700">6 → physical 33</span> ✅
+        </div>
+        <strong style="color:#ff6b6b">คำตอบ: Physical Block 33</strong>
+      </div>
+    </div>
+
+    <!-- Q2.1.b -->
+    <div style="background:#141925;border:1.5px solid #48cfad;border-radius:7px;padding:10px 14px;margin-bottom:10px;font-size:12px">
+      <div style="color:#48cfad;font-weight:700;margin-bottom:6px">Q2.1.b — Physical block 28 เก็บ data block อะไร?</div>
+      <div style="color:#c9d1e0;line-height:1.8">
+        ไล่โซ่จนเจอ physical = 28:<br>
+        <div style="font-family:monospace;font-size:11px;background:#0e1520;border-radius:4px;padding:6px 10px;margin:6px 0">
+          Block 1 → physical 8 &nbsp;❌<br>
+          Block 2 → physical 14 ❌<br>
+          Block 3 → physical 22 ❌<br>
+          Block <span style="color:#48cfad;font-weight:700">4 → physical 28</span> ✅ ← เจอแล้ว!
+        </div>
+        <strong style="color:#48cfad">คำตอบ: Data Block 4</strong>
+      </div>
+    </div>
+
+    <div class="warn" style="font-size:12px">⚠ Linked List ข้อเสียคือต้องไล่จากต้นทุกครั้ง — ถ้าอยากได้ block ที่ 100 ต้องไล่ pointer 100 ก้าว = 100 disk reads ช้ามาก!</div>
   </div>
 </div>
 
+<!-- ===== Q2.2: FAT ===== -->
 <div class="collapsible">
-  <div class="col-header" onclick="tog(this)">HW9 ข้อ 2.2: FAT (File Allocation Table) <span class="arrow">▼</span></div>
+  <div class="col-header" onclick="tog(this)">HW9 ข้อ 2.2: FAT (File Allocation Table) — ไล่ตาราง next-block <span class="arrow">▼</span></div>
   <div class="col-body">
-    <p><strong>โจทย์ FAT:</strong></p>
-    <table>
-      <tr><th>Physical Block #</th><th>FAT Entry</th></tr>
-      <tr><td>0</td><td>2</td></tr>
-      <tr><td>1</td><td>6</td></tr>
-      <tr><td>2</td><td>-1</td></tr>
-      <tr><td>3</td><td>5</td></tr>
-      <tr><td>4</td><td>7 ← File A เริ่มที่นี่</td></tr>
-      <tr><td>5</td><td>-1</td></tr>
-      <tr><td>6</td><td>3</td></tr>
-      <tr><td>7</td><td>1</td></tr>
-      <tr><td>8</td><td>15 ← File B เริ่มที่นี่</td></tr>
+
+    <div style="background:#1a2a0a;border-left:4px solid #48cfad;border-radius:6px;padding:10px 14px;margin-bottom:12px;font-size:12px;line-height:1.8">
+      <strong style="color:#48cfad">หลักการ FAT:</strong><br>
+      FAT คือตาราง "block ถัดไปคือ block อะไร" — เก็บแยกต่างหากใน RAM<br>
+      แต่ละช่อง FAT[i] = physical block ถัดไปที่ต่อจาก block i<br>
+      ถ้า FAT[i] = -1 → block i คือ block สุดท้ายของไฟล์<br>
+      <strong>วิธีไล่: เริ่มที่ block แรกของไฟล์ → อ่าน FAT → ไปต่อ → วนจน -1</strong>
+    </div>
+
+    <!-- FAT Table -->
+    <p style="font-size:12px;color:#c9d1e0;margin-bottom:6px"><strong>FAT Table (จากโจทย์) — File A เริ่มที่ Physical Block 4:</strong></p>
+    <table style="font-size:12px;margin-bottom:12px">
+      <tr><th>Physical Block #</th><th>FAT value (next block)</th><th>หมายเหตุ</th></tr>
+      <tr><td>0</td><td>2</td><td style="color:#7a8a9e">ไม่เกี่ยวกับ File A</td></tr>
+      <tr style="background:#1a2235"><td><strong style="color:#ffce54">1</strong></td><td><strong style="color:#ffce54">6</strong></td><td style="color:#ffce54">← File A ก้าวที่ 3</td></tr>
+      <tr><td>2</td><td>-1</td><td style="color:#7a8a9e">ไม่เกี่ยวกับ File A</td></tr>
+      <tr style="background:#1a2235"><td><strong style="color:#ffce54">3</strong></td><td><strong style="color:#ffce54">5</strong></td><td style="color:#ffce54">← File A ก้าวที่ 5</td></tr>
+      <tr style="background:#1e2a1e"><td><strong style="color:#48cfad">4</strong></td><td><strong style="color:#48cfad">7</strong></td><td style="color:#48cfad">← File A เริ่มที่นี่ (data block 0)</td></tr>
+      <tr style="background:#1a2235"><td><strong style="color:#ff6b6b">5</strong></td><td><strong style="color:#ff6b6b">-1</strong></td><td style="color:#ff6b6b">← File A จบที่นี่ (data block 5)</td></tr>
+      <tr style="background:#1a2235"><td><strong style="color:#ffce54">6</strong></td><td><strong style="color:#ffce54">3</strong></td><td style="color:#ffce54">← File A ก้าวที่ 4</td></tr>
+      <tr style="background:#1a2235"><td><strong style="color:#ffce54">7</strong></td><td><strong style="color:#ffce54">1</strong></td><td style="color:#ffce54">← File A ก้าวที่ 2</td></tr>
+      <tr><td>8</td><td>...</td><td style="color:#7a8a9e">File B เริ่มที่นี่</td></tr>
     </table>
-    <button class="run-btn" onclick="show('hw9-22')">เฉลย</button>
-    <div id="hw9-22" style="display:none" class="box box-green">
-      <strong>(2.2.a) File A มีกี่ Data Block?</strong><br>
-      ไล่ FAT จาก Block 4: 4 → FAT[4]=7 → FAT[7]=1 → FAT[1]=6 → FAT[6]=3 → FAT[3]=5 → FAT[5]=-1 (EOF)<br>
-      ลำดับ Physical: <strong>4, 7, 1, 6, 3, 5</strong> = <strong>6 Data Blocks</strong><br><br>
-      <strong>(2.2.b) Data Block 4 ของ File A อยู่ Physical ใด?</strong><br>
-      ลำดับ Data Block: 0=4, 1=7, 2=1, 3=6, 4=<strong>3</strong>, 5=5
+
+    <!-- Chain walkthrough -->
+    <div style="background:#141925;border-radius:6px;padding:10px 14px;margin-bottom:10px;font-size:12px">
+      <div style="color:#ffce54;font-weight:700;margin-bottom:6px">ไล่ FAT chain ของ File A ทีละก้าว:</div>
+      <div style="font-family:monospace;font-size:11px;line-height:2">
+        เริ่มที่ physical <span style="color:#48cfad">4</span> (data block 0)<br>
+        FAT[<span style="color:#48cfad">4</span>] = <span style="color:#ffce54">7</span> → ไปต่อที่ physical 7 (data block 1)<br>
+        FAT[<span style="color:#ffce54">7</span>] = <span style="color:#ffce54">1</span> → ไปต่อที่ physical 1 (data block 2)<br>
+        FAT[<span style="color:#ffce54">1</span>] = <span style="color:#ffce54">6</span> → ไปต่อที่ physical 6 (data block 3)<br>
+        FAT[<span style="color:#ffce54">6</span>] = <span style="color:#ffce54">3</span> → ไปต่อที่ physical 3 (data block 4) ← Q2.2.b<br>
+        FAT[<span style="color:#ffce54">3</span>] = <span style="color:#ffce54">5</span> → ไปต่อที่ physical 5 (data block 5)<br>
+        FAT[<span style="color:#ff6b6b">5</span>] = <span style="color:#ff6b6b">-1</span> → จบ! ✅<br><br>
+        <span style="color:#48cfad">Chain: 4 → 7 → 1 → 6 → 3 → 5</span>
+      </div>
     </div>
-    <div class="box box-blue">
-      <strong>เทคนิคไล่ FAT:</strong> เริ่มจาก Block แรก ดูค่าใน FAT เป็นเลข Block ถัดไป — วนจนเจอ −1 (EOF)
+
+    <!-- Q2.2.a -->
+    <div style="background:#141925;border:1.5px solid #48cfad;border-radius:7px;padding:10px 14px;margin-bottom:10px;font-size:12px">
+      <div style="color:#48cfad;font-weight:700;margin-bottom:4px">Q2.2.a — File A มีกี่ data block?</div>
+      <div style="color:#c9d1e0">นับ block ใน chain: 4, 7, 1, 6, 3, 5 = <strong style="color:#48cfad">6 blocks</strong></div>
+    </div>
+
+    <!-- Q2.2.b -->
+    <div style="background:#141925;border:1.5px solid #ffce54;border-radius:7px;padding:10px 14px;margin-bottom:10px;font-size:12px">
+      <div style="color:#ffce54;font-weight:700;margin-bottom:4px">Q2.2.b — Data block 4 (0-indexed) อยู่ที่ physical block อะไร?</div>
+      <div style="color:#c9d1e0;line-height:1.8">
+        นับจาก 0 ตาม chain:<br>
+        <div style="font-family:monospace;font-size:11px;background:#0e1520;border-radius:4px;padding:6px 10px;margin:6px 0">
+          Data block 0 → physical 4<br>
+          Data block 1 → physical 7<br>
+          Data block 2 → physical 1<br>
+          Data block 3 → physical 6<br>
+          Data block <span style="color:#ffce54;font-weight:700">4 → physical 3</span> ✅
+        </div>
+        <strong style="color:#ffce54">คำตอบ: Physical Block 3</strong>
+      </div>
+    </div>
+
+    <div class="box box-blue" style="font-size:12px">
+      <strong>💡 FAT vs Linked List:</strong> ทั้งคู่ต้องไล่ chain เหมือนกัน แต่ FAT เก็บ chain ไว้ใน <strong>RAM</strong> — ไล่ได้โดยไม่ต้อง read disk ทุกก้าว ทำให้เร็วกว่า Linked List มาก
     </div>
   </div>
 </div>
 
+<!-- ===== Summary comparison ===== -->
 <div class="collapsible">
-  <div class="col-header" onclick="tog(this)">HW9 MCQ ข้อสำคัญพร้อมเฉลย <span class="arrow">▼</span></div>
+  <div class="col-header" onclick="tog(this)">สรุปเปรียบเทียบ 3 วิธี + หลักคิดตอบข้อสอบ <span class="arrow">▼</span></div>
   <div class="col-body">
-    <div class="box box-blue">
-      <strong>ข้อ 1:</strong> File system management เป็นบริการของ <em>OS</em> ไม่ใช่ application program (B ผิด)<br>
-      <strong>ข้อ 2:</strong> name, type, location, size, protection, date = <strong>File Attributes</strong><br>
-      <strong>ข้อ 3:</strong> ไฟล์เก็บใน <strong>nonvolatile storage</strong> (เก็บได้แม้ปิดเครื่อง)<br>
-      <strong>ข้อ 4:</strong> ไฟล์ที่ OS ทุกตัวต้องรองรับ = <strong>executable</strong> (ไม่งั้นรันโปรแกรมไม่ได้)<br>
-      <strong>ข้อ 5:</strong> Partition <em>ไม่</em> มีไฟล์โดยตรง — Volume ต่างหากที่มีไฟล์ (C ผิด)<br>
-      <strong>ข้อ 6:</strong> สิ่งที่บรรจุ file system = <strong>Volume</strong><br>
-      <strong>ข้อ 7:</strong> Directory ง่ายสุด = <strong>Single-Level</strong><br>
-      <strong>ข้อ 8:</strong> Naming Problem (ชื่อซ้ำ) เกิดใน <strong>Single-Level Directory</strong><br>
-      <strong>ข้อ 9:</strong> Absolute Path เริ่มจาก <em>Root</em> ไม่ใช่ Current Directory (B ผิด)<br>
-      <strong>ข้อ 10:</strong> r-xrw-r-x → Owner=r-x (อ่าน/รัน), Group=rw- (อ่าน/เขียน), Others=r-x → <strong>คำตอบ B (Group อ่าน+เขียน)</strong><br>
-      <strong>ข้อ 11:</strong> ข้อมูลใน HDD เก็บที่ <strong>Disk Platters</strong> (จานหมุน)<br>
-      <strong>ข้อ 12:</strong> ไม่ใช่ File-Implementation = <strong>Paging</strong> (ใช้สำหรับ Memory)<br>
-      <strong>ข้อ 13:</strong> FAT เก็บที่ <strong>Main Memory</strong> (เพื่อ Access เร็ว — Cache จาก Disk)<br>
-      <strong>ข้อ 14:</strong> 100 ไฟล์ → 100 i-nodes (1 i-node ต่อ 1 ไฟล์)<br>
-      <strong>ข้อ 15:</strong> Bit Vector 00110011001100110... — 0 = ว่าง, 1 = ใช้งาน. นับจาก position 0:<br>
-      Block 0=0(ว่าง), 1=0(ว่าง), 2=1(ใช้), 3=1(ใช้), 4=0(ว่าง), 5=0(ว่าง), 6=1(ใช้), 7=1(ใช้)... → A: Block 4 ว่าง ✓ มี answer ที่ถูก แต่ในคำตอบจริง <strong>B (Block 6 free)</strong> — ตรวจ pattern ใหม่: ดูจริงๆ pattern อาจเริ่มที่ position 0 = "0011" → รูปแบบทุก 4 = 00,11. ตามเฉลย <strong>B (Block 6 = ว่าง)</strong> ใช้ pattern ที่ Block 4-5 ใช้ Block 6-7 ว่าง<br>
-      <strong>ข้อ 16:</strong> รองรับอุปกรณ์ใหม่ = <strong>Device Driver</strong><br>
-      <strong>ข้อ 17:</strong> Register ที่เก็บข้อมูลส่งออก = <strong>Data-out Register</strong><br>
-      <strong>ข้อ 18:</strong> Asynchronous, character-stream = <strong>Keyboard</strong><br>
-      <strong>ข้อ 19:</strong> Data Rate สูงสุด = <strong>Gigabit Ethernet</strong>
-    </div>
-  </div>
-</div>
-
-<div class="collapsible">
-  <div class="col-header" onclick="tog(this)">HW9 บทสรุปการเปรียบเทียบ File Allocation Methods <span class="arrow">▼</span></div>
-  <div class="col-body">
-    <table>
-      <tr><th>วิธี</th><th>ตำแหน่ง Pointer</th><th>วิธีหา Block ที่ k</th><th>เร็ว Random?</th></tr>
-      <tr><td>Contiguous</td><td>ไม่มี — Block ติดกัน</td><td>Start + k</td><td>✅ เร็วมาก</td></tr>
-      <tr><td>Linked List</td><td>ในแต่ละ Data Block</td><td>ไล่ Pointer k ครั้ง</td><td>❌ ช้า</td></tr>
-      <tr><td>FAT</td><td>ในตารางแยก (Cache RAM)</td><td>ไล่ FAT k ครั้ง (เร็ว เพราะใน RAM)</td><td>✅ OK</td></tr>
-      <tr><td>Indexed (i-node)</td><td>ในบล็อก Index แยก</td><td>i-node[k] (1 step)</td><td>✅ เร็ว</td></tr>
+    <table style="font-size:12px;width:100%">
+      <tr><th>วิธี</th><th>วิธีหา Data Block ที่ N</th><th>จำนวน I/O</th><th>Random Access</th></tr>
+      <tr><td><strong style="color:#a78bfa">I-node</strong></td><td>ดูตาราง i-node[N] โดยตรง</td><td>1 (+ อ่าน i-node)</td><td>✅ เร็วสุด</td></tr>
+      <tr style="background:#1e2a3a"><td><strong style="color:#ff6b6b">Linked List</strong></td><td>ไล่ pointer N ก้าว อ่าน disk ทุกก้าว</td><td>N disk reads</td><td>❌ ช้า</td></tr>
+      <tr><td><strong style="color:#48cfad">FAT</strong></td><td>ไล่ FAT N ก้าว แต่ FAT อยู่ใน RAM</td><td>N RAM reads + 1 disk</td><td>✅ ดีกว่า Linked</td></tr>
     </table>
+
+    <div style="margin-top:10px;background:#1a2235;border-radius:6px;padding:10px 14px;font-size:12px">
+      <div style="color:#ffce54;font-weight:700;margin-bottom:6px">🎯 หลักคิดตอบข้อสอบ — จำ 3 ประโยคนี้</div>
+      <div style="color:#c9d1e0;line-height:2">
+        1. <strong>I-node:</strong> "ดู i-node[N] ได้เลย → 1 ขั้นตอน"<br>
+        2. <strong>Linked List:</strong> "ต้องไล่ pointer N ก้าว → N disk I/O (ช้า)"<br>
+        3. <strong>FAT:</strong> "ไล่ FAT เหมือน Linked แต่ FAT อยู่ RAM → เร็วกว่า"
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MCQ ===== -->
+<div class="collapsible">
+  <div class="col-header" onclick="tog(this)">HW9 MCQ ข้อสำคัญพร้อมเฉลยและเหตุผล <span class="arrow">▼</span></div>
+  <div class="col-body">
+    <div style="display:flex;flex-direction:column;gap:6px;font-size:12px">
+      <div style="background:#141925;border-radius:5px;padding:7px 10px"><span style="color:#ff6b6b;font-weight:700">ข้อ 1 → B</span> File system management เป็นบริการของ <strong>OS</strong> ไม่ใช่ application program</div>
+      <div style="background:#141925;border-radius:5px;padding:7px 10px"><span style="color:#48cfad;font-weight:700">ข้อ 2 → B</span> name, type, location, size, protection, date = <strong>File Attributes</strong></div>
+      <div style="background:#141925;border-radius:5px;padding:7px 10px"><span style="color:#48cfad;font-weight:700">ข้อ 3 → B</span> ไฟล์เก็บใน <strong>nonvolatile storage</strong> (ยังคงอยู่แม้ปิดเครื่อง)</div>
+      <div style="background:#141925;border-radius:5px;padding:7px 10px"><span style="color:#48cfad;font-weight:700">ข้อ 4 → A</span> OS ทุกตัวต้องรองรับ <strong>executable file</strong> (ไม่งั้นรันโปรแกรมไม่ได้)</div>
+      <div style="background:#141925;border-radius:5px;padding:7px 10px"><span style="color:#ff6b6b;font-weight:700">ข้อ 5 → C</span> Partition ≠ Volume — Partition คือส่วนแบ่งของ disk, Volume คือ Partition ที่ format แล้วมี file system</div>
+      <div style="background:#141925;border-radius:5px;padding:7px 10px"><span style="color:#48cfad;font-weight:700">ข้อ 6 → C</span> สิ่งที่บรรจุ file system = <strong>Volume</strong></div>
+      <div style="background:#141925;border-radius:5px;padding:7px 10px"><span style="color:#48cfad;font-weight:700">ข้อ 7 → A</span> Directory ง่ายสุด = <strong>Single-Level</strong> (ไฟล์ทุกอย่างอยู่ในชั้นเดียว)</div>
+      <div style="background:#141925;border-radius:5px;padding:7px 10px"><span style="color:#48cfad;font-weight:700">ข้อ 8 → A</span> Naming Problem (ชื่อซ้ำกันไม่ได้) = <strong>Single-Level Directory</strong></div>
+      <div style="background:#141925;border-radius:5px;padding:7px 10px"><span style="color:#ff6b6b;font-weight:700">ข้อ 9 → B</span> Absolute path เริ่มจาก <strong>Root</strong> (/), Relative path เริ่มจาก current directory</div>
+      <div style="background:#141925;border-radius:5px;padding:7px 10px"><span style="color:#48cfad;font-weight:700">ข้อ 10 → B</span> r-xrw-r-x: Owner=r-x, Group=<strong>rw-</strong>(อ่าน+เขียน✅), Others=r-x → Group อ่าน+เขียนได้ แต่รันไม่ได้</div>
+      <div style="background:#141925;border-radius:5px;padding:7px 10px"><span style="color:#48cfad;font-weight:700">ข้อ 11 → A</span> ข้อมูล HDD เก็บที่ <strong>Disk Platters</strong> (จานแม่เหล็กหมุน)</div>
+      <div style="background:#141925;border-radius:5px;padding:7px 10px"><span style="color:#ff6b6b;font-weight:700">ข้อ 12 → C</span> <strong>Paging</strong> ไม่ใช่วิธี file allocation — Paging ใช้สำหรับ Memory Management</div>
+      <div style="background:#141925;border-radius:5px;padding:7px 10px"><span style="color:#48cfad;font-weight:700">ข้อ 13 → A</span> FAT เก็บใน <strong>Main Memory (RAM)</strong> เพื่อ access เร็ว (load มาจาก disk ตอน mount)</div>
+      <div style="background:#141925;border-radius:5px;padding:7px 10px"><span style="color:#48cfad;font-weight:700">ข้อ 14 → C</span> 100 files → <strong>100 i-nodes</strong> (ทุกไฟล์มี i-node ของตัวเอง 1 ตัว)</div>
+      <div style="background:#141925;border-radius:5px;padding:7px 10px"><span style="color:#48cfad;font-weight:700">ข้อ 15 → B</span> Bit vector: 0=ว่าง, 1=ใช้. Pattern 00110011… → Block 0=0✓,1=0✓,2=1,3=1,4=0✓,5=0✓,6=1,7=1 → Block 6 ใช้อยู่ ตรวจ B: "Block 6 is free" ต้องเทียบกับ bit 6 = 1 (ใช้) → B ผิด → ตามเฉลยจริง <strong>A (Block 4 is free)</strong> เพราะ bit 4 = 0</div>
+      <div style="background:#141925;border-radius:5px;padding:7px 10px"><span style="color:#48cfad;font-weight:700">ข้อ 16 → D</span> รองรับอุปกรณ์ใหม่ = <strong>Device Driver</strong> (แปลคำสั่ง OS → คำสั่งเฉพาะ hardware)</div>
+      <div style="background:#141925;border-radius:5px;padding:7px 10px"><span style="color:#48cfad;font-weight:700">ข้อ 17 → B</span> Register เก็บข้อมูลที่จะส่ง<strong>ออก</strong>ไป device = <strong>Data-out Register</strong></div>
+      <div style="background:#141925;border-radius:5px;padding:7px 10px"><span style="color:#48cfad;font-weight:700">ข้อ 18 → A</span> Asynchronous + character-stream = <strong>Keyboard</strong> (กด key เมื่อไหรก็ได้ ส่งเป็น char ทีละตัว)</div>
+      <div style="background:#141925;border-radius:5px;padding:7px 10px"><span style="color:#48cfad;font-weight:700">ข้อ 19 → B</span> Data rate สูงสุด = <strong>Gigabit Ethernet</strong> (1 Gbps >> Mouse/Keyboard/56K modem)</div>
+    </div>
   </div>
 </div>
 </div>
