@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="th">
 <head>
 <meta charset="UTF-8">
@@ -104,6 +104,7 @@ button.run-btn.secondary{background:#2a3a52}
   <button class="nav-btn" onclick="showCh('ch9',this)">บทที่ 9: File &amp; I/O</button>
   <button class="nav-btn" onclick="showCh('mcq-map',this)">🎯 MCQ → Lecture Map</button>
   <button class="nav-btn" onclick="showCh('exam',this)">📝 บทสอบฝึก</button>
+  <button class="nav-btn" onclick="showCh('exam-hw',this)">📚 MCQ จาก Homework</button>
 </nav>
 <div id="main">
 
@@ -7527,9 +7528,9 @@ Multiprogramming ↓
   <div class="hero-icon">📝</div>
   <div>
     <div class="hero-title">บทสอบฝึก — Final Exam Practice</div>
-    <div class="hero-sub">MCQ 60 ข้อ + Short-Answer 12 ข้อ ครอบคลุมบทที่ 6–9 · เลียนแบบรูปแบบข้อสอบจริง</div>
+    <div class="hero-sub">MCQ 60 + 60 ข้อ + Short-Answer 12 ข้อ ครอบคลุมบทที่ 6–9 · เลียนแบบรูปแบบข้อสอบจริง</div>
     <div style="margin-top:8px">
-      <span class="tag">Part I: MCQ</span><span class="tag">Part II: Computational</span>
+      <span class="tag">Part I: MCQ ทั่วไป</span><span class="tag">Part II: Computational</span><span class="tag">Part III: MCQ จาก HW</span>
       <span class="tag">บทที่ 6 Deadlocks</span><span class="tag">บทที่ 7 Memory</span>
       <span class="tag">บทที่ 8 Virtual Memory</span><span class="tag">บทที่ 9 File &amp; I/O</span>
     </div>
@@ -7540,15 +7541,15 @@ Multiprogramming ↓
 <h2>วิธีใช้บทสอบฝึก</h2>
 <div class="box box-blue">
   <strong>📋 คำแนะนำ:</strong><br>
-  1. <strong>Part I (MCQ):</strong> คลิกตัวเลือก a–d → ระบบจะแสดงผลถูก/ผิดทันที + คำอธิบาย<br>
-  2. <strong>Part II (คำนวณ):</strong> ลองคิดเองก่อน → กดปุ่ม "แสดงเฉลย" เพื่อตรวจ<br>
-  3. คะแนนสะสมจะแสดงด้านบนตลอด สามารถกด "รีเซ็ต" เพื่อทำใหม่<br>
-  4. ทุกข้อระบุประเภท/บท เพื่อให้ทราบจุดอ่อน
+  1. <strong>Part I (MCQ ทั่วไป — 60 ข้อ):</strong> คลิกตัวเลือก a–d → ระบบจะแสดงผลถูก/ผิดทันที + คำอธิบาย<br>
+  2. <strong>Part II (คำนวณ — 12 ข้อ):</strong> ลองคิดเองก่อน → กดปุ่ม "แสดงเฉลย" เพื่อตรวจ<br>
+  3. <strong>Part III (MCQ จาก Homework — 60 ข้อ):</strong> ทุกข้อยึดโจทย์/ตัวเลขจริงจาก HW6–HW9 + ตารางสรุปคำอธิบายเต็มท้าย Part<br>
+  4. คะแนนสะสมจะแสดงด้านบนตลอด (รวมทั้ง 120 ข้อ) สามารถกด "รีเซ็ต" เพื่อทำใหม่
 </div>
 <div class="score-board">
-  <div class="sc">ตอบถูก: <b id="sc-right">0</b> / <span id="sc-total">60</span></div>
-  <div class="sc wrong-c">ตอบผิด: <b style="color:var(--accent3)" id="sc-wrong">0</b></div>
-  <div class="sc">เปอร์เซ็นต์: <b id="sc-pct">0%</b></div>
+  <div class="sc">ตอบถูก: <b id="sc-right" class="sc-right">0</b> / <span id="sc-total" class="sc-total">120</span></div>
+  <div class="sc wrong-c">ตอบผิด: <b style="color:var(--accent3)" id="sc-wrong" class="sc-wrong">0</b></div>
+  <div class="sc">เปอร์เซ็นต์: <b id="sc-pct" class="sc-pct">0%</b></div>
   <button class="run-btn secondary" onclick="resetQuiz()">🔄 รีเซ็ต</button>
 </div>
 </div>
@@ -7779,6 +7780,391 @@ Multiprogramming ↓
 </div>
 </div>
 </div><!-- end exam -->
+<!-- ═══════════════════════════════════════════════════
+     บทสอบฝึก : MCQ จาก Homework (Part III)
+═══════════════════════════════════════════════════ -->
+<div id="exam-hw" class="chapter">
+<div class="chapter-hero">
+  <div class="hero-icon">📚</div>
+  <div>
+    <div class="hero-title">MCQ จาก Homework — Part III</div>
+    <div class="hero-sub">60 ข้อที่ยึดโจทย์/ตัวเลข/ตารางจาก HW6–HW9 โดยตรง · พร้อมเฉลยและคำอธิบายเต็ม</div>
+    <div style="margin-top:8px">
+      <span class="tag">HW6 Deadlocks</span><span class="tag">HW7 Memory</span>
+      <span class="tag">HW8 Virtual Memory</span><span class="tag">HW9 File &amp; I/O</span>
+      <span class="tag">15 ข้อ × 4 บท = 60 ข้อ</span>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+<h2>วิธีใช้บทสอบฝึก Part III</h2>
+<div class="box box-purple">
+  <strong>📋 คำแนะนำ:</strong><br>
+  1. <strong>ทำ MCQ:</strong> คลิกตัวเลือก a–d → ระบบแสดงผลถูก/ผิด + คำอธิบายทันที<br>
+  2. <strong>คะแนนสะสม:</strong> นับรวมกับ Part I (รวม 120 ข้อทั้งหมด) — ดูได้ทั้งใน tab นี้และใน "📝 บทสอบฝึก"<br>
+  3. <strong>ทบทวน:</strong> ดูตาราง "เฉลย + คำอธิบายเต็ม" ตอนท้ายเพื่อทบทวนทุกข้อในที่เดียว<br>
+  4. <strong>เน้น HW:</strong> ทุกข้อยึด HW จริง — ตัวเลข, ตาราง, สถานการณ์เดียวกันเป๊ะ
+</div>
+<div class="score-board">
+  <div class="sc">ตอบถูก: <b class="sc-right">0</b> / <span class="sc-total">120</span></div>
+  <div class="sc wrong-c">ตอบผิด: <b style="color:var(--accent3)" class="sc-wrong">0</b></div>
+  <div class="sc">เปอร์เซ็นต์: <b class="sc-pct">0%</b></div>
+  <button class="run-btn secondary" onclick="resetQuiz()">🔄 รีเซ็ต</button>
+</div>
+</div>
+
+<!-- ═════════ MCQ Practice Containers ═════════ -->
+<div class="card" style="border:2px solid #a78bfa">
+<h2 style="color:#a78bfa">📚 MCQ ชุดที่ 2: เน้นโจทย์จาก Homework (60 ข้อ)</h2>
+
+<h3>📖 บทที่ 6: Deadlocks — เน้น HW6 (15 ข้อ)</h3>
+<div id="mcq-ch6_2"></div>
+
+<h3>📖 บทที่ 7: Memory Management — เน้น HW7 (15 ข้อ)</h3>
+<div id="mcq-ch7_2"></div>
+
+<h3>📖 บทที่ 8: Virtual Memory — เน้น HW8 (15 ข้อ)</h3>
+<div id="mcq-ch8_2"></div>
+
+<h3>📖 บทที่ 9: File &amp; I/O Systems — เน้น HW9 (15 ข้อ)</h3>
+<div id="mcq-ch9_2"></div>
+</div>
+
+<!-- ═════════ สรุปเฉลย + คำอธิบายเต็ม ═════════ -->
+<div class="card" style="border:2px solid #48cfad">
+<h2 style="color:#48cfad">📋 สรุปเฉลย — คำอธิบายละเอียดครบ 60 ข้อ</h2>
+<div class="box box-blue">
+  <strong>📌 วิธีใช้:</strong> ทำ MCQ ก่อน → กลับมาดูตารางสรุปนี้เพื่อทบทวน<br>
+  ทุกข้อระบุ: <strong>(1) คำตอบ</strong> · <strong>(2) ที่มาจาก HW</strong> · <strong>(3) สูตร/ขั้นตอน</strong> · <strong>(4) ข้อผิดที่นักเรียนมักทำ</strong>
+</div>
+<div class="collapsible">
+  <div class="col-header" onclick="tog(this)">📖 บทที่ 6 — Deadlocks (HW6) — เฉลยพร้อมคำอธิบาย <span class="arrow">▼</span></div>
+  <div class="col-body">
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 1) HW6 ข้อ 1 — 4 เงื่อนไข Traffic Deadlock</strong><br>
+      <strong>คำตอบ:</strong> No Preemption<br>
+      <strong>คำอธิบาย:</strong> ในโจทย์รถติด — "ดึงรถออกจากตำแหน่งโดยบังคับไม่ได้" คือ <strong>No Preemption</strong>. อย่าสับสน: Mutual Exclusion = พื้นที่ 1 รถใช้, Hold and Wait = ถือพื้นที่รอข้างหน้า, Circular Wait = วงกลมการรอ
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 2) HW6 ข้อ 1 — กฎ "ไม่เข้าสี่แยกถ้าออกไม่ได้"</strong><br>
+      <strong>คำตอบ:</strong> ทำลาย Hold and Wait<br>
+      <strong>คำอธิบาย:</strong> กฎนี้บังคับว่า "ก่อนถือพื้นที่ในสี่แยกต้องมั่นใจมีพื้นที่ออก" → รถจะ "ไม่ถือทรัพยากรขณะรอ" = ทำลาย Hold and Wait
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 3) RAG Single Instance + Cycle</strong><br>
+      <strong>คำตอบ:</strong> Deadlock เกิดแน่นอน<br>
+      <strong>คำอธิบาย:</strong> กฎจาก HW6: Single Instance + Cycle ⇒ Deadlock เสมอ. แต่ Multi-Instance + Cycle ⇒ <em>อาจ</em>มีหรือไม่ (ต้องตรวจ Detection). No Cycle ⇒ ไม่มี Deadlock แน่
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 4) HW6 ข้อ 6 — ตรวจ RAG หลาย Instance</strong><br>
+      <strong>คำตอบ:</strong> ลบได้หมด → ไม่ใช่ Deadlock<br>
+      <strong>คำอธิบาย:</strong> วิธีตรวจ: หา Process ที่ทุก Request edge จัดสรรได้ → ทำงานเสร็จ → ลบ edge → ทำซ้ำ. ถ้าลบได้หมด = ไม่มี Deadlock
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 5) HW6 ข้อ 2(a) — เพิ่ม Available</strong><br>
+      <strong>คำตอบ:</strong> ปลอดภัย<br>
+      <strong>คำอธิบาย:</strong> เพิ่มทรัพยากร = มีของให้ใช้มากขึ้น → ทุก Process เข้า Safe Sequence ได้ง่ายขึ้น
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 6) HW6 ข้อ 2(b) — ลด Available</strong><br>
+      <strong>คำตอบ:</strong> ไม่ปลอดภัย<br>
+      <strong>คำอธิบาย:</strong> Safety เดิมสมมติว่ามีของจำนวนหนึ่ง — ถ้าลดลง Process ที่เคยพอใช้อาจไม่ได้ทำงาน → อาจเกิด Deadlock
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 7) HW6 ข้อ 2(c) — เพิ่ม Max</strong><br>
+      <strong>คำตอบ:</strong> ไม่ปลอดภัย<br>
+      <strong>คำอธิบาย:</strong> Process อาจมี Need สูงสุดเกินที่ Available รองรับ → อาจ Deadlock เมื่อขอเต็มความสามารถ
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 8) HW6 ข้อ 3 — สูตร Need</strong><br>
+      <strong>คำตอบ:</strong> Need = Max − Allocation = [2,2,1,1]<br>
+      <strong>คำอธิบาย:</strong> P0: Max=[4,2,1,2], Alloc=[2,0,0,1] → Need=[4−2, 2−0, 1−0, 2−1]=[2,2,1,1]. ต้องคำนวณ Need ก่อน Safety เสมอ
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 9) HW6 ข้อ 3 — Safe Sequence</strong><br>
+      <strong>คำตอบ:</strong> ⟨P0, P3, P4, P1, P2⟩<br>
+      <strong>คำอธิบาย:</strong> Available=[3,3,2,1] → P0(Need=[2,2,1,1])ผ่าน → P3 → P4 → P1 → P2. Need ของ P1 มี C=3 ทำให้ต้องรอจนหลัง P3, P4 คืนทรัพยากร
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 10) HW6 ข้อ 3b — P1 ขอ [1,1,0,0]</strong><br>
+      <strong>คำตอบ:</strong> Safe → อนุมัติได้<br>
+      <strong>คำอธิบาย:</strong> 4 ขั้น: ≤Need ✓, ≤Available ✓, จำลอง → Available=[2,2,2,1], รัน Safety หาลำดับ ⟨P0,P3,P4,P1,P2⟩ → Safe
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 11) HW6 ข้อ 3c — P4 ขอ [0,0,2,0]</strong><br>
+      <strong>คำตอบ:</strong> Unsafe → ปฏิเสธ<br>
+      <strong>คำอธิบาย:</strong> หลังจำลอง Available=[3,3,0,1] — ทุก Process ต้องการ C อย่างน้อย 1 แต่เหลือ 0 → ไม่มีใครทำได้ → Deadlock → ปฏิเสธคำขอ
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 12) HW6 ข้อ 16 — Detection</strong><br>
+      <strong>คำตอบ:</strong> Deadlock — P0, P1, P2 ทุกตัวติด<br>
+      <strong>คำอธิบาย:</strong> Available=[1,0,1]. P0 Req=[2,0,1] ต้อง A=2 ✗, P1 Req=[1,2,1] ต้อง B=2 ✗, P2 Req=[2,1,0] ต้อง A=2 ✗ → ไม่มีใครทำได้ = Deadlock
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 13) Detection vs Banker's matrix</strong><br>
+      <strong>คำตอบ:</strong> Detection ใช้ Request matrix แทน Need<br>
+      <strong>คำอธิบาย:</strong> Banker's ใช้ Need (Max−Allocation, ตรวจล่วงหน้า). Detection ใช้ Request (สิ่งที่ขออยู่จริง, ตรวจสถานะปัจจุบัน)
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 14) Recovery method</strong><br>
+      <strong>คำตอบ:</strong> Process Termination<br>
+      <strong>คำอธิบาย:</strong> Recovery 2 วิธี — Process Termination (ยกเลิก Process), Resource Preemption (ดึงทรัพยากร อาจ Rollback). ทั้งคู่เป็น Recovery ไม่ใช่ Avoidance
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 15) Detection Finish เริ่มต้น</strong><br>
+      <strong>คำตอบ:</strong> Finish[i]=true ถ้า Allocation[i]=0 ทั้งหมด<br>
+      <strong>คำอธิบาย:</strong> Process ที่ไม่ถือทรัพยากร = ทำงานเสร็จแล้วหรือยังไม่เริ่ม จะไม่มีส่วนใน Deadlock จึงตั้ง Finish=true ตั้งแต่แรก
+    </div>
+  </div>
+</div>
+
+<div class="collapsible">
+  <div class="col-header" onclick="tog(this)">📖 บทที่ 7 — Memory Management (HW7) — เฉลยพร้อมคำอธิบาย <span class="arrow">▼</span></div>
+  <div class="col-body">
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 1) HW7 ข้อ 1 — Internal Frag</strong><br>
+      <strong>คำตอบ:</strong> พื้นที่ภายในส่วนที่จัดสรรแล้วแต่ Process ไม่ได้ใช้<br>
+      <strong>คำอธิบาย:</strong> Internal = "ภายใน" บล็อก (Page 4KB ใช้ 3KB → 1KB เสียทิ้ง). External = "ระหว่าง" บล็อก (Hole กระจาย)
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 2) HW7 ข้อ 2 — First Fit สำหรับ 115KB</strong><br>
+      <strong>คำตอบ:</strong> 300 KB<br>
+      <strong>คำอธิบาย:</strong> Partitions=[300, 600, 350, 200, 750, 125]. First Fit สแกนจากต้น → 300≥115 ✓ → ใส่ที่ 300 เหลือ 185
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 3) HW7 ข้อ 2 — Best Fit สำหรับ 115KB</strong><br>
+      <strong>คำตอบ:</strong> 125 KB<br>
+      <strong>คำอธิบาย:</strong> Best Fit เลือก hole เล็กสุดที่ ≥ 115. ตรวจทุก hole: 125 เล็กสุดที่ ≥ 115 → ใส่ที่ 125 เหลือ 10
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 4) HW7 ข้อ 2 — Worst Fit Process 5 (375KB)</strong><br>
+      <strong>คำตอบ:</strong> ไม่ได้ — ไม่มี hole ใหญ่พอ<br>
+      <strong>คำอธิบาย:</strong> Worst Fit ใช้ hole ใหญ่หมดเร็ว: 750→ใส่ 115 เหลือ 635, 635→ใส่ 500 เหลือ 135, 600→ใส่ 358 เหลือ 242, 350→ใส่ 200 เหลือ 150. Process 375KB → hole สูงสุดเหลือ 300, 242 — ไม่พอ
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 5) HW7 ข้อ 3 — Dynamic Memory ไม่ต้อง relocate</strong><br>
+      <strong>คำตอบ:</strong> Pure Paging<br>
+      <strong>คำอธิบาย:</strong> Page ไม่จำเป็นอยู่ติดกัน — เพิ่ม Page ใหม่ที่ Frame ว่างไหนก็ได้. Contiguous/Segmentation ต้อง relocate ถ้าหลังที่ปัจจุบันไม่ว่าง
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 6) HW7 ข้อ 5 — Address 3085 / Page 1KB</strong><br>
+      <strong>คำตอบ:</strong> page = 3<br>
+      <strong>คำอธิบาย:</strong> page = ⌊3085/1024⌋ = 3, offset = 3085 mod 1024 = 3085 − 3072 = 13. ระวัง: หารปัดลง (floor) เสมอ
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 7) HW7 ข้อ 5 — Address 215201 / Page 1KB</strong><br>
+      <strong>คำตอบ:</strong> page = 210<br>
+      <strong>คำอธิบาย:</strong> 215201/1024 = 210.157... → page = 210. offset = 215201 − 210×1024 = 215201 − 215040 = 161
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 8) HW7 ข้อ 6(a) — Logical Address bits</strong><br>
+      <strong>คำตอบ:</strong> 20 bits<br>
+      <strong>คำอธิบาย:</strong> 256 pages = 2⁸ → page# 8 bits. 4KB = 2¹² → offset 12 bits. รวม Logical = 8+12 = 20 bits
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 9) HW7 ข้อ 6(b) — Physical Address bits</strong><br>
+      <strong>คำตอบ:</strong> 18 bits<br>
+      <strong>คำอธิบาย:</strong> 64 frames = 2⁶ → frame# 6 bits. offset เท่าเดิม 12 bits. รวม Physical = 6+12 = 18 bits (น้อยกว่า Logical เพราะ frame น้อยกว่า page)
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 10) HW7 ข้อ 7(a) — Segment ⟨0, 430⟩</strong><br>
+      <strong>คำตอบ:</strong> 649<br>
+      <strong>คำอธิบาย:</strong> Seg 0: Base=219, Limit=600. 430 < 600 ✓ → Physical = 219 + 430 = 649
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 11) HW7 ข้อ 7(c) — Segment ⟨2, 500⟩</strong><br>
+      <strong>คำตอบ:</strong> Illegal — Trap to OS<br>
+      <strong>คำอธิบาย:</strong> Seg 2: Limit=100. 500 ≥ 100 ✗ → Segmentation Fault → Trap to OS (อย่าตอบเป็นเลข!)
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 12) HW7 ข้อ 9.1 — words/page</strong><br>
+      <strong>คำตอบ:</strong> 640 words<br>
+      <strong>คำอธิบาย:</strong> Page = 5KB = 5120 bytes. 1 word = 8 bytes. words/page = 5120/8 = 640
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 13) HW7 ข้อ 9.3 — Internal Frag</strong><br>
+      <strong>คำตอบ:</strong> 4580 bytes<br>
+      <strong>คำอธิบาย:</strong> Process 41500 bytes, Page 5120 bytes. Pages = ⌈41500/5120⌉ = ⌈8.106⌉ = 9. Allocated = 9×5120 = 46080. Frag = 46080 − 41500 = 4580
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 14) HW7 ข้อ 10.1 — Logical bits</strong><br>
+      <strong>คำตอบ:</strong> 9 bits<br>
+      <strong>คำอธิบาย:</strong> 8 pages = 2³ → page# 3 bits. 64 words = 2⁶ → offset 6 bits. รวม = 3+6 = 9 bits
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 15) HW7 ข้อ 10.3 — Physical ⟨5, 17⟩</strong><br>
+      <strong>คำตอบ:</strong> 401 (decimal) / 000110010001 (binary)<br>
+      <strong>คำอธิบาย:</strong> PageTable[5]=Frame 6. Physical = 6×64 + 17 = 384+17 = 401. Binary: 6=000110, 17=010001 → ต่อกันได้ 000110010001
+    </div>
+  </div>
+</div>
+
+<div class="collapsible">
+  <div class="col-header" onclick="tog(this)">📖 บทที่ 8 — Virtual Memory (HW8) — เฉลยพร้อมคำอธิบาย <span class="arrow">▼</span></div>
+  <div class="col-body">
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 1) HW8 ข้อ 1(a) — Pure Demand Paging ตอนเริ่ม</strong><br>
+      <strong>คำตอบ:</strong> Page Fault Rate สูงมาก<br>
+      <strong>คำอธิบาย:</strong> Pure Demand = ไม่โหลดอะไรตอนเริ่ม → Page ที่อ้างถึงครั้งแรก<em>ทุกตัว</em>เป็น Fault → Rate สูงจนกว่า Working Set จะถูกโหลดครบ
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 2) HW8 ข้อ 1(c) — Working Set ใหม่ใหญ่เกิน RAM</strong><br>
+      <strong>คำตอบ:</strong> Ignore / ซื้อ RAM เพิ่ม / Replacement ก้าวร้าวขึ้น<br>
+      <strong>คำอธิบาย:</strong> ทางเลือก 3 แบบใน HW8 — Ignore (จะ Thrashing), Buy more RAM, ทวงคืน Page ก้าวร้าวมากขึ้น
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 3) HW8 ข้อ 2 — Copy-on-Write</strong><br>
+      <strong>คำตอบ:</strong> Trap → OS Copy Page → เขียนลง Copy<br>
+      <strong>คำอธิบาย:</strong> Page ถูก Map Write-Protected. เมื่อมีเขียน → Trap → OS copy แล้ว Process ที่เขียนใช้ Copy ของตัวเอง. ใช้ตอน fork() ประหยัด RAM
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 4) HW8 ข้อ 3 — One-to-One thread + Page Fault</strong><br>
+      <strong>คำตอบ:</strong> ไม่ต้องรอ — threads อื่นทำงานต่อได้<br>
+      <strong>คำอธิบาย:</strong> One-to-One = แต่ละ user thread มี kernel thread ของตัวเอง → kernel block เฉพาะ thread ที่ fault. ต่าง Many-to-One ที่ block ทั้ง process
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 5) HW8 ข้อ 4 — Reference 20 ตัว LRU 3 frames</strong><br>
+      <strong>คำตอบ:</strong> 18 page faults<br>
+      <strong>คำอธิบาย:</strong> Reference: 7,2,3,1,2,5,3,4,6,7,7,1,0,5,4,6,2,3,0,1. LRU เตะตัวที่ไม่ถูกใช้นานสุดในอดีต → 18 fault
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 6) HW8 ข้อ 4 — FIFO 3 frames</strong><br>
+      <strong>คำตอบ:</strong> 17 page faults<br>
+      <strong>คำอธิบาย:</strong> ในตัวอย่างนี้ FIFO ดีกว่า LRU 1 ครั้ง (กรณีพิเศษ — ปกติ LRU ≤ FIFO เกือบทุกครั้ง)
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 7) HW8 ข้อ 4 — Optimal 3 frames</strong><br>
+      <strong>คำตอบ:</strong> 13 page faults<br>
+      <strong>คำอธิบาย:</strong> OPT เป็น Lower Bound เสมอ — ไล่ตัวที่ใช้ห่างที่สุดในอนาคต. 13 fault คือน้อยที่สุดเท่าที่ทำได้
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 8) HW8 ข้อ 5(a) — Faster CPU</strong><br>
+      <strong>คำตอบ:</strong> ไม่ช่วย<br>
+      <strong>คำอธิบาย:</strong> CPU 20% = ว่าง 80% → ไม่ใช่คอขวด. คอขวดคือ Paging Disk (97.7%). CPU เร็วขึ้นก็ idle เร็วขึ้น — Util อาจ <em>ลด</em> ด้วยซ้ำ
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 9) HW8 ข้อ 5(c) — Increase multiprogramming</strong><br>
+      <strong>คำตอบ:</strong> ไม่ช่วย — แย่ลง<br>
+      <strong>คำอธิบาย:</strong> Multi↑ → Frames/Process↓ → Fault↑ → Disk Queue ยาว → CPU รอนาน → Util↓. ระบบนี้อยู่<em>หลังจุดยอด</em>ของกราฟ Thrashing แล้ว
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 10) HW8 ข้อ 5(d) — Decrease multiprogramming</strong><br>
+      <strong>คำตอบ:</strong> ช่วย — วิธีแก้ Thrashing คลาสสิก<br>
+      <strong>คำอธิบาย:</strong> Process น้อยลง → แต่ละ Process มี Frame พอ Working Set → Fault ลด → Disk โล่ง → CPU ได้รัน. OS อาจ Suspend (swap-out) Process บางตัว
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 11) HW8 ข้อ 5(e) — More main memory</strong><br>
+      <strong>คำตอบ:</strong> ช่วย<br>
+      <strong>คำอธิบาย:</strong> RAM↑ → เก็บ Page ของหลาย Process ได้มากขึ้น → Working Set fit → Fault ลด. ดีกว่า (d) เพราะไม่ต้องลด workload
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 12) HW8 ข้อ 5(f) — Faster hard disk</strong><br>
+      <strong>คำตอบ:</strong> ช่วย<br>
+      <strong>คำอธิบาย:</strong> ไม่ลดจำนวน Fault แต่ทำให้แต่ละ Fault เสร็จเร็ว → CPU รอสั้น. Multiple Disks ทำ I/O parallel ได้. ต่าง (b) ที่เพิ่มขนาด — (f) เพิ่มความเร็ว/จำนวน
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 13) HW8 ข้อ 5(h) — Increase page size</strong><br>
+      <strong>คำตอบ:</strong> โดยทั่วไปไม่ช่วย<br>
+      <strong>คำอธิบาย:</strong> Page ใหญ่ → Frame ใน RAM ลด → Process มี Frame น้อยลง → Fault อาจเพิ่ม. แต่ละ transfer นานขึ้น. ดีเฉพาะถ้ามี Spatial Locality สูงมาก
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 14) HW8 ข้อ 6 — Detect Thrashing</strong><br>
+      <strong>คำตอบ:</strong> เปรียบเทียบ CPU Util กับ Multiprogramming<br>
+      <strong>คำอธิบาย:</strong> Multi สูงแต่ Util ต่ำ = Thrashing. แก้ด้วยการลด Multiprogramming (Suspend Process)
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 15) HW8 MCQ ข้อ 12 — Proportional 50 frames</strong><br>
+      <strong>คำตอบ:</strong> P0=7, P1=15, P2=26<br>
+      <strong>คำอธิบาย:</strong> Total = 15+30+50 = 95. P0 = ⌊15/95×50⌋ = ⌊7.89⌋ = 7. P1 = ⌊30/95×50⌋ = ⌊15.78⌋ = 15. P2 = ⌊50/95×50⌋ = ⌊26.31⌋ = 26. <strong>ใช้ floor ทุกตัว!</strong>
+    </div>
+  </div>
+</div>
+
+<div class="collapsible">
+  <div class="col-header" onclick="tog(this)">📖 บทที่ 9 — File &amp; I/O (HW9) — เฉลยพร้อมคำอธิบาย <span class="arrow">▼</span></div>
+  <div class="col-body">
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 1) HW9 ข้อ 1 — i-node access steps</strong><br>
+      <strong>คำตอบ:</strong> 1 step (ดู i-node[N] ตรงๆ)<br>
+      <strong>คำอธิบาย:</strong> i-node = สารบัญ — i-node[N] บอก Physical Block ของ data block N โดยตรง. ต่าง Linked List ที่ต้องไล่ N ก้าว
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 2) HW9 ข้อ 1.1 — Physical 44 = data block?</strong><br>
+      <strong>คำตอบ:</strong> Data block 3<br>
+      <strong>คำอธิบาย:</strong> i-node = [(0,51),(1,232),(2,123),(3,44),(4,915),(5,28),(6,75)]. หา 44 ในคอลัมน์ขวา → แถว Data Block 3
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 3) HW9 ข้อ 1.2 — Data block 5 = physical?</strong><br>
+      <strong>คำตอบ:</strong> Physical Block 28<br>
+      <strong>คำอธิบาย:</strong> ดูแถว Data Block 5 ในตาราง i-node → คอลัมน์ขวา = 28 (โดยตรง 1 step)
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 4) HW9 ข้อ 2.1.a — Linked List data block 6</strong><br>
+      <strong>คำตอบ:</strong> Physical Block 33<br>
+      <strong>คำอธิบาย:</strong> Chain physicals = [8,14,22,28,5,33,19] (data block 1-7). ไล่ทีละก้าว: 1→8, 2→14, 3→22, 4→28, 5→5, <strong>6→33</strong>
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 5) HW9 ข้อ 2.1.b — Physical 28 = data block?</strong><br>
+      <strong>คำตอบ:</strong> Data Block 4<br>
+      <strong>คำอธิบาย:</strong> ไล่ chain จนเจอ 28: block 1→8, 2→14, 3→22, <strong>4→28</strong> ✓
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 6) HW9 ข้อ 2.2.a — File A กี่ block?</strong><br>
+      <strong>คำตอบ:</strong> 6 blocks<br>
+      <strong>คำอธิบาย:</strong> เริ่ม Physical 4 → FAT[4]=7 → FAT[7]=1 → FAT[1]=6 → FAT[6]=3 → FAT[3]=5 → FAT[5]=-1 (จบ). Chain: 4→7→1→6→3→5 = 6 blocks
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 7) HW9 ข้อ 2.2.b — Data block 4 = physical?</strong><br>
+      <strong>คำตอบ:</strong> Physical Block 3<br>
+      <strong>คำอธิบาย:</strong> นับ 0-indexed: data 0→4, 1→7, 2→1, 3→6, <strong>4→3</strong>, 5→5
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 8) HW9 MCQ ข้อ 1 — File system service</strong><br>
+      <strong>คำตอบ:</strong> Operating System<br>
+      <strong>คำอธิบาย:</strong> File System เป็นบริการของ OS ไม่ใช่ application. OS จัดการสร้าง/ลบ/อ่าน/เขียนไฟล์และ Allocation บน disk
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 9) HW9 MCQ ข้อ 2 — File Attributes</strong><br>
+      <strong>คำตอบ:</strong> File Attributes<br>
+      <strong>คำอธิบาย:</strong> name, type, location, size, protection, date, owner = ทุกอย่างรวมกันเรียก File Attributes (ไม่ใช่อย่างใดอย่างหนึ่ง)
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 10) HW9 MCQ ข้อ 4 — Executable</strong><br>
+      <strong>คำตอบ:</strong> Executable file<br>
+      <strong>คำอธิบาย:</strong> OS ทุกตัวต้องรองรับ Executable เพราะต้องโหลดเข้า Memory แล้ว Run. ถ้าไม่งั้นรันโปรแกรมไม่ได้
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 11) HW9 MCQ ข้อ 6 — Volume</strong><br>
+      <strong>คำตอบ:</strong> Volume<br>
+      <strong>คำอธิบาย:</strong> Volume = สิ่งที่บรรจุ File System (Partition ที่ format แล้ว). Partition คือส่วนแบ่งของ disk ก่อน format
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 12) HW9 MCQ ข้อ 8 — Naming Problem</strong><br>
+      <strong>คำตอบ:</strong> Single-Level<br>
+      <strong>คำอธิบาย:</strong> Single-Level: ทุกไฟล์อยู่ folder เดียว → ชื่อซ้ำไม่ได้ = Naming Problem. Two-Level/Tree แก้ปัญหานี้ได้
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 13) HW9 MCQ ข้อ 10 — r-xrw-r-x Group</strong><br>
+      <strong>คำตอบ:</strong> อ่านและเขียนได้ แต่รันไม่ได้<br>
+      <strong>คำอธิบาย:</strong> r-xrw-r-x: Owner=r-x, Group=<strong>rw-</strong>, Others=r-x. Group bit สาม = ‘-’ → execute=0 จึงรันไม่ได้
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 14) HW9 MCQ ข้อ 12 — Not file allocation</strong><br>
+      <strong>คำตอบ:</strong> Paging<br>
+      <strong>คำอธิบาย:</strong> Paging เป็น Memory Management (บทที่ 7) ไม่ใช่ File Allocation. File Allocation 4 วิธี: Contiguous, Linked, FAT, Indexed (i-node)
+    </div>
+    <div class="box box-yellow" style="font-size:13px;line-height:1.9">
+      <strong>ข้อ 15) HW9 MCQ ข้อ 13 — FAT location</strong><br>
+      <strong>คำตอบ:</strong> Main Memory (RAM) — Load มาตอน Mount<br>
+      <strong>คำอธิบาย:</strong> FAT เก็บที่ RAM (Load จาก Disk ตอน Mount) → ไล่ chain ใน RAM ได้ ไม่ต้อง read disk ทุกก้าว → เร็วกว่า Linked List
+    </div>
+  </div>
+</div>
+</div>
+
+</div><!-- end exam-hw -->
+
 
 </div><!-- #main -->
 <script>
@@ -8115,7 +8501,80 @@ const MCQ_CH9=[
  {q:"Bus ใดเร็วที่สุดสำหรับอุปกรณ์ต่อพ่วงสมัยใหม่?",o:["ISA","Expansion bus","PCIe","Serial port"],a:2,e:"PCIe เป็น bus เร็วสุดสำหรับ peripheral ปัจจุบัน"}
 ];
 
-const ALL_MCQ={ch6:MCQ_CH6,ch7:MCQ_CH7,ch8:MCQ_CH8,ch9:MCQ_CH9};
+// ── MCQ ชุดที่ 2 (เน้น Homework) ──
+const MCQ_CH6_2=[
+ {q:"HW6 ข้อ 1: ในโจทย์ Traffic Deadlock เงื่อนไขใดบ่งชี้ว่า \"ดึงรถออกจากตำแหน่งโดยบังคับไม่ได้\"?",o:["Mutual Exclusion","Hold and Wait","No Preemption","Circular Wait"],a:2,e:"จาก HW6 ข้อ 1: No Preemption = ดึงรถออกจากที่จอดบนถนนไม่ได้ (ต้องให้คนขับขยับเอง). ส่วน Mutual Exclusion = พื้นที่ถนน 1 รถ, Hold and Wait = ถือพื้นที่รอข้างหน้า, Circular Wait = วงกลมรถรอกัน"},
+ {q:"HW6 ข้อ 1: กฎ \"รถจะไม่เข้าสี่แยกถ้าไม่มั่นใจว่าจะออกได้ทันที\" ทำลายเงื่อนไข Deadlock ข้อใด?",o:["Mutual Exclusion","Hold and Wait","No Preemption","Circular Wait"],a:1,e:"กฎนี้บังคับว่า \"ไม่ถือพื้นที่ขณะรอ\" — ก่อนเข้าสี่แยกต้องมั่นใจมีที่ออกแล้ว = ทำลาย Hold and Wait. ถ้าไม่มีพื้นที่ออก รถจะไม่ถือสี่แยกตั้งแต่แรก"},
+ {q:"จาก HW6: ใน Resource Allocation Graph ที่ทุก Resource มี 1 Instance ถ้ามี Cycle จะหมายความว่าอะไร?",o:["ปลอดภัย ไม่มี Deadlock","Deadlock เกิดขึ้นแน่นอน","อาจมีหรือไม่มี Deadlock ต้องตรวจเพิ่ม","ต้องรัน Banker's Algorithm"],a:1,e:"กฎจาก HW6 RAG: Single Instance + Cycle ⇒ Deadlock เสมอ. แต่ถ้า Multi-Instance + Cycle ⇒ อาจมีหรือไม่ (ต้องเช็ค Detection). ถ้าไม่มี Cycle → ไม่มี Deadlock แน่"},
+ {q:"HW6 ข้อ 6 (RAG): A ถือ D, C ถือ B รอ F, E ถือ F. ตามวิธีตรวจ RAG หลาย Instance ผลลัพธ์คืออะไร?",o:["เกิด Deadlock ระหว่าง A กับ E","ทุก Resource จัดสรรได้ → ลบได้หมด → ไม่ใช่ Deadlock","ต้องใช้ Banker's เพิ่ม","Single Instance ตอบไม่ได้"],a:1,e:"HW6 ข้อ 6: วิธีตรวจ RAG multi-instance — หา Process ที่ทุก Request edge จัดสรรได้ → ทำงานเสร็จ → ลบ edge → ทำซ้ำ. ในข้อนี้จัดสรรได้ครบ → ไม่ใช่ Deadlock"},
+ {q:"HW6 ข้อ 2(a): ในระบบที่ใช้ Banker's Algorithm ถ้าเพิ่ม Available (เพิ่มทรัพยากรใหม่) ระบบจะ?",o:["ปลอดภัย — มีทรัพยากรให้ใช้มากขึ้น","ไม่ปลอดภัย — อาจ Deadlock","ขึ้นอยู่กับ Need ของแต่ละ Process","ต้องรัน Safety ก่อนถึงจะตอบได้"],a:0,e:"HW6 ข้อ 2(a): เพิ่ม Available = มีทรัพยากรให้ใช้มากขึ้น → Process เข้า Safe Sequence ได้ง่ายขึ้น → ปลอดภัยเสมอ"},
+ {q:"HW6 ข้อ 2(b): ถ้าทรัพยากรเสียถาวร (ลด Available) ระบบจะเป็นอย่างไร?",o:["ยังคงปลอดภัย","ไม่ปลอดภัย — อาจเกิด Deadlock","ปลอดภัยถ้าไม่มี Process กำลังทำงาน","ต้องเพิ่ม Max ของ Process"],a:1,e:"HW6 ข้อ 2(b): Safety เดิมคำนวณบนสมมติฐานว่ามีทรัพยากรจำนวนหนึ่ง — ถ้าลดลง Process ที่เคยพอใช้อาจไม่ได้ทำงาน → อาจ Deadlock"},
+ {q:"HW6 ข้อ 2(c): ถ้าเพิ่ม Max ของ Process ใดๆ ในระบบที่ปลอดภัยอยู่ จะเป็นอย่างไร?",o:["ยังคงปลอดภัย","อาจไม่ปลอดภัย — Process อาจขอเกินที่ระบบรองรับ","ไม่ส่งผล","ต้องเพิ่ม Available ด้วย"],a:1,e:"HW6 ข้อ 2(c): การเพิ่ม Max ทำให้ Process อาจมี Need สูงสุดเกินที่ Available รองรับ → อาจ Deadlock เมื่อ Process ขอเต็มความสามารถ"},
+ {q:"HW6 ข้อ 3: ถ้า Allocation ของ P0 = [2,0,0,1] และ Max = [4,2,1,2] แล้ว Need ของ P0 คือ?",o:["[4,2,1,2]","[6,2,1,3]","[2,2,1,1]","[2,0,0,1]"],a:2,e:"HW6 ข้อ 3: Need[i] = Max[i] − Allocation[i] = [4−2, 2−0, 1−0, 2−1] = [2,2,1,1]. ต้องคำนวณ Need ก่อน Safety เสมอ"},
+ {q:"HW6 ข้อ 3: 5 Process 4 Resource Available=[3,3,2,1] — Safe Sequence ที่ถูกต้องคือ?",o:["⟨P0, P1, P2, P3, P4⟩","⟨P0, P3, P4, P1, P2⟩","⟨P1, P3, P4, P0, P2⟩","Unsafe — ไม่มี Safe Sequence"],a:1,e:"HW6 ข้อ 3: P0 (Need=[2,2,1,1]) ผ่านก่อน → Work=[5,3,2,2]. P1, P2 ติดเพราะ Need[C]>2. P3 (Need=[0,1,1,2]) ผ่าน → P4 → P1 → P2 → ⟨P0, P3, P4, P1, P2⟩"},
+ {q:"HW6 ข้อ 3b: P1 ขอ Request=[1,1,0,0]. ผลลัพธ์คือ?",o:["ปฏิเสธเพราะเกิน Need","ปฏิเสธเพราะเกิน Available","อนุมัติได้ — Safe State","ต้องรอจน P0 เสร็จก่อน"],a:2,e:"HW6 ข้อ 3b: ขั้น 1: [1,1,0,0]≤Need[P1]=[2,1,3,1] ✓. ขั้น 2: ≤Available=[3,3,2,1] ✓. ขั้น 3: จำลอง Available=[2,2,2,1]. ขั้น 4: รัน Safety ⟨P0,P3,P4,P1,P2⟩ Safe → อนุมัติ"},
+ {q:"HW6 ข้อ 3c: P4 ขอ Request=[0,0,2,0]. ผลคือ?",o:["อนุมัติ Safe","ปฏิเสธ — Unsafe จะเกิด Deadlock","ต้องเพิ่มทรัพยากร C","Need ไม่พอ"],a:1,e:"HW6 ข้อ 3c: หลังจำลอง Available=[3,3,0,1]. ทุก Process ต้องการ C อย่างน้อย 1 แต่เหลือ 0 → ไม่มีใครทำได้ → Unsafe → ปฏิเสธคำขอ"},
+ {q:"HW6 ข้อ 16 (Detection): Available=[1,0,1] P0 Req[2,0,1], P1 Req[1,2,1], P2 Req[2,1,0]. ผลคือ?",o:["ไม่มี Deadlock — ทุก Process รัน","Deadlock — P0, P1, P2 ทุกตัวติด","Deadlock เฉพาะ P1, P2","ต้องคำนวณ Need ก่อน"],a:1,e:"HW6 ข้อ 16: P0 Req[2,0,1] ต้อง A=2 แต่ Available=1 ✗. P1 Req[1,2,1] ต้อง B=2 แต่ Available=0 ✗. P2 Req[2,1,0] ต้อง A=2 แต่ Available=1 ✗. ไม่มีใครทำได้ → Deadlock ทั้งหมด"},
+ {q:"จาก HW6 Cheat Sheet: Detection Algorithm ต่างจาก Banker's ที่ Matrix ใด?",o:["Detection ไม่ใช้ Matrix","Detection ใช้ Need","Detection ใช้ Request matrix แทน Need","ใช้แค่ Available"],a:2,e:"HW6 Cheat: Banker's ใช้ Need (Max−Allocation, ตรวจล่วงหน้า). Detection ใช้ Request matrix (สิ่งที่ Process ขออยู่จริง, ตรวจสถานะปัจจุบัน)"},
+ {q:"HW6: การยกเลิกกระบวนการเพื่อปล่อยทรัพยากรเรียกว่าอะไร?",o:["Resource Preemption","Process Termination","Rollback","Banker's Algorithm"],a:1,e:"HW6: Recovery 2 วิธี — Process Termination (ยกเลิก Process), Resource Preemption (ดึงทรัพยากร อาจ Rollback). ทั้งคู่เป็น Recovery ไม่ใช่ Avoidance"},
+ {q:"HW6 Cheat: ใน Detection Algorithm Finish[i] เริ่มต้นเป็น true เมื่อใด?",o:["เริ่ม false เสมอ","เริ่ม true ถ้า Allocation[i] = 0 ทั้งหมด","เริ่ม true ทุกตัว","ขึ้นกับ Available"],a:1,e:"HW6 Cheat: Detection ตั้ง Finish[i]=true ตั้งแต่แรกถ้า Process i ไม่ได้ถือทรัพยากร (Allocation=0) เพราะ Process นั้นทำงานเสร็จแล้วหรือยังไม่เริ่ม จะไม่มีส่วนใน Deadlock"}
+];
+
+const MCQ_CH7_2=[
+ {q:"HW7 ข้อ 1: Internal Fragmentation คืออะไร?",o:["พื้นที่ว่างระหว่าง partition","พื้นที่ภายในส่วนที่จัดสรรแล้วแต่ Process ไม่ได้ใช้","Hole ที่ใส่ Process ไม่ได้","Page Table เต็ม"],a:1,e:"HW7 ข้อ 1: Internal = ภายในบล็อก (Page 4KB ใช้ 3KB → 1KB เสียทิ้งจนกว่าจะคืน Page). External = ระหว่างบล็อก (Hole กระจายใส่ Process ใหม่ไม่ได้)"},
+ {q:"HW7 ข้อ 2: Partitions=[300, 600, 350, 200, 750, 125] KB, Process 115KB ด้วย First Fit ใส่ที่ partition ใด?",o:["300 KB","125 KB","200 KB","600 KB"],a:0,e:"HW7 ข้อ 2 First Fit: สแกนจากต้น เลือก hole แรกที่ ≥ 115. 300 ≥ 115 ตั้งแต่ตัวแรก → ใส่ที่ 300KB เหลือ 185KB"},
+ {q:"HW7 ข้อ 2: Partitions เดียวกัน Process 115KB ด้วย Best Fit ใส่ที่ใด?",o:["300 KB","125 KB","200 KB","750 KB"],a:1,e:"HW7 ข้อ 2 Best Fit: เลือก hole เล็กสุดที่ ≥ 115. ตรวจทุก hole → 125 เป็นเล็กสุดที่ ≥ 115 → ใส่ที่ 125 เหลือเพียง 10KB"},
+ {q:"HW7 ข้อ 2: Worst Fit ใส่ Process 1-4 (115, 500, 358, 200) ตามลำดับแล้ว Process 5 (375 KB) ใส่ได้หรือไม่?",o:["ใส่ได้ที่ 600","ใส่ได้ที่ 392","ไม่ได้ — ไม่มี hole ใหญ่พอ","ใส่ที่ 350"],a:2,e:"HW7 ข้อ 2 Worst Fit: 750→ใส่ 115 เหลือ 635, 635→ใส่ 500 เหลือ 135, 600→ใส่ 358 เหลือ 242, 350→ใส่ 200 เหลือ 150. Process 375 → hole สูงสุดเหลือ 300, 242 — ไม่พอ → ใส่ไม่ได้!"},
+ {q:"HW7 ข้อ 3 (Ex 8.4): Memory Allocation แบบใดที่ขยายไฟล์ได้โดย<strong>ไม่ต้อง relocate</strong>?",o:["Contiguous","Pure Segmentation","Pure Paging","ทุกแบบต้อง relocate"],a:2,e:"HW7 ข้อ 3: Pure Paging เพิ่ม Page ใหม่ที่ Frame ว่างไหนก็ได้ — ไม่ต้องอยู่ติดกัน. Contiguous ต้อง relocate ทั้งโปรแกรม. Pure Segmentation อาจต้อง relocate Segment ที่ขยาย"},
+ {q:"HW7 ข้อ 5: Page size = 1KB. Logical Address 3085 → page#?",o:["2","3","4","13"],a:1,e:"HW7 ข้อ 5: page = ⌊3085/1024⌋ = 3, offset = 3085 mod 1024 = 3085 − 3072 = 13. ระวัง — หารปัดลง (floor) เสมอ"},
+ {q:"HW7 ข้อ 5: Page size 1KB. Logical Address 215201 → page#?",o:["210","211","215","161"],a:0,e:"HW7 ข้อ 5: 215201/1024 = 210.157... → page = 210. offset = 215201 − 210×1024 = 215201 − 215040 = 161"},
+ {q:"HW7 ข้อ 6: 256 pages, page size 4KB → จำนวน bits ของ Logical Address?",o:["18","20","24","12"],a:1,e:"HW7 ข้อ 6: 256 = 2⁸ → page# 8 bits. 4KB = 2¹² → offset 12 bits. รวม Logical = 8+12 = 20 bits"},
+ {q:"HW7 ข้อ 6: 64 frames, frame size 4KB → จำนวน bits ของ Physical Address?",o:["16","18","20","24"],a:1,e:"HW7 ข้อ 6: 64 frames = 2⁶ → frame# 6 bits. offset = page size = 12 bits. รวม Physical = 6+12 = 18 bits (น้อยกว่า Logical เพราะ frame น้อยกว่า page)"},
+ {q:"HW7 ข้อ 7: Seg 0 มี Base=219, Length=600. Logical ⟨0, 430⟩ → Physical?",o:["649","1030","819","Trap"],a:0,e:"HW7 ข้อ 7(a): 430 < 600 ✓ (อยู่ในขอบเขต) → Physical = Base + d = 219 + 430 = 649"},
+ {q:"HW7 ข้อ 7: Seg 2 มี Base=90, Length=100. Logical ⟨2, 500⟩ → ?",o:["590","90","Illegal — Trap to OS","500"],a:2,e:"HW7 ข้อ 7(c): 500 ≥ 100 (เกิน Limit) → Segmentation Fault → Trap to OS. อย่าตอบเป็นเลข — ต้องตอบ \"Illegal\""},
+ {q:"HW7 ข้อ 9.1: Page size = 5KB, 1 word = 8 bytes → words ต่อ page?",o:["512","640","1024","5120"],a:1,e:"HW7 ข้อ 9.1: 1 page = 5KB = 5120 bytes. words/page = 5120/8 = 640 words"},
+ {q:"HW7 ข้อ 9.3: Process 41,500 bytes, Page size 5KB (5120 B) → Internal Fragmentation?",o:["1024 bytes","4580 bytes","5120 bytes","0 bytes"],a:1,e:"HW7 ข้อ 9.3: Pages = ⌈41500/5120⌉ = ⌈8.106⌉ = 9. Total allocated = 9×5120 = 46080. Internal Frag = 46080 − 41500 = 4580 bytes"},
+ {q:"HW7 ข้อ 10.1: Logical Address Space = 8 pages, 64 words/page → จำนวน bits ของ Logical Address?",o:["6 bits","8 bits","9 bits","12 bits"],a:2,e:"HW7 ข้อ 10.1: 8 pages = 2³ → page# 3 bits. 64 words = 2⁶ → offset 6 bits. รวม Logical = 3+6 = 9 bits"},
+ {q:"HW7 ข้อ 10.3: Logical ⟨5, 17⟩, Page Size=64, PageTable[5]=Frame 6 → Physical (decimal)?",o:["384","401","512","17"],a:1,e:"HW7 ข้อ 10.3: Physical = Frame × Page Size + Offset = 6 × 64 + 17 = 384 + 17 = 401. Binary: 6=000110, 17=010001 → 000110010001 = 401"}
+];
+
+const MCQ_CH8_2=[
+ {q:"HW8 ข้อ 1(a) (Ex 9.3): ใน Pure Demand Paging ตอน Process เริ่มรัน Page Fault Rate เป็นอย่างไร?",o:["ต่ำมาก เพราะ OS เตรียม Page ไว้","สูงมาก เพราะ Page ที่ต้องการยังไม่อยู่ใน Memory","0 เพราะยังไม่อ้างอิง Page","ขึ้นกับขนาด RAM"],a:1,e:"HW8 ข้อ 1(a): Pure Demand Paging = ไม่โหลดอะไรตอนเริ่ม → Page ที่อ้างถึงครั้งแรกทุกตัวเป็น Fault → Rate สูงมากจนกว่า Working Set จะถูกโหลดครบ"},
+ {q:"HW8 ข้อ 1(c): ถ้า Process เปลี่ยน locality และ Working Set ใหม่ใหญ่เกิน RAM ทางเลือกที่โจทย์ระบุคือ?",o:["ลด Multiprogramming เท่านั้น","Ignore (รับ Thrashing) / ซื้อ RAM เพิ่ม / Replacement ก้าวร้าวขึ้น","ปิด Process","เพิ่ม Page Size"],a:1,e:"HW8 ข้อ 1(c) ระบุ 3 ทางเลือก: (1) Ignore (จะเกิด Thrashing), (2) ซื้อ RAM เพิ่ม (Physical Memory), (3) ทวงคืน Page ก้าวร้าวขึ้น (Aggressive Replacement)"},
+ {q:"HW8 ข้อ 2 (Ex 9.4): Copy-on-Write ทำงานอย่างไรเมื่อ Process หนึ่งเขียน Page ที่แชร์อยู่?",o:["ลบ Page เดิม","ห้ามเขียน","Trap → OS Copy Page → Process เขียนลง Copy ของตัวเอง","เขียนลง Page เดิมเลย"],a:2,e:"HW8 ข้อ 2: COW ทุก Process Map Page เดิมแบบ Write-Protected. เมื่อมีเขียน → Trap → OS Copy Page → Process นั้นเขียนลง Copy ของตัวเอง → Process อื่นเห็น Page เดิม → ใช้ตอน fork() ประหยัด RAM"},
+ {q:"HW8 ข้อ 3 (Ex 9.7): Process มี 5 user threads แบบ One-to-One. ถ้า 1 thread เกิด Page Fault, threads อื่นเป็นอย่างไร?",o:["Block ทั้งหมด","ไม่ต้องรอ — ทำงานต่อได้","ขึ้นกับ Priority","OS หยุดทุกอย่าง"],a:1,e:"HW8 ข้อ 3: One-to-One = แต่ละ user thread มี kernel thread ของตัวเอง → kernel block เฉพาะ kernel thread ที่เกิด fault. ต่าง Many-to-One ที่ block ทั้ง process"},
+ {q:"HW8 ข้อ 4 (Ex 9.8): Reference 7,2,3,1,2,5,3,4,6,7,7,1,0,5,4,6,2,3,0,1 (20 refs), Frames=3, LRU → Page Faults?",o:["13","17","18","20"],a:2,e:"HW8 ข้อ 4 LRU: 18 fault. LRU เตะตัวที่ไม่ถูกใช้นานสุดในอดีต. กรณีนี้ FIFO (17) < LRU (18) เป็นกรณีพิเศษ ปกติ LRU ≤ FIFO"},
+ {q:"HW8 ข้อ 4: Reference เดิม Frames=3, FIFO → Page Faults?",o:["13","17","18","20"],a:1,e:"HW8 ข้อ 4 FIFO: 17 fault — ดีกว่า LRU 1 ครั้งในกรณีนี้! FIFO เตะตัวที่อยู่ใน Memory นานสุด (เข้ามาก่อน)"},
+ {q:"HW8 ข้อ 4: Reference เดิม Frames=3, Optimal → Page Faults?",o:["13","17","18","9"],a:0,e:"HW8 ข้อ 4 OPT: 13 fault — น้อยที่สุด เป็น Lower Bound. OPT เลือกไล่ตัวที่ใช้ห่างที่สุดในอนาคต ทำในชีวิตจริงไม่ได้แต่ใช้เป็น benchmark"},
+ {q:"HW8 ข้อ 5(a) (Ex 9.14): CPU=20%, Paging Disk=97.7%. Install faster CPU จะช่วย CPU Utilization หรือไม่?",o:["ช่วยมาก","ไม่ช่วย — CPU ไม่ใช่คอขวด","ช่วยเล็กน้อย","ขึ้นกับ workload"],a:1,e:"HW8 ข้อ 5(a): CPU 20% = ว่าง 80% → ไม่ใช่คอขวด. คอขวดคือ Paging Disk (97.7%). CPU เร็วขึ้นก็ idle เร็วขึ้น — Util อาจ ลดลง ด้วยซ้ำ"},
+ {q:"HW8 ข้อ 5(c): เพิ่ม Degree of Multiprogramming จะช่วยหรือไม่?",o:["ช่วย","ไม่ช่วย — ทำให้แย่ลงไปอีก","ช่วยถ้า RAM เยอะ","ขึ้นกับ Process"],a:1,e:"HW8 ข้อ 5(c): Multi↑ → Frames/Process↓ → Fault↑ → Disk Queue ยาว → CPU รอ → Util↓. ระบบนี้อยู่หลังจุดยอดของกราฟ Thrashing เพิ่ม Multi จะ Thrashing หนักขึ้น"},
+ {q:"HW8 ข้อ 5(d): ลด Degree of Multiprogramming จะช่วยหรือไม่?",o:["ไม่ช่วย","ช่วย — เป็นวิธีแก้ Thrashing คลาสสิก","ขึ้นกับ Page Size","ทำให้ระบบช้าลง"],a:1,e:"HW8 ข้อ 5(d): ลด Process → Frames/Process↑ → Working Set fit ใน RAM → Fault↓ → Disk โล่ง → CPU ได้รัน. OS อาจ Suspend (swap-out) Process บางตัว"},
+ {q:"HW8 ข้อ 5(e): Install more main memory (เพิ่ม RAM) จะช่วยหรือไม่?",o:["ช่วย — เก็บ Page ได้มากขึ้น Page Fault ลด","ไม่ช่วย","ช่วยเฉพาะถ้าลด Process","เพิ่มแล้วช้าลง"],a:0,e:"HW8 ข้อ 5(e): RAM↑ → เก็บ Page ของหลาย Process ได้มากขึ้น → Working Set fit ใน Memory → Fault ลดลงมาก. ดีกว่า (d) เพราะไม่ต้องลด workload"},
+ {q:"HW8 ข้อ 5(f): Install faster hard disk หรือ multiple disks จะช่วยหรือไม่?",o:["ไม่ช่วย","ช่วย — แต่ละ Page Fault เสร็จเร็วขึ้น CPU รอน้อยลง","ช่วยเฉพาะถ้าซื้อ SSD","ทำให้ Thrashing เพิ่ม"],a:1,e:"HW8 ข้อ 5(f): ไม่ลดจำนวน Fault แต่ทำให้แต่ละ Fault เสร็จเร็ว → CPU รอสั้น. Multiple Disks ทำ I/O parallel ได้. ต่าง (b) ที่เพิ่มขนาด — (f) เพิ่มความเร็ว/จำนวน"},
+ {q:"HW8 ข้อ 5(h): Increase Page Size ในระบบที่ Thrashing อยู่แล้วจะช่วยหรือไม่?",o:["ช่วยเสมอ","โดยทั่วไปไม่ช่วย — Frame ใน RAM ลด, transfer ต่อ Fault นานขึ้น","ช่วยถ้า process มี locality สูงทุกกรณี","ลด Internal Frag เสมอ"],a:1,e:"HW8 ข้อ 5(h): Page ใหญ่ → Frame ใน RAM ลด → Process มี Frame น้อยลง → Fault อาจเพิ่ม. แต่ละ Fault ต้องอ่านมากขึ้น → CPU รอนานขึ้น. ดีเฉพาะถ้ามี Spatial Locality สูงมาก"},
+ {q:"HW8 ข้อ 6 (Ex 9.19): การตรวจจับ Thrashing ทำอย่างไร?",o:["ดูจาก Page Table","เปรียบเทียบ CPU Utilization กับ Multiprogramming — สูง Multi แต่ต่ำ Util = Thrashing","นับ Page Fault อย่างเดียว","ดูจาก Disk Queue"],a:1,e:"HW8 ข้อ 6: อาการ Thrashing — Multiprogramming สูง แต่ CPU Utilization ต่ำ → ระบบอยู่ใน Thrashing. แก้: ลด Multiprogramming (Suspend บาง Process)"},
+ {q:"HW8 MCQ ข้อ 12: P0=15, P1=30, P2=50 pages, มี 50 frames Proportional Allocation → P0/P1/P2 ได้กี่ frame?",o:["5/15/30","7/14/29","7/15/26","8/16/26"],a:2,e:"HW8 MCQ ข้อ 12: Total = 15+30+50 = 95. P0 = ⌊15/95×50⌋ = ⌊7.89⌋ = 7. P1 = ⌊30/95×50⌋ = ⌊15.78⌋ = 15. P2 = ⌊50/95×50⌋ = ⌊26.31⌋ = 26. ใช้ floor ทุกตัว!"}
+];
+
+const MCQ_CH9_2=[
+ {q:"HW9 ข้อ 1: I-node Table ใช้กี่ขั้นตอนในการเข้าถึง data block ใดก็ได้?",o:["N steps (ตามลำดับ block)","2 steps","1 step (ดู i-node[N] โดยตรง)","ขึ้นกับ Block Size"],a:2,e:"HW9 ข้อ 1: i-node = สารบัญ — i-node[N] บอก Physical Block ของ data block N โดยตรง → 1 step (+ อ่าน i-node 1 ครั้ง). ต่าง Linked List ที่ต้องไล่ N ก้าว"},
+ {q:"HW9 ข้อ 1.1: i-node = [(0,51),(1,232),(2,123),(3,44),(4,915),(5,28),(6,75)]. Physical block 44 เก็บ data block ใด?",o:["0","2","3","4"],a:2,e:"HW9 ข้อ 1.1: หาแถวที่ Physical Block = 44 ในคอลัมน์ขวา → แถว Data Block 3. คำตอบ: Data Block 3"},
+ {q:"HW9 ข้อ 1.2: จากตาราง i-node เดียวกัน Data block 5 อยู่ที่ Physical Block ใด?",o:["5","75","28","915"],a:2,e:"HW9 ข้อ 1.2: ดูคอลัมน์ขวาของแถว Data Block = 5 → Physical Block = 28 (อ่านโดยตรงจาก i-node[5])"},
+ {q:"HW9 ข้อ 2.1.a (Linked List): Chain physicals = [8,14,22,28,5,33,19] เริ่มจาก data block 1. Data block 6 อยู่ Physical ใด?",o:["5","19","33","22"],a:2,e:"HW9 ข้อ 2.1.a: ไล่ chain ทีละก้าว: block 1→8, 2→14, 3→22, 4→28, 5→5, 6→33. ต้องนับเริ่มจาก data block 1 (ในโจทย์เริ่มที่ 1 ไม่ใช่ 0). คำตอบ: Physical 33"},
+ {q:"HW9 ข้อ 2.1.b: Chain เดียวกัน Physical block 28 เก็บ data block ใด?",o:["1","3","4","5"],a:2,e:"HW9 ข้อ 2.1.b: ไล่ chain จนเจอ physical = 28. block 1→8 ❌ 2→14 ❌ 3→22 ❌ 4→28 ✓. คำตอบ: Data Block 4"},
+ {q:"HW9 ข้อ 2.2.a (FAT): File A เริ่ม Physical 4. FAT[4]=7, FAT[7]=1, FAT[1]=6, FAT[6]=3, FAT[3]=5, FAT[5]=-1. File A มีกี่ data block?",o:["4","5","6","7"],a:2,e:"HW9 ข้อ 2.2.a: Chain: 4→7→1→6→3→5 (จบที่ -1) = 6 blocks. นับ block ใน chain ทั้งหมดจนเจอ -1"},
+ {q:"HW9 ข้อ 2.2.b: จาก FAT chain เดียวกัน data block 4 (0-indexed) อยู่ที่ Physical ใด?",o:["4","7","3","5"],a:2,e:"HW9 ข้อ 2.2.b: นับ 0-indexed: data 0→4, 1→7, 2→1, 3→6, 4→3, 5→5. คำตอบ: Physical Block 3"},
+ {q:"HW9 MCQ ข้อ 1: File System Management เป็นบริการของอะไร?",o:["Application Program","Operating System","Compiler","Hardware"],a:1,e:"HW9 MCQ ข้อ 1: File System เป็นบริการของ OS — ไม่ใช่ application program. OS จัดการสร้าง/ลบ/อ่าน/เขียนไฟล์ และ Allocation บน disk"},
+ {q:"HW9 MCQ ข้อ 2: name, type, location, size, protection, date, owner เรียกรวมว่าอะไร?",o:["File System","File Attributes","File Permissions","File Operations"],a:1,e:"HW9 MCQ ข้อ 2: คุณสมบัติ/Metadata ของไฟล์ทั้งหมดนี้รวมเรียก File Attributes (ไม่ใช่อย่างใดอย่างหนึ่ง — รวมทุกอย่าง)"},
+ {q:"HW9 MCQ ข้อ 4: OS ทุกตัวต้องรองรับไฟล์ประเภทใดเสมอ?",o:["Executable file","PDF","Image","Compressed file"],a:0,e:"HW9 MCQ ข้อ 4: Executable เป็นไฟล์ที่ OS ต้องเข้าใจเสมอ — ถ้าไม่งั้นรันโปรแกรมไม่ได้ (โหลด Executable เข้า Memory แล้วเริ่ม Process)"},
+ {q:"HW9 MCQ ข้อ 6: สิ่งที่ \"บรรจุ\" File System คืออะไร?",o:["Partition","Sector","Volume","Block"],a:2,e:"HW9 MCQ ข้อ 6: Volume = หน่วยที่บรรจุ File System (Partition ที่ format แล้วมี file system). Partition คือส่วนแบ่งของ disk ก่อน format. Volume = Partition + File System"},
+ {q:"HW9 MCQ ข้อ 8: Directory แบบใดมีปัญหา \"Naming Problem\" (ชื่อซ้ำกันไม่ได้)?",o:["Single-Level","Two-Level","Tree","Acyclic Graph"],a:0,e:"HW9 MCQ ข้อ 8: Single-Level Directory: ทุกไฟล์อยู่ใน folder เดียว → ห้ามชื่อซ้ำ = Naming Problem. Two-Level/Tree แก้ปัญหานี้ได้"},
+ {q:"HW9 MCQ ข้อ 10: Permission r-xrw-r-x — Group ทำอะไรได้?",o:["อ่านอย่างเดียว","รันอย่างเดียว","อ่านและเขียนได้ แต่รันไม่ได้","ทำได้ทุกอย่าง"],a:2,e:"HW9 MCQ ข้อ 10: r-xrw-r-x: Owner=r-x (อ่าน+รัน), Group=rw- (อ่าน+เขียน, รันไม่ได้!), Others=r-x. ระวัง — Group bit สาม = '-' จึงรันไม่ได้"},
+ {q:"HW9 MCQ ข้อ 12: ข้อใดไม่ใช่วิธี File Allocation?",o:["Contiguous","Linked","Paging","Indexed"],a:2,e:"HW9 MCQ ข้อ 12: Paging เป็น Memory Management (บทที่ 7) ไม่ใช่ File Allocation. File Allocation 4 วิธี: Contiguous, Linked, FAT, Indexed (i-node)"},
+ {q:"HW9 MCQ ข้อ 13: FAT (File Allocation Table) เก็บที่ใดเพื่อ access เร็วขึ้น?",o:["Disk เท่านั้น","Main Memory (RAM) — Load มาตอน Mount","Cache CPU","Disk Controller"],a:1,e:"HW9 MCQ ข้อ 13: FAT เก็บที่ RAM (Load จาก Disk ตอน Mount) → ไล่ chain ใน RAM ได้ ไม่ต้อง read disk ทุกก้าว → เร็วกว่า Linked List มาก"}
+];
+
+const ALL_MCQ={ch6:MCQ_CH6,ch7:MCQ_CH7,ch8:MCQ_CH8,ch9:MCQ_CH9,ch6_2:MCQ_CH6_2,ch7_2:MCQ_CH7_2,ch8_2:MCQ_CH8_2,ch9_2:MCQ_CH9_2};
 let qState={};
 function renderMCQ(){
   let gi=0;
@@ -8135,7 +8594,7 @@ function renderMCQ(){
     });
     cont.innerHTML=h;
   });
-  document.getElementById('sc-total').textContent=gi;
+  document.querySelectorAll('.sc-total').forEach(el=>el.textContent=gi);
 }
 function pickOpt(id,picked,correct){
   const st=qState[id];if(!st||st.done)return;
@@ -8153,10 +8612,11 @@ function pickOpt(id,picked,correct){
 function updateScore(){
   let r=0,w=0,t=0;
   Object.values(qState).forEach(s=>{t++;if(s.done){if(s.correct)r++;else w++;}});
-  document.getElementById('sc-right').textContent=r;
-  document.getElementById('sc-wrong').textContent=w;
+  document.querySelectorAll('.sc-right').forEach(el=>el.textContent=r);
+  document.querySelectorAll('.sc-wrong').forEach(el=>el.textContent=w);
   const done=r+w;
-  document.getElementById('sc-pct').textContent=done?((r/done*100).toFixed(0)+'%'):'0%';
+  const pct=done?((r/done*100).toFixed(0)+'%'):'0%';
+  document.querySelectorAll('.sc-pct').forEach(el=>el.textContent=pct);
 }
 function resetQuiz(){
   Object.keys(qState).forEach(id=>{qState[id]={done:false,correct:false};});
