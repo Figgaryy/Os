@@ -5320,7 +5320,93 @@ Internal Fragmentation = (จำนวน Pages × Page Size) − Process Size<b
         </div>
       </div>
     </div>
-    <div class="box box-red" style="margin:0;font-size:12px">Contiguous เข้า Block ที่ 3 ใช้แค่ <strong>1 I/O</strong> แต่ Linked ใช้ถึง <strong>4 I/O</strong> — ช้ากว่า 4 เท่า</div>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-top:2px">
+
+      <!-- Why comparison -->
+      <div style="background:#1a1f2e;border:1px solid #ff6b6b;border-radius:8px;padding:12px;font-size:13px">
+        <div style="color:#ff6b6b;font-weight:bold;margin-bottom:10px">ทำไม Contiguous ถึงใช้แค่ 1 I/O แต่ Linked ต้องใช้ 4 I/O?</div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div style="background:#112b1e;border:1px solid #48cfad;border-radius:6px;padding:10px">
+            <div style="color:#48cfad;font-weight:bold;margin-bottom:6px">Contiguous — คำนวณได้เลย</div>
+            <div style="line-height:1.8;color:#c9d1e0">
+              OS รู้ว่าไฟล์เริ่มที่ block <strong>14</strong><br>
+              ต้องการ block ที่ 3 → <strong>14 + 3 = 17</strong><br>
+              ไปหา block 17 โดยตรงได้เลย<br>
+              <span style="color:#48cfad">ไม่ต้องผ่านบล็อกอื่นก่อน → <strong>1 I/O</strong></span>
+            </div>
+            <div style="margin-top:8px;background:#0d1f16;border-radius:4px;padding:6px;font-family:monospace;font-size:12px;color:#48cfad">
+              Physical Block = Start + i<br>
+              = 14 + 3 = <strong>17</strong> ✓
+            </div>
+          </div>
+
+          <div style="background:#2b1111;border:1px solid #ff6b6b;border-radius:6px;padding:10px">
+            <div style="color:#ff6b6b;font-weight:bold;margin-bottom:6px">Linked — ต้องไล่ทีละก้าว</div>
+            <div style="line-height:1.8;color:#c9d1e0">
+              OS รู้แค่ว่าไฟล์เริ่มที่ block <strong>9</strong><br>
+              ไม่รู้ว่า block ที่ 3 อยู่ที่ไหน<br>
+              <span style="color:#ff6b6b">ต้องอ่านทีละ block เพื่อดู pointer</span><br>
+              9 → 16 → 1 → 10 (ถึงจะเจอ)
+            </div>
+            <div style="margin-top:8px;background:#1a0808;border-radius:4px;padding:6px;font-family:monospace;font-size:12px;color:#ff6b6b">
+              ต้องการ block ที่ n<br>
+              → ต้องอ่าน <strong>n+1 ครั้ง</strong> เสมอ
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Analogy -->
+      <div style="background:#1a1f2e;border:1px solid #ffce54;border-radius:8px;padding:12px;font-size:13px">
+        <div style="color:#ffce54;font-weight:bold;margin-bottom:8px">อุปมาให้เข้าใจง่าย</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div style="line-height:1.8">
+            <strong style="color:#48cfad">Contiguous</strong> = หนังสือที่มีเลขหน้า<br>
+            อยากอ่านหน้า 50 → เปิดไปหน้า 50 ได้เลย<br>
+            <span style="color:#48cfad">กระโดดไปตำแหน่งใดก็ได้ทันที</span>
+          </div>
+          <div style="line-height:1.8">
+            <strong style="color:#ff6b6b">Linked</strong> = ปริศนาล่าสมบัติ<br>
+            จุดที่ 1 บอกว่าไปจุดที่ 2, จุด 2 บอกไปจุด 3...<br>
+            <span style="color:#ff6b6b">ต้องผ่านทุกจุดตามลำดับ ข้ามไม่ได้</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- General rule -->
+      <div style="background:#1a1f2e;border:1px solid #6c63ff;border-radius:8px;padding:12px;font-size:13px">
+        <div style="color:#6c63ff;font-weight:bold;margin-bottom:8px">กฎทั่วไป — จำไว้ตอบข้อสอบ</div>
+        <table style="font-size:12px;margin:0;width:100%">
+          <tr>
+            <th>Method</th>
+            <th>เข้าถึง Block ที่ n ใช้กี่ I/O</th>
+            <th>Random Access</th>
+          </tr>
+          <tr>
+            <td><strong style="color:#48cfad">Contiguous</strong></td>
+            <td><strong>1 I/O เสมอ</strong> (คำนวณตรง)</td>
+            <td style="color:#48cfad">✅ เร็ว O(1)</td>
+          </tr>
+          <tr>
+            <td><strong style="color:#ff6b6b">Linked</strong></td>
+            <td><strong>n+1 I/O</strong> (ไล่ pointer)</td>
+            <td style="color:#ff6b6b">❌ ช้า O(n)</td>
+          </tr>
+          <tr>
+            <td><strong style="color:#ffce54">FAT</strong></td>
+            <td><strong>1 I/O</strong> (ถ้า Cache FAT ใน RAM)</td>
+            <td style="color:#ffce54">✅ เร็ว (ถ้า Cache)</td>
+          </tr>
+          <tr>
+            <td><strong style="color:#4a9eff">Indexed</strong></td>
+            <td><strong>2 I/O</strong> (อ่าน i-node + อ่าน block)</td>
+            <td style="color:#4a9eff">✅ เร็ว O(1)</td>
+          </tr>
+        </table>
+      </div>
+
+    </div>
   </div>
 </details>
 
