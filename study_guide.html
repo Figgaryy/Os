@@ -102,6 +102,7 @@ button.run-btn.secondary{background:#2a3a52}
   <button class="nav-btn" onclick="showCh('ch7',this)">บทที่ 7: Memory</button>
   <button class="nav-btn" onclick="showCh('ch8',this)">บทที่ 8: Virtual Memory</button>
   <button class="nav-btn" onclick="showCh('ch9',this)">บทที่ 9: File &amp; I/O</button>
+  <button class="nav-btn" onclick="showCh('mcq-map',this)">🎯 MCQ → Lecture Map</button>
   <button class="nav-btn" onclick="showCh('exam',this)">📝 บทสอบฝึก</button>
 </nav>
 <div id="main">
@@ -7040,6 +7041,483 @@ Multiprogramming ↓
 </div>
 </div>
 </div><!-- end ch9 -->
+
+<!-- ═══════════════════════════════════════════════════
+     🎯 MCQ → Lecture Note Cross-Reference Map
+═══════════════════════════════════════════════════ -->
+<div id="mcq-map" class="chapter">
+<div class="chapter-hero">
+  <div class="hero-icon">🎯</div>
+  <div>
+    <div class="hero-title">MCQ → Lecture Note Map — แผนที่อ่านสอบ</div>
+    <div class="hero-sub">ทุก MCQ ใน HW6–HW9 ชี้ไปที่หัวข้อ Lecture Note ที่ต้องอ่าน · เน้นเนื้อหาที่จะออกสอบจริง</div>
+    <div style="margin-top:8px">
+      <span class="tag">HW6 MCQ</span><span class="tag">HW7 MCQ</span>
+      <span class="tag">HW8 MCQ</span><span class="tag">HW9 MCQ</span>
+      <span class="tag">Section Map</span><span class="tag">Exam Prep</span>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+<h2>📖 วิธีใช้แผนที่นี้</h2>
+<div class="box box-blue">
+  <strong>เป้าหมาย:</strong> อ่านสอบให้ตรงจุด ไม่เสียเวลาอ่านสิ่งที่ไม่ออก<br><br>
+  <strong>แต่ละ MCQ จะมี:</strong>
+  <ul>
+    <li><strong>หัวข้อ Lecture Note ที่ต้องอ่าน</strong> (เช่น 7.5 Paging) — กดดู section นั้นใน chapter ที่เกี่ยวข้อง</li>
+    <li><strong>Key Concept</strong> — สิ่งที่ต้องจำให้ได้ก่อนเข้าห้องสอบ</li>
+    <li><strong>กับดักข้อสอบ</strong> — จุดที่ผู้สอบมักผิด</li>
+  </ul>
+  <strong>กลยุทธ์อ่านสอบ:</strong>
+  <ol>
+    <li>อ่านตารางทั้งหมดของบทที่จะสอบ — ดูว่าหัวข้อไหนถามบ่อย</li>
+    <li>เปิด Lecture Note section ที่ระบุ → อ่านให้เข้าใจ Concept</li>
+    <li>ทำ MCQ Practice (บทสอบฝึก) → ตรวจคำตอบกับเฉลย</li>
+    <li>กลับมาดู "กับดักข้อสอบ" อีกครั้งก่อนเข้าห้องสอบ</li>
+  </ol>
+</div>
+</div>
+
+<!-- ════════════ บทที่ 6 ════════════ -->
+<div class="card">
+<h2 style="color:#ff6b6b">📘 บทที่ 6 — Deadlocks (HW6 MCQ)</h2>
+
+<div class="box box-yellow">
+  <strong>หัวข้อหลักที่ออกใน HW6 MCQ:</strong> Resource Allocation Graph, Banker's Algorithm (Safety + Request), Detection Algorithm, Recovery
+</div>
+
+<table>
+  <tr>
+    <th style="width:18%">หัวข้อ MCQ</th>
+    <th style="width:22%">📖 อ่านที่ Lecture Note</th>
+    <th style="width:30%">🔑 Key Concept ต้องจำ</th>
+    <th style="width:30%">⚠️ กับดักข้อสอบ</th>
+  </tr>
+  <tr>
+    <td><strong>4 เงื่อนไข Deadlock</strong></td>
+    <td>6.3 เงื่อนไข 4 ข้อ</td>
+    <td>Mutual Exclusion, Hold and Wait, No Preemption, Circular Wait — <strong>ต้องครบทั้ง 4</strong> จึงเกิด Deadlock</td>
+    <td>ขาดเงื่อนไขใดเงื่อนไขหนึ่ง = ไม่เกิด Deadlock; แก้ไขเงื่อนไขใดข้อหนึ่ง = แก้ Deadlock ได้</td>
+  </tr>
+  <tr>
+    <td><strong>Resource Allocation Graph (RAG)</strong></td>
+    <td>6.4, 6.4b ตัวอย่างกราฟจริง</td>
+    <td>ลูกศร P→R = Request, R→P = Allocation. <strong>Cycle</strong> = อาจ Deadlock</td>
+    <td>1 instance + Cycle = Deadlock แน่; หลาย instance + Cycle = อาจไม่ Deadlock (ต้องใช้ Banker's)</td>
+  </tr>
+  <tr>
+    <td><strong>Safe State</strong></td>
+    <td>6.2, 6.5 Safety Algorithm</td>
+    <td>Safe = หา Safe Sequence ได้ (ทุก Process เสร็จได้); Unsafe ≠ Deadlock</td>
+    <td>Unsafe ไม่ได้แปลว่า Deadlock เลยทันที — แต่อาจนำไปสู่ Deadlock</td>
+  </tr>
+  <tr>
+    <td><strong>Banker's — Safety</strong></td>
+    <td>6.5, 6.5b ฝึกจนชำนาญ</td>
+    <td>Need = Max − Allocation. Work เริ่มที่ Available. หา Process ที่ Need ≤ Work → Work += Allocation → ทำต่อ</td>
+    <td>ลืมคำนวณ Need ก่อนทำ Safety; ตรวจ Need vs Work ตำแหน่งใดตำแหน่งหนึ่งผิด</td>
+  </tr>
+  <tr>
+    <td><strong>Banker's — Request</strong></td>
+    <td>6.6, 6.6b ทีละขั้น</td>
+    <td>3 ขั้น: (1) Request ≤ Need? (2) Request ≤ Available? (3) จำลองแล้ว Safety ผ่าน?</td>
+    <td>ผ่านขั้น 1, 2 แต่ <strong>ลืมรัน Safety</strong> หลังจำลอง — ขั้น 3 สำคัญที่สุด</td>
+  </tr>
+  <tr>
+    <td><strong>Banker's — การเปลี่ยนแปลง</strong></td>
+    <td>6.HW ข้อ 2 (Exercise 7.6)</td>
+    <td>เพิ่ม Available + ลด Max + ลด Process = ปลอดภัย; ลด Available + เพิ่ม Max = อันตราย</td>
+    <td>คำตอบสำหรับ "เพิ่ม Process" = ⚠ ขึ้นกับว่าหลังเพิ่มแล้วยัง Safe หรือไม่ (ไม่ใช่ Yes/No ตายตัว)</td>
+  </tr>
+  <tr>
+    <td><strong>Detection Algorithm</strong></td>
+    <td>6.7, 6.7b</td>
+    <td>คล้าย Safety แต่ใช้ <strong>Request</strong> แทน Need; เริ่ม Finish=false สำหรับ Process ที่ยังถือ Resource</td>
+    <td>ลืมว่า Detection ใช้ Request (ของจริงตอนนี้) ไม่ใช่ Need (Max ที่อาจขอ)</td>
+  </tr>
+  <tr>
+    <td><strong>Recovery</strong></td>
+    <td>6.8</td>
+    <td>2 วิธี: Process Termination (ฆ่า Process), Resource Preemption (ยึด Resource คืน)</td>
+    <td>ต้องเลือก Victim โดยดู Priority + Cost + Progress</td>
+  </tr>
+</table>
+</div>
+
+<!-- ════════════ บทที่ 7 ════════════ -->
+<div class="card">
+<h2 style="color:#4a9eff">📗 บทที่ 7 — Memory Management (HW7 MCQ)</h2>
+
+<div class="box box-yellow">
+  <strong>หัวข้อหลักที่ออกใน HW7 MCQ:</strong> Logical/Physical Address, Base/Limit Register, Swapping, Memory Allocation (Fit), Segmentation, Paging, Internal Frag
+</div>
+
+<table>
+  <tr>
+    <th style="width:18%">หัวข้อ MCQ</th>
+    <th style="width:22%">📖 อ่านที่ Lecture Note</th>
+    <th style="width:30%">🔑 Key Concept ต้องจำ</th>
+    <th style="width:30%">⚠️ กับดักข้อสอบ</th>
+  </tr>
+  <tr>
+    <td><strong>Logical vs Physical Address</strong></td>
+    <td>7.1 พื้นฐาน Address</td>
+    <td>Logical = CPU สร้าง; Physical = MMU แปลง → ใช้จริงใน RAM. <strong>MAR เก็บ Physical Address</strong></td>
+    <td>สับสนว่า MAR เก็บ Logical (ผิด!) — MAR ใช้กับ RAM โดยตรง</td>
+  </tr>
+  <tr>
+    <td><strong>Base / Limit Register</strong></td>
+    <td>7.3 Contiguous Allocation</td>
+    <td>เข้าถึงได้ Base ถึง Base+Limit−1; ตรวจ d &lt; Limit ก่อน</td>
+    <td>HW7 ข้อ 2: Base=4501, Limit=5000 → 4501 ถึง <strong>9500</strong> (ไม่ใช่ 9501!)</td>
+  </tr>
+  <tr>
+    <td><strong>Standard Swapping</strong></td>
+    <td>7.2 Swapping</td>
+    <td>ย้าย <strong>ทั้ง Process</strong> ระหว่าง RAM ↔ Disk (ไม่ใช่ Page เดียว)</td>
+    <td>สับสนกับ Page Swapping ในบทที่ 8 (เป็นคนละเรื่อง!)</td>
+  </tr>
+  <tr>
+    <td><strong>Best Fit / First Fit / Worst Fit</strong></td>
+    <td>7.3 Contiguous Allocation</td>
+    <td>First = ตัวแรกที่พอ; Best = เล็กสุดที่พอ; Worst = ใหญ่สุด</td>
+    <td>HW7 ข้อ 6: First Fit สำหรับ 120KB ใน [50, 115, 210, 125, 150] → <strong>210KB</strong> (115 ไม่พอ ข้ามไป!)</td>
+  </tr>
+  <tr>
+    <td><strong>Segmentation</strong></td>
+    <td>7.4 Segmentation</td>
+    <td>PA = SegTable[s].base + d (ต้อง d &lt; limit ของ segment นั้น)</td>
+    <td>HW7 ข้อ 8: ⟨1, 550⟩ ที่ limit=500 → 550≥500 → <strong>Error</strong> (ไม่ใช่ตอบเป็นเลข)</td>
+  </tr>
+  <tr>
+    <td><strong>Paging — Address แยก p/d</strong></td>
+    <td>7.5, 7.5b</td>
+    <td>p = ⌊LA / page_size⌋, d = LA mod page_size; PA = Frame×page_size + d</td>
+    <td>HW7 ข้อ 11: 5500 / 2048 → <strong>p=2, d=1404</strong> (ลืมเศษ → ตอบผิด)</td>
+  </tr>
+  <tr>
+    <td><strong>Page Size = Frame Size</strong></td>
+    <td>7.5 Paging</td>
+    <td>Page (logical) กับ Frame (physical) <strong>ขนาดเท่ากันเสมอ</strong></td>
+    <td>HW7 ข้อ 9: ตอบ "Frame เล็กกว่า Page" = ผิด!</td>
+  </tr>
+  <tr>
+    <td><strong>Internal Fragmentation</strong></td>
+    <td>7.5 Paging</td>
+    <td>Frag = (#Pages × page_size) − Process_size; เกิดที่ Page สุดท้าย</td>
+    <td>HW7 ข้อ 14: Process 10500B, Page 2048B → 6 pages = 12288B → <strong>Frag = 1788B</strong></td>
+  </tr>
+  <tr>
+    <td><strong>Valid Bit ใน Page Table</strong></td>
+    <td>7.5 Paging</td>
+    <td>Valid=1 → Page อยู่ใน RAM; Valid=0 → Page อยู่ Disk หรือไม่มีสิทธิ์</td>
+    <td>HW7 ข้อ 15: Invalid bit อาจมีหลายความหมาย — ทุกข้อย่อยถูก!</td>
+  </tr>
+</table>
+</div>
+
+<!-- ════════════ บทที่ 8 ════════════ -->
+<div class="card">
+<h2 style="color:#48cfad">📙 บทที่ 8 — Virtual Memory (HW8 MCQ)</h2>
+
+<div class="box box-yellow">
+  <strong>หัวข้อหลักที่ออกใน HW8 MCQ:</strong> Demand Paging, Page Fault, Copy-on-Write, Page Replacement (FIFO/OPT/LRU), Belady's Anomaly, Frame Allocation, Thrashing
+</div>
+
+<table>
+  <tr>
+    <th style="width:18%">หัวข้อ MCQ</th>
+    <th style="width:22%">📖 อ่านที่ Lecture Note</th>
+    <th style="width:30%">🔑 Key Concept ต้องจำ</th>
+    <th style="width:30%">⚠️ กับดักข้อสอบ</th>
+  </tr>
+  <tr>
+    <td><strong>Virtual Memory Concept</strong></td>
+    <td>8.1 VM คืออะไร</td>
+    <td>VM <strong>อนุญาต</strong> ให้ Process ใหญ่กว่า Physical Memory ได้</td>
+    <td>HW8 ข้อ 1: ตอบ "ห้าม Process ใหญ่กว่า RAM" = ผิด!</td>
+  </tr>
+  <tr>
+    <td><strong>Demand Paging</strong></td>
+    <td>8.2 Demand Paging</td>
+    <td>โหลด Page <strong>เฉพาะตอนต้องใช้</strong> — Pure Demand Paging เริ่มจาก Frame ว่างหมด</td>
+    <td>สับสนกับ Pre-paging (โหลดล่วงหน้า) — Demand Paging โหลดเมื่อ Fault เท่านั้น</td>
+  </tr>
+  <tr>
+    <td><strong>Page Fault</strong></td>
+    <td>8.2 Page Fault</td>
+    <td>Valid bit=0 → Trap → 6 ขั้นตอน → Restart Instruction</td>
+    <td>นับ Page Fault: ต้อง <strong>นับรวม</strong> Frame ว่างตอนเริ่มต้นด้วย!</td>
+  </tr>
+  <tr>
+    <td><strong>Copy-on-Write</strong></td>
+    <td>8.2 Copy-on-Write</td>
+    <td>Parent + Child ใช้ Page เดียวกันจน <strong>มีฝ่ายเขียน</strong> → ค่อย copy</td>
+    <td>HW8 ข้อ 4: ตอบ "There is only one COW page per process" = ผิด — มีหลายได้</td>
+  </tr>
+  <tr>
+    <td><strong>FIFO Algorithm</strong></td>
+    <td>8.3 Page Replacement</td>
+    <td>ไล่ที่ <strong>เข้า RAM ก่อนสุด</strong> (ใช้ Queue เก็บลำดับเข้า)</td>
+    <td>HW8 ข้อ 9: FIFO ใช้ "เวลาที่โหลดเข้ามา" ไม่ใช่ "เวลาที่ใช้ล่าสุด" (อันนั้น LRU)</td>
+  </tr>
+  <tr>
+    <td><strong>OPT Algorithm</strong></td>
+    <td>8.3, 8.3b</td>
+    <td>ไล่ที่ <strong>จะใช้ช้าสุดในอนาคต</strong>; Fault น้อยสุดเสมอ</td>
+    <td>HW8 ข้อ 8: OPT ดีที่สุดทุกแง่ — ทำจริงไม่ได้แต่ใช้เป็น Lower Bound</td>
+  </tr>
+  <tr>
+    <td><strong>LRU Algorithm</strong></td>
+    <td>8.3, 8.3b</td>
+    <td>ไล่ที่ <strong>ไม่ได้ใช้นานสุดในอดีต</strong>; ต้องการ HW support</td>
+    <td>LRU ≠ OPT — บางครั้ง LRU = FIFO (เมื่อ pattern อ่านพอดี)</td>
+  </tr>
+  <tr>
+    <td><strong>Belady's Anomaly</strong></td>
+    <td>8.3 Page Replacement</td>
+    <td>เกิดเฉพาะ <strong>FIFO</strong> — เพิ่ม Frame อาจทำให้ Fault เพิ่ม</td>
+    <td>HW8 ข้อ 10: LRU/OPT <strong>ไม่มี</strong> Belady's Anomaly</td>
+  </tr>
+  <tr>
+    <td><strong>Equal vs Proportional Allocation</strong></td>
+    <td>8.5 Frame Allocation</td>
+    <td>Equal = ⌊Total/n⌋; Proportional = ⌊(size_i/Σsize) × Total⌋</td>
+    <td>HW8 ข้อ 12: P0(15)/P1(30)/P2(50) ใน 50 frames → ⌊7.89⌋=7, ⌊15.78⌋=15, ⌊26.31⌋=26 (ตัด floor!)</td>
+  </tr>
+  <tr>
+    <td><strong>Thrashing</strong></td>
+    <td>8.4 Thrashing, HW8 ข้อ 5/6</td>
+    <td>Frame &lt; Working Set → Page Fault ถี่ → CPU Util ลด; แก้โดย <strong>ลด</strong> Multiprogramming</td>
+    <td>HW8 ข้อ 13: ตอบ "เพิ่ม Multiprogramming แก้ Thrashing" = ผิด! ทำให้แย่ลง</td>
+  </tr>
+  <tr>
+    <td><strong>Page-Fault Rate ขึ้นกับอะไร</strong></td>
+    <td>8.4 Thrashing</td>
+    <td>เพิ่ม Multiprogramming → Frame/Process ลด → Page Fault Rate ↑</td>
+    <td>HW8 ข้อ 6: ความสัมพันธ์ <strong>เป็นบวก</strong> ระหว่าง Multiprogramming และ Fault Rate</td>
+  </tr>
+</table>
+</div>
+
+<!-- ════════════ บทที่ 9 ════════════ -->
+<div class="card">
+<h2 style="color:#ffce54">📕 บทที่ 9 — File &amp; I/O (HW9 MCQ)</h2>
+
+<div class="box box-yellow">
+  <strong>หัวข้อหลักที่ออกใน HW9 MCQ:</strong> File Attributes, Volume/Partition, Directory Structure, Permissions, File Allocation, Free Space, Device Driver, I/O Hardware
+</div>
+
+<table>
+  <tr>
+    <th style="width:18%">หัวข้อ MCQ</th>
+    <th style="width:22%">📖 อ่านที่ Lecture Note</th>
+    <th style="width:30%">🔑 Key Concept ต้องจำ</th>
+    <th style="width:30%">⚠️ กับดักข้อสอบ</th>
+  </tr>
+  <tr>
+    <td><strong>File System = หน้าที่ของ OS</strong></td>
+    <td>9.1 ไฟล์คืออะไร</td>
+    <td>File System Management = บริการของ <strong>OS</strong> ไม่ใช่ Application</td>
+    <td>HW9 ข้อ 1: ตอบ "Application Program" = ผิด!</td>
+  </tr>
+  <tr>
+    <td><strong>File Attributes</strong></td>
+    <td>9.1 File Attributes</td>
+    <td>Name, Type, Location, Size, Protection, Date — เก็บใน <strong>Directory Entry</strong></td>
+    <td>HW9 ข้อ 2: รวมทุกอย่างที่กล่าวมา = File Attributes (ไม่ใช่อย่างใดอย่างหนึ่ง)</td>
+  </tr>
+  <tr>
+    <td><strong>Nonvolatile Storage</strong></td>
+    <td>9.1</td>
+    <td>ไฟล์เก็บใน <strong>Nonvolatile Storage</strong> (HDD/SSD) — ปิดเครื่องข้อมูลยังอยู่</td>
+    <td>RAM = Volatile (หาย); Disk = Nonvolatile (ไม่หาย)</td>
+  </tr>
+  <tr>
+    <td><strong>Executable File</strong></td>
+    <td>9.1 File Types</td>
+    <td>OS ทุกตัวต้องรองรับ <strong>Executable File</strong> (ไม่งั้นรันโปรแกรมไม่ได้)</td>
+    <td>HW9 ข้อ 4: Executable เป็นประเภทไฟล์ที่ OS ต้องเข้าใจ <strong>เสมอ</strong></td>
+  </tr>
+  <tr>
+    <td><strong>Volume vs Partition</strong></td>
+    <td>9.1</td>
+    <td>Partition = ส่วนแบ่งของ Disk; <strong>Volume = Partition ที่ Format แล้ว</strong> มี File System</td>
+    <td>HW9 ข้อ 5/6: Volume คือสิ่งที่ "บรรจุ File System" — ไม่ใช่ Partition!</td>
+  </tr>
+  <tr>
+    <td><strong>Directory Structure</strong></td>
+    <td>9.2 Directory Structure</td>
+    <td>5 แบบ: Single, Two-Level, Tree, Acyclic-Graph, General Graph</td>
+    <td>HW9 ข้อ 7/8: Single-Level = ง่ายสุด แต่มี <strong>Naming Problem</strong> (ชื่อซ้ำไม่ได้)</td>
+  </tr>
+  <tr>
+    <td><strong>Absolute vs Relative Path</strong></td>
+    <td>9.2 Directory Structure</td>
+    <td>Absolute เริ่มจาก <strong>Root (/)</strong>; Relative เริ่มจาก Current Directory</td>
+    <td>HW9 ข้อ 9: /home/user = Absolute; ./file.txt = Relative</td>
+  </tr>
+  <tr>
+    <td><strong>Permissions (rwx)</strong></td>
+    <td>9.3, 9.3b ตัวอย่าง Permission</td>
+    <td>9 bits = rwx × (Owner, Group, Others); octal: r=4, w=2, x=1</td>
+    <td>HW9 ข้อ 10: r-xrw-r-x → Group ได้ rw- = อ่าน+เขียน <strong>แต่รันไม่ได้</strong>!</td>
+  </tr>
+  <tr>
+    <td><strong>HDD Physical Structure</strong></td>
+    <td>9.4 File Allocation (intro)</td>
+    <td>HDD เก็บข้อมูลที่ <strong>Disk Platters</strong> (จานแม่เหล็กหมุน)</td>
+    <td>HW9 ข้อ 11: ไม่ใช่ Read/Write Head (อันนั้นแค่อ่าน/เขียน), ไม่ใช่ Spindle</td>
+  </tr>
+  <tr>
+    <td><strong>File Allocation Methods</strong></td>
+    <td>9.4, 9.4b ตัวอย่างคำนวณ</td>
+    <td>4 วิธี: Contiguous, Linked, FAT, Indexed (i-node) — <strong>Paging ไม่ใช่!</strong></td>
+    <td>HW9 ข้อ 12: Paging = Memory Management (บทที่ 7), ไม่ใช่ File Allocation!</td>
+  </tr>
+  <tr>
+    <td><strong>FAT</strong></td>
+    <td>9.4 FAT Allocation</td>
+    <td>FAT เก็บใน <strong>Main Memory (RAM)</strong> ขณะ Mount เพื่อ access เร็ว</td>
+    <td>HW9 ข้อ 13: ไม่ใช่ "ที่ Disk เท่านั้น" — Load มา RAM ตอน Mount</td>
+  </tr>
+  <tr>
+    <td><strong>i-node Count</strong></td>
+    <td>9.4, 9.4b</td>
+    <td>ทุกไฟล์มี <strong>i-node 1 ตัว</strong> → 100 files = 100 i-nodes</td>
+    <td>HW9 ข้อ 14: i-node ≠ Block (ไฟล์ใหญ่ใช้ block หลายอัน แต่ i-node 1 ตัว)</td>
+  </tr>
+  <tr>
+    <td><strong>Bit Vector (Free Space)</strong></td>
+    <td>9.5 Free Space Management</td>
+    <td>0 = Block ว่าง, 1 = Block ใช้อยู่ (ในหนังสือเรียน)</td>
+    <td>HW9 ข้อ 15: อ่าน bit ทีละตัวให้ตรง index — เริ่มจาก Block 0!</td>
+  </tr>
+  <tr>
+    <td><strong>Device Driver</strong></td>
+    <td>9.6 ระบบ I/O</td>
+    <td>Software ที่ <strong>แปลคำสั่ง OS → คำสั่งเฉพาะ Hardware</strong> → รองรับอุปกรณ์ใหม่</td>
+    <td>HW9 ข้อ 16: ไม่ใช่ Device Controller (อันนั้นคือ Hardware), ไม่ใช่ Bus</td>
+  </tr>
+  <tr>
+    <td><strong>Device Controller Registers</strong></td>
+    <td>9.6 ระบบ I/O</td>
+    <td>4 ตัว: Data-in (รับเข้า), Data-out (ส่งออก), Status, Control</td>
+    <td>HW9 ข้อ 17: "ส่งข้อมูลออกไป Device" = <strong>Data-out</strong> (ไม่ใช่ Data-in!)</td>
+  </tr>
+  <tr>
+    <td><strong>Device Classification</strong></td>
+    <td>9.6 ระบบ I/O</td>
+    <td>Block (Disk) vs Character (Keyboard); Sync vs Async; Sharable vs Dedicated</td>
+    <td>HW9 ข้อ 18: Keyboard = Async + Character-stream (กดเมื่อไหรก็ได้, ส่งทีละตัว)</td>
+  </tr>
+  <tr>
+    <td><strong>Bus / Data Rates</strong></td>
+    <td>9.6 ระบบ I/O</td>
+    <td>เรียงเร็ว→ช้า: Gigabit Ethernet (1Gbps) &gt;&gt; Modem (56K) &gt; Mouse/Keyboard</td>
+    <td>HW9 ข้อ 19: เปรียบเทียบหน่วย — bps vs Kbps vs Mbps vs Gbps ให้ตรง!</td>
+  </tr>
+  <tr>
+    <td><strong>I/O Methods (Polling/Interrupt/DMA)</strong></td>
+    <td>9.6 ระบบ I/O</td>
+    <td>Polling = CPU busy รอ; Interrupt = CPU ทำอื่นได้; <strong>DMA = CPU เป็นอิสระทั้งหมด</strong> (ส่งทีละ block)</td>
+    <td>DMA ใช้กับข้อมูลปริมาณมาก (Disk, Network) ไม่ใช่ Mouse/Keyboard</td>
+  </tr>
+</table>
+</div>
+
+<!-- ════════════ Strategy Card ════════════ -->
+<div class="card" style="border:2px solid #48cfad">
+<h2 style="color:#48cfad">🎯 กลยุทธ์อ่านสอบ — Final Strategy</h2>
+
+<div class="grid2">
+  <div class="box box-green">
+    <strong>📚 ลำดับการอ่านที่แนะนำ:</strong><br><br>
+    <strong>วันที่ 1–2:</strong> บทที่ 6 (Deadlocks)
+    <ul>
+      <li>เริ่มที่ 6.2, 6.3 (Concept)</li>
+      <li>ฝึก 6.5b, 6.6b (Banker's)</li>
+      <li>ทำ HW6 MCQ ทั้งหมด</li>
+    </ul>
+    <strong>วันที่ 3–4:</strong> บทที่ 7 (Memory)
+    <ul>
+      <li>7.1 (Address) → 7.5 (Paging)</li>
+      <li>ฝึก 7.5b คำนวณ p, d, PA</li>
+    </ul>
+    <strong>วันที่ 5–6:</strong> บทที่ 8 (Virtual Memory)
+    <ul>
+      <li>8.3, 8.3b (Page Replacement)</li>
+      <li>8.4, 8.5 (Thrashing, Allocation)</li>
+    </ul>
+    <strong>วันที่ 7:</strong> บทที่ 9 + ทำบทสอบฝึก
+    <ul>
+      <li>9.4b (File Allocation calc)</li>
+      <li>9.6 (I/O Hardware)</li>
+      <li>ทำ MCQ Practice 60 ข้อ</li>
+    </ul>
+  </div>
+
+  <div class="box box-yellow">
+    <strong>⚠ กับดักที่เจอบ่อยในข้อสอบ:</strong><br><br>
+    <strong>บทที่ 6:</strong>
+    <ul>
+      <li>Detection ใช้ Request ไม่ใช่ Need</li>
+      <li>Banker's Request: 3 ขั้น → ลืมขั้น Safety</li>
+    </ul>
+    <strong>บทที่ 7:</strong>
+    <ul>
+      <li>MAR = Physical (ไม่ใช่ Logical)</li>
+      <li>Base+Limit−1 (ลืม −1)</li>
+      <li>First Fit ข้าม block ที่ไม่พอ</li>
+      <li>Internal Frag = pages×size − process_size</li>
+    </ul>
+    <strong>บทที่ 8:</strong>
+    <ul>
+      <li>นับ Fault รวม Frame ว่างตอนแรก</li>
+      <li>Belady's เฉพาะ FIFO</li>
+      <li>Thrashing แก้โดย <em>ลด</em> Multiprogramming</li>
+      <li>Floor Function ใน Proportional</li>
+    </ul>
+    <strong>บทที่ 9:</strong>
+    <ul>
+      <li>Volume ≠ Partition</li>
+      <li>Paging ≠ File Allocation</li>
+      <li>FAT เก็บใน RAM (ไม่ใช่ Disk เท่านั้น)</li>
+      <li>i-node 1 ตัว/ไฟล์</li>
+    </ul>
+  </div>
+</div>
+
+<div class="box box-blue" style="margin-top:14px">
+  <strong>💡 เทคนิคทำ MCQ ให้เร็ว:</strong>
+  <ol>
+    <li><strong>อ่านโจทย์ 2 รอบ</strong> — รอบแรกจับใจความ, รอบสองดูคำสำคัญ (เช่น "ผิด", "ไม่ใช่", "ทุกข้อ")</li>
+    <li><strong>กำจัดตัวเลือกที่ผิดชัด ๆ ก่อน</strong> — ลดเหลือ 2 ตัวเลือก ความน่าจะถูก 50%</li>
+    <li><strong>ระวังข้อ "Negate"</strong> — "ข้อใด <em>ไม่ใช่</em> ..." → กากบาทคำว่า "ไม่" เพื่อไม่ลืม</li>
+    <li><strong>คำนวณ:</strong> ทำในกระดาษทด อย่าทำในหัว — ผิดง่าย โดยเฉพาะ Banker's, Paging, Page Fault</li>
+    <li><strong>ข้อที่ไม่แน่ใจ:</strong> ทำเครื่องหมาย → ทำข้ออื่นก่อน → กลับมาทบทวน</li>
+    <li><strong>ดู Pattern คำตอบ</strong> — ถ้าตอบ A ติดกัน 5 ข้อ น่าจะมีข้อใดข้อหนึ่งผิด ตรวจซ้ำ</li>
+  </ol>
+</div>
+
+<div class="box box-red" style="margin-top:14px">
+  <strong>🚨 จำให้ขึ้นใจ ก่อนเข้าห้องสอบ:</strong>
+  <ol>
+    <li><strong>Deadlock 4 เงื่อนไข:</strong> Mutual Exclusion, Hold and Wait, No Preemption, Circular Wait</li>
+    <li><strong>Banker's:</strong> Need = Max − Allocation; Safety = หา Process ที่ Need ≤ Work</li>
+    <li><strong>Paging:</strong> p = ⌊LA/size⌋, d = LA mod size, PA = Frame×size + d</li>
+    <li><strong>Page Replacement:</strong> FIFO (queue), OPT (อนาคต), LRU (อดีต)</li>
+    <li><strong>Belady's Anomaly เฉพาะ FIFO</strong></li>
+    <li><strong>Thrashing แก้:</strong> ลด Multiprogramming / เพิ่ม RAM / Disk เร็วขึ้น</li>
+    <li><strong>File Allocation 4 วิธี:</strong> Contiguous, Linked, FAT, Indexed</li>
+    <li><strong>Permission:</strong> r=4, w=2, x=1; chmod 755 = rwxr-xr-x</li>
+    <li><strong>I/O 3 แบบ:</strong> Polling (busy), Interrupt (event), DMA (block transfer)</li>
+  </ol>
+</div>
+</div>
+
+</div><!-- end mcq-map -->
 
 <!-- ═══════════════════════════════════════════════════
      บทสอบฝึก : Final Exam Practice
